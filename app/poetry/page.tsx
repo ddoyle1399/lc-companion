@@ -56,6 +56,7 @@ export default function PoetryPage() {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [searchStatus, setSearchStatus] = useState("");
   const abortRef = useRef<AbortController | null>(null);
   const outputRef = useRef<HTMLDivElement>(null);
 
@@ -85,6 +86,7 @@ export default function PoetryPage() {
     setGenerating(true);
     setOutput("");
     setError("");
+    setSearchStatus("");
 
     abortRef.current = new AbortController();
 
@@ -132,7 +134,10 @@ export default function PoetryPage() {
               const parsed = JSON.parse(data);
               if (parsed.error) {
                 setError(parsed.error);
+              } else if (parsed.status === "searching") {
+                setSearchStatus("Searching for poem text...");
               } else if (parsed.text) {
+                setSearchStatus("");
                 setOutput((prev) => prev + parsed.text);
               }
             } catch {
@@ -321,7 +326,9 @@ export default function PoetryPage() {
                   {poet} &ndash; {poem}
                 </h2>
                 {generating && (
-                  <p className="text-xs text-teal mt-0.5">Generating...</p>
+                  <p className="text-xs text-teal mt-0.5">
+                    {searchStatus || "Generating..."}
+                  </p>
                 )}
               </div>
               {output && !generating && (

@@ -13,6 +13,7 @@ export interface PromptContext {
   // Injected by the API route before prompt building
   examSummary?: string;
   prescribedPoems?: string[];
+  poemText?: string;
 }
 
 function getReadingLevel(level: "HL" | "OL"): string {
@@ -43,9 +44,34 @@ function getComparativeModes(year: number, level: "HL" | "OL"): string {
     : "Theme, Social Setting, Relationships";
 }
 
+function buildQuoteAccuracyBlock(context: PromptContext): string {
+  if (context.poemText) {
+    return `QUOTE ACCURACY:
+The full text of the poem has been provided below. You have the actual text in front of you. Use it.
+- Quote directly and confidently from the provided text. No [VERIFY] tags needed.
+- Do not invent or fabricate any quotes. Only quote words that appear in the provided text.
+- If you want to quote a phrase, check it against the provided text first.
+- Cross-reference every quotation against the text before including it.`;
+  }
+
+  return `QUOTE ACCURACY IS THE SINGLE MOST IMPORTANT RULE:
+STEP 1: READ THE POEM FIRST. You have access to the web_search tool. Before writing ANY analysis, use it to search for the full text of "${context.poem}" by ${context.poet}. Find a reliable source (Poetry Foundation, poets.org, or similar). Read the full text carefully.
+
+STEP 2: ONLY AFTER you have read the poem text via web search, begin your analysis. If web search fails to find the full text, state this clearly at the top of the note and fall back to paraphrasing.
+
+STEP 3: QUOTE RULES:
+- If you successfully found and read the poem text via web search, quote directly and confidently. No [VERIFY] tags needed for quotes you can see in the search results.
+- If web search did not return the full text, follow these rules:
+  - DEFAULT TO PARAPHRASING. Describe what lines say in your own words.
+  - If you include ANY direct quote from memory, flag it with [VERIFY].
+  - A note with accurate paraphrasing is infinitely better than confident but wrong quotes.
+- Do NOT invent phrases, similes, metaphors, or images that you are not certain exist in the poem.`;
+}
+
 export function buildSystemPrompt(context: PromptContext): string {
   const readingLevel = getReadingLevel(context.level);
   const modes = getComparativeModes(context.year, context.level);
+  const quoteBlock = buildQuoteAccuracyBlock(context);
 
   let examAlignmentBlock = "";
   if (context.contentType === "poetry" && context.examSummary) {
@@ -65,13 +91,7 @@ Your note must:
 
   return `You are a Leaving Certificate English content generator for an experienced Irish secondary school teacher. Your role is to produce exam-focused, accurate, and concise study content aligned with the Irish Leaving Certificate English syllabus.
 
-QUOTE ACCURACY IS THE SINGLE MOST IMPORTANT RULE:
-You do NOT have the text of the poem in front of you. You are working from memory, which means you WILL misremember exact wording. Therefore:
-- DEFAULT TO PARAPHRASING. Describe what lines say in your own words. This is the safest approach and produces better notes than fabricated quotes.
-- If you include ANY direct quote (text inside quotation marks), you MUST flag it with [VERIFY] so the teacher can check it against the actual text. No exceptions. Every single quoted phrase gets [VERIFY].
-- The ONLY exception is the poem's title, which does not need [VERIFY].
-- A note with zero direct quotes and accurate paraphrasing is infinitely better than a note with confident but wrong quotes. One fabricated quote destroys the credibility of the entire note.
-- Do NOT invent phrases, similes, metaphors, or images that you are not certain exist in the poem. If you are unsure whether the poem contains a particular image or phrase, do not include it.
+${quoteBlock}
 
 ABSOLUTE RULES:
 - Write in UK English at all times (colour, analyse, recognise, etc.)
@@ -128,7 +148,30 @@ export function buildPoetryNotePrompt(context: PromptContext): string {
 CRITICAL: You must ONLY link to poems on the prescribed list for ${context.year} at ${context.level}. The prescribed poems for ${context.poet} are: ${poemList}. Do NOT reference any poem not on this list. Linking to non-prescribed poems is misleading and harmful to exam preparation.`;
   }
 
-  return `Generate a comprehensive poetry analysis note for "${context.poem}" by ${context.poet}.
+  // If poem text is provided, include it in the prompt
+  let poemTextBlock = "";
+  if (context.poemText) {
+    poemTextBlock = `
+
+POEM TEXT (verified, use this as your primary source):
+---
+${context.poemText}
+---
+Quote directly from this text. You have the actual words in front of you.`;
+  }
+
+  // Adjust quote guidance based on whether we have text
+  let quoteGuidance: string;
+  if (context.poemText) {
+    quoteGuidance = `- Quote directly from the provided poem text. No [VERIFY] tags needed.
+- Cross-reference every quotation against the provided text before including it.`;
+  } else {
+    quoteGuidance = `- BEFORE writing analysis, use web_search to find and read the full text of this poem.
+- If you successfully found the poem via web search, quote directly and confidently.
+- If web search did not return the full text, default to paraphrasing and flag any direct quotes with [VERIFY].`;
+  }
+
+  return `Generate a comprehensive poetry analysis note for "${context.poem}" by ${context.poet}.${poemTextBlock}
 
 STRUCTURE (follow this exactly):
 
@@ -147,17 +190,15 @@ For each stanza (or section of lines):
 - Format: quote or describe the relevant line/phrase, then the technique, then the effect/significance
 - Use stanza-by-stanza breakdown by default. Only go line-by-line if the poem is exceptionally dense (e.g., Prufrock, A Valediction Forbidding Mourning, Fireman's Lift)
 - Every device identified MUST be connected to meaning. Do not just name a device.
+${quoteGuidance}
 
 BE SPECIFIC, BUT HONEST ABOUT UNCERTAINTY. Do not summarise what a stanza is "about" in vague terms. Instead:
-- Describe what happens in specific lines using paraphrase (since you do not have the text in front of you)
-- If you include a direct quote, it MUST have [VERIFY] after it
+- Describe what happens in specific lines, quoting where possible
 - Name the specific technique being used
 - Explain the specific effect of that technique in the context of THIS moment in the poem
 - Connect it to the poem's themes
 Bad example: "The poet uses imagery to create atmosphere."
 Good example: "The description of mushrooms crowding together in darkness creates a claustrophobic atmosphere that mirrors the confinement of forgotten communities."
-Also good: "The poet describes the mushrooms as [VERIFY: 'crowding to a keyhole'], a vivid image that conveys their desperation for light and recognition."
-Bad example: Inventing a simile or metaphor that may not exist in the poem and presenting it confidently.
 
 ## 3. Key Themes
 2-3 sentences per theme. Only themes genuinely central to this poem.

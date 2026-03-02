@@ -3,6 +3,7 @@ import { getClient } from "@/lib/claude/client";
 import { buildSystemPrompt, buildPoetryNotePrompt, PromptContext } from "@/lib/claude/prompts";
 import { buildPoetExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
+import { getPoemText } from "@/lib/poems/store";
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,16 +35,22 @@ export async function POST(request: NextRequest) {
       userInstructions,
     };
 
-    // For poetry generation, inject exam data and prescribed poem list
+    // For poetry generation, inject exam data, prescribed poem list, and stored poem text
     if (contentType === "poetry" && poet) {
-      // Look up past questions and exam angles for this poet
       context.examSummary = buildPoetExamSummary(poet);
 
-      // Look up the prescribed poem list for this poet/year/level
       const prescribedPoems = level === "HL"
         ? getPoemsForPoet(year, poet)
         : getOLPoemsForPoet(year, poet);
       context.prescribedPoems = prescribedPoems;
+
+      // Check if we have the poem text stored locally
+      if (poem) {
+        const storedText = await getPoemText(poet, poem);
+        if (storedText) {
+          context.poemText = storedText;
+        }
+      }
     }
 
     const systemPrompt = buildSystemPrompt(context);
@@ -68,14 +75,28 @@ export async function POST(request: NextRequest) {
 
     const client = getClient();
 
+    // Use web search for poetry when we don't have stored poem text
+    const useWebSearch = contentType === "poetry" && !context.poemText;
+
     const stream = await client.messages.stream({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
+      max_tokens: 16000,
       system: systemPrompt,
       messages: [{ role: "user", content: userPrompt }],
+      ...(useWebSearch
+        ? {
+            tools: [
+              {
+                type: "web_search_20250305" as const,
+                name: "web_search" as const,
+                max_uses: 3,
+              },
+            ],
+          }
+        : {}),
     });
 
-    // Create a ReadableStream that sends text chunks
+    // Create a ReadableStream that sends text chunks and search status
     const encoder = new TextEncoder();
     const readableStream = new ReadableStream({
       async start(controller) {
@@ -87,6 +108,15 @@ export async function POST(request: NextRequest) {
             ) {
               const chunk = `data: ${JSON.stringify({ text: event.delta.text })}\n\n`;
               controller.enqueue(encoder.encode(chunk));
+            }
+            // Send a status update when web search starts
+            if (
+              event.type === "content_block_start" &&
+              event.content_block.type === "server_tool_use" &&
+              event.content_block.name === "web_search"
+            ) {
+              const status = `data: ${JSON.stringify({ status: "searching" })}\n\n`;
+              controller.enqueue(encoder.encode(status));
             }
           }
           controller.enqueue(encoder.encode("data: [DONE]\n\n"));
