@@ -57,6 +57,8 @@ export default function PoetryPage() {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [searchStatus, setSearchStatus] = useState("");
+  const rawOutputRef = useRef("");
+  const foundHeadingRef = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
   const outputRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +89,8 @@ export default function PoetryPage() {
     setOutput("");
     setError("");
     setSearchStatus("");
+    rawOutputRef.current = "";
+    foundHeadingRef.current = false;
 
     abortRef.current = new AbortController();
 
@@ -138,7 +142,22 @@ export default function PoetryPage() {
                 setSearchStatus("Searching for poem text...");
               } else if (parsed.text) {
                 setSearchStatus("");
-                setOutput((prev) => prev + parsed.text);
+                rawOutputRef.current += parsed.text;
+
+                if (foundHeadingRef.current) {
+                  // Already past the preamble, append directly
+                  setOutput((prev) => prev + parsed.text);
+                } else {
+                  // Check if we've hit a markdown heading yet
+                  const headingMatch = rawOutputRef.current.match(/^([\s\S]*?)(#{1,2}\s)/);
+                  if (headingMatch) {
+                    foundHeadingRef.current = true;
+                    // Output from the heading onwards
+                    const fromHeading = rawOutputRef.current.slice(headingMatch[1].length);
+                    setOutput(fromHeading);
+                  }
+                  // If no heading yet, don't display anything (it's preamble)
+                }
               }
             } catch {
               // Skip malformed JSON
@@ -153,6 +172,10 @@ export default function PoetryPage() {
         setError(err instanceof Error ? err.message : "Generation failed");
       }
     } finally {
+      // If stream ended without ever finding a heading, show all output
+      if (!foundHeadingRef.current && rawOutputRef.current) {
+        setOutput(rawOutputRef.current);
+      }
       setGenerating(false);
       abortRef.current = null;
     }
