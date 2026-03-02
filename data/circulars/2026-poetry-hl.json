@@ -1,0 +1,112 @@
+{
+  "year": 2026,
+  "circular": "0016/2024",
+  "level": "HL",
+  "note": "Students must study at least 6 poems per poet. 8 poets prescribed.",
+  "poets": {
+    "Elizabeth Bishop": [
+      "The Fish",
+      "The Bight",
+      "At the Fishhouses",
+      "The Prodigal",
+      "Questions of Travel",
+      "The Armadillo",
+      "Sestina",
+      "First Death in Nova Scotia",
+      "Filling Station",
+      "In the Waiting Room"
+    ],
+    "John Donne": [
+      "The Sunne Rising",
+      "Song: Go, and catch a falling star",
+      "The Anniversarie",
+      "Song: Sweetest love, I do not goe",
+      "The Dreame",
+      "A Valediction Forbidding Mourning",
+      "The Flea",
+      "Batter my heart",
+      "At the round earth's imagined corners",
+      "Thou hast made me"
+    ],
+    "T.S. Eliot": [
+      "The Lovesong of J. Alfred Prufrock",
+      "Preludes",
+      "Aunt Helen",
+      "from The Waste Land: II. A Game of Chess",
+      "Journey of the Magi",
+      "from Landscapes: III Usk",
+      "from Landscapes: IV Rannoch, by Glencoe",
+      "from The Four Quartets: East Coker IV"
+    ],
+    "Seamus Heaney": [
+      "The Forge",
+      "Bogland",
+      "The Tollund Man",
+      "Mossbawn: Two Poems in Dedication (1) Sunlight",
+      "A Constable Calls",
+      "The Skunk",
+      "The Harvest Bow",
+      "The Underground",
+      "Postscript",
+      "A Call",
+      "Tate's Avenue",
+      "The Pitchfork",
+      "Lightenings viii (The annals say...)"
+    ],
+    "Paula Meehan": [
+      "Buying Winkles",
+      "The Pattern",
+      "The Statue of the Virgin at Granard Speaks",
+      "Cora, Auntie",
+      "The Exact Moment I Became a Poet",
+      "My Father Perceived as a Vision of St. Francis",
+      "Hearth Lesson",
+      "Prayer for the Children of Longing",
+      "Death of a Field",
+      "Them Ducks Died for Ireland"
+    ],
+    "Eilean Ni Chuilleanain": [
+      "Lucina Schynning in Silence of the Nicht",
+      "The Second Voyage",
+      "Deaths and Engines",
+      "Street",
+      "Fireman's Lift",
+      "All for You",
+      "Following",
+      "Kilcash",
+      "Translation",
+      "The Bend in the Road",
+      "On Lacking the Killer Instinct",
+      "To Niall Woods and Xenya Ostrovskaia, married in Dublin on 9 September 2009"
+    ],
+    "Tracy K. Smith": [
+      "Joy (Elegy 1)",
+      "Dominion over the beasts of the Earth",
+      "The Searchers",
+      "Letter to a Photojournalist Going In",
+      "The Universe is a House Party",
+      "The Museum of Obsolescence",
+      "Don't you wonder, sometimes?",
+      "It's Not",
+      "The Universe as Primal Scream",
+      "The Greatest Personal Privation",
+      "I am 60 odd years of age (from I will tell you the truth about this, I will tell you all about it)",
+      "Ghazal"
+    ],
+    "W.B. Yeats": [
+      "The Lake Isle of Innisfree",
+      "September 1913",
+      "The Wild Swans at Coole",
+      "An Irish Airman Foresees his Death",
+      "Easter 1916",
+      "The Second Coming",
+      "Sailing to Byzantium",
+      "from Meditations in Time of Civil War: VI, The Stare's Nest by My Window",
+      "In Memory of Eva Gore-Booth and Con Markiewicz",
+      "Swift's Epitaph",
+      "An Acre of Grass",
+      "from Under Ben Bulben: V and VI",
+      "Politics"
+    ]
+  }
+}

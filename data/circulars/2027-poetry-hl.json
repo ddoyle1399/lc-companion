@@ -1,0 +1,107 @@
+{
+  "year": 2027,
+  "circular": "0021/2025",
+  "level": "Higher",
+  "note": "Students must study at least 6 poems per poet. 8 poets prescribed.",
+  "poets": {
+    "Elizabeth Bishop": [
+      "The Fish",
+      "The Bight",
+      "At the Fishhouses",
+      "The Prodigal",
+      "Questions of Travel",
+      "The Armadillo",
+      "Sestina",
+      "First Death in Nova Scotia",
+      "Filling Station",
+      "In the Waiting Room"
+    ],
+    "Emily Dickinson": [
+      "\"Hope\" is the thing with feathers",
+      "There's a certain Slant of light",
+      "I felt a Funeral, in my Brain",
+      "A Bird came down the Walk",
+      "I Heard a fly buzz - when I died",
+      "The Soul has Bandaged moments",
+      "I could bring You Jewels - had I a mind to",
+      "A narrow Fellow in the Grass",
+      "I taste a liquor never brewed",
+      "After great pain, a formal feeling comes"
+    ],
+    "John Donne": [
+      "The Sunne Rising",
+      "Song: Go, and catch a falling star",
+      "The Anniversarie",
+      "Song: Sweetest love, I do not goe",
+      "The Dreame",
+      "A Valediction Forbidding Mourning",
+      "The Flea",
+      "Batter my heart",
+      "At the round earth's imagined corners",
+      "Thou hast made me"
+    ],
+    "Patrick Kavanagh": [
+      "Inniskeen Road: July Evening",
+      "Shancoduff",
+      "from The Great Hunger Section I",
+      "Advent",
+      "A Christmas Childhood",
+      "Epic",
+      "Canal Bank Walk",
+      "Lines Written on a Seat on the Grand Canal",
+      "The Hospital",
+      "On Raglan Road"
+    ],
+    "Derek Mahon": [
+      "Grandfather",
+      "Day Trip to Donegal",
+      "Ecclesiastes",
+      "After the Titanic",
+      "As It Should Be",
+      "A Disused Shed in Co. Wexford",
+      "Rathlin",
+      "The Chinese Restaurant in Portrush",
+      "Kinsale",
+      "Antarctica"
+    ],
+    "Paula Meehan": [
+      "Buying Winkles",
+      "The Pattern",
+      "The Statue of the Virgin at Granard Speaks",
+      "Cora, Auntie",
+      "The Exact Moment I Became a Poet",
+      "My Father Perceived as a Vision of St. Francis",
+      "Hearth Lesson",
+      "Prayer for the Children of Longing",
+      "Death of a Field",
+      "Them Ducks Died for Ireland"
+    ],
+    "Adrienne Rich": [
+      "Aunt Jennifer's Tigers",
+      "Uncle Speaks in the Drawing Room",
+      "Power",
+      "Storm Warnings",
+      "Living in Sin",
+      "The Roofwalker",
+      "Our Whole Life",
+      "Trying to Talk with a Man",
+      "Diving Into the Wreck",
+      "From a Survivor"
+    ],
+    "W.B. Yeats": [
+      "The Lake Isle of Innisfree",
+      "September 1913",
+      "The Wild Swans at Coole",
+      "An Irish Airman Foresees his Death",
+      "Easter 1916",
+      "The Second Coming",
+      "Sailing to Byzantium",
+      "from Meditations in Time of Civil War: VI, The Stare's Nest by My Window",
+      "In Memory of Eva Gore-Booth and Con Markiewicz",
+      "Swift's Epitaph",
+      "An Acre of Grass",
+      "from Under Ben Bulben: V and VI",
+      "Politics"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "year": 2027,
+  "circular": "0021/2025",
+  "single_texts": [
+    { "author": "Marina Carr", "title": "Girl on an Altar", "level": "H/O" },
+    { "author": "Lorraine Hansberry", "title": "A Raisin in the Sun", "level": "O" },
+    { "author": "John B. Keane", "title": "Sive", "level": "O" },
+    { "author": "Maggie O'Farrell", "title": "Hamnet", "level": "H/O" },
+    { "author": "Ron Rash", "title": "The Cove", "level": "O" },
+    { "author": "F. Scott Fitzgerald", "title": "The Great Gatsby", "level": "H/O" },
+    { "author": "William Shakespeare", "title": "Othello", "level": "H/O" },
+    { "author": "Bram Stoker", "title": "Dracula", "level": "H/O" },
+    { "author": "Colson Whitehead", "title": "The Underground Railroad", "level": "O" }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "year": 2026,
+  "circular": "0016/2024",
+  "single_texts": [
+    { "author": "Anne Bronte", "title": "The Tenant of Wildfell Hall", "level": "H/O" },
+    { "author": "Lorraine Hansberry", "title": "A Raisin in the Sun", "level": "O" },
+    { "author": "John B. Keane", "title": "Sive", "level": "O" },
+    { "author": "Arthur Miller", "title": "The Crucible", "level": "H/O" },
+    { "author": "Maggie O'Farrell", "title": "Hamnet", "level": "H/O" },
+    { "author": "Ron Rash", "title": "The Cove", "level": "O" },
+    { "author": "William Shakespeare", "title": "Macbeth", "level": "H/O" },
+    { "author": "Bram Stoker", "title": "Dracula", "level": "H/O" },
+    { "author": "Colson Whitehead", "title": "The Underground Railroad", "level": "O" }
+  ]
+}

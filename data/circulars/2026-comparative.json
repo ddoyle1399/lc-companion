@@ -1,0 +1,49 @@
+{
+  "year": 2026,
+  "circular": "0016/2024",
+  "comparative_modes_HL": ["Cultural Context", "General Vision and Viewpoint", "Literary Genre"],
+  "comparative_modes_OL": ["Social Setting", "Relationships", "Hero, heroine, villain"],
+  "novels_memoirs": [
+    { "author": "Chimamanda Ngozi Adichie", "title": "Purple Hibiscus" },
+    { "author": "Jane Austen", "title": "Pride and Prejudice" },
+    { "author": "Pat Barker", "title": "The Silence of the Girls" },
+    { "author": "Colin Barrett", "title": "Young Skins" },
+    { "author": "Anne Bronte", "title": "The Tenant of Wildfell Hall" },
+    { "author": "Thi Bui", "title": "The Best We Could Do" },
+    { "author": "Raymond Chandler", "title": "The Big Sleep" },
+    { "author": "Anthony Doerr", "title": "All the Light We Cannot See" },
+    { "author": "Daphne Du Maurier", "title": "Rebecca" },
+    { "author": "Bonnie Garmus", "title": "Lessons in Chemistry" },
+    { "author": "Tom Gregory", "title": "A Boy in the Water" },
+    { "author": "Thomas Hardy", "title": "The Mayor of Casterbridge" },
+    { "author": "Claire Keegan", "title": "Small Things Like These" },
+    { "author": "Mike McCormack", "title": "Notes from a Coma" },
+    { "author": "Maggie O'Farrell", "title": "Hamnet" },
+    { "author": "Delia Owens", "title": "Where the Crawdads Sing" },
+    { "author": "Claudia Pineiro", "title": "Elena Knows" },
+    { "author": "Ron Rash", "title": "The Cove" },
+    { "author": "Bram Stoker", "title": "Dracula" },
+    { "author": "Colson Whitehead", "title": "The Underground Railroad" }
+  ],
+  "drama": [
+    { "author": "Marina Carr", "title": "Girl on an Altar" },
+    { "author": "Euripides", "title": "Medea" },
+    { "author": "Lorraine Hansberry", "title": "A Raisin in the Sun" },
+    { "author": "John B. Keane", "title": "Sive" },
+    { "author": "Phillip McMahon", "title": "Once Before I Go" },
+    { "author": "Arthur Miller", "title": "The Crucible" },
+    { "author": "Laura Wade", "title": "Colder Than Here" },
+    { "author": "William Shakespeare", "title": "Macbeth" },
+    { "author": "William Shakespeare", "title": "The Merry Wives of Windsor" }
+  ],
+  "film": [
+    { "director": "Wes Anderson", "title": "The Grand Budapest Hotel" },
+    { "director": "Frank Darabont", "title": "The Shawshank Redemption" },
+    { "director": "Deniz Gamze Erguven", "title": "Mustang" },
+    { "director": "Greta Gerwig", "title": "Barbie" },
+    { "director": "Rian Johnson", "title": "Knives Out" },
+    { "director": "Asif Kapadia", "title": "Diego Maradona" },
+    { "director": "Elia Kazan", "title": "On the Waterfront" },
+    { "director": "Martin McDonagh", "title": "The Banshees of Inisherin" }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "exam_format": {
+    "paper": "Paper 2",
+    "section": "Section III - Poetry",
+    "marks": 50,
+    "question_structure": "A quoted statement combining a claim about the poet's STYLE/LANGUAGE with a claim about their THEMES/CONCERNS, followed by: 'Discuss this statement developing your response with reference to the poetry of [poet] on your Leaving Certificate English course.'",
+    "typical_choice": "Students answer ONE question from a choice of typically 5 poets.",
+    "recommended_poems": "Reference 4-6 poems with 3-4 discussed in depth.",
+    "examiner_expectations": [
+      "Evidence-based with supporting quotation",
+      "Analytical question-facing commentary, not summary",
+      "Brief opening paragraph stating thesis",
+      "Each body paragraph opens with a point related to the question",
+      "BOTH style/language AND thematic content must be addressed",
+      "Brief closing paragraph reiterating thesis",
+      "Personal engagement rewarded"
+    ]
+  },
+  "poets": {
+    "W.B. Yeats": {
+      "past_questions": [
+        {
+          "year": 2024,
+          "statement": "Yeats utilises powerful imagery to explore fascinating contradictions that are central to his poetry.",
+          "style_focus": "powerful imagery",
+          "theme_focus": "contradictions"
+        },
+        {
+          "year": 2022,
+          "statement": "The bold and brilliant imagery in Yeats's poetry creates a world of chaos and uncertainty that is both disturbing and enthralling.",
+          "style_focus": "bold brilliant imagery",
+          "theme_focus": "chaos and uncertainty"
+        },
+        {
+          "year": 2018,
+          "statement": "Yeats's poetry is driven by a tension between the real world in which he lives and an ideal world that he imagines.",
+          "style_focus": "tension and duality",
+          "theme_focus": "real vs ideal"
+        }
+      ],
+      "useful_themes": ["contradiction", "idealism vs reality", "ageing", "Irish identity", "beauty and decay", "permanence vs transience"],
+      "predicted_style_elements": ["powerful imagery", "bold and brilliant imagery", "symbolic language", "musical rhythm"],
+      "status": "frequently_examined"
+    },
+    "Seamus Heaney": {
+      "past_questions": [
+        {
+          "year": 2024,
+          "statement": "Heaney uses a deceptively simple style to convey profound observations about people and places.",
+          "style_focus": "deceptively simple style",
+          "theme_focus": "people and places"
+        },
+        {
+          "year": 2021,
+          "statement": "Heaney's evocative language and imagery bring us on a compelling journey through his exploration of a rich variety of themes.",
+          "style_focus": "evocative language and imagery",
+          "theme_focus": "rich variety of themes"
+        }
+      ],
+      "useful_themes": ["rural Ireland", "memory", "identity", "craft and work", "family", "landscape"],
+      "predicted_style_elements": ["deceptively simple style", "evocative language and imagery", "sensory detail", "earthy precision"],
+      "status": "frequently_examined"
+    },
+    "Eilean Ni Chuilleanain": {
+      "past_questions": [
+        {
+          "year": 2024,
+          "statement": "Ni Chuilleanain uses evocative imagery to produce poems that often reveal meaningful insights about the nature of life.",
+          "style_focus": "evocative imagery",
+          "theme_focus": "nature of life"
+        },
+        {
+          "year": 2018,
+          "statement": "Ni Chuilleanain tells fascinating stories, often examining themes relevant to contemporary Ireland, in a style that is both beautiful and mysterious.",
+          "style_focus": "beautiful and mysterious style",
+          "theme_focus": "contemporary Ireland"
+        }
+      ],
+      "useful_themes": ["hidden histories", "women's lives", "religion and institutions", "memory", "transformation", "journeys"],
+      "predicted_style_elements": ["evocative imagery", "beautiful and mysterious style", "narrative layering", "symbolic depth"],
+      "status": "frequently_examined"
+    },
+    "Paula Meehan": {
+      "past_questions": [
+        {
+          "year": 2023,
+          "statement": "Meehan's forceful language and imagery give powerful expression to the often-oppressive forces at work in her poetry.",
+          "style_focus": "forceful language and imagery",
+          "theme_focus": "oppressive forces"
+        }
+      ],
+      "useful_themes": ["social injustice", "poverty", "women's experience", "motherhood", "Dublin", "nature vs urban", "memory and childhood"],
+      "predicted_style_elements": ["forceful language and imagery", "direct emotional power", "accessible yet striking imagery", "blending of personal and political"],
+      "status": "examined"
+    },
+    "John Donne": {
+      "past_questions": [
+        {
+          "year": 2023,
+          "statement": "Donne's inventive and paradoxical style allows him to explore the depth and complexity of human experience in a compelling way.",
+          "style_focus": "inventive and paradoxical style",
+          "theme_focus": "human experience"
+        }
+      ],
+      "useful_themes": ["love", "death", "religion", "body and soul", "wit and argument", "devotion"],
+      "predicted_style_elements": ["inventive and paradoxical style", "intellectual wit", "extended conceits", "dramatic directness"],
+      "status": "examined"
+    },
+    "Elizabeth Bishop": {
+      "past_questions": [
+        {
+          "year": 2022,
+          "statement": "Bishop's carefully crafted poems use simple yet evocative language to reflect on profound aspects of human experience.",
+          "style_focus": "carefully crafted, simple yet evocative language",
+          "theme_focus": "human experience"
+        }
+      ],
+      "useful_themes": ["observation", "loss", "travel and displacement", "childhood", "nature", "memory", "identity"],
+      "predicted_style_elements": ["carefully crafted language", "simple yet evocative", "precise observation", "restrained emotional depth"],
+      "status": "examined"
+    },
+    "Tracy K. Smith": {
+      "past_questions": [],
+      "useful_themes": ["race and history", "grief and loss", "the universe and human smallness", "family", "justice"],
+      "predicted_style_elements": ["inventive imagery", "accessible yet layered language", "blend of personal and political", "cosmic scope with intimate detail"],
+      "status": "not_yet_examined"
+    },
+    "T.S. Eliot": {
+      "past_questions": [],
+      "useful_themes": ["disillusionment", "spiritual searching", "modern life", "time and memory"],
+      "predicted_style_elements": ["modernist techniques", "rich allusive imagery", "fragmented style", "dramatic juxtaposition of registers"],
+      "status": "not_yet_examined"
+    },
+    "Emily Dickinson": {
+      "past_questions": [],
+      "useful_themes": ["death and immortality", "pain and suffering", "nature", "faith and doubt", "the self and identity", "isolation and solitude"],
+      "predicted_style_elements": ["compressed and elliptical style", "striking use of dashes and unconventional punctuation", "startling imagery and metaphor", "hymn metre with subversive variation"],
+      "status": "not_yet_examined"
+    },
+    "Patrick Kavanagh": {
+      "past_questions": [
+        {
+          "year": 2019,
+          "statement": "Kavanagh's poetry is rooted in the ordinary, yet it reveals the extraordinary through his distinctive style and keen observation.",
+          "style_focus": "distinctive style and keen observation",
+          "theme_focus": "the ordinary revealing the extraordinary"
+        }
+      ],
+      "useful_themes": ["rural life and the land", "isolation and loneliness", "the ordinary as sacred", "spiritual renewal", "love and loss", "the artist and creativity"],
+      "predicted_style_elements": ["deceptively plain language", "keen observation of the ordinary", "movement from realism to transcendence", "conversational directness"],
+      "status": "examined"
+    },
+    "Derek Mahon": {
+      "past_questions": [
+        {
+          "year": 2019,
+          "statement": "Mahon's carefully crafted poetry challenges us to see the world from new and thought-provoking perspectives.",
+          "style_focus": "carefully crafted",
+          "theme_focus": "new and thought-provoking perspectives"
+        }
+      ],
+      "useful_themes": ["alienation and displacement", "the outsider", "decay and renewal", "history and civilisation", "Northern Ireland and conflict", "art and beauty"],
+      "predicted_style_elements": ["carefully crafted and polished style", "striking imagery of desolation and beauty", "intellectual precision with emotional depth", "ironic detachment"],
+      "status": "examined"
+    },
+    "Adrienne Rich": {
+      "past_questions": [],
+      "useful_themes": ["feminism and women's lives", "power and oppression", "identity and self-discovery", "political awakening", "love and relationships", "language and silence"],
+      "predicted_style_elements": ["evolving style from formal to open", "powerful and direct imagery", "unflinching political engagement", "blend of the personal and the political"],
+      "status": "not_yet_examined"
+    }
+  },
+  "comparative_patterns": {
+    "Cultural Context": {
+      "typical_angles": [
+        "Social position/status determining freedom",
+        "Cultural context nurturing values",
+        "Social class, family, religion, or gender shaping choices"
+      ],
+      "past_questions": [
+        {
+          "year": 2024,
+          "statement": "Discuss the extent to which the level of freedom enjoyed by a central character is determined by this character's social position and status."
+        }
+      ]
+    },
+    "General Vision and Viewpoint": {
+      "typical_angles": [
+        "Optimism vs pessimism",
+        "Compassion and kindness",
+        "Personal or societal crises shaping vision"
+      ],
+      "past_questions": [
+        {
+          "year": 2023,
+          "statement": "Compare how compassion and kindness feature in at least two of your comparative texts."
+        }
+      ]
+    },
+    "Literary Genre": {
+      "typical_angles": [
+        "Techniques making relationships believable",
+        "Manipulating emotional response",
+        "Heightening or lessening empathy"
+      ],
+      "past_questions": [
+        {
+          "year": 2024,
+          "statement": "Discuss how the author employs techniques to make a relationship believable."
+        }
+      ]
+    },
+    "Theme or Issue": {
+      "typical_angles": [
+        "Character interactions at pivotal moments revealing insights",
+        "Exploration instilling feelings or perspectives"
+      ],
+      "past_questions": [
+        {
+          "year": 2024,
+          "statement": "Discuss how an interaction between characters at a pivotal moment revealed important insights about a theme or issue."
+        }
+      ]
+    }
+  }
+}
