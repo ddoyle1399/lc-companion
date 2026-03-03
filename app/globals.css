@@ -67,3 +67,70 @@ body {
 .prose strong {
   font-weight: 600;
 }
+
+/* Print styles for PDF export */
+@media print {
+  /* Hide everything except the printable content */
+  .no-print,
+  nav,
+  button,
+  select,
+  textarea,
+  label {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: #333;
+    font-family: Calibri, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+
+  @page {
+    size: A4;
+    margin: 2.5cm;
+
+    @bottom-right {
+      content: "LC English Hub";
+      font-family: Calibri, sans-serif;
+      font-size: 9pt;
+      color: #888;
+    }
+  }
+
+  .prose h1,
+  .prose h2 {
+    color: #1B2A4A;
+    font-family: Calibri, sans-serif;
+    page-break-after: avoid;
+  }
+
+  .prose h2 {
+    font-size: 14pt;
+  }
+
+  .prose h3 {
+    font-size: 12pt;
+    color: #1B2A4A;
+    page-break-after: avoid;
+  }
+
+  .prose p,
+  .prose li {
+    font-size: 11pt;
+    orphans: 3;
+    widows: 3;
+  }
+
+  .prose blockquote {
+    border-left-color: #2A9D8F;
+  }
+
+  /* Ensure the output area is full width */
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+}

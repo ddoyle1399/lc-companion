@@ -90,3 +90,26 @@ export function buildPoetExamSummary(poet: string): string {
 
   return parts.join("\n");
 }
+
+/**
+ * Build a summary string of a comparative mode's exam history and angles,
+ * suitable for injection into a system prompt.
+ */
+export function buildComparativeExamSummary(mode: string): string {
+  const pattern = getComparativePattern(mode);
+  if (!pattern) return "";
+
+  const parts: string[] = [];
+  parts.push(`Comparative mode: ${mode}`);
+  parts.push(`Typical exam angles for this mode:`);
+  for (const angle of pattern.typical_angles) {
+    parts.push(`- ${angle}`);
+  }
+  if (pattern.past_questions.length > 0) {
+    parts.push(`\nPast SEC exam questions in this mode:`);
+    for (const q of pattern.past_questions) {
+      parts.push(`- ${q.year}: "${q.statement}"`);
+    }
+  }
+  return parts.join("\n");
+}

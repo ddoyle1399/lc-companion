@@ -1,28 +1,31 @@
 import { NextRequest } from "next/server";
 import { getClient } from "@/lib/claude/client";
-import { buildSystemPrompt, buildPoetryNotePrompt, PromptContext } from "@/lib/claude/prompts";
-import { buildPoetExamSummary } from "@/data/exam-patterns";
+import {
+  buildSystemPrompt,
+  buildPoetryNotePrompt,
+  buildComparativePrompt,
+  buildWorksheetPrompt,
+  buildSlidesPrompt,
+  PromptContext,
+} from "@/lib/claude/prompts";
+import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
+
+function errorResponse(message: string, status = 400) {
+  return new Response(
+    JSON.stringify({ error: message }),
+    { status, headers: { "Content-Type": "application/json" } }
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      year,
-      circular,
-      level,
-      contentType,
-      poet,
-      poem,
-      userInstructions,
-    } = body;
+    const { year, circular, level, contentType, userInstructions } = body;
 
     if (!year || !level || !contentType) {
-      return new Response(
-        JSON.stringify({ error: "Missing required fields: year, level, contentType" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
-      );
+      return errorResponse("Missing required fields: year, level, contentType");
     }
 
     const context: PromptContext = {
@@ -30,53 +33,92 @@ export async function POST(request: NextRequest) {
       circular: circular || "0016/2024",
       level,
       contentType,
-      poet,
-      poem,
       userInstructions,
     };
 
-    // For poetry generation, inject exam data, prescribed poem list, and stored poem text
-    if (contentType === "poetry" && poet) {
-      context.examSummary = buildPoetExamSummary(poet);
+    let userPrompt: string;
+    let useWebSearch = false;
+    let webSearchMaxUses = 3;
 
-      const prescribedPoems = level === "HL"
-        ? getPoemsForPoet(year, poet)
-        : getOLPoemsForPoet(year, poet);
-      context.prescribedPoems = prescribedPoems;
-
-      // Check if we have the poem text stored locally
-      if (poem) {
-        const storedText = await getPoemText(poet, poem);
-        if (storedText) {
-          context.poemText = storedText;
+    switch (contentType) {
+      case "poetry": {
+        const { poet, poem } = body;
+        if (!poet || !poem) {
+          return errorResponse("Poetry notes require poet and poem");
         }
+        context.poet = poet;
+        context.poem = poem;
+        context.examSummary = buildPoetExamSummary(poet);
+
+        const prescribedPoems = level === "HL"
+          ? getPoemsForPoet(year, poet)
+          : getOLPoemsForPoet(year, poet);
+        context.prescribedPoems = prescribedPoems;
+
+        if (poem) {
+          const storedText = await getPoemText(poet, poem);
+          if (storedText) {
+            context.poemText = storedText;
+          }
+        }
+
+        useWebSearch = !context.poemText;
+        userPrompt = buildPoetryNotePrompt(context);
+        break;
       }
+
+      case "comparative": {
+        const { comparativeMode, comparativeTexts } = body;
+        if (!comparativeMode || !comparativeTexts || comparativeTexts.length !== 3) {
+          return errorResponse("Comparative notes require a mode and exactly 3 texts");
+        }
+        context.comparativeMode = comparativeMode;
+        context.comparativeTexts = comparativeTexts;
+        context.comparativeExamPattern = buildComparativeExamSummary(comparativeMode);
+
+        useWebSearch = true;
+        webSearchMaxUses = 5;
+        userPrompt = buildComparativePrompt(context);
+        break;
+      }
+
+      case "worksheet": {
+        const { worksheetContentType, activityTypes, poet, poem, author, textTitle, comparativeMode, comparativeTexts } = body;
+        context.worksheetContentType = worksheetContentType;
+        context.activityTypes = activityTypes;
+        context.poet = poet;
+        context.poem = poem;
+        context.author = author;
+        context.textTitle = textTitle;
+        context.comparativeMode = comparativeMode;
+        context.comparativeTexts = comparativeTexts;
+
+        useWebSearch = true;
+        userPrompt = buildWorksheetPrompt(context);
+        break;
+      }
+
+      case "slides": {
+        const { slidesContentType, poet, poem, author, textTitle, comparativeMode, comparativeTexts } = body;
+        context.slidesContentType = slidesContentType;
+        context.poet = poet;
+        context.poem = poem;
+        context.author = author;
+        context.textTitle = textTitle;
+        context.comparativeMode = comparativeMode;
+        context.comparativeTexts = comparativeTexts;
+
+        useWebSearch = true;
+        userPrompt = buildSlidesPrompt(context);
+        break;
+      }
+
+      default:
+        return errorResponse(`Content type "${contentType}" is not supported`);
     }
 
     const systemPrompt = buildSystemPrompt(context);
-
-    let userPrompt: string;
-    switch (contentType) {
-      case "poetry":
-        if (!poet || !poem) {
-          return new Response(
-            JSON.stringify({ error: "Poetry notes require poet and poem" }),
-            { status: 400, headers: { "Content-Type": "application/json" } }
-          );
-        }
-        userPrompt = buildPoetryNotePrompt(context);
-        break;
-      default:
-        return new Response(
-          JSON.stringify({ error: `Content type "${contentType}" is not yet supported` }),
-          { status: 400, headers: { "Content-Type": "application/json" } }
-        );
-    }
-
     const client = getClient();
-
-    // Use web search for poetry when we don't have stored poem text
-    const useWebSearch = contentType === "poetry" && !context.poemText;
 
     const stream = await client.messages.stream({
       model: "claude-sonnet-4-20250514",
@@ -89,14 +131,13 @@ export async function POST(request: NextRequest) {
               {
                 type: "web_search_20250305" as const,
                 name: "web_search" as const,
-                max_uses: 3,
+                max_uses: webSearchMaxUses,
               },
             ],
           }
         : {}),
     });
 
-    // Create a ReadableStream that sends text chunks and search status
     const encoder = new TextEncoder();
     const readableStream = new ReadableStream({
       async start(controller) {
@@ -109,7 +150,6 @@ export async function POST(request: NextRequest) {
               const chunk = `data: ${JSON.stringify({ text: event.delta.text })}\n\n`;
               controller.enqueue(encoder.encode(chunk));
             }
-            // Send a status update when web search starts
             if (
               event.type === "content_block_start" &&
               event.content_block.type === "server_tool_use" &&
@@ -140,9 +180,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Generate error:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to generate content" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return errorResponse("Failed to generate content", 500);
   }
 }

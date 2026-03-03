@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import Nav from "@/components/nav";
+import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
+import { exportToWord } from "@/lib/export/word";
+import { exportToPDF } from "@/lib/export/pdf";
 
 // Import circular data statically for client-side use
 import poetryHL2026 from "@/data/circulars/2026-poetry-hl.json";
@@ -52,15 +55,11 @@ export default function PoetryPage() {
   const [poet, setPoet] = useState("");
   const [poem, setPoem] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [output, setOutput] = useState("");
-  const [generating, setGenerating] = useState(false);
-  const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
-  const [searchStatus, setSearchStatus] = useState("");
-  const rawOutputRef = useRef("");
-  const foundHeadingRef = useRef(false);
-  const abortRef = useRef<AbortController | null>(null);
   const outputRef = useRef<HTMLDivElement>(null);
+
+  const { output, generating, error, searchStatus, generate, stop } =
+    useStreamGenerate();
 
   const poets = getPoets(year, level);
   const poems = poet ? getPoems(year, level, poet) : [];
@@ -82,107 +81,17 @@ export default function PoetryPage() {
     setPoem("");
   }
 
-  const handleGenerate = useCallback(async () => {
+  async function handleGenerate() {
     if (!poet || !poem) return;
-
-    setGenerating(true);
-    setOutput("");
-    setError("");
-    setSearchStatus("");
-    rawOutputRef.current = "";
-    foundHeadingRef.current = false;
-
-    abortRef.current = new AbortController();
-
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          year,
-          circular: circularNumbers[year],
-          level,
-          contentType: "poetry",
-          poet,
-          poem,
-          userInstructions: instructions || undefined,
-        }),
-        signal: abortRef.current.signal,
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Generation failed");
-      }
-
-      const reader = res.body?.getReader();
-      if (!reader) throw new Error("No response stream");
-
-      const decoder = new TextDecoder();
-      let buffer = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const data = line.slice(6);
-            if (data === "[DONE]") continue;
-
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.error) {
-                setError(parsed.error);
-              } else if (parsed.status === "searching") {
-                setSearchStatus("Searching for poem text...");
-              } else if (parsed.text) {
-                setSearchStatus("");
-                rawOutputRef.current += parsed.text;
-
-                if (foundHeadingRef.current) {
-                  // Already past the preamble, append directly
-                  setOutput((prev) => prev + parsed.text);
-                } else {
-                  // Check if we've hit a markdown heading yet
-                  const headingMatch = rawOutputRef.current.match(/^([\s\S]*?)(#{1,2}\s)/);
-                  if (headingMatch) {
-                    foundHeadingRef.current = true;
-                    // Output from the heading onwards
-                    const fromHeading = rawOutputRef.current.slice(headingMatch[1].length);
-                    setOutput(fromHeading);
-                  }
-                  // If no heading yet, don't display anything (it's preamble)
-                }
-              }
-            } catch {
-              // Skip malformed JSON
-            }
-          }
-        }
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") {
-        // User cancelled
-      } else {
-        setError(err instanceof Error ? err.message : "Generation failed");
-      }
-    } finally {
-      // If stream ended without ever finding a heading, show all output
-      if (!foundHeadingRef.current && rawOutputRef.current) {
-        setOutput(rawOutputRef.current);
-      }
-      setGenerating(false);
-      abortRef.current = null;
-    }
-  }, [poet, poem, year, level, instructions]);
-
-  function handleStop() {
-    abortRef.current?.abort();
+    await generate({
+      year,
+      circular: circularNumbers[year],
+      level,
+      contentType: "poetry",
+      poet,
+      poem,
+      userInstructions: instructions || undefined,
+    });
   }
 
   async function handleCopy() {
@@ -191,7 +100,7 @@ export default function PoetryPage() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      setError("Failed to copy to clipboard");
+      // Copy failed
     }
   }
 
@@ -206,11 +115,20 @@ export default function PoetryPage() {
     URL.revokeObjectURL(url);
   }
 
+  async function handleDownloadWord() {
+    const filename = `${poet} - ${poem}`.replace(/[/\\?%*:|"<>]/g, "-");
+    await exportToWord(output, filename);
+  }
+
+  function handleDownloadPDF() {
+    exportToPDF();
+  }
+
   return (
     <div className="min-h-screen bg-cream">
       <Nav />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
+        <div className="mb-6 no-print">
           <h1 className="text-2xl font-semibold text-navy">
             Poetry Note Generator
           </h1>
@@ -220,7 +138,7 @@ export default function PoetryPage() {
         </div>
 
         {/* Controls */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5 mb-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-5 mb-6 no-print">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Year */}
             <div>
@@ -323,7 +241,7 @@ export default function PoetryPage() {
             </button>
             {generating && (
               <button
-                onClick={handleStop}
+                onClick={stop}
                 className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md text-sm hover:bg-gray-50 transition-colors"
               >
                 Stop
@@ -334,7 +252,7 @@ export default function PoetryPage() {
 
         {/* Error */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm no-print">
             {error}
           </div>
         )}
@@ -343,7 +261,7 @@ export default function PoetryPage() {
         {(output || generating) && (
           <div className="bg-white border border-gray-200 rounded-lg">
             {/* Output header */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200 no-print">
               <div>
                 <h2 className="font-medium text-navy text-sm">
                   {poet} &ndash; {poem}
@@ -366,7 +284,19 @@ export default function PoetryPage() {
                     onClick={handleDownloadMarkdown}
                     className="text-sm px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                   >
-                    Download .md
+                    .md
+                  </button>
+                  <button
+                    onClick={handleDownloadWord}
+                    className="text-sm px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                  >
+                    .docx
+                  </button>
+                  <button
+                    onClick={handleDownloadPDF}
+                    className="text-sm px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                  >
+                    PDF
                   </button>
                 </div>
               )}
