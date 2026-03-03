@@ -10,6 +10,7 @@ const navItems = [
   { href: "/comparative", label: "Comparative" },
   { href: "/worksheet", label: "Worksheets" },
   { href: "/slides", label: "Slides" },
+  { href: "/video", label: "Video" },
 ];
 
 export default function Nav() {

@@ -6,15 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "bundle:remotion": "npx tsx scripts/bundle-remotion.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
+    "@remotion/bundler": "^4.0.431",
+    "@remotion/cli": "^4.0.431",
+    "@remotion/renderer": "^4.0.431",
     "docx": "^9.6.0",
     "next": "16.1.6",
     "pptxgenjs": "^4.0.1",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "remotion": "^4.0.431"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

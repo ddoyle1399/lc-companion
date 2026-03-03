@@ -36,6 +36,11 @@ yarn-error.log*
 # generated content
 /data/generated/*
 !/data/generated/.gitkeep
+/data/videos/*
+!/data/videos/.gitkeep
+
+# remotion
+/.remotion-bundle/
 
 # vercel
 .vercel
