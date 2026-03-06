@@ -1,5 +1,7 @@
 import React from "react";
 import { useCurrentFrame, interpolate } from "remotion";
+import { GradientBackground } from "./GradientBackground";
+import { Particles } from "./Particles";
 
 interface TitleCardProps {
   title: string;
@@ -7,8 +9,6 @@ interface TitleCardProps {
   durationInFrames: number;
 }
 
-const NAVY = "#1B2A4A";
-const CREAM = "#FAF8F5";
 const TEAL = "#2A9D8F";
 
 export const TitleCard: React.FC<TitleCardProps> = ({
@@ -18,49 +18,106 @@ export const TitleCard: React.FC<TitleCardProps> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  const opacity = interpolate(
+  // Fade in: line at 0.5s (15f), title at 1s (30f), poet at 1.5s (45f)
+  // Fade out everything over last 15 frames
+  const fadeOut = interpolate(
     frame,
-    [0, 15, durationInFrames - 15, durationInFrames],
-    [0, 1, 1, 0],
+    [durationInFrames - 15, durationInFrames],
+    [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
+  const lineOpacity =
+    interpolate(frame, [0, 15], [0, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    }) * fadeOut;
+
+  const titleOpacity =
+    interpolate(frame, [15, 30], [0, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    }) * fadeOut;
+
+  const titleY = interpolate(frame, [15, 30], [12, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const poetOpacity =
+    interpolate(frame, [30, 45], [0, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    }) * fadeOut;
+
+  const poetY = interpolate(frame, [30, 45], [12, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: NAVY,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        opacity,
-      }}
-    >
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      <GradientBackground sectionType="title" showGlow />
+      <Particles />
       <div
         style={{
-          fontSize: 56,
-          fontFamily: "Calibri, sans-serif",
-          fontWeight: 700,
-          color: CREAM,
-          textAlign: "center",
-          maxWidth: "80%",
-          lineHeight: 1.3,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        {title}
-      </div>
-      <div
-        style={{
-          fontSize: 32,
-          fontFamily: "Calibri, sans-serif",
-          color: TEAL,
-          marginTop: 24,
-          textAlign: "center",
-        }}
-      >
-        {poet}
+        {/* Teal accent line */}
+        <div
+          style={{
+            width: 80,
+            height: 2,
+            backgroundColor: TEAL,
+            opacity: lineOpacity,
+            marginBottom: 32,
+          }}
+        />
+
+        {/* Poem title */}
+        <div
+          style={{
+            fontSize: 48,
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontWeight: 400,
+            color: "#FFFFFF",
+            textAlign: "center",
+            maxWidth: "70%",
+            lineHeight: 1.3,
+            letterSpacing: 2,
+            opacity: titleOpacity,
+            transform: `translateY(${titleY}px)`,
+            textShadow: "0 2px 30px rgba(0,0,0,0.4)",
+          }}
+        >
+          {title}
+        </div>
+
+        {/* Poet name */}
+        <div
+          style={{
+            fontSize: 20,
+            fontFamily: "Arial, sans-serif",
+            color: TEAL,
+            marginTop: 28,
+            textAlign: "center",
+            textTransform: "uppercase",
+            letterSpacing: 6,
+            opacity: poetOpacity,
+            transform: `translateY(${poetY}px)`,
+          }}
+        >
+          {poet}
+        </div>
       </div>
     </div>
   );

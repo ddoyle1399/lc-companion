@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Nav from "@/components/nav";
 import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
 import { exportToWord } from "@/lib/export/word";
@@ -57,6 +58,7 @@ export default function PoetryPage() {
   const [instructions, setInstructions] = useState("");
   const [copied, setCopied] = useState(false);
   const outputRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const { output, generating, error, searchStatus, generate, stop } =
     useStreamGenerate();
@@ -122,6 +124,18 @@ export default function PoetryPage() {
 
   function handleDownloadPDF() {
     exportToPDF();
+  }
+
+  function handleGenerateVideo() {
+    // Store the note in sessionStorage so the video page can read it
+    sessionStorage.setItem("lc-video-note", output);
+    const params = new URLSearchParams({
+      year: String(year),
+      level,
+      poet,
+      poem,
+    });
+    router.push(`/video?${params.toString()}`);
   }
 
   return (
@@ -297,6 +311,12 @@ export default function PoetryPage() {
                     className="text-sm px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                   >
                     PDF
+                  </button>
+                  <button
+                    onClick={handleGenerateVideo}
+                    className="text-sm px-3 py-1.5 border border-teal text-teal rounded-md hover:bg-teal/5 transition-colors"
+                  >
+                    Generate Video
                   </button>
                 </div>
               )}

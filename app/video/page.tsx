@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Nav from "@/components/nav";
 import { useVideoPipeline } from "@/lib/hooks/useVideoPipeline";
 import type { VideoScript, ScriptSection } from "@/lib/video/types";
@@ -56,7 +57,15 @@ const SECTION_LABELS: Record<string, string> = {
   outro: "Conclusion",
 };
 
-export default function VideoPage() {
+export default function VideoPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-cream" />}>
+      <VideoPage />
+    </Suspense>
+  );
+}
+
+function VideoPage() {
   // Selection state
   const [year, setYear] = useState(2026);
   const [level, setLevel] = useState<Level>("HL");
@@ -79,6 +88,51 @@ export default function VideoPage() {
 
   // Pipeline hook
   const pipeline = useVideoPipeline();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Auto-populate from query params (coming from poetry page)
+  const [initialized, setInitialized] = useState(false);
+  useEffect(() => {
+    if (initialized) return;
+    const qYear = searchParams.get("year");
+    const qLevel = searchParams.get("level");
+    const qPoet = searchParams.get("poet");
+    const qPoem = searchParams.get("poem");
+
+    if (qPoet && qPoem) {
+      if (qYear) setYear(Number(qYear));
+      if (qLevel === "HL" || qLevel === "OL") setLevel(qLevel);
+      setPoet(qPoet);
+      setPoem(qPoem);
+
+      // Load note from sessionStorage if available
+      const storedNote = sessionStorage.getItem("lc-video-note");
+      if (storedNote) {
+        setPoetryNote(storedNote);
+        sessionStorage.removeItem("lc-video-note");
+      }
+
+      // Fetch poem text
+      fetch(
+        `/api/poems?poet=${encodeURIComponent(qPoet)}&poem=${encodeURIComponent(qPoem)}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.text) {
+            setPoemText(data.text);
+          } else {
+            setPoemTextError(
+              "No poem text stored. Add it on the Poems page first."
+            );
+          }
+        })
+        .catch(() => {
+          setPoemTextError("Failed to check poem text.");
+        });
+    }
+    setInitialized(true);
+  }, [initialized, searchParams]);
 
   const poets = getPoets(year, level);
   const poems = poet ? getPoems(year, level, poet) : [];
@@ -495,6 +549,12 @@ export default function VideoPage() {
                 className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md text-sm hover:bg-gray-50 transition-colors"
               >
                 Start New Video
+              </button>
+              <button
+                onClick={() => router.push("/poetry")}
+                className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md text-sm hover:bg-gray-50 transition-colors"
+              >
+                Back to Notes
               </button>
             </div>
           </div>

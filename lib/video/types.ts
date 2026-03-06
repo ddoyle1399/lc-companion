@@ -4,6 +4,15 @@ export interface ScriptSection {
   spokenText: string;
   highlightLines: number[]; // 0-indexed poem line numbers
   estimatedDuration: number; // seconds, roughly 1s per 2.5 words
+  keyQuote?: {
+    text: string; // The exact quote from the poem
+    lineIndex: number; // Which poem line it comes from (0-indexed)
+  };
+  techniques?: {
+    name: string; // e.g. "Assonance", "Biblical Allusion"
+    quote: string; // The quote that demonstrates this technique
+    effect: string; // One-line exam-ready explanation
+  }[];
 }
 
 export interface VideoScript {
@@ -36,6 +45,16 @@ export interface PoemVideoProps {
     highlightLines: number[];
     durationInFrames: number;
     audioSrc: string;
+    spokenText?: string;
+    keyQuote?: {
+      text: string;
+      lineIndex: number;
+    };
+    techniques?: {
+      name: string;
+      quote: string;
+      effect: string;
+    }[];
   }[];
   titleDurationInFrames: number; // 90 frames = 3s at 30fps
   closingDurationInFrames: number; // 60 frames = 2s at 30fps

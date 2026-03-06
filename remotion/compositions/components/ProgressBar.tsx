@@ -15,8 +15,7 @@ export const ProgressBar: React.FC = () => {
         bottom: 0,
         left: 0,
         width: "100%",
-        height: 4,
-        backgroundColor: "rgba(0,0,0,0.1)",
+        height: 2,
       }}
     >
       <div
@@ -24,6 +23,7 @@ export const ProgressBar: React.FC = () => {
           width: `${progress * 100}%`,
           height: "100%",
           backgroundColor: TEAL,
+          opacity: 0.4,
         }}
       />
     </div>

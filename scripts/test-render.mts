@@ -1,0 +1,157 @@
+import { bundle } from "@remotion/bundler";
+import { renderMedia, selectComposition } from "@remotion/renderer";
+import path from "node:path";
+import { promises as fs } from "node:fs";
+import type { PoemVideoProps } from "../lib/video/types";
+
+const FPS = 30;
+
+const poemLines = [
+  "I will arise and go now, and go to Innisfree,",
+  "And a small cabin build there, of clay and wattles made;",
+  "Nine bean-rows will I have there, a hive for the honey-bee,",
+  "And live alone in the bee-loud glade.",
+  "",
+  "And I shall have some peace there, for peace comes dropping slow,",
+  "Dropping from the veils of the morning to where the cricket sings;",
+  "There midnight's all a glimmer, and noon a purple glow,",
+  "And evening full of the linnet's wings.",
+  "",
+  "I will arise and go now, for always night and day",
+  "I hear lake water lapping with low sounds by the shore;",
+  "While I stand on the roadway, or on the pavements grey,",
+  "I hear it in the deep heart's core.",
+];
+
+const sections: PoemVideoProps["sections"] = [
+  {
+    type: "intro",
+    highlightLines: [],
+    durationInFrames: 15 * FPS,
+    audioSrc: "",
+    spokenText: "Yeats wrote this poem in 1890 while living in London.",
+  },
+  {
+    type: "stanza_analysis",
+    highlightLines: [0, 1, 2, 3],
+    durationInFrames: 25 * FPS,
+    audioSrc: "",
+    spokenText: "Look at the opening. 'I will arise and go now.'",
+    keyQuote: { text: "I will arise and go now", lineIndex: 0 },
+    techniques: [
+      { name: "Biblical Allusion", quote: "I will arise and go", effect: "Echoes the parable of the prodigal son, giving the speaker's desire a sense of spiritual urgency" },
+      { name: "Concrete Imagery", quote: "clay and wattles made", effect: "Grounds the fantasy of escape in physical, achievable detail" },
+    ],
+  },
+  {
+    type: "stanza_analysis",
+    highlightLines: [5, 6, 7, 8],
+    durationInFrames: 25 * FPS,
+    audioSrc: "",
+    spokenText: "The second stanza shifts from action to stillness.",
+    keyQuote: { text: "peace comes dropping slow", lineIndex: 5 },
+    techniques: [
+      { name: "Assonance", quote: "dropping, veils, glimmer, glow", effect: "Long vowel sounds slow the rhythm, mirroring the peacefulness described" },
+      { name: "Synaesthesia", quote: "noon a purple glow", effect: "Blends visual and colour sensation to create an almost dreamlike atmosphere" },
+    ],
+  },
+  {
+    type: "stanza_analysis",
+    highlightLines: [10, 11, 12, 13],
+    durationInFrames: 20 * FPS,
+    audioSrc: "",
+    spokenText: "The final stanza brings you back to reality.",
+    keyQuote: { text: "I hear it in the deep heart's core", lineIndex: 13 },
+    techniques: [
+      { name: "Contrast", quote: "roadway...pavements grey", effect: "Juxtaposes dull urban reality with the vivid natural world of Innisfree" },
+      { name: "Metaphor", quote: "the deep heart's core", effect: "Innisfree becomes an internal place, not just a physical destination" },
+    ],
+  },
+  {
+    type: "theme",
+    highlightLines: [],
+    durationInFrames: 20 * FPS,
+    audioSrc: "",
+    spokenText: "Two themes dominate here. First, nature as escape.",
+    keyQuote: { text: "bee-loud glade", lineIndex: 3 },
+    techniques: [
+      { name: "Onomatopoeia", quote: "bee-loud", effect: "Makes the natural world audible, reinforcing nature as a living, sensory escape" },
+    ],
+  },
+  {
+    type: "exam_connection",
+    highlightLines: [],
+    durationInFrames: 12 * FPS,
+    audioSrc: "",
+    spokenText: "This poem pairs well with questions on nature, memory,",
+  },
+  {
+    type: "outro",
+    highlightLines: [],
+    durationInFrames: 5 * FPS,
+    audioSrc: "",
+    spokenText: "Know this poem inside out. It comes up regularly.",
+  },
+];
+
+const titleDurationInFrames = 90; // 3s
+const closingDurationInFrames = 60; // 2s
+
+const inputProps: PoemVideoProps = {
+  poemTitle: "The Lake Isle of Innisfree",
+  poet: "W.B. Yeats",
+  poemLines,
+  sections,
+  titleDurationInFrames,
+  closingDurationInFrames,
+};
+
+const totalFrames =
+  titleDurationInFrames +
+  sections.reduce((sum, s) => sum + s.durationInFrames, 0) +
+  closingDurationInFrames;
+
+async function main() {
+  console.log("Bundling Remotion composition...");
+  const entryPoint = path.resolve("remotion/index.ts");
+  const bundled = await bundle({
+    entryPoint,
+    webpackOverride: (config) => config,
+  });
+  console.log(`Bundle complete: ${bundled}`);
+
+  console.log("Selecting composition...");
+  const composition = await selectComposition({
+    serveUrl: bundled,
+    id: "PoemVideo",
+    inputProps: inputProps as unknown as Record<string, unknown>,
+  });
+
+  const outputDir = path.resolve("data/videos");
+  await fs.mkdir(outputDir, { recursive: true });
+  const outputPath = path.join(outputDir, "test-innisfree.mp4");
+
+  console.log(`Rendering ${totalFrames} frames (${(totalFrames / FPS).toFixed(1)}s) to ${outputPath}...`);
+  await renderMedia({
+    composition: {
+      ...composition,
+      durationInFrames: totalFrames,
+    },
+    serveUrl: bundled,
+    codec: "h264",
+    outputLocation: outputPath,
+    inputProps: inputProps as unknown as Record<string, unknown>,
+    onProgress: ({ progress }) => {
+      if (Math.round(progress * 100) % 10 === 0) {
+        process.stdout.write(`\rRendering: ${Math.round(progress * 100)}%`);
+      }
+    },
+  });
+
+  console.log(`\nDone! Video saved to ${outputPath}`);
+}
+
+main().catch((err) => {
+  console.error("Render failed:", err);
+  process.exit(1);
+});

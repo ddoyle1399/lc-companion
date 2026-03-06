@@ -1,10 +1,11 @@
 import React from "react";
+import { useCurrentFrame, interpolate } from "remotion";
 
 interface SectionLabelProps {
   type: string;
+  spokenText?: string;
 }
 
-const NAVY = "#1B2A4A";
 const TEAL = "#2A9D8F";
 
 const LABELS: Record<string, string> = {
@@ -15,45 +16,71 @@ const LABELS: Record<string, string> = {
   outro: "Summary",
 };
 
-export const SectionLabel: React.FC<SectionLabelProps> = ({ type }) => {
+function getPreview(text?: string): string {
+  if (!text) return "";
+  const words = text.split(/\s+/).slice(0, 8).join(" ");
+  return words.length < text.length ? words + "..." : words;
+}
+
+export const SectionLabel: React.FC<SectionLabelProps> = ({
+  type,
+  spokenText,
+}) => {
+  const frame = useCurrentFrame();
   const label = LABELS[type] || type;
+  const preview = getPreview(spokenText);
+
+  const lineWidth = interpolate(frame, [0, 15], [0, 40], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const textOpacity = interpolate(frame, [5, 20], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return (
-    <div
-      style={{
-        width: "40%",
-        height: "100%",
-        backgroundColor: "#F5F3F0",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "40px 30px",
-      }}
-    >
+    <div>
+      {/* Teal accent line */}
+      <div
+        style={{
+          width: lineWidth,
+          height: 2,
+          backgroundColor: TEAL,
+          marginBottom: 16,
+        }}
+      />
+
+      {/* Section type label */}
       <div
         style={{
           fontSize: 14,
-          fontFamily: "Calibri, sans-serif",
+          fontFamily: "Arial, sans-serif",
           color: TEAL,
           textTransform: "uppercase",
-          letterSpacing: 3,
-          marginBottom: 12,
-        }}
-      >
-        Now discussing
-      </div>
-      <div
-        style={{
-          fontSize: 28,
-          fontFamily: "Calibri, sans-serif",
-          fontWeight: 700,
-          color: NAVY,
-          textAlign: "center",
+          letterSpacing: 4,
+          opacity: textOpacity,
         }}
       >
         {label}
       </div>
+
+      {/* Brief preview from spoken text */}
+      {preview && (
+        <div
+          style={{
+            fontSize: 16,
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            color: "rgba(255, 255, 255, 0.4)",
+            marginTop: 12,
+            lineHeight: 1.5,
+            opacity: textOpacity,
+          }}
+        >
+          {preview}
+        </div>
+      )}
     </div>
   );
 };

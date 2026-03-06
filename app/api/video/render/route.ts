@@ -44,53 +44,82 @@ export async function POST(request: NextRequest) {
       }
 
       try {
-        // Check Voicebox health
+        // Check Voicebox availability - fall back to silent mode if unavailable
         const config = getVoiceboxConfig();
-        const healthy = await checkVoiceboxHealth(config.serverUrl);
-        if (!healthy) {
-          send({
-            stage: "error",
-            progress: 0,
-            message:
-              "Voicebox server is not running. Start it at " +
-              config.serverUrl,
-          });
-          controller.close();
-          return;
-        }
+        const voiceboxUrl = config.serverUrl;
+        const isSilentMode =
+          !voiceboxUrl ||
+          voiceboxUrl === "placeholder" ||
+          !(await checkVoiceboxHealth(voiceboxUrl));
 
-        // Create temp directory for audio files
-        const tmpDir = path.join(
-          "/tmp",
-          `lc-video-${Date.now()}`
-        );
+        const tmpDir = path.join("/tmp", `lc-video-${Date.now()}`);
         await fs.mkdir(tmpDir, { recursive: true });
 
-        // Audio generation stage
-        const audioSections = [];
-        const total = script.sections.length;
+        const FPS = 30;
+        const titleDurationInFrames = 90;
+        const closingDurationInFrames = 60;
+        const poemLines = poemText.split("\n");
 
-        for (let i = 0; i < total; i++) {
+        let compositionSections: PoemVideoProps["sections"];
+
+        if (isSilentMode) {
+          // Silent mode: skip audio, use estimated durations
           send({
-            stage: "audio",
-            progress: i / total,
-            message: `Generating audio: section ${i + 1} of ${total}...`,
-            sectionIndex: i,
+            stage: "render",
+            progress: 0,
+            message: "Silent mode: no audio server detected. Using estimated durations.",
           });
 
-          const audio = await generateSectionAudio(
-            script.sections[i],
-            tmpDir,
-            config
-          );
-          audioSections.push(audio);
-        }
+          compositionSections = script.sections.map((section) => {
+            const wordCount = section.spokenText.split(/\s+/).length;
+            const durationSeconds = section.estimatedDuration || wordCount / 2.5;
+            return {
+              type: section.type,
+              highlightLines: section.highlightLines,
+              durationInFrames: Math.round(durationSeconds * FPS),
+              audioSrc: "",
+              spokenText: section.spokenText,
+              keyQuote: section.keyQuote,
+              techniques: section.techniques,
+            };
+          });
+        } else {
+          // Audio mode: generate audio via Voicebox
+          const audioSections = [];
+          const total = script.sections.length;
 
-        send({
-          stage: "audio",
-          progress: 1,
-          message: "Audio generation complete.",
-        });
+          for (let i = 0; i < total; i++) {
+            send({
+              stage: "audio",
+              progress: i / total,
+              message: `Generating audio: section ${i + 1} of ${total}...`,
+              sectionIndex: i,
+            });
+
+            const audio = await generateSectionAudio(
+              script.sections[i],
+              tmpDir,
+              config
+            );
+            audioSections.push(audio);
+          }
+
+          send({
+            stage: "audio",
+            progress: 1,
+            message: "Audio generation complete.",
+          });
+
+          compositionSections = audioSections.map((audio, i) => ({
+            type: script.sections[i].type,
+            highlightLines: script.sections[i].highlightLines,
+            durationInFrames: Math.round(audio.durationSeconds * FPS),
+            audioSrc: `file://${audio.filePath}`,
+            spokenText: script.sections[i].spokenText,
+            keyQuote: script.sections[i].keyQuote,
+            techniques: script.sections[i].techniques,
+          }));
+        }
 
         // Verify bundle exists
         const bundlePath = path.resolve(".remotion-bundle");
@@ -104,23 +133,9 @@ export async function POST(request: NextRequest) {
               "Remotion bundle not found. Run: npm run bundle:remotion",
           });
           controller.close();
-          // Clean up temp dir
           await fs.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
           return;
         }
-
-        // Build composition props
-        const poemLines = poemText.split("\n");
-        const FPS = 30;
-        const titleDurationInFrames = 90; // 3 seconds
-        const closingDurationInFrames = 60; // 2 seconds
-
-        const compositionSections = audioSections.map((audio, i) => ({
-          type: script.sections[i].type,
-          highlightLines: script.sections[i].highlightLines,
-          durationInFrames: Math.round(audio.durationSeconds * FPS),
-          audioSrc: `file://${audio.filePath}`,
-        }));
 
         const inputProps: PoemVideoProps = {
           poemTitle: script.poemTitle,

@@ -54,20 +54,25 @@ SCRIPT STRUCTURE (follow this order):
    - For each section: say what is happening, name one key technique, explain why it matters for the exam
    - Quote directly from the poem text provided above
    - highlightLines must be 0-indexed line numbers from the poem text
+   - Include keyQuote: the single most important phrase from that stanza. Pick the phrase the examiner would most want to see quoted.
+   - Include techniques: 1-2 literary techniques used in that stanza. For each, give the technique name, the exact quote demonstrating it, and a one-sentence explanation of its effect on the reader. Keep the effect exam-focused.
 
 3. THEMES section (type: "theme", highlightLines: [])
    - 2 to 3 key themes in 2 to 3 sentences each
    - Connect to exam question patterns
    - No lines highlighted
+   - keyQuote and techniques are optional. Only include them if genuinely relevant.
 
 4. EXAM CONNECTION section (type: "exam_connection", highlightLines: [])
    - 1 to 2 sentences on what exam question types this poem suits
    - Which other poems by this poet it links to
    - No lines highlighted
+   - keyQuote and techniques are optional. Only include them if genuinely relevant.
 
 5. OUTRO section (type: "outro", highlightLines: [])
    - One sentence wrap-up
    - No lines highlighted
+   - keyQuote and techniques are optional. Only include them if genuinely relevant.
 
 JSON SCHEMA:
 {
@@ -80,7 +85,9 @@ JSON SCHEMA:
       "type": "intro" | "stanza_analysis" | "theme" | "exam_connection" | "outro",
       "spokenText": "string (the words the voiceover will say)",
       "highlightLines": [0, 1, 2, 3],
-      "estimatedDuration": number (seconds, roughly wordCount / 2.5)
+      "estimatedDuration": number (seconds, roughly wordCount / 2.5),
+      "keyQuote": { "text": "string", "lineIndex": number } | null,
+      "techniques": [{ "name": "string", "quote": "string", "effect": "string" }] | null
     }
   ]
 }
