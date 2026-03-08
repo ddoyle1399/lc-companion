@@ -1,6 +1,9 @@
 import { NextRequest } from "next/server";
 import path from "node:path";
 import { promises as fs } from "node:fs";
+import { createReadStream } from "node:fs";
+import http from "node:http";
+import net from "node:net";
 import {
   isConfigured,
   generateSectionAudio,
@@ -20,6 +23,49 @@ import { getPoemText } from "@/lib/poems/store";
 
 function sseEvent(data: VideoPipelineEvent): string {
   return `data: ${JSON.stringify(data)}\n\n`;
+}
+
+/**
+ * Start a temporary HTTP server to serve audio files from a directory.
+ * Remotion requires http:// URLs for audio assets.
+ */
+async function startAudioServer(audioDir: string): Promise<{ server: http.Server; port: number }> {
+  const server = http.createServer((req, res) => {
+    const filename = decodeURIComponent((req.url || "/").slice(1));
+    const filePath = path.join(audioDir, filename);
+
+    // Only serve .mp3 files from the audio directory
+    if (!filename.endsWith(".mp3") || filename.includes("..")) {
+      res.writeHead(404);
+      res.end();
+      return;
+    }
+
+    const stream = createReadStream(filePath);
+    stream.on("error", () => {
+      res.writeHead(404);
+      res.end();
+    });
+    res.writeHead(200, { "Content-Type": "audio/mpeg" });
+    stream.pipe(res);
+  });
+
+  // Find a random available port
+  const port = await new Promise<number>((resolve, reject) => {
+    const tempServer = net.createServer();
+    tempServer.listen(0, () => {
+      const addr = tempServer.address();
+      const p = typeof addr === "object" && addr ? addr.port : 0;
+      tempServer.close(() => resolve(p));
+    });
+    tempServer.on("error", reject);
+  });
+
+  await new Promise<void>((resolve) => {
+    server.listen(port, "127.0.0.1", () => resolve());
+  });
+
+  return { server, port };
 }
 
 function slugify(s: string): string {
@@ -125,6 +171,8 @@ export async function POST(request: NextRequest) {
         controller.enqueue(encoder.encode(sseEvent(event)));
       }
 
+      let audioServer: { server: http.Server; port: number } | null = null;
+
       try {
         // Step 1: Generate poetry note if not provided
         if (!poetryNote) {
@@ -226,11 +274,14 @@ export async function POST(request: NextRequest) {
             message: "Audio generation complete.",
           });
 
+          // Start a local HTTP server to serve audio files to Remotion
+          audioServer = await startAudioServer(tmpDir);
+
           compositionSections = audioSections.map((audio, i) => ({
             type: finalScript.sections[i].type,
             highlightLines: finalScript.sections[i].highlightLines,
             durationInFrames: Math.round(audio.durationSeconds * FPS),
-            audioSrc: `file://${audio.filePath}`,
+            audioSrc: `http://127.0.0.1:${audioServer!.port}/${encodeURIComponent(path.basename(audio.filePath))}`,
             spokenText: finalScript.sections[i].spokenText,
             keyQuote: finalScript.sections[i].keyQuote,
             techniques: finalScript.sections[i].techniques,
@@ -321,8 +372,14 @@ export async function POST(request: NextRequest) {
           videoUrl: `/api/video/download?file=${encodeURIComponent(filename)}`,
         });
 
+        // Shut down audio server
+        if (audioServer) {
+          audioServer.server.close();
+        }
+
         await fs.rm(tmpDir, { recursive: true, force: true }).catch(() => {});
       } catch (error) {
+        if (audioServer) audioServer.server.close();
         const message =
           error instanceof Error ? error.message : "Render failed";
         send({ stage: "error", progress: 0, message });
