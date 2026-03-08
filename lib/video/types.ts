@@ -36,10 +36,13 @@ export interface VideoPipelineEvent {
   videoUrl?: string;
 }
 
+export type CopyrightMode = 'public_domain' | 'rights_managed';
+
 export interface PoemVideoProps {
   poemTitle: string;
   poet: string;
   poemLines: string[];
+  copyrightMode: CopyrightMode;
   sections: {
     type: string;
     highlightLines: number[];

@@ -101,6 +101,7 @@ const inputProps: PoemVideoProps = {
   poemTitle: "The Lake Isle of Innisfree",
   poet: "W.B. Yeats",
   poemLines,
+  copyrightMode: "public_domain",
   sections,
   titleDurationInFrames,
   closingDurationInFrames,

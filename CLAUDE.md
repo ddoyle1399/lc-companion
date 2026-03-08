@@ -14,7 +14,7 @@ The system is built around the official Department of Education prescribed text 
 Generate poetry analysis notes, comparative text notes, worksheets, activities, and PowerPoint slides on demand via live Claude API calls. Content is concise, exam-focused, and aligned with the LC English syllabus. This is the foundation. Everything else derives from reviewed Output 1 content.
 
 **Output 2 - Video Content**
-Takes an approved note (from Output 1), reformats it into a spoken script with timing markers, generates audio via Voicebox (local voice cloning tool) REST API, and assembles a video with the poem/text on screen and highlighted lines synced to the audio. Target length: 3-10 minutes per video.
+Takes an approved note (from Output 1), reformats it into a spoken script with timing markers, generates audio via ElevenLabs TTS API, and assembles a video with the poem/text on screen and highlighted lines synced to the audio. Target length: 3-10 minutes per video.
 
 **Output 3 - H1 Club Content (Parked)**
 Same quality and substance as Output 1, reformatted to the H1 Club's existing content structure. The specific format will be defined later. Do not build this yet.
@@ -34,7 +34,7 @@ Only the owner. This is a private admin tool. There is no student-facing interfa
 | Styling | Tailwind CSS |
 | Hosting | Vercel (hobby tier) |
 | AI | Claude API (Anthropic) |
-| Voice | Voicebox (local, REST API at localhost:8000) |
+| Voice | ElevenLabs (cloud TTS API) |
 | Video | Remotion (React-based video rendering) |
 | Export | docx-js (Word), pptxgenjs (PowerPoint), PDF generation |
 | Data | JSON files for circular data, local filesystem for generated content |
@@ -267,24 +267,30 @@ Rules for script generation:
 - Target total duration: 3-10 minutes.
 - Each section should map to specific line numbers in the poem for highlighting.
 
-**Step 2: Voice Generation (Voicebox)**
+**Step 2: Voice Generation (ElevenLabs)**
 
-The system sends each script section to the Voicebox REST API running locally:
+The system sends each script section to the ElevenLabs TTS API:
 
 ```
-POST http://localhost:8000/generate
+POST https://api.elevenlabs.io/v1/text-to-speech/{voice_id}
+xi-api-key: {ELEVENLABS_API_KEY}
 Content-Type: application/json
 
 {
   "text": "Today we are looking at The Forge by Seamus Heaney...",
-  "profile_id": "{owner_voice_profile_id}",
-  "language": "en"
+  "model_id": "eleven_multilingual_v2",
+  "voice_settings": {
+    "stability": 0.5,
+    "similarity_boost": 0.75,
+    "style": 0.0,
+    "use_speaker_boost": true
+  }
 }
 ```
 
-Returns: audio file (WAV/MP3) for each section.
+Returns: MP3 audio for each section.
 
-The owner must have already created a voice profile in Voicebox by recording a short sample of their voice. The profile_id is stored in the app configuration.
+The owner's ElevenLabs voice ID is stored in the ELEVENLABS_VOICE_ID environment variable.
 
 **Step 3: Video Assembly (Remotion)**
 
@@ -313,7 +319,7 @@ In the app, after generating and reviewing a poetry note, the user should see a 
 
 1. Shows a preview of the script (editable before generation)
 2. Allows the user to adjust section breaks and line mappings
-3. Triggers the Voicebox API calls
+3. Triggers the ElevenLabs API calls
 4. Shows progress as audio generates
 5. Triggers Remotion rendering
 6. Provides the final MP4 for download
@@ -335,7 +341,7 @@ In the app, after generating and reviewing a poetry note, the user should see a 
 /slides               - PowerPoint generator
 /video                - Video pipeline (select a note, generate script, produce video)
 /video/[id]           - View/edit a video project
-/settings             - API keys, Voicebox config, voice profile selection
+/settings             - API keys, ElevenLabs config, voice settings
 ```
 
 ### Dashboard
@@ -683,7 +689,7 @@ This data must be stored as structured JSON and used to populate dropdowns and v
 ### Phase 3: Video Pipeline
 
 - Script formatter (takes approved note, produces JSON script structure)
-- Voicebox API integration (requires Voicebox running locally)
+- ElevenLabs TTS API integration
 - Script preview and editing UI
 - Remotion video composition (poem display, line highlighting, audio sync)
 - Video rendering and MP4 export
@@ -712,7 +718,7 @@ This data must be stored as structured JSON and used to populate dropdowns and v
 - The Claude API system prompt in Section 6 is a starting point. It should be refined based on output quality during testing.
 - The circular JSON files should be stored in `/data/circulars/` within the project.
 - Generated content should be stored in `/data/generated/` organised by type and date.
-- Environment variables needed: `ANTHROPIC_API_KEY`, `APP_PASSWORD`, `VOICEBOX_URL` (default: http://localhost:8000)
+- Environment variables needed: `ANTHROPIC_API_KEY`, `APP_PASSWORD`, `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID`
 
 ### File Structure
 
@@ -733,7 +739,7 @@ lc-companion/
   /lib
     /claude             - Claude API client and prompt templates
     /export             - Export utilities (docx, pptx, pdf)
-    /video              - Voicebox client, Remotion compositions
+    /video              - ElevenLabs client, Remotion compositions
   /public               - Static assets, branding
   PRD.md                - This document
 ```
@@ -764,7 +770,7 @@ lc-companion/
 
 - User can select an approved poetry note and generate a video script
 - User can edit the script before voice generation
-- Voicebox generates audio for each script section
+- ElevenLabs generates audio for each script section
 - Remotion assembles the video with correct line highlighting
 - Final MP4 downloads successfully and plays correctly
 - The full pipeline from "select note" to "download video" works end to end
@@ -788,3 +794,38 @@ For reference when the 2027 circular data is added:
 - The Great Gatsby appears as a single text option
 
 **The 2027 circular (and eventually 2028) should be added to the JSON data files when available.**
+
+---
+
+## COPYRIGHT RULES (Non-Negotiable)
+
+This system includes a copyright protection layer for the video pipeline. It exists because displaying the full text of poems by contemporary or recently deceased poets in videos creates commercial licensing risk. Most prescribed LC poets are still in copyright under EU law (life + 70 years).
+
+### Why This Exists
+
+Publishing video content that displays the full text of a copyrighted poem, line by line, without a licence is a copyright infringement risk. This is true even in an educational context when the videos are distributed publicly (e.g. YouTube). The system enforces two display modes to mitigate this.
+
+### The Two Modes
+
+**`public_domain`** - The poet's work is confirmed out of copyright in the EU. Full poem text displays and animates line by line in the video. This is the existing default behaviour.
+
+**`rights_managed`** - The poet's work is still under copyright. The video switches to analysis mode:
+- Never display more than two or three consecutive lines of the poem at once
+- Any lines shown must be styled as inline quotations (italic, smaller, secondary visual), not as the primary visual layer
+- The main visual layer shows analysis text, literary device labels, and thematic commentary instead
+- A visible attribution line (poet name) is always displayed
+
+### How It Works
+
+- The single source of truth is `src/data/poets.config.ts`, which lists every prescribed poet with their copyright status
+- The `getCopyrightMode(poetName)` function returns `'public_domain'` or `'rights_managed'`
+- If a poet is NOT found in the config, the function defaults to `'rights_managed'` and logs a warning
+- The video render route (`app/api/video/render/route.ts`) calls `getCopyrightMode()` and passes the result as `copyrightMode` into the Remotion composition props
+- The `PoemVideo` composition switches between `PoemDisplay` (full text) and `PoemDisplayRightsManaged` (analysis mode) based on this prop
+
+### Rules for All Contributors
+
+- **Never remove or bypass this copyright check without explicit legal sign-off from the project owner.**
+- When adding a new poet, always add them to `src/data/poets.config.ts`. If unsure of their status, set them as `rights_managed` and add a note.
+- Do not hardcode copyright exceptions anywhere else in the codebase. All copyright decisions flow through `poets.config.ts`.
+- The `rights_managed` display component must never show more than 3 consecutive lines of poem text at once.

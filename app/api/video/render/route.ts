@@ -2,11 +2,11 @@ import { NextRequest } from "next/server";
 import path from "node:path";
 import { promises as fs } from "node:fs";
 import {
-  checkVoiceboxHealth,
+  isConfigured,
   generateSectionAudio,
-  getVoiceboxConfig,
-} from "@/lib/video/voicebox";
+} from "@/lib/video/elevenlabs";
 import type { VideoScript, PoemVideoProps, VideoPipelineEvent } from "@/lib/video/types";
+import { getCopyrightMode } from "@/src/data/poets.config";
 
 function sseEvent(data: VideoPipelineEvent): string {
   return `data: ${JSON.stringify(data)}\n\n`;
@@ -44,13 +44,8 @@ export async function POST(request: NextRequest) {
       }
 
       try {
-        // Check Voicebox availability - fall back to silent mode if unavailable
-        const config = getVoiceboxConfig();
-        const voiceboxUrl = config.serverUrl;
-        const isSilentMode =
-          !voiceboxUrl ||
-          voiceboxUrl === "placeholder" ||
-          !(await checkVoiceboxHealth(voiceboxUrl));
+        // Check ElevenLabs availability - fall back to silent mode if unconfigured
+        const isSilentMode = !isConfigured();
 
         const tmpDir = path.join("/tmp", `lc-video-${Date.now()}`);
         await fs.mkdir(tmpDir, { recursive: true });
@@ -84,7 +79,7 @@ export async function POST(request: NextRequest) {
             };
           });
         } else {
-          // Audio mode: generate audio via Voicebox
+          // Audio mode: generate audio via ElevenLabs
           const audioSections = [];
           const total = script.sections.length;
 
@@ -98,8 +93,7 @@ export async function POST(request: NextRequest) {
 
             const audio = await generateSectionAudio(
               script.sections[i],
-              tmpDir,
-              config
+              tmpDir
             );
             audioSections.push(audio);
           }
@@ -137,10 +131,13 @@ export async function POST(request: NextRequest) {
           return;
         }
 
+        const copyrightMode = getCopyrightMode(poet);
+
         const inputProps: PoemVideoProps = {
           poemTitle: script.poemTitle,
           poet: script.poet,
           poemLines,
+          copyrightMode,
           sections: compositionSections,
           titleDurationInFrames,
           closingDurationInFrames,

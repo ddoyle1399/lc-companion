@@ -9,6 +9,7 @@ import {
 import type { PoemVideoProps } from "../../lib/video/types";
 import { TitleCard } from "./components/TitleCard";
 import { PoemDisplay } from "./components/PoemDisplay";
+import { PoemDisplayRightsManaged } from "./components/PoemDisplayRightsManaged";
 import { SectionLabel } from "./components/SectionLabel";
 import { QuoteCallout } from "./components/QuoteCallout";
 import { TechniqueCard } from "./components/TechniqueCard";
@@ -136,10 +137,12 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
   poemTitle,
   poet,
   poemLines,
+  copyrightMode = "public_domain",
   sections,
   titleDurationInFrames,
   closingDurationInFrames,
 }) => {
+  const isRightsManaged = copyrightMode === "rights_managed";
   let currentFrame = 0;
   const titleFrom = currentFrame;
   currentFrame += titleDurationInFrames;
@@ -184,10 +187,20 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
           durationInFrames={section.durationInFrames}
         >
           <AbsoluteFill style={{ flexDirection: "row" }}>
-            <PoemDisplay
-              lines={poemLines}
-              highlightLines={section.highlightLines}
-            />
+            {isRightsManaged ? (
+              <PoemDisplayRightsManaged
+                lines={poemLines}
+                highlightLines={section.highlightLines}
+                poet={poet}
+                spokenText={section.spokenText}
+                techniques={section.techniques}
+              />
+            ) : (
+              <PoemDisplay
+                lines={poemLines}
+                highlightLines={section.highlightLines}
+              />
+            )}
             <RightPanel section={section} />
           </AbsoluteFill>
           {section.audioSrc && <Audio src={section.audioSrc} />}

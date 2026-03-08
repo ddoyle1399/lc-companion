@@ -6,6 +6,7 @@ import type { PoemVideoProps } from "../lib/video/types";
 const DEFAULT_PROPS: PoemVideoProps = {
   poemTitle: "The Forge",
   poet: "Seamus Heaney",
+  copyrightMode: "rights_managed",
   poemLines: [
     "All I know is a door into the dark.",
     "Outside, old axles and iron hoops rusting;",
