@@ -12,7 +12,7 @@ import poetryHL2027 from "@/data/circulars/2027-poetry-hl.json";
 import poetryOL2027 from "@/data/circulars/2027-poetry-ol.json";
 
 type Level = "HL" | "OL";
-type UIState = "select" | "script" | "rendering" | "done";
+type UIState = "select" | "generating" | "script" | "rendering" | "done";
 
 const circularNumbers: Record<number, string> = {
   2026: "0016/2024",
@@ -71,17 +71,17 @@ function VideoPage() {
   const [level, setLevel] = useState<Level>("HL");
   const [poet, setPoet] = useState("");
   const [poem, setPoem] = useState("");
-  const [poetryNote, setPoetryNote] = useState("");
 
   // Poem text state
   const [poemText, setPoemText] = useState<string | null>(null);
   const [poemTextLoading, setPoemTextLoading] = useState(false);
   const [poemTextError, setPoemTextError] = useState("");
 
-  // Script state
-  const [script, setScript] = useState<VideoScript | null>(null);
-  const [scriptLoading, setScriptLoading] = useState(false);
-  const [scriptError, setScriptError] = useState("");
+  // Note passed from poetry page (optional)
+  const [preloadedNote, setPreloadedNote] = useState<string | undefined>(undefined);
+
+  // Script for review/editing
+  const [editableScript, setEditableScript] = useState<VideoScript | null>(null);
 
   // UI state machine
   const [uiState, setUIState] = useState<UIState>("select");
@@ -109,7 +109,7 @@ function VideoPage() {
       // Load note from sessionStorage if available
       const storedNote = sessionStorage.getItem("lc-video-note");
       if (storedNote) {
-        setPoetryNote(storedNote);
+        setPreloadedNote(storedNote);
         sessionStorage.removeItem("lc-video-note");
       }
 
@@ -123,7 +123,7 @@ function VideoPage() {
             setPoemText(data.text);
           } else {
             setPoemTextError(
-              "No poem text stored. Add it on the Poems page first."
+              "No poem text stored. Add it on the Poem Texts page first."
             );
           }
         })
@@ -133,6 +133,21 @@ function VideoPage() {
     }
     setInitialized(true);
   }, [initialized, searchParams]);
+
+  // Watch pipeline for script arrival (stops for review)
+  useEffect(() => {
+    if (uiState === "generating" && pipeline.script && !pipeline.running) {
+      setEditableScript(pipeline.script);
+      setUIState("script");
+    }
+  }, [uiState, pipeline.script, pipeline.running]);
+
+  // Watch pipeline for completion
+  useEffect(() => {
+    if (uiState === "rendering" && pipeline.videoUrl) {
+      setUIState("done");
+    }
+  }, [uiState, pipeline.videoUrl]);
 
   const poets = getPoets(year, level);
   const poems = poet ? getPoems(year, level, poet) : [];
@@ -178,7 +193,7 @@ function VideoPage() {
           setPoemText(data.text);
         } else {
           setPoemTextError(
-            "No poem text stored. Add it on the Poems page first."
+            "No poem text stored. Add it on the Poem Texts page first."
           );
         }
       } catch {
@@ -190,72 +205,75 @@ function VideoPage() {
     [poet]
   );
 
-  async function handleGenerateScript() {
-    if (!poet || !poem || !poemText || !poetryNote) return;
+  function handleGenerateVideo() {
+    if (!poet || !poem || !poemText) return;
 
-    setScriptLoading(true);
-    setScriptError("");
-
-    try {
-      const res = await fetch("/api/video/script", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ poet, poem, poemText, poetryNote, year, level }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to generate script");
-      }
-
-      setScript(data.script);
-      setUIState("script");
-    } catch (err) {
-      setScriptError(
-        err instanceof Error ? err.message : "Script generation failed"
-      );
-    } finally {
-      setScriptLoading(false);
-    }
+    setUIState("generating");
+    pipeline.startPipeline({
+      poet,
+      poem,
+      poemText,
+      year,
+      level,
+      poetryNote: preloadedNote,
+    });
   }
 
   function handleSectionTextChange(index: number, newText: string) {
-    if (!script) return;
-    const updated = { ...script };
+    if (!editableScript) return;
+    const updated = { ...editableScript };
     updated.sections = [...updated.sections];
     updated.sections[index] = {
       ...updated.sections[index],
       spokenText: newText,
     };
-    // Recalculate estimated duration
     const wordCount = newText.split(/\s+/).length;
     updated.sections[index].estimatedDuration = Math.round(wordCount / 2.5);
     updated.totalEstimatedDuration = updated.sections.reduce(
       (sum, s) => sum + s.estimatedDuration,
       0
     );
-    setScript(updated);
+    setEditableScript(updated);
   }
 
-  function handleStartRender() {
-    if (!script || !poemText) return;
+  function handleRenderVideo() {
+    if (!editableScript || !poemText) return;
     setUIState("rendering");
-    pipeline.startRender(script, poemText, poet, poem);
+    pipeline.startPipeline({
+      poet,
+      poem,
+      poemText,
+      year,
+      level,
+      poetryNote: preloadedNote || "auto-generated",
+      script: editableScript,
+    });
+  }
+
+  function handleRegenerateScript() {
+    setEditableScript(null);
+    setUIState("generating");
+    pipeline.startPipeline({
+      poet,
+      poem,
+      poemText: poemText!,
+      year,
+      level,
+      poetryNote: preloadedNote,
+    });
   }
 
   function handleStartNew() {
-    setScript(null);
-    setPoetryNote("");
-    setScriptError("");
+    setEditableScript(null);
+    setPreloadedNote(undefined);
+    setPoemText(null);
+    setPoemTextError("");
+    setPoet("");
+    setPoem("");
     setUIState("select");
   }
 
-  // Watch pipeline for completion/error to transition UI state
-  if (uiState === "rendering" && pipeline.videoUrl) {
-    setUIState("done");
-  }
-
-  const canGenerate = poet && poem && poemText && poetryNote && !scriptLoading;
+  const canGenerate = poet && poem && poemText && !pipeline.running;
 
   return (
     <div className="min-h-screen bg-cream">
@@ -266,188 +284,232 @@ function VideoPage() {
             Video Pipeline
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Generate narrated video analysis from a poetry note.
+            Select a poem and generate a narrated video analysis.
           </p>
         </div>
 
-        {/* State 1: Selection and Input */}
+        {/* State 1: Selection */}
         {uiState === "select" && (
-          <>
-            <div className="bg-white border border-gray-200 rounded-lg p-5 mb-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Year */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Circular Year
-                  </label>
-                  <select
-                    value={year}
-                    onChange={(e) => handleYearChange(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                  >
-                    <option value={2026}>2026</option>
-                    <option value={2027}>2027</option>
-                  </select>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Circular {circularNumbers[year]}
-                  </p>
-                </div>
-
-                {/* Level */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Level
-                  </label>
-                  <select
-                    value={level}
-                    onChange={(e) =>
-                      handleLevelChange(e.target.value as Level)
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                  >
-                    <option value="HL">Higher Level</option>
-                    <option value="OL">Ordinary Level</option>
-                  </select>
-                </div>
-
-                {/* Poet */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Poet
-                  </label>
-                  <select
-                    value={poet}
-                    onChange={(e) => handlePoetChange(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
-                  >
-                    <option value="">Select a poet</option>
-                    {poets.map((p) => (
-                      <option key={p} value={p}>
-                        {p}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Poem */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Poem
-                  </label>
-                  <select
-                    value={poem}
-                    onChange={(e) => handlePoemChange(e.target.value)}
-                    disabled={!poet}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400"
-                  >
-                    <option value="">
-                      {poet ? "Select a poem" : "Select a poet first"}
-                    </option>
-                    {poems.map((p) => (
-                      <option key={p} value={p}>
-                        {p}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Poem text status */}
-              {poemTextLoading && (
-                <p className="text-xs text-gray-500 mt-3">
-                  Checking poem text...
-                </p>
-              )}
-              {poemTextError && (
-                <p className="text-sm text-amber-600 mt-3">
-                  {poemTextError}{" "}
-                  <a
-                    href="/poems"
-                    className="underline text-teal hover:text-navy"
-                  >
-                    Go to Poems
-                  </a>
-                </p>
-              )}
-              {poemText && (
-                <p className="text-xs text-green-600 mt-3">
-                  Poem text found ({poemText.split("\n").length} lines).
-                </p>
-              )}
-
-              {/* Poetry note input */}
-              <div className="mt-4">
+          <div className="bg-white border border-gray-200 rounded-lg p-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Year */}
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Poetry Note
+                  Circular Year
                 </label>
-                <p className="text-xs text-gray-400 mb-2">
-                  Paste a reviewed poetry note to convert into a video script.
-                </p>
-                <textarea
-                  value={poetryNote}
-                  onChange={(e) => setPoetryNote(e.target.value)}
-                  rows={8}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent resize-y font-mono"
-                  placeholder="Paste your reviewed poetry analysis note here..."
-                />
-              </div>
-
-              {/* Generate script button */}
-              <div className="mt-4">
-                <button
-                  onClick={handleGenerateScript}
-                  disabled={!canGenerate}
-                  className="bg-navy text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-teal transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                <select
+                  value={year}
+                  onChange={(e) => handleYearChange(Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
                 >
-                  {scriptLoading ? "Generating Script..." : "Generate Script"}
-                </button>
+                  <option value={2026}>2026</option>
+                  <option value={2027}>2027</option>
+                </select>
+                <p className="text-xs text-gray-400 mt-1">
+                  Circular {circularNumbers[year]}
+                </p>
               </div>
 
-              {scriptError && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mt-4 text-sm">
-                  {scriptError}
-                </div>
+              {/* Level */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Level
+                </label>
+                <select
+                  value={level}
+                  onChange={(e) =>
+                    handleLevelChange(e.target.value as Level)
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+                >
+                  <option value="HL">Higher Level</option>
+                  <option value="OL">Ordinary Level</option>
+                </select>
+              </div>
+
+              {/* Poet */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Poet
+                </label>
+                <select
+                  value={poet}
+                  onChange={(e) => handlePoetChange(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+                >
+                  <option value="">Select a poet</option>
+                  {poets.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Poem */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Poem
+                </label>
+                <select
+                  value={poem}
+                  onChange={(e) => handlePoemChange(e.target.value)}
+                  disabled={!poet}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400"
+                >
+                  <option value="">
+                    {poet ? "Select a poem" : "Select a poet first"}
+                  </option>
+                  {poems.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Poem text status */}
+            {poemTextLoading && (
+              <p className="text-xs text-gray-500 mt-3">
+                Checking poem text...
+              </p>
+            )}
+            {poemTextError && (
+              <p className="text-sm text-red-600 mt-3">
+                {poemTextError}{" "}
+                <a
+                  href="/poems"
+                  className="underline text-teal hover:text-navy"
+                >
+                  Go to Poem Texts
+                </a>
+              </p>
+            )}
+            {poemText && (
+              <p className="text-sm text-green-600 mt-3">
+                Poem text found ({poemText.split("\n").length} lines).
+              </p>
+            )}
+
+            {/* Note status indicator */}
+            {preloadedNote && (
+              <p className="text-xs text-teal mt-2">
+                Poetry note loaded from previous session.
+              </p>
+            )}
+
+            {/* Generate button */}
+            <div className="mt-5">
+              <button
+                onClick={handleGenerateVideo}
+                disabled={!canGenerate}
+                className="bg-navy text-white px-6 py-2.5 rounded-md text-sm font-medium hover:bg-teal transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Generate Video
+              </button>
+              {!poemText && poet && poem && !poemTextLoading && !poemTextError && (
+                <p className="text-xs text-gray-400 mt-2">
+                  Waiting for poem text...
+                </p>
               )}
             </div>
-          </>
+          </div>
         )}
 
-        {/* State 2: Script Review */}
-        {uiState === "script" && script && (
+        {/* State 2: Generating (note + script) */}
+        {uiState === "generating" && (
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <h2 className="font-medium text-navy mb-4">
+              Generating Video Script
+            </h2>
+            <p className="text-sm text-gray-600 mb-1">
+              {poet} &mdash; {poem}
+            </p>
+
+            <div className="mt-4 mb-4">
+              <div className="flex items-center justify-between text-sm mb-1">
+                <span className="text-gray-600">{pipeline.message}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-teal h-2 rounded-full transition-all duration-500"
+                  style={{
+                    width: pipeline.stage === "note"
+                      ? `${Math.max(10, pipeline.progress * 50)}%`
+                      : pipeline.stage === "script"
+                        ? `${50 + pipeline.progress * 50}%`
+                        : "100%",
+                  }}
+                />
+              </div>
+            </div>
+
+            {pipeline.stage && (
+              <p className="text-xs text-gray-400">
+                Stage: {pipeline.stage === "note" ? "Poetry note" : "Video script"}
+              </p>
+            )}
+
+            {pipeline.error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mt-4 text-sm">
+                {pipeline.error}
+                <button
+                  onClick={() => setUIState("select")}
+                  className="block mt-2 text-sm underline"
+                >
+                  Back to selection
+                </button>
+              </div>
+            )}
+
+            <div className="mt-4">
+              <button
+                onClick={() => {
+                  pipeline.cancel();
+                  setUIState("select");
+                }}
+                className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md text-sm hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* State 3: Script Review */}
+        {uiState === "script" && editableScript && (
           <div className="space-y-4">
             <div className="bg-white border border-gray-200 rounded-lg p-5">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h2 className="font-medium text-navy">
-                    {script.poemTitle} by {script.poet}
+                    {editableScript.poemTitle} by {editableScript.poet}
                   </h2>
                   <p className="text-xs text-gray-500 mt-0.5">
-                    {script.sections.length} sections, ~
-                    {Math.round(script.totalEstimatedDuration / 60)} min{" "}
-                    {script.totalEstimatedDuration % 60}s estimated
+                    {editableScript.sections.length} sections, ~
+                    {Math.round(editableScript.totalEstimatedDuration / 60)} min{" "}
+                    {editableScript.totalEstimatedDuration % 60}s estimated
                   </p>
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => {
-                      setUIState("select");
-                      setScript(null);
-                    }}
+                    onClick={handleRegenerateScript}
                     className="text-sm px-3 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                   >
-                    Regenerate
+                    Regenerate Script
                   </button>
                   <button
-                    onClick={handleStartRender}
+                    onClick={handleRenderVideo}
                     className="bg-navy text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-teal transition-colors"
                   >
-                    Start Rendering
+                    Render Video
                   </button>
                 </div>
               </div>
             </div>
 
-            {script.sections.map((section: ScriptSection, i: number) => (
+            {editableScript.sections.map((section: ScriptSection, i: number) => (
               <div
                 key={section.id}
                 className="bg-white border border-gray-200 rounded-lg p-4"
@@ -472,12 +534,24 @@ function VideoPage() {
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent resize-y"
                 />
+                {section.techniques && section.techniques.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {section.techniques.map((t, ti) => (
+                      <span
+                        key={ti}
+                        className="inline-block px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded"
+                      >
+                        {t.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         )}
 
-        {/* State 3: Pipeline Progress */}
+        {/* State 4: Rendering */}
         {uiState === "rendering" && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h2 className="font-medium text-navy mb-4">Rendering Video</h2>
@@ -523,7 +597,7 @@ function VideoPage() {
           </div>
         )}
 
-        {/* State 4: Completion */}
+        {/* State 5: Complete */}
         {uiState === "done" && pipeline.videoUrl && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h2 className="font-medium text-navy mb-4">Video Ready</h2>
@@ -548,7 +622,7 @@ function VideoPage() {
                 onClick={handleStartNew}
                 className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md text-sm hover:bg-gray-50 transition-colors"
               >
-                Start New Video
+                Generate Another
               </button>
               <button
                 onClick={() => router.push("/poetry")}

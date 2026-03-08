@@ -29,11 +29,13 @@ export interface AudioSection {
 }
 
 export interface VideoPipelineEvent {
-  stage: "audio" | "render" | "complete" | "error";
+  stage: "note" | "script" | "audio" | "render" | "complete" | "error";
   progress: number; // 0.0 to 1.0
   message: string;
   sectionIndex?: number;
   videoUrl?: string;
+  script?: VideoScript;
+  noteText?: string;
 }
 
 export type CopyrightMode = 'public_domain' | 'rights_managed';
