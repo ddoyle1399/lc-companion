@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "bundle:remotion": "npx tsx scripts/bundle-remotion.mts",
-    "test:video": "npx tsx scripts/test-render.mts"
+    "test:video": "npx tsx scripts/test-render.mts",
+    "test:elevenlabs": "npx tsx scripts/test-elevenlabs.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

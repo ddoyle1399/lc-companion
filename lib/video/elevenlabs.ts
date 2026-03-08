@@ -32,11 +32,16 @@ export async function generateAudio(text: string): Promise<Buffer> {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   const voiceId = process.env.ELEVENLABS_VOICE_ID;
 
+  console.log(`[elevenlabs] generateAudio called: textLength=${text.length}, voiceId="${voiceId}", apiKeyPresent=${!!apiKey}`);
+
   if (!apiKey || !voiceId) {
     throw new Error("ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID must be set");
   }
 
-  const res = await fetch(`${ELEVENLABS_API_URL}/${voiceId}`, {
+  const url = `${ELEVENLABS_API_URL}/${voiceId}`;
+  console.log(`[elevenlabs] POST ${url}`);
+
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       "xi-api-key": apiKey,
@@ -54,13 +59,18 @@ export async function generateAudio(text: string): Promise<Buffer> {
     }),
   });
 
+  console.log(`[elevenlabs] Response status: ${res.status} ${res.statusText}`);
+
   if (!res.ok) {
     const errorText = await res.text().catch(() => "Unknown error");
+    console.error(`[elevenlabs] API ERROR (${res.status}): ${errorText}`);
     throw new Error(`ElevenLabs API error (${res.status}): ${errorText}`);
   }
 
   const arrayBuffer = await res.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+  const buffer = Buffer.from(arrayBuffer);
+  console.log(`[elevenlabs] Audio received: ${buffer.length} bytes`);
+  return buffer;
 }
 
 /**
@@ -102,17 +112,24 @@ export async function generateSectionAudio(
   outputDir: string
 ): Promise<AudioSection> {
   const filePath = path.join(outputDir, `${section.id}.mp3`);
+  const textPreview = section.spokenText.slice(0, 60).replace(/\n/g, " ");
+
+  console.log(`[elevenlabs] Section "${section.id}": generating audio for "${textPreview}..."`);
 
   let audioBuffer: Buffer;
   try {
     audioBuffer = await generateAudio(section.spokenText);
   } catch (err) {
+    const errMsg = err instanceof Error ? err.message : String(err);
+    console.error(`[elevenlabs] Section "${section.id}" attempt 1 FAILED: ${errMsg}`);
     // Retry once on failure
     await delay(1000);
     try {
       audioBuffer = await generateAudio(section.spokenText);
-    } catch {
-      // Both attempts failed: return estimated duration, no audio file
+    } catch (retryErr) {
+      const retryMsg = retryErr instanceof Error ? retryErr.message : String(retryErr);
+      console.error(`[elevenlabs] Section "${section.id}" attempt 2 FAILED: ${retryMsg}`);
+      console.error(`[elevenlabs] Section "${section.id}": both attempts failed, returning empty audio`);
       const wordCount = section.spokenText.split(/\s+/).length;
       return {
         sectionId: section.id,
@@ -123,8 +140,10 @@ export async function generateSectionAudio(
   }
 
   await writeFile(filePath, audioBuffer);
+  console.log(`[elevenlabs] Section "${section.id}": saved ${audioBuffer.length} bytes to ${filePath}`);
 
   const durationSeconds = await getMp3Duration(filePath, audioBuffer.length);
+  console.log(`[elevenlabs] Section "${section.id}": duration=${durationSeconds.toFixed(1)}s`);
 
   // Rate limit delay between calls
   await delay(500);
