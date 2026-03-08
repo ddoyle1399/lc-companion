@@ -3,7 +3,6 @@ import path from "node:path";
 import { promises as fs } from "node:fs";
 import { createReadStream } from "node:fs";
 import http from "node:http";
-import net from "node:net";
 import {
   isConfigured,
   generateSectionAudio,
@@ -31,39 +30,40 @@ function sseEvent(data: VideoPipelineEvent): string {
  */
 async function startAudioServer(audioDir: string): Promise<{ server: http.Server; port: number }> {
   const server = http.createServer((req, res) => {
-    const filename = decodeURIComponent((req.url || "/").slice(1));
+    const rawUrl = req.url || "/";
+    const filename = decodeURIComponent(rawUrl.slice(1));
     const filePath = path.join(audioDir, filename);
 
+    console.log(`[audio-server] Request: ${rawUrl} -> filename="${filename}" -> filePath="${filePath}"`);
+
     // Only serve .mp3 files from the audio directory
-    if (!filename.endsWith(".mp3") || filename.includes("..")) {
+    if (!filename || !filename.endsWith(".mp3") || filename.includes("..")) {
+      console.log(`[audio-server] 404: invalid filename "${filename}"`);
       res.writeHead(404);
       res.end();
       return;
     }
 
-    const stream = createReadStream(filePath);
-    stream.on("error", () => {
+    const fileStream = createReadStream(filePath);
+    fileStream.on("error", (err) => {
+      console.log(`[audio-server] 404: file read error for "${filePath}":`, err.message);
       res.writeHead(404);
       res.end();
     });
-    res.writeHead(200, { "Content-Type": "audio/mpeg" });
-    stream.pipe(res);
-  });
-
-  // Find a random available port
-  const port = await new Promise<number>((resolve, reject) => {
-    const tempServer = net.createServer();
-    tempServer.listen(0, () => {
-      const addr = tempServer.address();
-      const p = typeof addr === "object" && addr ? addr.port : 0;
-      tempServer.close(() => resolve(p));
+    fileStream.on("open", () => {
+      console.log(`[audio-server] 200: serving "${filePath}"`);
     });
-    tempServer.on("error", reject);
+    res.writeHead(200, { "Content-Type": "audio/mpeg" });
+    fileStream.pipe(res);
   });
 
+  // Let the OS assign a random available port
   await new Promise<void>((resolve) => {
-    server.listen(port, "127.0.0.1", () => resolve());
+    server.listen(0, "127.0.0.1", () => resolve());
   });
+
+  const addr = server.address();
+  const port = typeof addr === "object" && addr ? addr.port : 0;
 
   return { server, port };
 }
@@ -276,16 +276,32 @@ export async function POST(request: NextRequest) {
 
           // Start a local HTTP server to serve audio files to Remotion
           audioServer = await startAudioServer(tmpDir);
+          console.log(`[video-render] Audio server started on port ${audioServer.port}, serving from ${tmpDir}`);
 
-          compositionSections = audioSections.map((audio, i) => ({
-            type: finalScript.sections[i].type,
-            highlightLines: finalScript.sections[i].highlightLines,
-            durationInFrames: Math.round(audio.durationSeconds * FPS),
-            audioSrc: `http://127.0.0.1:${audioServer!.port}/${encodeURIComponent(path.basename(audio.filePath))}`,
-            spokenText: finalScript.sections[i].spokenText,
-            keyQuote: finalScript.sections[i].keyQuote,
-            techniques: finalScript.sections[i].techniques,
-          }));
+          // List audio files in temp dir for debugging
+          const tmpFiles = await fs.readdir(tmpDir);
+          console.log(`[video-render] Files in tmpDir:`, tmpFiles);
+
+          compositionSections = audioSections.map((audio, i) => {
+            // If audio generation failed for this section, filePath will be empty
+            const hasAudio = audio.filePath && audio.filePath.length > 0;
+            const audioFilename = hasAudio ? path.basename(audio.filePath) : "";
+            const audioSrc = hasAudio
+              ? `http://127.0.0.1:${audioServer!.port}/${encodeURIComponent(audioFilename)}`
+              : "";
+
+            console.log(`[video-render] Section ${i} (${finalScript.sections[i].id}): filePath="${audio.filePath}", audioSrc="${audioSrc}"`);
+
+            return {
+              type: finalScript.sections[i].type,
+              highlightLines: finalScript.sections[i].highlightLines,
+              durationInFrames: Math.round(audio.durationSeconds * FPS),
+              audioSrc,
+              spokenText: finalScript.sections[i].spokenText,
+              keyQuote: finalScript.sections[i].keyQuote,
+              techniques: finalScript.sections[i].techniques,
+            };
+          });
         }
 
         // Verify bundle exists
@@ -304,6 +320,8 @@ export async function POST(request: NextRequest) {
         }
 
         const copyrightMode = getCopyrightMode(poet);
+
+        console.log(`[video-render] Composition sections audioSrc values:`, compositionSections.map((s, i) => `${i}: "${s.audioSrc}"`));
 
         const inputProps: PoemVideoProps = {
           poemTitle: finalScript.poemTitle,
