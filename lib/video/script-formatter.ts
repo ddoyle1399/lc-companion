@@ -1,6 +1,6 @@
 import { getClient } from "@/lib/claude/client";
 import { buildScriptSystemPrompt, buildScriptUserPrompt } from "./script-prompt";
-import type { VideoScript } from "./types";
+import type { VideoScript, ScriptWarning } from "./types";
 
 function parseScriptJSON(raw: string): VideoScript {
   let cleaned = raw.trim();
@@ -47,6 +47,66 @@ function parseScriptJSON(raw: string): VideoScript {
   return parsed as VideoScript;
 }
 
+/**
+ * Validate the generated script against the source note and poem text.
+ * Returns warnings for potential hallucinations (does not block generation).
+ */
+function validateScript(
+  script: VideoScript,
+  poetryNote: string,
+  poemText: string
+): ScriptWarning[] {
+  const warnings: ScriptWarning[] = [];
+  const noteLower = poetryNote.toLowerCase();
+  const poemLines = poemText.split("\n").map((l) => l.trim().toLowerCase());
+  const poemTextLower = poemText.toLowerCase();
+
+  for (const section of script.sections) {
+    // Check technique names exist in the source note
+    if (section.techniques) {
+      for (const tech of section.techniques) {
+        if (!noteLower.includes(tech.name.toLowerCase())) {
+          const msg = `Technique "${tech.name}" in section "${section.id}" not found in source note`;
+          console.warn(`[script-validation] ${msg}`);
+          warnings.push({
+            type: "technique_not_in_note",
+            message: msg,
+            sectionId: section.id,
+            value: tech.name,
+          });
+        }
+      }
+    }
+
+    // Check keyQuote text appears in the poem
+    if (section.keyQuote) {
+      const quoteWords = section.keyQuote.text.toLowerCase().trim();
+      // Check if the quote appears anywhere in the poem text (fuzzy: check if most words match a line)
+      const foundInPoem = poemLines.some((line) => line.includes(quoteWords)) ||
+        poemTextLower.includes(quoteWords);
+
+      if (!foundInPoem) {
+        const msg = `Key quote "${section.keyQuote.text}" in section "${section.id}" not found in poem text`;
+        console.warn(`[script-validation] ${msg}`);
+        warnings.push({
+          type: "quote_not_in_poem",
+          message: msg,
+          sectionId: section.id,
+          value: section.keyQuote.text,
+        });
+      }
+    }
+  }
+
+  if (warnings.length > 0) {
+    console.warn(`[script-validation] ${warnings.length} warning(s) found`);
+  } else {
+    console.log(`[script-validation] No warnings. Script content looks clean.`);
+  }
+
+  return warnings;
+}
+
 export async function generateVideoScript(
   poet: string,
   poem: string,
@@ -84,7 +144,12 @@ export async function generateVideoScript(
         throw new Error("No text content in Claude response");
       }
 
-      return parseScriptJSON(textBlock.text);
+      const script = parseScriptJSON(textBlock.text);
+      const warnings = validateScript(script, poetryNote, poemText);
+      if (warnings.length > 0) {
+        script.warnings = warnings;
+      }
+      return script;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
       // Only retry on parse errors, not API errors

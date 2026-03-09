@@ -15,11 +15,19 @@ export interface ScriptSection {
   }[];
 }
 
+export interface ScriptWarning {
+  type: "technique_not_in_note" | "quote_not_in_poem";
+  message: string;
+  sectionId: string;
+  value: string;
+}
+
 export interface VideoScript {
   poemTitle: string;
   poet: string;
   totalEstimatedDuration: number;
   sections: ScriptSection[];
+  warnings?: ScriptWarning[];
 }
 
 export interface AudioSection {
@@ -36,6 +44,7 @@ export interface VideoPipelineEvent {
   videoUrl?: string;
   script?: VideoScript;
   noteText?: string;
+  warnings?: ScriptWarning[];
 }
 
 export type CopyrightMode = 'public_domain' | 'rights_managed';

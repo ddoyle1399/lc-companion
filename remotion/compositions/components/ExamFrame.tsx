@@ -10,6 +10,50 @@ interface ExamFrameProps {
   durationInFrames: number;
 }
 
+/**
+ * Extract connected poet names from spoken text.
+ * Looks for capitalised multi-word sequences that look like names.
+ */
+function extractPoetNames(spokenText?: string, currentPoet?: string): string[] {
+  if (!spokenText) return [];
+  const namePattern = /\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})\b/g;
+  const names: string[] = [];
+  let match;
+  while ((match = namePattern.exec(spokenText)) !== null) {
+    const name = match[1];
+    if (name !== currentPoet && !names.includes(name)) {
+      names.push(name);
+    }
+  }
+  return names.slice(0, 4);
+}
+
+/**
+ * Extract question type labels from spoken text or techniques.
+ */
+function extractQuestionTypes(
+  spokenText?: string,
+  techniques?: { name: string; quote: string; effect: string }[]
+): string[] {
+  const types: string[] = [];
+
+  if (techniques) {
+    for (const t of techniques) {
+      types.push(t.name);
+    }
+  }
+
+  if (types.length === 0 && spokenText) {
+    const sentences = spokenText.split(/[.!?]+/).filter((s) => s.trim());
+    for (const s of sentences.slice(0, 4)) {
+      const words = s.trim().split(/\s+/).slice(0, 5).join(" ");
+      if (words.length > 3) types.push(words);
+    }
+  }
+
+  return types.slice(0, 6);
+}
+
 export const ExamFrame: React.FC<ExamFrameProps> = ({
   poet,
   spokenText,
@@ -18,14 +62,14 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  // Header
+  // Header "EXAM FOCUS" fades in centred top
   const headerOpacity = interpolate(frame, [0, 15], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
 
-  // Fade out
+  // Fade out at end
   const fadeOut = interpolate(
     frame,
     [durationInFrames - 12, durationInFrames],
@@ -33,28 +77,14 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Poet name
-  const poetOpacity = interpolate(frame, [10, 25], [0, 1], {
+  const connectedPoets = extractPoetNames(spokenText, poet);
+  const questionTypes = extractQuestionTypes(spokenText, techniques);
+
+  // Slow drift for constant motion (Change 4)
+  const drift = interpolate(frame, [0, durationInFrames], [0, -3], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
   });
-
-  // Extract exam keywords from techniques
-  const examPoints: string[] = [];
-  if (techniques) {
-    for (const t of techniques) {
-      examPoints.push(t.name);
-    }
-  }
-  // If no techniques, extract from spoken text
-  if (examPoints.length === 0 && spokenText) {
-    const sentences = spokenText.split(/[.!?]+/).filter((s) => s.trim());
-    for (const s of sentences.slice(0, 4)) {
-      const words = s.trim().split(/\s+/).slice(0, 5).join(" ");
-      if (words.length > 3) examPoints.push(words);
-    }
-  }
 
   return (
     <div
@@ -69,9 +99,10 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
         justifyContent: "center",
         alignItems: "center",
         opacity: fadeOut,
+        transform: `translateY(${drift}px)`,
       }}
     >
-      {/* Section header */}
+      {/* EXAM FOCUS header */}
       <div
         style={{
           position: "absolute",
@@ -81,7 +112,7 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           color: TEAL,
           textTransform: "uppercase",
           letterSpacing: 4,
-          opacity: headerOpacity,
+          opacity: headerOpacity * (0.9 + 0.1 * Math.sin(frame * 0.05)),
         }}
       >
         EXAM FOCUS
@@ -95,13 +126,76 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           color: "#FFFFFF",
           marginBottom: 48,
           textShadow: "0 2px 20px rgba(0,0,0,0.5)",
-          opacity: poetOpacity,
+          opacity: interpolate(frame, [10, 25], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+            easing: Easing.out(Easing.quad),
+          }),
         }}
       >
         {poet}
       </div>
 
-      {/* Exam points as labels */}
+      {/* Connected poet names with teal dots - staggered */}
+      {connectedPoets.length > 0 && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: 12,
+            marginBottom: 40,
+          }}
+        >
+          {connectedPoets.map((name, i) => {
+            const start = 20 + i * 15;
+            const opacity = interpolate(frame, [start, start + 15], [0, 1], {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            });
+            const x = interpolate(frame, [start, start + 15], [12, 0], {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            });
+
+            return (
+              <div
+                key={i}
+                style={{
+                  opacity,
+                  transform: `translateX(${x}px)`,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                }}
+              >
+                <div
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: 3,
+                    backgroundColor: TEAL,
+                    flexShrink: 0,
+                  }}
+                />
+                <div
+                  style={{
+                    fontFamily: "Georgia, 'Times New Roman', serif",
+                    fontSize: 20,
+                    color: "rgba(255, 255, 255, 0.8)",
+                  }}
+                >
+                  {name}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Question type labels - staggered, separate group */}
       <div
         style={{
           display: "flex",
@@ -111,8 +205,8 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           maxWidth: "70%",
         }}
       >
-        {examPoints.slice(0, 6).map((point, i) => {
-          const start = 20 + i * 12;
+        {questionTypes.map((point, i) => {
+          const start = 20 + connectedPoets.length * 15 + i * 12;
           const opacity = interpolate(frame, [start, start + 15], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",

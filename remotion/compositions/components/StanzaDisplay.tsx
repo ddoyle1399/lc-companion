@@ -96,24 +96,47 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           position: "absolute",
           top: 48,
           right: 64,
-          fontFamily: "Arial, sans-serif",
-          fontSize: 10,
-          color: TEAL,
-          textTransform: "uppercase",
-          letterSpacing: 4,
-          opacity: labelOpacity * 0.4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          opacity: interpolate(frame, [0, 10], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          }),
         }}
       >
-        STANZA {sectionIndex}
+        {/* Teal line above label */}
+        <div
+          style={{
+            width: 40,
+            height: 1,
+            backgroundColor: TEAL,
+            marginBottom: 8,
+            opacity: 0.7,
+          }}
+        />
+        <div
+          style={{
+            fontFamily: "Arial, sans-serif",
+            fontSize: 13,
+            color: TEAL,
+            textTransform: "uppercase",
+            letterSpacing: 4,
+            opacity: 0.6 * (0.9 + 0.1 * Math.sin(frame * 0.05)),
+          }}
+        >
+          STANZA {sectionIndex}
+        </div>
       </div>
 
-      {/* Poem lines - centred */}
+      {/* Poem lines - centred, slow upward drift (constant motion) */}
       <div
         style={{
           maxWidth: "60%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          transform: `translateY(${interpolate(frame, [0, durationInFrames], [0, -3], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
         }}
       >
         {linesToShow.map((lineIdx, i) => {

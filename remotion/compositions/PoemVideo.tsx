@@ -106,6 +106,7 @@ const SectionContent: React.FC<{
         highlightLines={section.highlightLines}
         poet={poet}
         durationInFrames={section.durationInFrames}
+        spokenText={section.spokenText}
       />
     );
   }
@@ -139,6 +140,7 @@ const SectionContent: React.FC<{
         highlightLines={section.highlightLines}
         poet={poet}
         durationInFrames={section.durationInFrames}
+        spokenText={section.spokenText}
       />
     );
   }

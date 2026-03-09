@@ -52,7 +52,7 @@ export const SectionLabel: React.FC<SectionLabelProps> = ({
         }}
       />
 
-      {/* Section type label */}
+      {/* Section type label with slow opacity pulse (constant motion) */}
       <div
         style={{
           fontSize: 14,
@@ -60,7 +60,7 @@ export const SectionLabel: React.FC<SectionLabelProps> = ({
           color: TEAL,
           textTransform: "uppercase",
           letterSpacing: 4,
-          opacity: textOpacity,
+          opacity: textOpacity * (0.9 + 0.1 * Math.sin(frame * 0.05)),
         }}
       >
         {label}

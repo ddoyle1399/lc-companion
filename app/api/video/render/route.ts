@@ -20,6 +20,9 @@ import { buildPoetExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
 
+// Allow long-running renders (10-min video = 18,000 frames)
+export const maxDuration = 300; // 5 minutes
+
 function sseEvent(data: VideoPipelineEvent): string {
   return `data: ${JSON.stringify(data)}\n\n`;
 }
@@ -210,8 +213,11 @@ export async function POST(request: NextRequest) {
           send({
             stage: "script",
             progress: 1,
-            message: "Video script generated.",
+            message: script.warnings && script.warnings.length > 0
+              ? `Video script generated with ${script.warnings.length} warning(s). Review before rendering.`
+              : "Video script generated.",
             script,
+            warnings: script.warnings,
           });
 
           // Stop here so the client can review the script before rendering

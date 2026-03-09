@@ -1,6 +1,8 @@
 export function buildScriptSystemPrompt(): string {
   return `You are converting a poetry teaching note into a spoken video script. The video will show the poem on screen whilst a teacher's voice analyses it.
 
+Your job is to convert the ENTIRE teaching note into a spoken video script. Do not summarise or skip content. Every key point, technique, and quote in the note should appear in the script. The note is the source of truth. If the note discusses a technique, the script must discuss it. If the note quotes a line, the script must quote it.
+
 ABSOLUTE RULES:
 - Write in UK English at all times (colour, analyse, recognise, etc.)
 - NEVER use em dashes or en dashes anywhere. Use commas, full stops, or colons instead.
@@ -13,8 +15,18 @@ ABSOLUTE RULES:
 - Do NOT say "in this video we will" or "let us examine" or "we shall now look at". Just start teaching.
 - Do NOT start consecutive sentences with the same word.
 - Vary sentence length. Mix very short sentences with slightly longer ones.
-- Total script length: 800 to 1200 words (roughly 5 to 8 minutes when spoken at natural pace).
+- Target total script length: 1500 to 2500 words. This should produce a video of 5 to 10 minutes.
 - Never hallucinate quotes. Only quote lines that appear in the poem text provided.
+
+CRITICAL CONTENT RULES:
+- The teaching note below is your ONLY source of truth. Do not add analysis, claims, or interpretations that are not in the note.
+- If the note quotes a line from the poem, you must quote it exactly as written. Do not paraphrase poem quotes.
+- If the note names a literary technique, use that exact technique name. Do not substitute with a different technique name.
+- Do not invent connections to other poets unless the note explicitly mentions them.
+- Do not add historical context unless the note provides it.
+- If in doubt about whether something is in the note, leave it out.
+- Every technique in the techniques array must come directly from the note. Every keyQuote must be a direct quote from the poem that the note discusses.
+- The spokenText for each section is a spoken version of what the note says. It should be reworded for speech but the substance must be identical to the note.
 
 RESPONSE FORMAT:
 Return ONLY valid JSON. No markdown fences. No explanation before or after. The response must start with { and end with }.`;
@@ -50,27 +62,31 @@ SCRIPT STRUCTURE (follow this order):
    - No lines highlighted on screen during the intro
 
 2. STANZA ANALYSIS sections (type: "stanza_analysis", highlightLines: [relevant 0-indexed line numbers])
-   - One section per stanza or logical group of lines
-   - For each section: say what is happening, name one key technique, explain why it matters for the exam
+   - Break the poem into as many sections as needed to cover the FULL poem. Each section covers 3 to 6 lines.
+   - For a short poem like "The Lake Isle of Innisfree" (12 lines), use 3 sections.
+   - For a medium poem like "The Forge" (14 lines), use 3 to 4 sections.
+   - For a long poem like "The Fish" (76 lines), use 6 to 8 sections.
+   - Every section must include at least one keyQuote and 1 to 2 techniques.
+   - For each section: say what is happening, name the key techniques, explain why they matter for the exam. Go into real depth. Do not skim.
    - Quote directly from the poem text provided above
    - highlightLines must be 0-indexed line numbers from the poem text
-   - Include keyQuote: the single most important phrase from that stanza. Pick the phrase the examiner would most want to see quoted.
-   - Include techniques: 1-2 literary techniques used in that stanza. For each, give the technique name, the exact quote demonstrating it, and a one-sentence explanation of its effect on the reader. Keep the effect exam-focused.
+   - Include keyQuote: the single most important phrase from that section. Pick the phrase the examiner would most want to see quoted.
+   - Include techniques: 1-2 literary techniques used in that section. For each, give the technique name, the exact quote demonstrating it, and a one-sentence explanation of its effect on the reader. Keep the effect exam-focused.
 
 3. THEMES section (type: "theme", highlightLines: [])
-   - 2 to 3 key themes in 2 to 3 sentences each
-   - Connect to exam question patterns
+   - 2 to 4 key themes, each with 3 to 4 sentences. Go deeper than surface level.
+   - Connect each theme to exam question patterns and to the poet's wider body of work.
    - No lines highlighted
    - keyQuote and techniques are optional. Only include them if genuinely relevant.
 
 4. EXAM CONNECTION section (type: "exam_connection", highlightLines: [])
-   - 1 to 2 sentences on what exam question types this poem suits
-   - Which other poems by this poet it links to
+   - 2 to 3 sentences on what exam question types this poem suits
+   - Name specific exam question patterns and which other poems by this poet it links to
    - No lines highlighted
    - keyQuote and techniques are optional. Only include them if genuinely relevant.
 
 5. OUTRO section (type: "outro", highlightLines: [])
-   - One sentence wrap-up
+   - 1 to 2 sentences wrap-up
    - No lines highlighted
    - keyQuote and techniques are optional. Only include them if genuinely relevant.
 

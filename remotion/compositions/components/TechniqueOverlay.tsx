@@ -2,15 +2,14 @@ import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
 
 const TEAL = "#2A9D8F";
+const CARD_ENTER = 15;
+const CARD_FADE_OUT = 10;
+const STAGGER_DELAY = 15;
 
 interface TechniqueOverlayProps {
   techniques: { name: string; quote: string; effect: string }[];
   durationInFrames: number;
 }
-
-const CARD_DURATION = 90; // 3 seconds per card
-const CARD_ENTER = 12;
-const CARD_EXIT = 12;
 
 export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
   techniques,
@@ -20,32 +19,25 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
 
   if (!techniques || techniques.length === 0) return null;
 
-  // Calculate when each technique card appears
-  // Start at 20% into the section, space them evenly
-  const startFrame = Math.floor(durationInFrames * 0.2);
-  const availableFrames = durationInFrames - startFrame - 15; // leave buffer at end
-  const perCard = Math.min(
-    CARD_DURATION + CARD_EXIT,
-    Math.floor(availableFrames / techniques.length)
+  // Cards fade out together at the end of the section
+  const fadeOutStart = durationInFrames - CARD_FADE_OUT;
+  const fadeOut = interpolate(
+    frame,
+    [fadeOutStart, durationInFrames],
+    [1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  return (
-    <div
-      style={{
-        position: "absolute",
-        bottom: 120,
-        left: 0,
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        pointerEvents: "none",
-      }}
-    >
-      {techniques.map((tech, i) => {
-        const cardStart = startFrame + i * perCard;
-        const cardEnd = cardStart + Math.min(CARD_DURATION, perCard - CARD_EXIT);
+  // Subtle scale pulse for constant motion (Change 4)
+  const scalePulse =
+    1 + 0.005 * Math.sin((frame / durationInFrames) * Math.PI * 2);
 
-        // Enter animation
+  return (
+    <>
+      {techniques.slice(0, 2).map((tech, i) => {
+        const cardStart = i * STAGGER_DELAY;
+
+        // Slide in from bottom with fade
         const enterProgress = interpolate(
           frame,
           [cardStart, cardStart + CARD_ENTER],
@@ -57,48 +49,40 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
           }
         );
 
-        // Exit animation
-        const exitProgress = interpolate(
-          frame,
-          [cardEnd - CARD_EXIT, cardEnd],
-          [0, 1],
-          {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-            easing: Easing.in(Easing.quad),
-          }
-        );
+        const translateY = interpolate(enterProgress, [0, 1], [30, 0]);
+        const opacity = enterProgress * fadeOut;
 
-        const isVisible = frame >= cardStart && frame < cardEnd;
-        if (!isVisible) return null;
-
-        const translateY = interpolate(enterProgress - exitProgress, [-1, 0, 1], [100, 0, 100]);
-        const opacity = enterProgress * (1 - exitProgress);
+        // Position: first card bottom-left, second card bottom-right
+        const positionStyle: React.CSSProperties =
+          i === 0
+            ? { position: "absolute", left: 60, bottom: 80 }
+            : { position: "absolute", right: 60, bottom: 80 };
 
         return (
           <div
             key={i}
             style={{
-              transform: `translateY(${translateY}px)`,
+              ...positionStyle,
+              transform: `translateY(${translateY}px) scale(${scalePulse})`,
               opacity,
               backgroundColor: "rgba(10, 15, 25, 0.85)",
               borderRadius: 12,
-              padding: 32,
-              maxWidth: 600,
-              minWidth: 400,
-              backdropFilter: "blur(8px)",
+              padding: 24,
+              maxWidth: 420,
+              border: "1px solid rgba(42, 157, 143, 0.2)",
+              pointerEvents: "none",
             }}
           >
             {/* Technique name */}
             <div
               style={{
                 fontFamily: "Arial, sans-serif",
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: 700,
                 color: TEAL,
                 textTransform: "uppercase",
                 letterSpacing: 3,
-                marginBottom: 12,
+                marginBottom: 10,
               }}
             >
               {tech.name}
@@ -108,22 +92,24 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
             <div
               style={{
                 fontFamily: "Georgia, 'Times New Roman', serif",
-                fontSize: 18,
+                fontSize: 17,
                 fontStyle: "italic",
                 color: "#FFFFFF",
                 lineHeight: 1.5,
-                marginBottom: 10,
+                marginBottom: 8,
               }}
             >
-              {"\u201C"}{tech.quote}{"\u201D"}
+              {"\u201C"}
+              {tech.quote}
+              {"\u201D"}
             </div>
 
             {/* Effect */}
             <div
               style={{
                 fontFamily: "Arial, sans-serif",
-                fontSize: 14,
-                color: "rgba(255, 255, 255, 0.7)",
+                fontSize: 13,
+                color: "rgba(255, 255, 255, 0.6)",
                 lineHeight: 1.5,
               }}
             >
@@ -132,6 +118,6 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
           </div>
         );
       })}
-    </div>
+    </>
   );
 };

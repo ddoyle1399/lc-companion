@@ -1,4 +1,5 @@
 import React from "react";
+import { useCurrentFrame } from "remotion";
 
 export type SectionType =
   | "title"
@@ -55,7 +56,12 @@ interface GradientBackgroundProps {
 export const GradientBackground: React.FC<GradientBackgroundProps> = ({
   sectionType,
 }) => {
+  const frame = useCurrentFrame();
   const spec = BACKGROUNDS[sectionType] || BACKGROUNDS.intro;
+
+  // Slow glow position drift for constant motion (Change 4)
+  const glowDriftX = Math.sin(frame * 0.008) * 3;
+  const glowDriftY = Math.cos(frame * 0.006) * 2;
 
   return (
     <div
@@ -74,7 +80,7 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
             position: "absolute",
             top: spec.glow.posY,
             left: spec.glow.posX,
-            transform: "translate(-50%, -50%)",
+            transform: `translate(calc(-50% + ${glowDriftX}px), calc(-50% + ${glowDriftY}px))`,
             width: "60%",
             height: "60%",
             borderRadius: "50%",

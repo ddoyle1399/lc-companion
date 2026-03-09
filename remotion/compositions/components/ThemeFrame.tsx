@@ -30,7 +30,6 @@ function extractThemes(
   // If no techniques, extract key phrases from spoken text
   if (themes.length === 0 && spokenText) {
     const sentences = spokenText.split(/[.!?]+/).filter((s) => s.trim());
-    // Take first 3 sentences as theme indicators
     for (const s of sentences.slice(0, 3)) {
       const trimmed = s.trim();
       if (trimmed.length > 5) {
@@ -52,14 +51,14 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
   const frame = useCurrentFrame();
   const themes = extractThemes(spokenText, techniques);
 
-  // Header
+  // Header fade in
   const headerOpacity = interpolate(frame, [0, 15], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
 
-  // Fade out
+  // Fade out at end
   const fadeOut = interpolate(
     frame,
     [durationInFrames - 12, durationInFrames],
@@ -67,10 +66,17 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Calculate per-theme timing
+  // Per-theme timing: crossfade between themes
   const themeStartFrame = 20;
+  const crossfadeDuration = 15;
   const perTheme = Math.floor(
     (durationInFrames - themeStartFrame - 15) / Math.max(themes.length, 1)
+  );
+
+  // Determine which theme is currently active
+  const activeThemeIndex = Math.min(
+    Math.floor(Math.max(0, frame - themeStartFrame) / perTheme),
+    themes.length - 1
   );
 
   return (
@@ -88,7 +94,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
         opacity: fadeOut,
       }}
     >
-      {/* Section header */}
+      {/* Section header with opacity pulse (Change 4) */}
       <div
         style={{
           position: "absolute",
@@ -98,27 +104,32 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
           color: TEAL,
           textTransform: "uppercase",
           letterSpacing: 4,
-          opacity: headerOpacity,
+          opacity: headerOpacity * (0.9 + 0.1 * Math.sin(frame * 0.05)),
         }}
       >
         THEMES
       </div>
 
-      {/* Theme display area */}
+      {/* Theme display area - crossfade between themes */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 20,
           maxWidth: "70%",
+          position: "relative",
+          minHeight: 200,
+          justifyContent: "center",
         }}
       >
         {themes.map((theme, i) => {
           const start = themeStartFrame + i * perTheme;
+          const end = start + perTheme;
+
+          // Fade in
           const enterOpacity = interpolate(
             frame,
-            [start, start + 15],
+            [start, start + crossfadeDuration],
             [0, 1],
             {
               extrapolateLeft: "clamp",
@@ -126,31 +137,110 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
               easing: Easing.out(Easing.quad),
             }
           );
-          const enterY = interpolate(frame, [start, start + 15], [20, 0], {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-            easing: Easing.out(Easing.quad),
-          });
+
+          // Scale up from 0.95 to 1.0
+          const enterScale = interpolate(
+            frame,
+            [start, start + crossfadeDuration],
+            [0.95, 1.0],
+            {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            }
+          );
+
+          // Fade out (crossfade to next theme)
+          const exitOpacity =
+            i < themes.length - 1
+              ? interpolate(
+                  frame,
+                  [end - crossfadeDuration, end],
+                  [1, 0],
+                  {
+                    extrapolateLeft: "clamp",
+                    extrapolateRight: "clamp",
+                    easing: Easing.in(Easing.quad),
+                  }
+                )
+              : 1;
+
+          const opacity = enterOpacity * exitOpacity;
+
+          // Slow upward drift while visible (Change 4)
+          const drift = interpolate(
+            frame,
+            [start, end],
+            [0, -5],
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+          );
+
+          // Quote fade in (15 frames after theme label)
+          const quoteOpacity = interpolate(
+            frame,
+            [start + crossfadeDuration, start + crossfadeDuration + 15],
+            [0, 1],
+            {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            }
+          );
+
+          // Teal underline draws itself under theme word
+          const underlineWidth = interpolate(
+            frame,
+            [start + 5, start + 20],
+            [0, 100],
+            {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            }
+          );
+
+          // Only render if theme has any visibility
+          if (frame < start || opacity < 0.01) return null;
 
           return (
             <div
               key={i}
               style={{
-                opacity: enterOpacity,
-                transform: `translateY(${enterY}px)`,
+                position: "absolute",
+                opacity,
+                transform: `translateY(${drift}px) scale(${enterScale})`,
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
             >
+              {/* Theme label */}
               <div
                 style={{
                   fontFamily: "Georgia, 'Times New Roman', serif",
-                  fontSize: 44,
+                  fontSize: 48,
                   color: "#FFFFFF",
                   textShadow: "0 2px 20px rgba(0,0,0,0.5)",
                 }}
               >
                 {theme.label}
               </div>
+
+              {/* Teal underline */}
+              <div
+                style={{
+                  width: `${underlineWidth}%`,
+                  maxWidth: 300,
+                  height: 2,
+                  backgroundColor: TEAL,
+                  marginTop: 12,
+                  marginBottom: 16,
+                  opacity: 0.7,
+                }}
+              />
+
+              {/* Supporting quote */}
               {theme.quote && (
                 <div
                   style={{
@@ -158,10 +248,13 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
                     fontSize: 18,
                     fontStyle: "italic",
                     color: "rgba(255, 255, 255, 0.5)",
-                    marginTop: 10,
+                    opacity: quoteOpacity,
+                    maxWidth: 500,
                   }}
                 >
-                  {"\u201C"}{theme.quote}{"\u201D"}
+                  {"\u201C"}
+                  {theme.quote}
+                  {"\u201D"}
                 </div>
               )}
             </div>
@@ -169,7 +262,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
         })}
       </div>
 
-      {/* Key quote if present */}
+      {/* Key quote at bottom if present */}
       {keyQuote && (
         <div
           style={{
@@ -187,7 +280,9 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
             }),
           }}
         >
-          {"\u201C"}{keyQuote.text}{"\u201D"}
+          {"\u201C"}
+          {keyQuote.text}
+          {"\u201D"}
         </div>
       )}
     </div>

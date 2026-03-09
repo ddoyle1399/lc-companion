@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       level
     );
 
-    return new Response(JSON.stringify({ script }), {
+    return new Response(JSON.stringify({ script, warnings: script.warnings || [] }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
