@@ -12,26 +12,54 @@ interface IntroFrameProps {
 }
 
 /**
+ * Curated list of thematically strong words, checked in priority order.
+ * If the spokenText contains one of these, it becomes the background keyword.
+ */
+const THEME_WORDS = [
+  "longing", "memory", "loss", "death", "love", "nature", "freedom",
+  "rebellion", "identity", "faith", "grief", "beauty", "time", "war",
+  "home", "exile", "hope", "fear", "solitude", "escape", "belonging",
+  "innocence", "power", "silence", "conflict", "sacrifice", "truth",
+  "desire", "isolation", "transformation", "journey", "darkness", "light",
+  "childhood", "mortality", "dignity", "courage", "defiance", "nostalgia",
+  "wonder", "rage", "sorrow", "peace", "hunger", "pride", "shame", "duty",
+  "betrayal", "regret", "renewal", "decay",
+];
+
+const FALLBACK_STOP_WORDS = new Set([
+  "the", "a", "an", "is", "are", "was", "were", "this", "that", "and",
+  "or", "but", "in", "on", "at", "to", "for", "of", "with", "by",
+  "from", "it", "he", "she", "they", "we", "you", "his", "her", "its",
+  "poem", "poet", "poetry", "today", "looking", "one", "most", "will",
+  "has", "have", "had", "been", "being", "about", "who", "what", "which",
+  "when", "where", "how", "not", "all", "each", "every", "both", "few",
+  "wrote", "their", "years", "while", "living",
+]);
+
+/**
  * Extract a key contextual word from spoken text for the background element.
- * Looks for meaningful nouns/adjectives, skipping common words.
+ * 1. Check for curated theme words in priority order
+ * 2. Fall back to longest noun from first sentence
  */
 function extractKeyWord(spokenText?: string): string {
   if (!spokenText) return "";
-  const stopWords = new Set([
-    "the", "a", "an", "is", "are", "was", "were", "this", "that", "and",
-    "or", "but", "in", "on", "at", "to", "for", "of", "with", "by",
-    "from", "it", "he", "she", "they", "we", "you", "his", "her", "its",
-    "poem", "poet", "poetry", "today", "looking", "one", "most", "will",
-    "has", "have", "had", "been", "being", "about", "who", "what", "which",
-    "when", "where", "how", "not", "all", "each", "every", "both", "few",
-  ]);
+  const textLower = spokenText.toLowerCase();
 
-  const words = spokenText
+  // Check curated theme words in priority order
+  for (const word of THEME_WORDS) {
+    if (textLower.includes(word)) {
+      return word;
+    }
+  }
+
+  // Fallback: longest non-stop word from first sentence
+  const firstSentence = spokenText.split(/[.!?]/)[0] || "";
+  const words = firstSentence
     .replace(/[^a-zA-Z\s]/g, "")
     .split(/\s+/)
-    .filter((w) => w.length > 4 && !stopWords.has(w.toLowerCase()));
+    .filter((w) => w.length > 4 && !FALLBACK_STOP_WORDS.has(w.toLowerCase()))
+    .filter((w) => !/^\d+$/.test(w));
 
-  // Return the longest word as a rough proxy for significance
   if (words.length === 0) return "";
   words.sort((a, b) => b.length - a.length);
   return words[0];

@@ -29,7 +29,7 @@ const sections: PoemVideoProps["sections"] = [
     highlightLines: [],
     durationInFrames: 15 * FPS,
     audioSrc: "",
-    spokenText: "Yeats wrote this poem in 1890 while living in London.",
+    spokenText: "Yeats wrote this poem in 1890 while living in London. It captures a deep longing for nature and escape from city life.",
   },
   {
     type: "stanza_analysis",
@@ -52,7 +52,7 @@ const sections: PoemVideoProps["sections"] = [
     keyQuote: { text: "peace comes dropping slow", lineIndex: 5 },
     techniques: [
       { name: "Assonance", quote: "dropping, veils, glimmer, glow", effect: "Long vowel sounds slow the rhythm, mirroring the peacefulness described" },
-      { name: "Synaesthesia", quote: "noon a purple glow", effect: "Blends visual and colour sensation to create an almost dreamlike atmosphere" },
+      { name: "Sensory Imagery", quote: "midnight's all a glimmer, and noon a purple glow", effect: "Appeals to sight and colour to create a vivid, almost dreamlike picture of Innisfree" },
     ],
   },
   {
