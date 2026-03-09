@@ -2,6 +2,7 @@ import React from "react";
 import { useCurrentFrame, interpolate } from "remotion";
 import { GradientBackground } from "./GradientBackground";
 import { Particles } from "./Particles";
+import { Vignette } from "./Vignette";
 
 interface ClosingCardProps {
   durationInFrames: number;
@@ -49,6 +50,7 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <GradientBackground sectionType="closing" showGlow />
       <Particles />
+      <Vignette />
       <div
         style={{
           position: "absolute",
@@ -65,7 +67,7 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({
         {/* Brand name */}
         <div
           style={{
-            fontSize: 36,
+            fontSize: 40,
             fontFamily: "Georgia, 'Times New Roman', serif",
             fontWeight: 400,
             color: "#FFFFFF",

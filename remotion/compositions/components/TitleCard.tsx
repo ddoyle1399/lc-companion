@@ -2,6 +2,7 @@ import React from "react";
 import { useCurrentFrame, interpolate } from "remotion";
 import { GradientBackground } from "./GradientBackground";
 import { Particles } from "./Particles";
+import { Vignette } from "./Vignette";
 
 interface TitleCardProps {
   title: string;
@@ -59,6 +60,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <GradientBackground sectionType="title" showGlow />
       <Particles />
+      <Vignette />
       <div
         style={{
           position: "absolute",
@@ -86,7 +88,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
         {/* Poem title */}
         <div
           style={{
-            fontSize: 48,
+            fontSize: 56,
             fontFamily: "Georgia, 'Times New Roman', serif",
             fontWeight: 400,
             color: "#FFFFFF",
@@ -111,7 +113,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
             marginTop: 28,
             textAlign: "center",
             textTransform: "uppercase",
-            letterSpacing: 6,
+            letterSpacing: 4,
             opacity: poetOpacity,
             transform: `translateY(${poetY}px)`,
           }}

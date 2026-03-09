@@ -8,17 +8,18 @@ import {
 } from "remotion";
 import type { PoemVideoProps } from "../../lib/video/types";
 import { TitleCard } from "./components/TitleCard";
-import { PoemDisplay } from "./components/PoemDisplay";
-import { PoemDisplayRightsManaged } from "./components/PoemDisplayRightsManaged";
-import { SectionLabel } from "./components/SectionLabel";
-import { QuoteCallout } from "./components/QuoteCallout";
-import { TechniqueCard } from "./components/TechniqueCard";
 import { ClosingCard } from "./components/ClosingCard";
 import { ProgressBar } from "./components/ProgressBar";
 import { GradientBackground, type SectionType } from "./components/GradientBackground";
 import { Particles } from "./components/Particles";
+import { Vignette } from "./components/Vignette";
+import { StanzaDisplay } from "./components/StanzaDisplay";
+import { TechniqueOverlay } from "./components/TechniqueOverlay";
+import { IntroFrame } from "./components/IntroFrame";
+import { ThemeFrame } from "./components/ThemeFrame";
+import { ExamFrame } from "./components/ExamFrame";
 
-const TRANSITION_FRAMES = 15;
+const TRANSITION_FRAMES = 20;
 
 interface SectionTiming {
   type: string;
@@ -31,7 +32,11 @@ interface SectionTiming {
   techniques?: { name: string; quote: string; effect: string }[];
 }
 
-const AnalysisSections: React.FC<{
+/**
+ * Renders the animated background layer: gradient crossfades + particles + vignette.
+ * Sits behind all content and transitions smoothly between section colours.
+ */
+const AnimatedBackground: React.FC<{
   sectionTimings: SectionTiming[];
 }> = ({ sectionTimings }) => {
   const frame = useCurrentFrame();
@@ -83,53 +88,80 @@ const AnalysisSections: React.FC<{
         </AbsoluteFill>
       )}
       <Particles />
+      <Vignette />
     </>
   );
 };
 
-const RightPanel: React.FC<{
+/**
+ * Renders the content for a single analysis section based on its type.
+ * Full-screen layout: no two-column split, no full poem display.
+ */
+const SectionContent: React.FC<{
   section: SectionTiming;
-}> = ({ section }) => {
-  const hasQuote = !!section.keyQuote;
-  const hasTechniques = section.techniques && section.techniques.length > 0;
+  poemLines: string[];
+  poet: string;
+  stanzaIndex: number;
+}> = ({ section, poemLines, poet, stanzaIndex }) => {
+  if (section.type === "intro") {
+    return (
+      <IntroFrame
+        poemLines={poemLines}
+        highlightLines={section.highlightLines}
+        poet={poet}
+        durationInFrames={section.durationInFrames}
+      />
+    );
+  }
 
+  if (section.type === "theme") {
+    return (
+      <ThemeFrame
+        spokenText={section.spokenText}
+        keyQuote={section.keyQuote}
+        techniques={section.techniques}
+        durationInFrames={section.durationInFrames}
+      />
+    );
+  }
+
+  if (section.type === "exam_connection") {
+    return (
+      <ExamFrame
+        poet={poet}
+        spokenText={section.spokenText}
+        techniques={section.techniques}
+        durationInFrames={section.durationInFrames}
+      />
+    );
+  }
+
+  if (section.type === "outro") {
+    return (
+      <IntroFrame
+        poemLines={poemLines}
+        highlightLines={section.highlightLines}
+        poet={poet}
+        durationInFrames={section.durationInFrames}
+      />
+    );
+  }
+
+  // Default: stanza_analysis
   return (
-    <div
-      style={{
-        width: "45%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        paddingTop: "15%",
-        paddingLeft: 40,
-        paddingRight: 40,
-      }}
-    >
-      {/* Section label at top */}
-      <SectionLabel type={section.type} spokenText={section.spokenText} />
-
-      {/* Quote callout */}
-      {hasQuote && (
-        <div style={{ marginTop: 40 }}>
-          <QuoteCallout
-            text={section.keyQuote!.text}
-            durationFrames={section.durationInFrames}
-          />
-        </div>
-      )}
-
-      {/* Technique cards */}
-      {hasTechniques && (
-        <div style={{ marginTop: hasQuote ? 32 : 40 }}>
-          <TechniqueCard
-            techniques={section.techniques!}
-            durationFrames={section.durationInFrames}
-          />
-        </div>
-      )}
-    </div>
+    <>
+      <StanzaDisplay
+        poemLines={poemLines}
+        highlightLines={section.highlightLines}
+        durationInFrames={section.durationInFrames}
+        keyQuote={section.keyQuote}
+        sectionIndex={stanzaIndex}
+      />
+      <TechniqueOverlay
+        techniques={section.techniques || []}
+        durationInFrames={section.durationInFrames}
+      />
+    </>
   );
 };
 
@@ -137,12 +169,10 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
   poemTitle,
   poet,
   poemLines,
-  copyrightMode = "public_domain",
   sections,
   titleDurationInFrames,
   closingDurationInFrames,
 }) => {
-  const isRightsManaged = copyrightMode === "rights_managed";
   let currentFrame = 0;
   const titleFrom = currentFrame;
   currentFrame += titleDurationInFrames;
@@ -154,15 +184,24 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
   });
 
   const closingFrom = currentFrame;
-
   const contentStart = titleDurationInFrames;
   const contentEnd = closingFrom;
 
+  // Track stanza index for section indicators
+  let stanzaCounter = 0;
+  const stanzaIndices = sectionTimings.map((s) => {
+    if (s.type === "stanza_analysis") {
+      stanzaCounter += 1;
+      return stanzaCounter;
+    }
+    return 0;
+  });
+
   return (
     <AbsoluteFill style={{ backgroundColor: "#0B1628" }}>
-      {/* Background gradients for analysis sections */}
+      {/* Animated background for analysis sections */}
       <Sequence from={contentStart} durationInFrames={contentEnd - contentStart}>
-        <AnalysisSections
+        <AnimatedBackground
           sectionTimings={sectionTimings.map((s) => ({
             ...s,
             from: s.from - contentStart,
@@ -179,29 +218,20 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
         />
       </Sequence>
 
-      {/* Analysis sections: poem display + right panel + audio */}
+      {/* Analysis sections: full-screen content + audio */}
       {sectionTimings.map((section, i) => (
         <Sequence
           key={i}
           from={section.from}
           durationInFrames={section.durationInFrames}
         >
-          <AbsoluteFill style={{ flexDirection: "row" }}>
-            {isRightsManaged ? (
-              <PoemDisplayRightsManaged
-                lines={poemLines}
-                highlightLines={section.highlightLines}
-                poet={poet}
-                spokenText={section.spokenText}
-                techniques={section.techniques}
-              />
-            ) : (
-              <PoemDisplay
-                lines={poemLines}
-                highlightLines={section.highlightLines}
-              />
-            )}
-            <RightPanel section={section} />
+          <AbsoluteFill>
+            <SectionContent
+              section={section}
+              poemLines={poemLines}
+              poet={poet}
+              stanzaIndex={stanzaIndices[i]}
+            />
           </AbsoluteFill>
           {section.audioSrc && <Audio src={section.audioSrc} />}
         </Sequence>
