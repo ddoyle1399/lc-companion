@@ -76,6 +76,11 @@ function slugify(s: string): string {
     .replace(/\s+/g, "-");
 }
 
+function formatTimestamp(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}-${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`;
+}
+
 /**
  * Generate a poetry note using the same logic as /api/generate (poetry mode).
  * Returns the full note text, non-streaming.
@@ -376,17 +381,42 @@ export async function POST(request: NextRequest) {
           },
         });
 
-        // Copy to data/videos
+        // Copy to data/videos with persistent metadata
         const videosDir = path.join(process.cwd(), "data", "videos");
         await fs.mkdir(videosDir, { recursive: true });
-        const filename = `${slugify(poet)}--${slugify(poem)}--${Date.now()}.mp4`;
+        const now = new Date();
+        const baseName = `${year}-${slugify(poet)}-${slugify(poem)}-${formatTimestamp(now)}`;
+        const filename = `${baseName}.mp4`;
         const finalPath = path.join(videosDir, filename);
         await fs.copyFile(outputPath, finalPath);
+
+        // Save metadata JSON
+        const stat = await fs.stat(finalPath);
+        const totalDurationSeconds = compositionSections.reduce(
+          (sum, s) => sum + s.durationInFrames / FPS,
+          0
+        ) + titleDurationInFrames / FPS + closingDurationInFrames / FPS;
+
+        const metadata = {
+          year: String(year),
+          level,
+          poet,
+          poem,
+          createdAt: now.toISOString(),
+          duration: Math.round(totalDurationSeconds),
+          fileSize: stat.size,
+          hasAudio: !isSilentMode,
+          videoFile: filename,
+        };
+        await fs.writeFile(
+          path.join(videosDir, `${baseName}.json`),
+          JSON.stringify(metadata, null, 2)
+        );
 
         send({
           stage: "complete",
           progress: 1,
-          message: "Video ready!",
+          message: "Video saved automatically.",
           videoUrl: `/api/video/download?file=${encodeURIComponent(filename)}`,
         });
 

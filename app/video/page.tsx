@@ -6,6 +6,18 @@ import Nav from "@/components/nav";
 import { useVideoPipeline } from "@/lib/hooks/useVideoPipeline";
 import type { VideoScript, ScriptSection } from "@/lib/video/types";
 
+interface VideoMeta {
+  year: string;
+  level: string;
+  poet: string;
+  poem: string;
+  createdAt: string;
+  duration: number;
+  fileSize: number;
+  hasAudio: boolean;
+  videoFile: string;
+}
+
 import poetryHL2026 from "@/data/circulars/2026-poetry-hl.json";
 import poetryOL2026 from "@/data/circulars/2026-poetry-ol.json";
 import poetryHL2027 from "@/data/circulars/2027-poetry-hl.json";
@@ -86,10 +98,32 @@ function VideoPage() {
   // UI state machine
   const [uiState, setUIState] = useState<UIState>("select");
 
+  // Video library
+  const [library, setLibrary] = useState<VideoMeta[]>([]);
+  const [libraryLoading, setLibraryLoading] = useState(true);
+  const [playingUrl, setPlayingUrl] = useState<string | null>(null);
+
   // Pipeline hook
   const pipeline = useVideoPipeline();
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  // Load video library
+  const fetchLibrary = useCallback(async () => {
+    try {
+      const res = await fetch("/api/video/library");
+      const data = await res.json();
+      setLibrary(data);
+    } catch {
+      // Silently fail
+    } finally {
+      setLibraryLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLibrary();
+  }, [fetchLibrary]);
 
   // Auto-populate from query params (coming from poetry page)
   const [initialized, setInitialized] = useState(false);
@@ -600,7 +634,12 @@ function VideoPage() {
         {/* State 5: Complete */}
         {uiState === "done" && pipeline.videoUrl && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h2 className="font-medium text-navy mb-4">Video Ready</h2>
+            <div className="flex items-center gap-2 mb-4">
+              <h2 className="font-medium text-navy">Video Ready</h2>
+              <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded">
+                Saved automatically
+              </span>
+            </div>
 
             <video
               controls
@@ -619,7 +658,10 @@ function VideoPage() {
                 Download MP4
               </a>
               <button
-                onClick={handleStartNew}
+                onClick={() => {
+                  handleStartNew();
+                  fetchLibrary();
+                }}
                 className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md text-sm hover:bg-gray-50 transition-colors"
               >
                 Generate Another
@@ -633,6 +675,109 @@ function VideoPage() {
             </div>
           </div>
         )}
+        {/* Video player for library playback */}
+        {playingUrl && (
+          <div className="mt-6 bg-white border border-gray-200 rounded-lg p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-navy">Now Playing</h3>
+              <button
+                onClick={() => setPlayingUrl(null)}
+                className="text-xs text-gray-400 hover:text-gray-600"
+              >
+                Close
+              </button>
+            </div>
+            <video
+              controls
+              autoPlay
+              className="w-full rounded-lg border border-gray-200"
+              src={playingUrl}
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        )}
+
+        {/* Video Library */}
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold text-navy mb-3">
+            Previous Videos
+          </h2>
+
+          {libraryLoading ? (
+            <p className="text-sm text-gray-400">Loading...</p>
+          ) : library.length === 0 ? (
+            <p className="text-sm text-gray-400">No videos generated yet.</p>
+          ) : (
+            <div className="space-y-2">
+              {library.map((v) => (
+                <div
+                  key={v.videoFile}
+                  className="bg-white border border-gray-200 rounded-lg px-4 py-3 flex items-center justify-between gap-4"
+                >
+                  <div className="flex-1 min-w-0">
+                    <button
+                      onClick={() =>
+                        setPlayingUrl(
+                          `/api/video/download?file=${encodeURIComponent(v.videoFile)}`
+                        )
+                      }
+                      className="text-sm font-medium text-navy hover:text-teal transition-colors text-left truncate block w-full"
+                    >
+                      {v.poet} &mdash; {v.poem}
+                    </button>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {v.year} {v.level}
+                      {" \u00B7 "}
+                      {new Date(v.createdAt).toLocaleDateString("en-IE", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                      {" \u00B7 "}
+                      {Math.floor(v.duration / 60)}:{String(v.duration % 60).padStart(2, "0")}
+                      {" \u00B7 "}
+                      {(v.fileSize / (1024 * 1024)).toFixed(1)} MB
+                      {!v.hasAudio && " \u00B7 Silent"}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    <a
+                      href={`/api/video/download?file=${encodeURIComponent(v.videoFile)}`}
+                      download
+                      className="text-xs px-3 py-1.5 bg-navy text-white rounded hover:bg-teal transition-colors"
+                    >
+                      Download
+                    </a>
+                    <button
+                      onClick={async () => {
+                        if (!confirm(`Delete video for "${v.poem}" by ${v.poet}?`)) return;
+                        await fetch(
+                          `/api/video/library?file=${encodeURIComponent(v.videoFile)}`,
+                          { method: "DELETE" }
+                        );
+                        setLibrary((prev) =>
+                          prev.filter((item) => item.videoFile !== v.videoFile)
+                        );
+                        if (
+                          playingUrl ===
+                          `/api/video/download?file=${encodeURIComponent(v.videoFile)}`
+                        ) {
+                          setPlayingUrl(null);
+                        }
+                      }}
+                      className="text-xs px-3 py-1.5 border border-red-200 text-red-600 rounded hover:bg-red-50 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
