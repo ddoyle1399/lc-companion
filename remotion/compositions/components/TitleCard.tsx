@@ -1,8 +1,6 @@
 import React from "react";
 import { useCurrentFrame, interpolate } from "remotion";
 import { GradientBackground } from "./GradientBackground";
-import { Particles } from "./Particles";
-import { Vignette } from "./Vignette";
 
 interface TitleCardProps {
   title: string;
@@ -58,9 +56,7 @@ export const TitleCard: React.FC<TitleCardProps> = ({
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
-      <GradientBackground sectionType="title" showGlow />
-      <Particles />
-      <Vignette />
+      <GradientBackground sectionType="title" />
       <div
         style={{
           position: "absolute",

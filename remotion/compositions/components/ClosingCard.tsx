@@ -1,8 +1,6 @@
 import React from "react";
 import { useCurrentFrame, interpolate } from "remotion";
 import { GradientBackground } from "./GradientBackground";
-import { Particles } from "./Particles";
-import { Vignette } from "./Vignette";
 
 interface ClosingCardProps {
   durationInFrames: number;
@@ -48,9 +46,7 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
-      <GradientBackground sectionType="closing" showGlow />
-      <Particles />
-      <Vignette />
+      <GradientBackground sectionType="closing" />
       <div
         style={{
           position: "absolute",

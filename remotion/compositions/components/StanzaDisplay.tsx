@@ -21,8 +21,20 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  // Only show the highlighted lines (2-4 lines at a time)
-  const linesToShow = highlightLines.length > 0 ? highlightLines : [];
+  // Only show the highlighted lines, filtering out blank lines
+  const linesToShow = highlightLines.filter((idx) => {
+    const line = poemLines[idx];
+    return line !== undefined && line.trim() !== "";
+  });
+
+  // Debug logging for stanza verification
+  if (frame === 0) {
+    console.log(
+      `[StanzaDisplay] sectionIndex=${sectionIndex}, highlightLines=[${highlightLines}], ` +
+      `linesToShow=[${linesToShow}], lines: ${linesToShow.map((idx) => `[${idx}]="${poemLines[idx]}"`).join(", ")}`
+    );
+  }
+
   if (linesToShow.length === 0) return null;
 
   // Key quote spotlight timing: starts at 40% through, lasts 60 frames
@@ -85,11 +97,11 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           top: 48,
           right: 64,
           fontFamily: "Arial, sans-serif",
-          fontSize: 11,
+          fontSize: 10,
           color: TEAL,
           textTransform: "uppercase",
           letterSpacing: 4,
-          opacity: labelOpacity * 0.6,
+          opacity: labelOpacity * 0.4,
         }}
       >
         STANZA {sectionIndex}
@@ -179,10 +191,10 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
               {showAccent && (
                 <div
                   style={{
-                    width: 2,
-                    height: 32,
+                    width: 1.5,
+                    height: 36,
                     backgroundColor: TEAL,
-                    marginRight: 20,
+                    marginRight: 24,
                     opacity: interpolate(frame, [0, 20], [0, 0.7], {
                       extrapolateLeft: "clamp",
                       extrapolateRight: "clamp",
@@ -194,13 +206,13 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
               <div
                 style={{
                   fontFamily: "Georgia, 'Times New Roman', serif",
-                  fontSize: 32,
+                  fontSize: 36,
                   color: "#FFFFFF",
-                  lineHeight: 2.4,
+                  lineHeight: 2.6,
                   textAlign: "center",
                   textShadow: isQuoteLine && isInSpotlight
-                    ? `0 2px 20px rgba(0,0,0,0.5), 0 0 ${glowBlur}px rgba(42, 157, 143, 0.3)`
-                    : "0 2px 20px rgba(0,0,0,0.5)",
+                    ? `0 1px 8px rgba(0,0,0,0.3), 0 0 ${glowBlur}px rgba(42, 157, 143, 0.3)`
+                    : "0 1px 8px rgba(0,0,0,0.3)",
                 }}
               >
                 {line}

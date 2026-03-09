@@ -11,8 +11,6 @@ import { TitleCard } from "./components/TitleCard";
 import { ClosingCard } from "./components/ClosingCard";
 import { ProgressBar } from "./components/ProgressBar";
 import { GradientBackground, type SectionType } from "./components/GradientBackground";
-import { Particles } from "./components/Particles";
-import { Vignette } from "./components/Vignette";
 import { StanzaDisplay } from "./components/StanzaDisplay";
 import { TechniqueOverlay } from "./components/TechniqueOverlay";
 import { IntroFrame } from "./components/IntroFrame";
@@ -87,8 +85,6 @@ const AnimatedBackground: React.FC<{
           <GradientBackground sectionType={nextSectionType} />
         </AbsoluteFill>
       )}
-      <Particles />
-      <Vignette />
     </>
   );
 };

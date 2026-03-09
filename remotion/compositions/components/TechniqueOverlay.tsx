@@ -33,7 +33,7 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
     <div
       style={{
         position: "absolute",
-        bottom: 40,
+        bottom: 120,
         left: 0,
         width: "100%",
         display: "flex",
@@ -81,13 +81,10 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
             style={{
               transform: `translateY(${translateY}px)`,
               opacity,
-              backgroundColor: "rgba(0, 0, 0, 0.6)",
-              borderTopLeftRadius: 12,
-              borderTopRightRadius: 12,
-              borderBottomLeftRadius: 4,
-              borderBottomRightRadius: 4,
-              padding: "24px 40px",
-              maxWidth: 700,
+              backgroundColor: "rgba(10, 15, 25, 0.85)",
+              borderRadius: 12,
+              padding: 32,
+              maxWidth: 600,
               minWidth: 400,
               backdropFilter: "blur(8px)",
             }}
@@ -96,12 +93,12 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
             <div
               style={{
                 fontFamily: "Arial, sans-serif",
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: 700,
                 color: TEAL,
                 textTransform: "uppercase",
                 letterSpacing: 3,
-                marginBottom: 10,
+                marginBottom: 12,
               }}
             >
               {tech.name}
@@ -111,11 +108,11 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
             <div
               style={{
                 fontFamily: "Georgia, 'Times New Roman', serif",
-                fontSize: 16,
+                fontSize: 18,
                 fontStyle: "italic",
                 color: "#FFFFFF",
                 lineHeight: 1.5,
-                marginBottom: 8,
+                marginBottom: 10,
               }}
             >
               {"\u201C"}{tech.quote}{"\u201D"}
@@ -125,9 +122,9 @@ export const TechniqueOverlay: React.FC<TechniqueOverlayProps> = ({
             <div
               style={{
                 fontFamily: "Arial, sans-serif",
-                fontSize: 13,
-                color: "rgba(255, 255, 255, 0.6)",
-                lineHeight: 1.4,
+                fontSize: 14,
+                color: "rgba(255, 255, 255, 0.7)",
+                lineHeight: 1.5,
               }}
             >
               {tech.effect}

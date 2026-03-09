@@ -140,6 +140,7 @@ async function main() {
     },
     serveUrl: bundled,
     codec: "h264",
+    jpegQuality: 95,
     outputLocation: outputPath,
     inputProps: inputProps as unknown as Record<string, unknown>,
     onProgress: ({ progress }) => {

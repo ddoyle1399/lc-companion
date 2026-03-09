@@ -9,31 +9,53 @@ export type SectionType =
   | "outro"
   | "closing";
 
-interface GradientSpec {
-  from: string;
-  to: string;
+interface BackgroundSpec {
+  base: string;
+  glow?: {
+    color: string;
+    opacity: number;
+    posX: string; // CSS percentage
+    posY: string;
+  };
 }
 
-const GRADIENTS: Record<SectionType, GradientSpec> = {
-  title: { from: "#0B1628", to: "#0F2B3C" },
-  intro: { from: "#141E30", to: "#243B55" },
-  stanza_analysis: { from: "#0A1A12", to: "#1A3A2A" },
-  theme: { from: "#1A0A2E", to: "#2D1B69" },
-  exam_connection: { from: "#1C1C2E", to: "#2A2A4A" },
-  outro: { from: "#0B1628", to: "#0F2B3C" },
-  closing: { from: "#0B1628", to: "#0F2B3C" },
+const BACKGROUNDS: Record<SectionType, BackgroundSpec> = {
+  title: {
+    base: "#080F1A",
+    glow: { color: "#1A3A4A", opacity: 0.15, posX: "50%", posY: "50%" },
+  },
+  closing: {
+    base: "#080F1A",
+    glow: { color: "#1A3A4A", opacity: 0.15, posX: "50%", posY: "50%" },
+  },
+  intro: {
+    base: "#0C1220",
+  },
+  stanza_analysis: {
+    base: "#0C1220",
+    glow: { color: "#2A9D8F", opacity: 0.05, posX: "80%", posY: "20%" },
+  },
+  theme: {
+    base: "#100C20",
+    glow: { color: "#4A2A8F", opacity: 0.05, posX: "50%", posY: "50%" },
+  },
+  exam_connection: {
+    base: "#0E0E1A",
+  },
+  outro: {
+    base: "#080F1A",
+    glow: { color: "#1A3A4A", opacity: 0.15, posX: "50%", posY: "50%" },
+  },
 };
 
 interface GradientBackgroundProps {
   sectionType: SectionType;
-  showGlow?: boolean;
 }
 
 export const GradientBackground: React.FC<GradientBackgroundProps> = ({
   sectionType,
-  showGlow = false,
 }) => {
-  const { from, to } = GRADIENTS[sectionType] || GRADIENTS.intro;
+  const spec = BACKGROUNDS[sectionType] || BACKGROUNDS.intro;
 
   return (
     <div
@@ -43,25 +65,24 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
         left: 0,
         width: "100%",
         height: "100%",
-        background: `linear-gradient(135deg, ${from} 0%, ${to} 100%)`,
+        backgroundColor: spec.base,
       }}
     >
-      {showGlow && (
+      {spec.glow && (
         <div
           style={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
+            top: spec.glow.posY,
+            left: spec.glow.posX,
             transform: "translate(-50%, -50%)",
             width: "60%",
             height: "60%",
             borderRadius: "50%",
-            background: `radial-gradient(ellipse, rgba(42, 157, 143, 0.08) 0%, transparent 70%)`,
+            background: `radial-gradient(ellipse, ${spec.glow.color} 0%, transparent 70%)`,
+            opacity: spec.glow.opacity,
           }}
         />
       )}
     </div>
   );
 };
-
-export { GRADIENTS };
