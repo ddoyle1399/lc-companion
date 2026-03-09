@@ -74,10 +74,14 @@ SCRIPT STRUCTURE (follow this order):
    - Include techniques: 1-2 literary techniques used in that section. For each, give the technique name, the exact quote demonstrating it, and a one-sentence explanation of its effect on the reader. Keep the effect exam-focused.
 
 3. THEMES section (type: "theme", highlightLines: [])
-   - 2 to 4 key themes, each with 3 to 4 sentences. Go deeper than surface level.
+   - 2 to 4 key themes, each with 3 to 4 sentences in the spokenText. Go deeper than surface level.
    - Connect each theme to exam question patterns and to the poet's wider body of work.
    - No lines highlighted
    - keyQuote and techniques are optional. Only include them if genuinely relevant.
+   - MUST include a "themes" array. Each theme object must have:
+     - "name": A clear, concise theme name (2 to 5 words, capitalised like a title). Examples: "Nature as Escape", "The Power of Memory", "Loss of Innocence", "Conflict Between Duty and Desire". Do NOT use full sentences. Do NOT use "The poem explores..." format. Just the theme name.
+     - "supportingPoints": 2 to 3 short sentences (max 15 words each) explaining how this theme appears in the text. Each point should reference a specific moment or quote.
+     - "quote": One key quote from the poem that best illustrates this theme. Optional but preferred.
 
 4. EXAM CONNECTION section (type: "exam_connection", highlightLines: [])
    - 2 to 3 sentences on what exam question types this poem suits
@@ -103,7 +107,8 @@ JSON SCHEMA:
       "highlightLines": [0, 1, 2, 3],
       "estimatedDuration": number (seconds, roughly wordCount / 2.5),
       "keyQuote": { "text": "string", "lineIndex": number } | null,
-      "techniques": [{ "name": "string", "quote": "string", "effect": "string" }] | null
+      "techniques": [{ "name": "string", "quote": "string", "effect": "string" }] | null,
+      "themes": [{ "name": "string", "supportingPoints": ["string"], "quote": "string" }] | null
     }
   ]
 }

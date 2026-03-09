@@ -9,7 +9,7 @@ export interface PromptContext {
   year: number;
   circular: string;
   level: "HL" | "OL";
-  contentType: "poetry" | "comparative" | "worksheet" | "slides";
+  contentType: "poetry" | "comparative" | "worksheet" | "slides" | "single_text" | "unseen_poetry" | "comprehension" | "composition";
   poet?: string;
   poem?: string;
   author?: string;
@@ -23,10 +23,16 @@ export interface PromptContext {
   poemText?: string;
   comparativeExamPattern?: string;
   // Worksheet-specific
-  worksheetContentType?: "poetry" | "single_text" | "comparative";
+  worksheetContentType?: "poetry" | "single_text" | "comparative" | "unseen_poetry" | "comprehension" | "composition";
   activityTypes?: string[];
   // Slides-specific
-  slidesContentType?: "poetry" | "comparative" | "general";
+  slidesContentType?: "poetry" | "comparative" | "general" | "single_text" | "unseen_poetry" | "comprehension" | "composition";
+  // Single text-specific
+  textType?: "shakespeare" | "novel" | "play";
+  // Comprehension-specific
+  focusArea?: "question_a" | "question_b" | "both";
+  // Composition-specific
+  compositionType?: "personal_essay" | "short_story" | "speech" | "discursive" | "feature_article" | "descriptive";
 }
 
 function getReadingLevel(level: "HL" | "OL"): string {
@@ -105,6 +111,23 @@ If you include direct quotes from any text, use web_search to verify them first.
 - Never fabricate quotes for exam-style questions.`;
   }
 
+  if (context.contentType === "single_text") {
+    return `QUOTE ACCURACY IS CRITICAL FOR SINGLE TEXT NOTES:
+You have access to the web_search tool. Before writing your analysis, use it to search for key quotes from "${context.textTitle}" by ${context.author}.
+- Search for character quotes, pivotal scenes, and thematic passages.
+- Only quote words you have verified via web search. No inventing quotes.
+- If you cannot verify a quote, paraphrase the passage and flag with [VERIFY].
+- A note with accurate paraphrasing is better than confident but wrong quotes.
+- Do not quote literary critics or secondary sources. Only quote the text itself.`;
+  }
+
+  if (context.contentType === "unseen_poetry" || context.contentType === "comprehension" || context.contentType === "composition") {
+    return `QUOTE ACCURACY:
+This is a skills-based guide. If you include example quotes from texts, ensure they are accurate or clearly labelled as illustrative examples.
+- For practice exercises using public domain poems, verify the poem text via web search if needed.
+- Do not fabricate quotes from any specific text.`;
+  }
+
   // Slides: minimal guidance
   return `QUOTE ACCURACY:
 If you include direct quotes on slides, ensure they are accurate. Use web_search to verify key quotes.
@@ -143,6 +166,58 @@ Your note must:
 (2) Compare and contrast across all three texts, not summarise each text separately
 (3) Include evidence-based arguments with supporting quotation
 (4) Demonstrate the A-then-B-then-C linking structure examiners reward`;
+  }
+
+  if (context.contentType === "single_text") {
+    examAlignmentBlock = `
+
+EXAM ALIGNMENT REQUIREMENT:
+This is a Paper 2, Section I text (60 marks). The single text question asks students to engage personally and critically with the text. Questions typically ask students to discuss a theme, a character, a key moment, or the text's overall impact.
+
+Your note must:
+(1) Prepare students for character-focused, theme-focused, and moment-focused questions
+(2) Provide quotes that can be deployed flexibly across different question angles
+(3) Show students how to structure a 60-mark essay with proper paragraph development
+(4) Connect analysis to the specific marking criteria: clarity of argument, use of evidence, personal response`;
+  }
+
+  if (context.contentType === "unseen_poetry") {
+    examAlignmentBlock = `
+
+EXAM ALIGNMENT REQUIREMENT:
+This is a Paper 2, Section III skills guide. The unseen poetry question (50 marks) asks students to respond to a poem they have never seen before. The examiner rewards students who can identify techniques, quote accurately from the given poem, explain effects, and offer genuine personal response.
+
+Your guide must:
+(1) Teach a repeatable method that works for any poem
+(2) Focus on the techniques that actually appear in exam poems (imagery, tone, structure, sound)
+(3) Show students how to write about technique with precision, not vagueness
+(4) Emphasise personal response as a genuine component of the mark, not an afterthought`;
+  }
+
+  if (context.contentType === "comprehension") {
+    examAlignmentBlock = `
+
+EXAM ALIGNMENT REQUIREMENT:
+This is a Paper 1, Section I skills guide. Question A (comprehension, 50 marks) tests the student's ability to read, understand, and analyse unseen texts. Question B (functional writing, 50 marks) tests the student's ability to write in a specific format and register.
+
+Your guide must:
+(1) Teach students to decode what each question type is actually asking
+(2) Show how to use evidence from the passage without over-quoting or under-quoting
+(3) For Question B, emphasise format conventions and register as much as content
+(4) Connect all advice to the PCLM marking criteria used by examiners`;
+  }
+
+  if (context.contentType === "composition") {
+    examAlignmentBlock = `
+
+EXAM ALIGNMENT REQUIREMENT:
+This is a Paper 1, Section II composition (100 marks, the highest-value question on either paper). Assessed on PCLM: Purpose (P), Coherence (C), Language (L), Mechanics (M). Each criterion is marked on a scale.
+
+Your guide must:
+(1) Make PCLM concrete and actionable for this specific composition type
+(2) Show students what distinguishes a 70-mark composition from a 90-mark composition
+(3) Provide openings and structures that demonstrate clear purpose from the first line
+(4) Emphasise that Language marks come from precision and variety, not from big words`;
   }
 
   return `You are a Leaving Certificate English content generator for an experienced Irish secondary school teacher. Your role is to produce exam-focused, accurate, and concise study content aligned with the Irish Leaving Certificate English syllabus.
@@ -363,6 +438,17 @@ export function buildWorksheetPrompt(context: PromptContext): string {
     textDescription = `"${context.poem}" by ${context.poet}`;
   } else if (context.worksheetContentType === "single_text") {
     textDescription = `"${context.textTitle}" by ${context.author}`;
+  } else if (context.worksheetContentType === "unseen_poetry") {
+    textDescription = `unseen poetry skills (${context.level} level, ${context.year})`;
+  } else if (context.worksheetContentType === "comprehension") {
+    textDescription = `Paper 1 comprehension skills (${context.level} level, ${context.year})`;
+  } else if (context.worksheetContentType === "composition") {
+    const typeLabels: Record<string, string> = {
+      personal_essay: "Personal Essay", short_story: "Short Story", speech: "Speech",
+      discursive: "Discursive Essay", feature_article: "Feature Article", descriptive: "Descriptive Essay",
+    };
+    const compType = typeLabels[context.compositionType || "personal_essay"] || "Personal Essay";
+    textDescription = `Paper 1 composition: ${compType} (${context.level} level, ${context.year})`;
   } else {
     const texts = context.comparativeTexts || [];
     const textList = texts.map((t) => formatTextEntry(t)).join(", ");
@@ -425,6 +511,74 @@ Generate exercises covering 8-12 key words or phrases from the text:
 - Include both everyday words used in specific literary ways and genuine literary terms relevant to the text`;
   }
 
+  // For skills-based content types, override with specific exercise structures
+  let skillsOverride = "";
+  if (context.worksheetContentType === "unseen_poetry") {
+    skillsOverride = `
+
+UNSEEN POETRY WORKSHEET STRUCTURE (use this instead of the activity types above):
+
+## Technique Identification Exercises
+5 exercises. For each, provide a line or short passage from a public domain poem and ask the student to:
+1. Name the technique used
+2. Quote the specific words that demonstrate the technique
+3. Explain the effect the technique creates
+
+## Quote Analysis Exercises
+3 exercises. For each, provide a quote from a public domain poem and ask the student to write a paragraph (5-7 sentences) analysing the quote, identifying techniques, and explaining their effect.
+
+## Full Unseen Poem Response
+Provide a short public domain poem (8-16 lines) the student has not studied. Include:
+- The poem text
+- An exam-style question (50 marks)
+- Space for the student's response
+- A brief marking guide for the teacher`;
+  }
+
+  if (context.worksheetContentType === "comprehension") {
+    skillsOverride = `
+
+COMPREHENSION WORKSHEET STRUCTURE (use this instead of the activity types above):
+
+## Question A Practice
+Provide a short non-fiction passage (200-300 words, invented but realistic) and generate:
+1. A "main ideas" question (10 marks)
+2. A "language analysis" question (15 marks)
+3. A "personal response" question (15 marks)
+Include mark allocations and brief marking guidance for the teacher.
+
+## Question B Practice
+Based on the passage above, generate:
+1. A functional writing task (speech, article, letter, blog post, or report) (50 marks)
+2. Include the specific format, audience, and word count expectations
+3. Include a brief marking guide referencing PCLM criteria`;
+  }
+
+  if (context.worksheetContentType === "composition") {
+    skillsOverride = `
+
+COMPOSITION WORKSHEET STRUCTURE (use this instead of the activity types above):
+
+## Planning Exercise
+Provide a composition title and ask the student to:
+1. Write a 5-point plan (beginning, 3 middle points, ending)
+2. Draft their opening paragraph (100 words)
+3. List 5 strong vocabulary words they intend to use
+
+## Opening Paragraph Practice
+Provide 3 different composition titles. For each, the student writes an opening paragraph (80-100 words) using a different opening strategy (anecdote, question, vivid description).
+
+## Peer Review Checklist
+A structured checklist the student uses to review a classmate's composition:
+- Does the opening grab attention?
+- Is there a clear sense of purpose?
+- Does each paragraph flow to the next?
+- Are sentences varied in length?
+- Are there any cliches or vague language?
+- Is the ending effective?
+- 3 things that work well / 2 things to improve`;
+  }
+
   return `Generate a classroom worksheet for ${textDescription}.
 
 Activity types requested: ${activityList}
@@ -437,7 +591,7 @@ OUTPUT FORMAT:
 - Use horizontal rules (---) between major sections
 - Keep instructions brief and clear
 - All activities must be exam-aligned and practically useful in a classroom
-${activityInstructions}${userInstr}`;
+${skillsOverride || activityInstructions}${userInstr}`;
 }
 
 export function buildSlidesPrompt(context: PromptContext): string {
@@ -468,6 +622,51 @@ export function buildSlidesPrompt(context: PromptContext): string {
 6-9. Comparison slides: key arguments linking all three texts
 10. Sample paragraph walkthrough
 11. Exam tips for this mode`;
+  } else if (context.slidesContentType === "single_text") {
+    textDescription = `a single text lesson on "${context.textTitle}" by ${context.author}`;
+    slideStructure = `Suggested slide sequence (10 slides):
+1. Title slide (text name, author, exam year)
+2-4. Character profiles (one per slide: key traits, role, and 1-2 key quotes)
+5-7. Key themes (one per slide: how theme manifests, supporting evidence)
+8. Essay structure guide (how to structure a 60-mark answer)
+9. Key quotes summary (organised by theme)
+10. Exam tips (what examiners reward, common mistakes)`;
+  } else if (context.slidesContentType === "unseen_poetry") {
+    textDescription = `an unseen poetry skills lesson`;
+    slideStructure = `Suggested slide sequence (10 slides):
+1. Title slide
+2-3. The 4-step approach to unseen poetry (first read, second read, plan, write)
+4-5. Sound devices with examples (alliteration, assonance, onomatopoeia, rhyme, sibilance)
+6-7. Imagery and figurative language with examples (metaphor, simile, personification, symbolism)
+8. Structural devices with examples (enjambment, caesura, repetition)
+9. Response structure template (opening, body paragraphs, closing)
+10. Common mistakes and exam tips`;
+  } else if (context.slidesContentType === "comprehension") {
+    textDescription = `a Paper 1 comprehension skills lesson`;
+    slideStructure = `Suggested slide sequence (10 slides):
+1. Title slide
+2. Overview: Question A vs Question B (marks, time, approach)
+3-5. Question A types: what each question type asks and how to approach it
+6. Language analysis toolkit: key techniques to identify in prose
+7-8. Question B formats: letter, speech, article, report, review (format and tone)
+9. Sample response walkthrough
+10. PCLM marking criteria and exam tips`;
+  } else if (context.slidesContentType === "composition") {
+    const typeLabels: Record<string, string> = {
+      personal_essay: "Personal Essay", short_story: "Short Story", speech: "Speech",
+      discursive: "Discursive Essay", feature_article: "Feature Article", descriptive: "Descriptive Essay",
+    };
+    const compType = typeLabels[context.compositionType || "personal_essay"] || "Personal Essay";
+    textDescription = `a ${compType} writing skills lesson`;
+    slideStructure = `Suggested slide sequence (10 slides):
+1. Title slide (${compType})
+2. Format overview: what examiners expect from a ${compType}
+3-4. Structure template: opening strategies, middle development, closing
+5. PCLM breakdown: what each criterion means for a ${compType}
+6-7. Opening examples: 2-3 strong openings with explanation
+8. Language tips: vocabulary, sentence variety, common errors
+9. Common mistakes to avoid
+10. Summary and exam tips`;
   } else {
     textDescription = `a general English lesson on "${context.textTitle || "the selected topic"}"`;
     slideStructure = `Suggested slide sequence (8-15 slides):
@@ -509,4 +708,364 @@ Rules for slide content:
 - Use "summary" layout for conclusion/exam connection slides
 
 ${slideStructure}${userInstr}`;
+}
+
+export function buildSingleTextPrompt(context: PromptContext): string {
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  const textTypeLabel =
+    context.textType === "shakespeare"
+      ? "Shakespeare play"
+      : context.textType === "play"
+        ? "play"
+        : "novel";
+
+  return `Generate a comprehensive single text study note for "${context.textTitle}" by ${context.author} (${textTypeLabel}).
+
+This is a Paper 2, Section I text worth 60 marks at ${context.level} level for the ${context.year} examination.
+
+IMPORTANT: Use web_search to find and verify key quotes from this text before writing. Search for key passages, character quotes, and pivotal scenes. Only quote words you have verified. If you cannot verify a quote, paraphrase instead and flag with [VERIFY].
+
+STRUCTURE (follow this exactly):
+
+## 1. Text Overview
+100-150 words. Cover:
+- What the text is about in plain language
+- Setting and time period
+- Central conflict or driving force of the narrative
+- No hedging or spoiler avoidance. Students need the full picture.
+
+## 2. Character Analysis
+For each major character (3-5 characters depending on the text), write 150-200 words covering:
+- Their role in the text
+- Key character traits with supporting quotes
+- Character arc: how they change from beginning to end
+- Examiner focus: what questions tend to ask about this character
+- 3-4 key quotes with act/scene/page references where applicable
+
+Format each character as a ### subheading.
+
+## 3. Themes
+For each major theme (4-6 themes), write 150-200 words covering:
+- How the theme manifests in the text with specific examples
+- Key quotes that support this theme
+- How this theme connects to exam question patterns
+- A one-sentence "exam sentence" the student could use directly in an essay
+
+Format each theme as a ### subheading.
+
+## 4. Key Scenes and Moments
+For each pivotal moment (5-8 scenes), write 100-150 words covering:
+- What happens in the scene
+- Why it matters to the text as a whole
+- Key quotes from the scene
+- Which themes it connects to
+
+Format each scene as a ### subheading.
+
+## 5. Essay Structure Guide
+200-300 words on how to structure a 60-mark single text essay:
+- How to open (not "In this essay I will...")
+- How to build paragraphs: point, quote, explain, link to question
+- How to close effectively
+- Common mistakes to avoid
+- What the examiner specifically rewards in single text answers
+
+## 6. Quote Bank
+15-20 essential quotes organised by theme.
+For each quote:
+- The quote itself (verified via web search)
+- Which theme it supports
+- A one-line note on what the quote proves or demonstrates
+
+Format as a table or structured list grouped by theme.
+
+## 7. Sample Paragraph
+200-250 words. One model paragraph answering a typical exam question on this text.
+- Demonstrate proper structure: point, quote, explain, personal response
+- Show how to integrate quotes naturally
+- Show how to link back to the exam question${userInstr}`;
+}
+
+export function buildUnseenPoetryPrompt(context: PromptContext): string {
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  return `Generate a comprehensive unseen poetry skills guide for ${context.level} level students preparing for the ${context.year} Leaving Certificate English examination.
+
+This covers Paper 2, Section III. Students must analyse a poem they have never seen before. This is skills-based, not content-based. Worth 50 marks.
+
+STRUCTURE (follow this exactly):
+
+## 1. Approach Guide
+200-300 words. A step-by-step method for tackling an unseen poem under exam conditions:
+- First read: what is happening? Who is speaking? What is the mood?
+- Second read: mark techniques, note imagery, identify tone shifts
+- Planning: link observations to the specific question asked
+- Writing: how to structure the response
+- Time management: how long to spend reading vs writing
+
+## 2. Core Poetic Techniques Reference
+Cover 15-20 techniques that students MUST be able to identify and discuss. For each technique, write 50-80 words covering:
+- A plain English definition
+- A brief example (use well-known poems, not prescribed ones, to avoid confusion)
+- A template sentence showing how to write about it in an exam: "The poet's use of [technique] in '[quote]' creates a sense of..."
+
+Group the techniques under these headings:
+
+### Sound Devices
+Alliteration, assonance, onomatopoeia, rhyme (full, half, internal), rhythm, sibilance
+
+### Figurative Language
+Metaphor, simile, personification, hyperbole, symbolism
+
+### Structural Devices
+Enjambment, caesura, stanza structure, repetition, refrain
+
+### Tone and Mood
+Tone shifts, irony, contrast, juxtaposition
+
+### Imagery
+Visual imagery, auditory imagery, tactile imagery, sensory detail
+
+## 3. Response Structure Template
+150-200 words. How to structure an unseen poetry answer:
+- Opening: name the poem's subject and your overall impression (2-3 sentences)
+- Body paragraphs: technique + quote + effect + personal response (3-4 paragraphs)
+- Closing: overall impact of the poem (2-3 sentences)
+- Include a model opening sentence and a model closing sentence
+
+## 4. Common Question Patterns
+100-150 words. The types of questions that appear and what they actually ask for:
+- "Discuss the poet's use of imagery" = find and analyse specific images
+- "Comment on the mood/atmosphere" = identify emotional tone and explain how it is created
+- "Do you find this poem appealing/interesting?" = personal response with evidence from the text
+- "How does the poet convey [theme]?" = identify techniques used to communicate the theme
+- "Comment on the effectiveness of the title" = connect the title to the poem's content and meaning
+
+## 5. Practice Exercise
+A worked example using a public domain poem (choose a short, accessible poem by W.B. Yeats, John Donne, or another poet whose work is out of copyright). Show:
+- The poem text
+- A sample exam question
+- A model response (200-250 words) applying the method from Section 1
+- Brief annotations explaining why each paragraph works
+
+## 6. PCLM Connection
+100-150 words. How the PCLM marking criteria apply to unseen poetry responses:
+- Purpose: demonstrate understanding of the poem and engagement with the question
+- Coherence: logical flow from point to point, each paragraph building on the last
+- Language: appropriate literary vocabulary, varied sentence structure
+- Mechanics: spelling, grammar, punctuation
+- What vocabulary and phrasing scores highly in poetry responses${userInstr}`;
+}
+
+export function buildComprehensionPrompt(context: PromptContext): string {
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  const includeQA =
+    context.focusArea === "question_a" || context.focusArea === "both";
+  const includeQB =
+    context.focusArea === "question_b" || context.focusArea === "both";
+
+  let sections = "";
+
+  if (includeQA) {
+    sections += `
+## 1. Question A Strategy Guide
+200-300 words. How to approach comprehension questions:
+- Read the text first, read the questions second, read the text again with the questions in mind
+- Identify what the question is actually asking: summarise, analyse, compare, evaluate, or respond personally
+- How to use quotes from the passage: short, embedded in your sentences, directly relevant
+- How to structure responses: point, evidence from the passage, explanation
+- Time management: how long per question based on mark allocation
+- The difference between "identify" questions (shorter answers) and "discuss" questions (longer answers)
+
+## 2. Question Types Reference
+For each of the following question types, write 100-150 words explaining what the question asks, how to approach it, and a brief example of a strong response structure:
+
+### "What are the main ideas in this text?"
+Summarise in your own words. Do not copy full sentences from the passage.
+
+### "Comment on the writer's use of language"
+Identify specific language techniques (rhetorical questions, lists of three, emotive language, imagery, register) and explain their effect on the reader.
+
+### "Compare the two texts"
+Find similarities and differences. Use linking phrases: "Both texts...", "However, Text B differs in that...", "While Text A emphasises..."
+
+### "Do you agree with the writer's view?"
+Personal response with evidence. State your position, support it with evidence from both the text and your own knowledge.
+
+### "Identify the writer's purpose and audience"
+Analyse tone, register, content choices, and publication context.
+
+### "How effective is the opening/closing?"
+Analyse structural choices: hooks, conclusions, circular structure, call to action.
+
+### "What impression do you form of [person/place/event]?"
+Character or subject analysis with evidence from the passage.
+
+### "Explain the impact of specific words/phrases"
+Close language analysis: connotation, imagery, sound, register.
+
+## 3. Language Analysis Toolkit
+200-250 words. The techniques students need to identify in prose passages:
+- Rhetorical questions, lists of three, direct address
+- Emotive language, formal vs informal register
+- Statistics, anecdote, expert testimony (in persuasive texts)
+- Imagery and metaphor in non-fiction prose
+- Sentence structure variation: short sentences for impact, longer sentences for flow
+- Paragraph structure and topic sentences
+- Bias and perspective: how to identify when a writer is presenting one side
+
+Include 2-3 template sentences for writing about language: "The writer's use of [technique] in the phrase '[quote]' serves to..."`;
+  }
+
+  if (includeQB) {
+    sections += `
+
+## ${includeQA ? "4" : "1"}. Question B Types and Frameworks
+For each functional writing type, write 150-200 words covering format requirements, tone expectations, typical length, opening strategy, and a structural template:
+
+### Formal Letter
+Format: addresses, date, "Dear...", "Yours sincerely/faithfully". Tone: professional, measured. Structure: state purpose, develop points, close with action.
+
+### Informal Letter / Email
+Format: relaxed greeting, conversational close. Tone: warm but clear. Structure: context, main points, personal sign-off.
+
+### Blog Post / Feature Article
+Format: catchy title, subheadings optional, engaging opening. Tone: engaging, opinionated, personal. Structure: hook, body paragraphs with examples, conclusion.
+
+### Speech / Talk
+Format: "Ladies and gentlemen..." or direct address to audience. Tone: persuasive, personal, varied pace. Structure: attention-grabbing opening, 3-4 key points, memorable close.
+
+### Report
+Format: title, introduction, findings, recommendations. Tone: formal, objective. Structure: state purpose, present evidence, draw conclusions.
+
+### Review (book, film, event)
+Format: title of item reviewed, star rating optional. Tone: evaluative, balanced. Structure: summary, strengths, weaknesses, recommendation.
+
+### Diary / Journal Entry
+Format: date, first person, reflective. Tone: personal, honest. Structure: describe event/situation, reflect on feelings, consider meaning.
+
+## ${includeQA ? "5" : "2"}. Sample Question A Response
+200-250 words. A model answer to a typical comprehension question. Show:
+- How to open without restating the question
+- How to embed short quotes from the passage
+- How to explain the significance of evidence
+- How to maintain focus on the specific question asked
+
+## ${includeQA ? "6" : "3"}. Sample Question B Response
+250-300 words. A model functional writing piece (choose the most common type: speech or feature article). Show:
+- Correct format for the chosen type
+- Appropriate tone and register
+- Clear structure with logical flow
+- Strong opening and closing`;
+  }
+
+  return `Generate a comprehensive Paper 1 comprehension skills guide for ${context.level} level students preparing for the ${context.year} Leaving Certificate English examination.
+
+This covers Paper 1, Section I. Students read unseen texts and answer Question A (comprehension/analysis, 50 marks) and Question B (functional writing based on the text, 50 marks).
+
+Focus area: ${context.focusArea === "both" ? "Both Question A and Question B" : context.focusArea === "question_a" ? "Question A (Comprehension)" : "Question B (Functional Writing)"}
+${sections}${userInstr}`;
+}
+
+export function buildCompositionPrompt(context: PromptContext): string {
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  const typeLabels: Record<string, string> = {
+    personal_essay: "Personal Essay",
+    short_story: "Short Story",
+    speech: "Speech",
+    discursive: "Discursive Essay",
+    feature_article: "Feature Article",
+    descriptive: "Descriptive Essay",
+  };
+
+  const compType = typeLabels[context.compositionType || "personal_essay"] || "Personal Essay";
+
+  const typeSpecificGuidance: Record<string, string> = {
+    personal_essay: `A personal essay is reflective, drawing on the student's own experiences, observations, and feelings. The examiner expects a genuine voice, not a formal academic essay. The best personal essays move between the specific (a moment, a memory, a detail) and the general (a broader insight about life, people, or the world). The tone should feel honest and thoughtful. Humour is welcome if natural. The essay should feel like it was written by a real person with something to say.`,
+    short_story: `A short story must have a clear narrative arc: a beginning that hooks, a middle that develops tension or conflict, and an ending that resolves or resonates. Characters should feel real, not cardboard. Dialogue should sound natural. The setting should be established quickly through specific sensory detail, not lengthy description. The examiner rewards controlled pacing, a clear climax, and an ending that leaves an impression. Avoid cliches: "it was all a dream", "and then I woke up", "the end".`,
+    speech: `A speech must be written for a specific audience and occasion. It should open with direct address and an attention-grabbing statement. The tone should be persuasive and engaging, mixing personal anecdote with broader argument. Use rhetorical techniques naturally: repetition, rhetorical questions, lists of three, direct address. The speech should build to a strong conclusion with a call to action or memorable final statement. It must sound like something that would be spoken aloud, not read silently.`,
+    discursive: `A discursive essay presents a balanced exploration of an issue, considering multiple perspectives before reaching a reasoned conclusion. The structure is critical: introduce the topic, present arguments for and against (or multiple viewpoints), and conclude with a considered personal position. Each paragraph should have a clear topic sentence and supporting evidence. The tone should be thoughtful and measured, not aggressive or one-sided. The examiner rewards nuance and the ability to engage with opposing viewpoints fairly.`,
+    feature_article: `A feature article is written for publication in a newspaper or magazine. It needs a catchy headline and an engaging opening that hooks the reader. The tone is more personal and engaging than a news report but more structured than a personal essay. It can include anecdote, interview-style quotes (invented is fine), statistics, and expert opinion. Subheadings can be used to break up the text. The closing should circle back to the opening or leave the reader with something to think about.`,
+    descriptive: `A descriptive essay creates a vivid picture of a place, person, event, or experience through detailed sensory writing. The examiner rewards specific, concrete detail over vague generalities. Use all five senses where appropriate. The description should have a controlling mood or atmosphere. Structure through spatial organisation (moving through a place), chronological organisation (moving through time), or emotional organisation (moving through feelings). Avoid listing adjectives. Instead, use precise nouns and strong verbs to carry the description.`,
+  };
+
+  const guidance = typeSpecificGuidance[context.compositionType || "personal_essay"] || typeSpecificGuidance.personal_essay;
+
+  return `Generate a comprehensive composition writing guide for the ${compType} for ${context.level} level students preparing for the ${context.year} Leaving Certificate English examination.
+
+This covers Paper 1, Section II. The composition is worth 100 marks, the single highest-value question on either paper. It is assessed on PCLM: Purpose, Coherence, Language, Mechanics.
+
+COMPOSITION TYPE: ${compType}
+
+TYPE-SPECIFIC CONTEXT:
+${guidance}
+
+STRUCTURE (follow this exactly):
+
+## 1. Format and Expectations
+150-200 words. What the examiner expects from a ${compType}:
+- Typical length for a strong answer
+- Structural conventions specific to this type
+- Tone and voice expectations
+- What "Purpose" means specifically for a ${compType}
+- What "Coherence" means specifically for a ${compType}
+
+## 2. Structure Template
+200-250 words. A detailed structural framework:
+- How to open: provide 2-3 specific opening strategies with brief examples
+- How to develop the middle: paragraph structure, transitions, pacing
+- How to close: circular structure, resonant ending, or call to action
+- Approximate number of paragraphs and rough length for each
+- How to plan the composition in 5 minutes before writing
+
+## 3. Language Marks Guide
+150-200 words. How to maximise the Language mark in a ${compType}:
+- 5-10 strong words or phrases to aim for (not pretentious, but precise and effective)
+- Sentence variety techniques: how to mix short and long, simple and complex
+- What "sophisticated language" actually looks like at this level, with 2-3 examples
+- Common language errors that cost marks (repetitive vocabulary, vague adjectives, cliched phrases)
+
+## 4. PCLM Breakdown
+200-250 words. How each PCLM criterion applies to the ${compType} specifically:
+
+### Purpose
+What does a clear sense of purpose look like in a ${compType}? How does the student demonstrate they know what they are doing and why?
+
+### Coherence
+What makes a ${compType} flow? How do paragraphs connect? What structural devices create unity?
+
+### Language
+What register and vocabulary is expected? What distinguishes a B-grade ${compType} from an A-grade one in terms of language?
+
+### Mechanics
+Spelling, grammar, punctuation focus areas for this type. Common mechanical errors students make in ${compType} writing.
+
+## 5. Strong Opening Examples
+Provide 3 different ways to open a ${compType}. For each opening:
+- The opening itself (50-80 words)
+- A brief explanation (1-2 sentences) of why this opening works
+
+## 6. Sample ${compType}
+400-500 words. A complete model ${compType} demonstrating all the principles above.
+- This should be the kind of composition that would score 85-90 out of 100
+- It should demonstrate varied sentence structure, strong vocabulary, clear purpose, and effective structure
+- It should read as if written by a talented student, not by a teacher or AI
+- Choose a topic that is accessible and relatable for a 17-18 year old
+
+## 7. Common Mistakes
+100-150 words. The 4-5 most common errors students make when writing a ${compType}:
+- What the mistake is
+- Why it costs marks
+- How to avoid it${userInstr}`;
 }

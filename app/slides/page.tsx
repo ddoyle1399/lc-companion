@@ -11,9 +11,22 @@ import poetryHL2027 from "@/data/circulars/2027-poetry-hl.json";
 import poetryOL2027 from "@/data/circulars/2027-poetry-ol.json";
 import comp2026 from "@/data/circulars/2026-comparative.json";
 import comp2027 from "@/data/circulars/2027-comparative.json";
+import singleTexts2026 from "@/data/circulars/2026-single-texts.json";
+import singleTexts2027 from "@/data/circulars/2027-single-texts.json";
 
 type Level = "HL" | "OL";
-type SlidesContentType = "poetry" | "comparative" | "general";
+type SlidesContentType = "poetry" | "comparative" | "general" | "single_text" | "unseen_poetry" | "comprehension" | "composition";
+
+type CompositionType = "personal_essay" | "short_story" | "speech" | "discursive" | "feature_article" | "descriptive";
+
+const compositionTypeLabels: Record<CompositionType, string> = {
+  personal_essay: "Personal Essay",
+  short_story: "Short Story",
+  speech: "Speech",
+  discursive: "Discursive Essay",
+  feature_article: "Feature Article",
+  descriptive: "Descriptive Essay",
+};
 
 interface TextOption {
   title: string;
@@ -91,6 +104,25 @@ function getCompTextOptions(year: number): TextOption[] {
     });
   }
   return options;
+}
+
+const singleTextData: Record<
+  number,
+  { single_texts: { author: string; title: string; level: string }[] }
+> = {
+  2026: singleTexts2026,
+  2027: singleTexts2027,
+};
+
+function getSingleTexts(
+  year: number,
+  level: Level
+): { author: string; title: string }[] {
+  const data = singleTextData[year];
+  if (!data) return [];
+  return data.single_texts.filter(
+    (t) => t.level === "H/O" || (level === "OL" && t.level === "O")
+  );
 }
 
 function parseDeckJSON(raw: string): DeckData | null {
@@ -196,6 +228,8 @@ export default function SlidesPage() {
   const [text2Key, setText2Key] = useState("");
   const [text3Key, setText3Key] = useState("");
   const [generalTopic, setGeneralTopic] = useState("");
+  const [singleTextKey, setSingleTextKey] = useState("");
+  const [compositionType, setCompositionType] = useState<CompositionType>("personal_essay");
   const [instructions, setInstructions] = useState("");
   const [deck, setDeck] = useState<DeckData | null>(null);
   const [parseError, setParseError] = useState(false);
@@ -208,6 +242,7 @@ export default function SlidesPage() {
   const compModes = getCompModes(year, level);
   const compTextOptions = getCompTextOptions(year);
 
+  const singleTexts = getSingleTexts(year, level);
   const novels = compTextOptions.filter((t) => t.category === "Novel");
   const drama = compTextOptions.filter((t) => t.category === "Drama");
   const films = compTextOptions.filter((t) => t.category === "Film");
@@ -252,6 +287,8 @@ export default function SlidesPage() {
     setText2Key("");
     setText3Key("");
     setGeneralTopic("");
+    setSingleTextKey("");
+    setCompositionType("personal_essay");
   }
 
   function findTextByKey(key: string): TextOption | undefined {
@@ -271,6 +308,10 @@ export default function SlidesPage() {
       );
     }
     if (contentType === "general") return !!generalTopic;
+    if (contentType === "single_text") return !!singleTextKey;
+    if (contentType === "unseen_poetry") return true;
+    if (contentType === "comprehension") return true;
+    if (contentType === "composition") return !!compositionType;
     return false;
   }
 
@@ -305,6 +346,16 @@ export default function SlidesPage() {
         }));
     } else if (contentType === "general") {
       body.textTitle = generalTopic;
+    } else if (contentType === "single_text") {
+      const st = singleTexts.find(
+        (t) => `${t.title}::${t.author}` === singleTextKey
+      );
+      if (st) {
+        body.author = st.author;
+        body.textTitle = st.title;
+      }
+    } else if (contentType === "composition") {
+      body.compositionType = compositionType;
     }
 
     await generate(body);
@@ -432,7 +483,11 @@ export default function SlidesPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
               >
                 <option value="poetry">Poetry lesson</option>
+                <option value="single_text">Single Text lesson</option>
                 <option value="comparative">Comparative lesson</option>
+                <option value="unseen_poetry">Unseen Poetry skills</option>
+                <option value="comprehension">Comprehension skills</option>
+                <option value="composition">Composition skills</option>
                 <option value="general">General lesson</option>
               </select>
             </div>
@@ -510,6 +565,50 @@ export default function SlidesPage() {
                   {renderCompTextSelect(text3Key, setText3Key, "Text 3")}
                 </div>
               </>
+            )}
+
+            {contentType === "single_text" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Text
+                </label>
+                <select
+                  value={singleTextKey}
+                  onChange={(e) => setSingleTextKey(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+                >
+                  <option value="">Select a text</option>
+                  {singleTexts.map((t) => (
+                    <option
+                      key={`${t.title}::${t.author}`}
+                      value={`${t.title}::${t.author}`}
+                    >
+                      {t.title} by {t.author}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {contentType === "composition" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Composition Type
+                </label>
+                <select
+                  value={compositionType}
+                  onChange={(e) => setCompositionType(e.target.value as CompositionType)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+                >
+                  {(Object.entries(compositionTypeLabels) as [CompositionType, string][]).map(
+                    ([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    )
+                  )}
+                </select>
+              </div>
             )}
 
             {contentType === "general" && (

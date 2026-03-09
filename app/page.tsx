@@ -1,7 +1,14 @@
 import Link from "next/link";
 import Nav from "@/components/nav";
 
-const quickActions = [
+interface QuickAction {
+  href: string;
+  label: string;
+  description: string;
+  icon: string;
+}
+
+const paper2Actions: QuickAction[] = [
   {
     href: "/poetry",
     label: "New Poetry Note",
@@ -9,11 +16,41 @@ const quickActions = [
     icon: "pencil",
   },
   {
+    href: "/single-text",
+    label: "New Single Text Note",
+    description: "Generate study notes for prescribed novels, plays, and Shakespeare",
+    icon: "book",
+  },
+  {
     href: "/comparative",
     label: "New Comparative Note",
     description: "Generate comparative study notes across texts",
     icon: "compare",
   },
+  {
+    href: "/unseen-poetry",
+    label: "Unseen Poetry Guide",
+    description: "Generate skills guides for unseen poetry analysis",
+    icon: "eye",
+  },
+];
+
+const paper1Actions: QuickAction[] = [
+  {
+    href: "/comprehension",
+    label: "Comprehension Guide",
+    description: "Generate Paper 1 comprehension and functional writing strategies",
+    icon: "search",
+  },
+  {
+    href: "/composition",
+    label: "Composition Guide",
+    description: "Generate writing guides for Paper 1 compositions (100 marks)",
+    icon: "pen",
+  },
+];
+
+const toolActions: QuickAction[] = [
   {
     href: "/worksheet",
     label: "New Worksheet",
@@ -67,6 +104,31 @@ function ActionIcon({ type }: { type: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
         </svg>
       );
+    case "book":
+      return (
+        <svg className={cls} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+        </svg>
+      );
+    case "eye":
+      return (
+        <svg className={cls} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      );
+    case "search":
+      return (
+        <svg className={cls} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        </svg>
+      );
+    case "pen":
+      return (
+        <svg className={cls} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Z" />
+        </svg>
+      );
     default:
       return null;
   }
@@ -84,8 +146,64 @@ export default function DashboardPage() {
           </p>
         </div>
 
+        {/* Paper 2 */}
+        <h2 className="text-xs uppercase tracking-wider text-gray-400 font-medium mb-3">
+          Paper 2
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          {paper2Actions.map((action) => (
+            <Link
+              key={action.href}
+              href={action.href}
+              className="bg-white border border-gray-200 rounded-lg p-5 hover:border-teal hover:shadow-sm transition-all group"
+            >
+              <div className="flex items-start gap-3">
+                <ActionIcon type={action.icon} />
+                <div>
+                  <h2 className="font-medium text-navy group-hover:text-teal transition-colors">
+                    {action.label}
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-0.5">
+                    {action.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Paper 1 */}
+        <h2 className="text-xs uppercase tracking-wider text-gray-400 font-medium mb-3">
+          Paper 1
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          {paper1Actions.map((action) => (
+            <Link
+              key={action.href}
+              href={action.href}
+              className="bg-white border border-gray-200 rounded-lg p-5 hover:border-teal hover:shadow-sm transition-all group"
+            >
+              <div className="flex items-start gap-3">
+                <ActionIcon type={action.icon} />
+                <div>
+                  <h2 className="font-medium text-navy group-hover:text-teal transition-colors">
+                    {action.label}
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-0.5">
+                    {action.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Tools */}
+        <h2 className="text-xs uppercase tracking-wider text-gray-400 font-medium mb-3">
+          Tools
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {quickActions.map((action) => (
+          {toolActions.map((action) => (
             <Link
               key={action.href}
               href={action.href}

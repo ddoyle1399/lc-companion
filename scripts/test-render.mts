@@ -72,10 +72,30 @@ const sections: PoemVideoProps["sections"] = [
     highlightLines: [],
     durationInFrames: 20 * FPS,
     audioSrc: "",
-    spokenText: "Two themes dominate here. First, nature as escape.",
+    spokenText: "Two themes dominate here. First, nature as escape. Innisfree represents freedom from the grey urban world of London. Every sensory detail builds a paradise of sound and colour. Second, memory and longing. The speaker does not physically go to Innisfree. He hears it in his mind. Innisfree lives in the deep heart's core, not on any map.",
     keyQuote: { text: "bee-loud glade", lineIndex: 3 },
     techniques: [
       { name: "Onomatopoeia", quote: "bee-loud", effect: "Makes the natural world audible, reinforcing nature as a living, sensory escape" },
+    ],
+    themes: [
+      {
+        name: "Nature as Escape",
+        supportingPoints: [
+          "Innisfree represents freedom from the grey urban world of London.",
+          "Every sensory detail builds a paradise of sound and colour.",
+          "Nature is not just scenery but a source of spiritual peace.",
+        ],
+        quote: "peace comes dropping slow",
+      },
+      {
+        name: "Memory and Longing",
+        supportingPoints: [
+          "The speaker does not physically go to Innisfree. He hears it in his mind.",
+          "The repetition of 'I will arise' suggests an unfulfilled desire.",
+          "Innisfree lives in the deep heart's core, not on any map.",
+        ],
+        quote: "I hear it in the deep heart's core",
+      },
     ],
   },
   {

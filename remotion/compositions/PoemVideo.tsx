@@ -28,6 +28,7 @@ interface SectionTiming {
   spokenText?: string;
   keyQuote?: { text: string; lineIndex: number };
   techniques?: { name: string; quote: string; effect: string }[];
+  themes?: { name: string; supportingPoints: string[]; quote?: string }[];
 }
 
 /**
@@ -117,6 +118,7 @@ const SectionContent: React.FC<{
         spokenText={section.spokenText}
         keyQuote={section.keyQuote}
         techniques={section.techniques}
+        themes={section.themes}
         durationInFrames={section.durationInFrames}
       />
     );

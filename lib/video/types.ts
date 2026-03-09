@@ -13,6 +13,11 @@ export interface ScriptSection {
     quote: string; // The quote that demonstrates this technique
     effect: string; // One-line exam-ready explanation
   }[];
+  themes?: {
+    name: string; // e.g. "Nature as Escape", "Memory and Longing"
+    supportingPoints: string[]; // 2-3 short sentences
+    quote?: string; // A key quote that supports this theme
+  }[];
 }
 
 export interface ScriptWarning {
@@ -68,6 +73,11 @@ export interface PoemVideoProps {
       name: string;
       quote: string;
       effect: string;
+    }[];
+    themes?: {
+      name: string;
+      supportingPoints: string[];
+      quote?: string;
     }[];
   }[];
   titleDurationInFrames: number; // 90 frames = 3s at 30fps

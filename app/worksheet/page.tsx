@@ -16,7 +16,18 @@ import comp2026 from "@/data/circulars/2026-comparative.json";
 import comp2027 from "@/data/circulars/2027-comparative.json";
 
 type Level = "HL" | "OL";
-type WorksheetContentType = "poetry" | "single_text" | "comparative";
+type WorksheetContentType = "poetry" | "single_text" | "comparative" | "unseen_poetry" | "comprehension" | "composition";
+
+type CompositionType = "personal_essay" | "short_story" | "speech" | "discursive" | "feature_article" | "descriptive";
+
+const compositionTypeLabels: Record<CompositionType, string> = {
+  personal_essay: "Personal Essay",
+  short_story: "Short Story",
+  speech: "Speech",
+  discursive: "Discursive Essay",
+  feature_article: "Feature Article",
+  descriptive: "Descriptive Essay",
+};
 
 interface TextOption {
   title: string;
@@ -138,6 +149,8 @@ export default function WorksheetPage() {
     "during-lesson",
     "post-lesson",
   ]);
+  const [focusArea, setFocusArea] = useState("both");
+  const [compositionType, setCompositionType] = useState<CompositionType>("personal_essay");
   const [instructions, setInstructions] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -182,6 +195,8 @@ export default function WorksheetPage() {
     setText1Key("");
     setText2Key("");
     setText3Key("");
+    setFocusArea("both");
+    setCompositionType("personal_essay");
   }
 
   function toggleActivity(id: string) {
@@ -197,7 +212,9 @@ export default function WorksheetPage() {
   }
 
   function isReadyToGenerate(): boolean {
-    if (activities.length === 0) return false;
+    // Skills-based types don't need activity checkboxes (they have fixed structures)
+    const needsActivities = contentType === "poetry" || contentType === "single_text" || contentType === "comparative";
+    if (needsActivities && activities.length === 0) return false;
     if (contentType === "poetry") return !!poet && !!poem;
     if (contentType === "single_text") return !!singleTextKey;
     if (contentType === "comparative") {
@@ -206,6 +223,9 @@ export default function WorksheetPage() {
       const t3 = findTextByKey(text3Key);
       return !!compMode && !!t1 && !!t2 && !!t3;
     }
+    if (contentType === "unseen_poetry") return true;
+    if (contentType === "comprehension") return true;
+    if (contentType === "composition") return !!compositionType;
     return false;
   }
 
@@ -244,6 +264,10 @@ export default function WorksheetPage() {
           director: t!.director,
           category: t!.category,
         }));
+    } else if (contentType === "comprehension") {
+      body.focusArea = focusArea;
+    } else if (contentType === "composition") {
+      body.compositionType = compositionType;
     }
 
     await generate(body);
@@ -266,6 +290,12 @@ export default function WorksheetPage() {
       return `Worksheet - ${singleTextKey.split("::")[0]}`;
     if (contentType === "comparative" && compMode)
       return `Worksheet - ${compMode}`;
+    if (contentType === "unseen_poetry")
+      return `Worksheet - Unseen Poetry - ${level} ${year}`;
+    if (contentType === "comprehension")
+      return `Worksheet - Comprehension - ${level} ${year}`;
+    if (contentType === "composition")
+      return `Worksheet - ${compositionTypeLabels[compositionType]} - ${level} ${year}`;
     return "Worksheet";
   }
 
@@ -401,6 +431,9 @@ export default function WorksheetPage() {
                 <option value="poetry">Poetry</option>
                 <option value="single_text">Single Text</option>
                 <option value="comparative">Comparative</option>
+                <option value="unseen_poetry">Unseen Poetry</option>
+                <option value="comprehension">Comprehension</option>
+                <option value="composition">Composition</option>
               </select>
             </div>
           </div>
@@ -501,30 +534,76 @@ export default function WorksheetPage() {
                 </div>
               </>
             )}
+
+            {contentType === "unseen_poetry" && (
+              <p className="text-sm text-gray-500">
+                Generates technique identification exercises, quote analysis practice, and a full unseen poem response task.
+              </p>
+            )}
+
+            {contentType === "comprehension" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Focus Area
+                </label>
+                <select
+                  value={focusArea}
+                  onChange={(e) => setFocusArea(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+                >
+                  <option value="both">Both Question A and B</option>
+                  <option value="question_a">Question A (Comprehension)</option>
+                  <option value="question_b">Question B (Functional Writing)</option>
+                </select>
+              </div>
+            )}
+
+            {contentType === "composition" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Composition Type
+                </label>
+                <select
+                  value={compositionType}
+                  onChange={(e) => setCompositionType(e.target.value as CompositionType)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+                >
+                  {(Object.entries(compositionTypeLabels) as [CompositionType, string][]).map(
+                    ([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    )
+                  )}
+                </select>
+              </div>
+            )}
           </div>
 
-          {/* Activity types */}
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Activity Types
-            </label>
-            <div className="flex flex-wrap gap-3">
-              {ACTIVITY_TYPES.map((at) => (
-                <label
-                  key={at.id}
-                  className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={activities.includes(at.id)}
-                    onChange={() => toggleActivity(at.id)}
-                    className="rounded border-gray-300 text-teal focus:ring-teal"
-                  />
-                  {at.label}
-                </label>
-              ))}
+          {/* Activity types - only for text-based content types */}
+          {(contentType === "poetry" || contentType === "single_text" || contentType === "comparative") && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Activity Types
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {ACTIVITY_TYPES.map((at) => (
+                  <label
+                    key={at.id}
+                    className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={activities.includes(at.id)}
+                      onChange={() => toggleActivity(at.id)}
+                      className="rounded border-gray-300 text-teal focus:ring-teal"
+                    />
+                    {at.label}
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Additional instructions */}
           <div className="mt-4">

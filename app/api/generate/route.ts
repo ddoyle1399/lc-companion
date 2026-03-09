@@ -6,6 +6,10 @@ import {
   buildComparativePrompt,
   buildWorksheetPrompt,
   buildSlidesPrompt,
+  buildSingleTextPrompt,
+  buildUnseenPoetryPrompt,
+  buildComprehensionPrompt,
+  buildCompositionPrompt,
   PromptContext,
 } from "@/lib/claude/prompts";
 import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
@@ -110,6 +114,48 @@ export async function POST(request: NextRequest) {
 
         useWebSearch = true;
         userPrompt = buildSlidesPrompt(context);
+        break;
+      }
+
+      case "single_text": {
+        const { author, textTitle, textType } = body;
+        if (!author || !textTitle) {
+          return errorResponse("Single text notes require author and textTitle");
+        }
+        context.author = author;
+        context.textTitle = textTitle;
+        context.textType = textType;
+
+        useWebSearch = true;
+        webSearchMaxUses = 5;
+        userPrompt = buildSingleTextPrompt(context);
+        break;
+      }
+
+      case "unseen_poetry": {
+        useWebSearch = false;
+        userPrompt = buildUnseenPoetryPrompt(context);
+        break;
+      }
+
+      case "comprehension": {
+        const { focusArea } = body;
+        context.focusArea = focusArea || "both";
+
+        useWebSearch = false;
+        userPrompt = buildComprehensionPrompt(context);
+        break;
+      }
+
+      case "composition": {
+        const { compositionType } = body;
+        if (!compositionType) {
+          return errorResponse("Composition notes require a compositionType");
+        }
+        context.compositionType = compositionType;
+
+        useWebSearch = false;
+        userPrompt = buildCompositionPrompt(context);
         break;
       }
 

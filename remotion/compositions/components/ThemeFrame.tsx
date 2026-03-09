@@ -3,53 +3,280 @@ import { useCurrentFrame, interpolate, Easing } from "remotion";
 
 const TEAL = "#2A9D8F";
 
+interface ThemeData {
+  name: string;
+  supportingPoints: string[];
+  quote?: string;
+}
+
 interface ThemeFrameProps {
   spokenText?: string;
   keyQuote?: { text: string; lineIndex: number };
   techniques?: { name: string; quote: string; effect: string }[];
+  themes?: ThemeData[];
   durationInFrames: number;
 }
 
 /**
- * Extract theme keywords from spoken text.
- * Looks for capitalised words or short phrases that represent themes.
- * Falls back to technique names if available.
+ * Fallback: extract themes from spokenText when no themes array is provided.
+ * Strips common AI prefixes and uses sentences as supporting points.
  */
-function extractThemes(
-  spokenText?: string,
-  techniques?: { name: string; quote: string; effect: string }[]
-): { label: string; quote: string }[] {
-  const themes: { label: string; quote: string }[] = [];
+function extractThemesFromText(spokenText?: string): ThemeData[] {
+  if (!spokenText) return [];
 
-  if (techniques && techniques.length > 0) {
-    for (const t of techniques) {
-      themes.push({ label: t.name, quote: t.quote });
+  const sentences = spokenText
+    .split(/[.!?]+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 5);
+
+  if (sentences.length === 0) return [];
+
+  const themes: ThemeData[] = [];
+  const prefixes = [
+    /^the poem explores\s*/i,
+    /^a key theme is\s*/i,
+    /^another theme is\s*/i,
+    /^the central theme of\s*/i,
+    /^one of the main themes is\s*/i,
+    /^first,?\s*/i,
+    /^second,?\s*/i,
+    /^third,?\s*/i,
+    /^finally,?\s*/i,
+    /^two themes dominate here\s*/i,
+  ];
+
+  // Group sentences into themes: treat short/capitalised fragments as names
+  let currentTheme: ThemeData | null = null;
+  for (const sentence of sentences) {
+    let cleaned = sentence;
+    for (const prefix of prefixes) {
+      cleaned = cleaned.replace(prefix, "");
+    }
+    cleaned = cleaned.trim();
+    if (!cleaned) continue;
+
+    // Capitalise first letter
+    cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+
+    // Short phrases (under 6 words) are likely theme names
+    const wordCount = cleaned.split(/\s+/).length;
+    if (wordCount <= 6) {
+      if (currentTheme) themes.push(currentTheme);
+      currentTheme = { name: cleaned, supportingPoints: [] };
+    } else if (currentTheme) {
+      currentTheme.supportingPoints.push(cleaned);
+    } else {
+      // First sentence is long; use first few words as name
+      const words = cleaned.split(/\s+/);
+      const name = words.slice(0, 4).join(" ");
+      currentTheme = {
+        name,
+        supportingPoints: [cleaned],
+      };
     }
   }
-
-  // If no techniques, extract key phrases from spoken text
-  if (themes.length === 0 && spokenText) {
-    const sentences = spokenText.split(/[.!?]+/).filter((s) => s.trim());
-    for (const s of sentences.slice(0, 3)) {
-      const trimmed = s.trim();
-      if (trimmed.length > 5) {
-        const words = trimmed.split(/\s+/).slice(0, 4).join(" ");
-        themes.push({ label: words, quote: "" });
-      }
-    }
-  }
+  if (currentTheme) themes.push(currentTheme);
 
   return themes.slice(0, 4);
 }
 
+/**
+ * Renders a single theme with staggered build-up animation.
+ */
+const SingleTheme: React.FC<{
+  theme: ThemeData;
+  startFrame: number;
+  endFrame: number;
+  isLast: boolean;
+}> = ({ theme, startFrame, endFrame, isLast }) => {
+  const frame = useCurrentFrame();
+  const localFrame = frame - startFrame;
+  const duration = endFrame - startFrame;
+
+  if (frame < startFrame || frame >= endFrame) return null;
+
+  // Fade out (last theme fades with the whole component, others fade at their end)
+  const fadeOutStart = isLast ? duration - 15 : duration - 20;
+  const fadeOut = interpolate(
+    localFrame,
+    [fadeOutStart, fadeOutStart + 15],
+    [1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
+  // Theme name: fade in over 15 frames with scale 0.95 -> 1.0
+  const nameOpacity = interpolate(localFrame, [0, 15], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+  const nameScale = interpolate(localFrame, [0, 15], [0.95, 1.0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+  // Slow upward drift
+  const nameDrift = interpolate(localFrame, [0, duration], [0, -2], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // Teal line: draws from centre outward, starts 10 frames after name
+  const lineProgress = interpolate(localFrame, [10, 25], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+  // Subtle opacity pulse on the line
+  const linePulse = 0.8 + 0.2 * Math.sin(frame * 0.08);
+
+  // Supporting points: staggered appearance
+  const pointTimings = theme.supportingPoints.map((_, i) => ({
+    fadeStart: 20 + i * 25,
+  }));
+
+  // Quote: appears 15 frames after the last point
+  const lastPointStart =
+    theme.supportingPoints.length > 0
+      ? 20 + (theme.supportingPoints.length - 1) * 25
+      : 20;
+  const quoteStart = lastPointStart + 15;
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        opacity: fadeOut,
+      }}
+    >
+      {/* Theme name */}
+      <div
+        style={{
+          fontFamily: "Georgia, 'Times New Roman', serif",
+          fontSize: 52,
+          fontWeight: "bold",
+          color: "#FFFFFF",
+          textShadow: "0 2px 20px rgba(0,0,0,0.5)",
+          opacity: nameOpacity,
+          transform: `scale(${nameScale}) translateY(${nameDrift}px)`,
+          textAlign: "center",
+          maxWidth: "80%",
+        }}
+      >
+        {theme.name}
+      </div>
+
+      {/* Teal divider line */}
+      <div
+        style={{
+          width: 80 * lineProgress,
+          height: 1.5,
+          backgroundColor: TEAL,
+          marginTop: 16,
+          marginBottom: 24,
+          opacity: lineProgress > 0 ? linePulse : 0,
+        }}
+      />
+
+      {/* Supporting points */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
+        {theme.supportingPoints.map((point, i) => {
+          const pointFadeStart = pointTimings[i].fadeStart;
+          const pointOpacity = interpolate(
+            localFrame,
+            [pointFadeStart, pointFadeStart + 15],
+            [0, 0.7],
+            {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            }
+          );
+          // Independent slow drift per point
+          const pointDrift = interpolate(
+            localFrame,
+            [pointFadeStart, duration],
+            [0, -3],
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+          );
+
+          return (
+            <div
+              key={i}
+              style={{
+                fontFamily: "Arial, sans-serif",
+                fontSize: 20,
+                color: "#FFFFFF",
+                opacity: pointOpacity,
+                transform: `translateY(${pointDrift}px)`,
+                textAlign: "center",
+                maxWidth: 700,
+                display: "flex",
+                alignItems: "baseline",
+                gap: 8,
+              }}
+            >
+              <span style={{ color: TEAL, fontSize: 14 }}>{"\u2022"}</span>
+              <span>{point}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Quote */}
+      {theme.quote && (
+        <div
+          style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontSize: 22,
+            fontStyle: "italic",
+            color: "#FFFFFF",
+            opacity: interpolate(
+              localFrame,
+              [quoteStart, quoteStart + 15],
+              [0, 0.5],
+              {
+                extrapolateLeft: "clamp",
+                extrapolateRight: "clamp",
+                easing: Easing.out(Easing.quad),
+              }
+            ),
+            marginTop: 20,
+            textAlign: "center",
+            maxWidth: 500,
+          }}
+        >
+          {"\u201C"}
+          {theme.quote}
+          {"\u201D"}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const ThemeFrame: React.FC<ThemeFrameProps> = ({
   spokenText,
   keyQuote,
-  techniques,
+  themes: themesFromProps,
   durationInFrames,
 }) => {
   const frame = useCurrentFrame();
-  const themes = extractThemes(spokenText, techniques);
+
+  // Resolve themes: prefer structured data, fall back to text extraction
+  const themes =
+    themesFromProps && themesFromProps.length > 0
+      ? themesFromProps
+      : extractThemesFromText(spokenText);
 
   // Header fade in
   const headerOpacity = interpolate(frame, [0, 15], [0, 1], {
@@ -58,7 +285,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
     easing: Easing.out(Easing.quad),
   });
 
-  // Fade out at end
+  // Global fade out at end
   const fadeOut = interpolate(
     frame,
     [durationInFrames - 12, durationInFrames],
@@ -66,18 +293,13 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Per-theme timing: crossfade between themes
-  const themeStartFrame = 20;
-  const crossfadeDuration = 15;
-  const perTheme = Math.floor(
-    (durationInFrames - themeStartFrame - 15) / Math.max(themes.length, 1)
-  );
-
-  // Determine which theme is currently active
-  const activeThemeIndex = Math.min(
-    Math.floor(Math.max(0, frame - themeStartFrame) / perTheme),
-    themes.length - 1
-  );
+  // Calculate per-theme timing
+  const themeStartFrame = 15; // after header fades in
+  const gapFrames = 5; // empty gap between themes
+  const themeCount = Math.max(themes.length, 1);
+  const totalGapFrames = (themeCount - 1) * gapFrames;
+  const availableFrames = durationInFrames - themeStartFrame - 15 - totalGapFrames;
+  const perThemeFrames = Math.floor(availableFrames / themeCount);
 
   return (
     <div
@@ -94,7 +316,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
         opacity: fadeOut,
       }}
     >
-      {/* Section header with opacity pulse (Change 4) */}
+      {/* THEMES header with opacity pulse */}
       <div
         style={{
           position: "absolute",
@@ -110,154 +332,29 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
         THEMES
       </div>
 
-      {/* Theme display area - crossfade between themes */}
+      {/* Theme content area */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          maxWidth: "70%",
-          position: "relative",
-          minHeight: 200,
           justifyContent: "center",
+          maxWidth: "80%",
         }}
       >
         {themes.map((theme, i) => {
-          const start = themeStartFrame + i * perTheme;
-          const end = start + perTheme;
-
-          // Fade in
-          const enterOpacity = interpolate(
-            frame,
-            [start, start + crossfadeDuration],
-            [0, 1],
-            {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            }
-          );
-
-          // Scale up from 0.95 to 1.0
-          const enterScale = interpolate(
-            frame,
-            [start, start + crossfadeDuration],
-            [0.95, 1.0],
-            {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            }
-          );
-
-          // Fade out (crossfade to next theme)
-          const exitOpacity =
-            i < themes.length - 1
-              ? interpolate(
-                  frame,
-                  [end - crossfadeDuration, end],
-                  [1, 0],
-                  {
-                    extrapolateLeft: "clamp",
-                    extrapolateRight: "clamp",
-                    easing: Easing.in(Easing.quad),
-                  }
-                )
-              : 1;
-
-          const opacity = enterOpacity * exitOpacity;
-
-          // Slow upward drift while visible (Change 4)
-          const drift = interpolate(
-            frame,
-            [start, end],
-            [0, -5],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-          );
-
-          // Quote fade in (15 frames after theme label)
-          const quoteOpacity = interpolate(
-            frame,
-            [start + crossfadeDuration, start + crossfadeDuration + 15],
-            [0, 1],
-            {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            }
-          );
-
-          // Teal underline draws itself under theme word
-          const underlineWidth = interpolate(
-            frame,
-            [start + 5, start + 20],
-            [0, 100],
-            {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            }
-          );
-
-          // Only render if theme has any visibility
-          if (frame < start || opacity < 0.01) return null;
+          const start = themeStartFrame + i * (perThemeFrames + gapFrames);
+          const end = start + perThemeFrames;
+          const isLast = i === themes.length - 1;
 
           return (
-            <div
+            <SingleTheme
               key={i}
-              style={{
-                position: "absolute",
-                opacity,
-                transform: `translateY(${drift}px) scale(${enterScale})`,
-                textAlign: "center",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              {/* Theme label */}
-              <div
-                style={{
-                  fontFamily: "Georgia, 'Times New Roman', serif",
-                  fontSize: 48,
-                  color: "#FFFFFF",
-                  textShadow: "0 2px 20px rgba(0,0,0,0.5)",
-                }}
-              >
-                {theme.label}
-              </div>
-
-              {/* Teal underline */}
-              <div
-                style={{
-                  width: `${underlineWidth}%`,
-                  maxWidth: 300,
-                  height: 2,
-                  backgroundColor: TEAL,
-                  marginTop: 12,
-                  marginBottom: 16,
-                  opacity: 0.7,
-                }}
-              />
-
-              {/* Supporting quote */}
-              {theme.quote && (
-                <div
-                  style={{
-                    fontFamily: "Georgia, 'Times New Roman', serif",
-                    fontSize: 18,
-                    fontStyle: "italic",
-                    color: "rgba(255, 255, 255, 0.5)",
-                    opacity: quoteOpacity,
-                    maxWidth: 500,
-                  }}
-                >
-                  {"\u201C"}
-                  {theme.quote}
-                  {"\u201D"}
-                </div>
-              )}
-            </div>
+              theme={theme}
+              startFrame={start}
+              endFrame={end}
+              isLast={isLast}
+            />
           );
         })}
       </div>
