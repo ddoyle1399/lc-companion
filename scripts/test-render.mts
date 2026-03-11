@@ -103,15 +103,18 @@ const sections: PoemVideoProps["sections"] = [
     highlightLines: [],
     durationInFrames: 12 * FPS,
     audioSrc: "",
-    spokenText: "This poem pairs well with questions on nature, memory, and the contrast between urban and rural life. It connects strongly to Heaney's sense of place and Kavanagh's rural imagery.",
+    spokenText: "This poem pairs well with questions on nature, memory, and the contrast between urban and rural life. It connects strongly to other Yeats poems that explore the tension between the real and the ideal.",
     examConnection: {
       questionTypes: [
         "Nature and sense of place",
         "Personal response to a poet's work",
         "The poet's use of imagery and sound",
       ],
-      linkedPoets: ["Seamus Heaney", "Eavan Boland", "Patrick Kavanagh"],
-      linkedPoems: ["Bogland", "The War Horse", "Epic"],
+      linkedPoems: [
+        "The Wild Swans at Coole",
+        "Sailing to Byzantium",
+        "An Irish Airman Foresees his Death",
+      ],
       examTip: "This poem suits any question on nature, memory, or the contrast between urban and rural life.",
     },
   },

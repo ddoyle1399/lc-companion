@@ -90,8 +90,7 @@ SCRIPT STRUCTURE (follow this order):
    - keyQuote and techniques are optional. Only include them if genuinely relevant.
    - MUST include an "examConnection" object with:
      - "questionTypes": 2 to 3 specific exam question themes this text suits. Use the actual phrasing examiners use, e.g. "The poet's use of imagery", "Themes of loss and memory", "Personal response". NOT generic descriptions.
-     - "linkedPoets": 2 to 3 poets whose work connects to this text for comparison or linked study. Use full names.
-     - "linkedPoems": Optional. 1 to 3 specific poems by those poets that pair well.
+     - "linkedPoems": 2 to 4 poems by the SAME POET that connect to this poem thematically or technically. Students answer on one poet in the exam, so all connections must be within the same poet's prescribed poems. Use full poem titles. These must be poems on the prescribed Leaving Cert course.
      - "examTip": One concrete sentence of exam advice. Practical, direct, no waffle.
 
 5. OUTRO section (type: "outro", highlightLines: [])
@@ -118,7 +117,7 @@ JSON SCHEMA:
       "keyQuote": { "text": "string", "lineIndex": number } | null,
       "techniques": [{ "name": "string", "quote": "string", "effect": "string" }] | null,
       "themes": [{ "name": "string", "supportingPoints": ["string"], "quote": "string" }] | null,
-      "examConnection": { "questionTypes": ["string"], "linkedPoets": ["string"], "linkedPoems": ["string"], "examTip": "string" } | null,
+      "examConnection": { "questionTypes": ["string"], "linkedPoems": ["string"], "examTip": "string" } | null,
       "outroData": { "closingLine": "string", "poemTitle": "string", "poetName": "string" } | null
     }
   ]

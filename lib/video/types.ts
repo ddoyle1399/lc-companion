@@ -20,8 +20,7 @@ export interface ScriptSection {
   }[];
   examConnection?: {
     questionTypes: string[]; // e.g. ["Nature and place", "Personal response to a poet's work"]
-    linkedPoets: string[]; // e.g. ["Seamus Heaney", "Eavan Boland"]
-    linkedPoems?: string[]; // e.g. ["The Forge", "Bogland"]
+    linkedPoems: string[]; // e.g. ["The Wild Swans at Coole", "Sailing to Byzantium"] - must be by the SAME poet
     examTip: string; // One practical sentence of exam advice
   };
   outroData?: {
@@ -92,8 +91,7 @@ export interface PoemVideoProps {
     }[];
     examConnection?: {
       questionTypes: string[];
-      linkedPoets: string[];
-      linkedPoems?: string[];
+      linkedPoems: string[];
       examTip: string;
     };
     outroData?: {

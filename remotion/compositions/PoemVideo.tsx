@@ -32,8 +32,7 @@ interface SectionTiming {
   themes?: { name: string; supportingPoints: string[]; quote?: string }[];
   examConnection?: {
     questionTypes: string[];
-    linkedPoets: string[];
-    linkedPoems?: string[];
+    linkedPoems: string[];
     examTip: string;
   };
   outroData?: {

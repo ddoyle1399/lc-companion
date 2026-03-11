@@ -12,28 +12,10 @@ interface ExamFrameProps {
   techniques?: { name: string; quote: string; effect: string }[];
   examConnection?: {
     questionTypes: string[];
-    linkedPoets: string[];
-    linkedPoems?: string[];
+    linkedPoems: string[];
     examTip: string;
   };
   durationInFrames: number;
-}
-
-/**
- * Fallback: extract connected poet names from spoken text.
- */
-function extractPoetNames(spokenText?: string, currentPoet?: string): string[] {
-  if (!spokenText) return [];
-  const namePattern = /\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})\b/g;
-  const names: string[] = [];
-  let match;
-  while ((match = namePattern.exec(spokenText)) !== null) {
-    const name = match[1];
-    if (name !== currentPoet && !names.includes(name)) {
-      names.push(name);
-    }
-  }
-  return names.slice(0, 3);
 }
 
 /**
@@ -66,7 +48,6 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
   const frame = useCurrentFrame();
 
   const questionTypes = examConnection?.questionTypes ?? extractQuestionTypes(spokenText);
-  const linkedPoets = examConnection?.linkedPoets ?? extractPoetNames(spokenText, poet);
   const linkedPoems = examConnection?.linkedPoems ?? [];
   const examTip = examConnection?.examTip ?? "";
 
@@ -92,7 +73,7 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
   });
 
   // Exam tip timing
-  const allItemCount = questionTypes.length + linkedPoets.length;
+  const allItemCount = questionTypes.length + linkedPoems.length;
   const tipStartFrame = 30 + allItemCount * 15;
   const tipOpacity = interpolate(frame, [tipStartFrame, tipStartFrame + 18], [0, 1], {
     extrapolateLeft: "clamp",
@@ -256,7 +237,7 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           })}
         </div>
 
-        {/* Right column: Pairs Well With */}
+        {/* Right column: Linked Poems (same poet) */}
         <div style={{ flex: "0 0 45%", display: "flex", flexDirection: "column" }}>
           <div
             style={{
@@ -288,11 +269,11 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
                 color: "#FFFFFF",
               }}
             >
-              Pairs Well With
+              Also by {poet}
             </div>
           </div>
 
-          {linkedPoets.map((poetName, i) => {
+          {linkedPoems.map((poemTitle, i) => {
             const start = 25 + i * 15;
             const itemOpacity = interpolate(frame, [start, start + 18], [0, 1], {
               extrapolateLeft: "clamp",
@@ -305,41 +286,39 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
               easing: Easing.out(Easing.quad),
             });
 
-            const linkedPoem = linkedPoems[i];
-
             return (
               <div
                 key={i}
                 style={{
                   opacity: itemOpacity,
                   transform: `translateY(${itemY}px)`,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
                   marginBottom: 20,
                 }}
               >
                 <div
                   style={{
-                    fontFamily: "Georgia, 'Times New Roman', serif",
-                    fontSize: 22,
-                    fontWeight: "bold",
-                    color: "#FFFFFF",
-                    lineHeight: 1.3,
+                    fontFamily: "Arial, sans-serif",
+                    fontSize: 13,
+                    color: TEAL,
+                    flexShrink: 0,
                   }}
                 >
-                  {poetName}
+                  {"\u2014"}
                 </div>
-                {linkedPoem && (
-                  <div
-                    style={{
-                      fontFamily: "Georgia, 'Times New Roman', serif",
-                      fontSize: 16,
-                      color: "rgba(255, 255, 255, 0.5)",
-                      marginTop: 4,
-                      fontStyle: "italic",
-                    }}
-                  >
-                    {linkedPoem}
-                  </div>
-                )}
+                <div
+                  style={{
+                    fontFamily: "Georgia, 'Times New Roman', serif",
+                    fontSize: 20,
+                    color: "rgba(255, 255, 255, 0.8)",
+                    lineHeight: 1.4,
+                    fontStyle: "italic",
+                  }}
+                >
+                  {poemTitle}
+                </div>
               </div>
             );
           })}
