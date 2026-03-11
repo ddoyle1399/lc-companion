@@ -7,12 +7,17 @@ interface ExamFrameProps {
   poet: string;
   spokenText?: string;
   techniques?: { name: string; quote: string; effect: string }[];
+  examConnection?: {
+    questionTypes: string[];
+    linkedPoets: string[];
+    linkedPoems?: string[];
+    examTip: string;
+  };
   durationInFrames: number;
 }
 
 /**
- * Extract connected poet names from spoken text.
- * Looks for capitalised multi-word sequences that look like names.
+ * Fallback: extract connected poet names from spoken text.
  */
 function extractPoetNames(spokenText?: string, currentPoet?: string): string[] {
   if (!spokenText) return [];
@@ -25,44 +30,47 @@ function extractPoetNames(spokenText?: string, currentPoet?: string): string[] {
       names.push(name);
     }
   }
-  return names.slice(0, 4);
+  return names.slice(0, 3);
 }
 
 /**
- * Extract question type labels from spoken text or techniques.
+ * Fallback: extract question types from spoken text.
  */
-function extractQuestionTypes(
-  spokenText?: string,
-  techniques?: { name: string; quote: string; effect: string }[]
-): string[] {
+function extractQuestionTypes(spokenText?: string): string[] {
+  if (!spokenText) return [];
   const types: string[] = [];
-
-  if (techniques) {
-    for (const t of techniques) {
-      types.push(t.name);
-    }
+  // Look for phrases after "question on" or "question about"
+  const questionPattern = /questions?\s+(?:on|about)\s+([^,.]+)/gi;
+  let match;
+  while ((match = questionPattern.exec(spokenText)) !== null) {
+    types.push(match[1].trim());
   }
-
-  if (types.length === 0 && spokenText) {
+  if (types.length === 0) {
+    // Fall back to first few meaningful phrases
     const sentences = spokenText.split(/[.!?]+/).filter((s) => s.trim());
-    for (const s of sentences.slice(0, 4)) {
-      const words = s.trim().split(/\s+/).slice(0, 5).join(" ");
+    for (const s of sentences.slice(0, 3)) {
+      const words = s.trim().split(/\s+/).slice(0, 6).join(" ");
       if (words.length > 3) types.push(words);
     }
   }
-
-  return types.slice(0, 6);
+  return types.slice(0, 3);
 }
 
 export const ExamFrame: React.FC<ExamFrameProps> = ({
   poet,
   spokenText,
-  techniques,
+  examConnection,
   durationInFrames,
 }) => {
   const frame = useCurrentFrame();
 
-  // Header "EXAM FOCUS" fades in centred top
+  // Use structured data or fall back to text extraction
+  const questionTypes = examConnection?.questionTypes ?? extractQuestionTypes(spokenText);
+  const linkedPoets = examConnection?.linkedPoets ?? extractPoetNames(spokenText, poet);
+  const linkedPoems = examConnection?.linkedPoems ?? [];
+  const examTip = examConnection?.examTip ?? "";
+
+  // Header fade in
   const headerOpacity = interpolate(frame, [0, 15], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -77,13 +85,24 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  const connectedPoets = extractPoetNames(spokenText, poet);
-  const questionTypes = extractQuestionTypes(spokenText, techniques);
-
-  // Slow drift for constant motion (Change 4)
-  const drift = interpolate(frame, [0, durationInFrames], [0, -3], {
+  // Slow drift for constant motion
+  const drift = interpolate(frame, [0, durationInFrames], [0, -4], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
+  });
+
+  // Exam tip appears last
+  const allItemCount = questionTypes.length + linkedPoets.length;
+  const tipStartFrame = 30 + allItemCount * 15;
+  const tipOpacity = interpolate(frame, [tipStartFrame, tipStartFrame + 20], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+  const tipY = interpolate(frame, [tipStartFrame, tipStartFrame + 20], [8, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
   });
 
   return (
@@ -96,10 +115,7 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
         opacity: fadeOut,
-        transform: `translateY(${drift}px)`,
       }}
     >
       {/* EXAM FOCUS header */}
@@ -107,54 +123,81 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
         style={{
           position: "absolute",
           top: 80,
+          left: "50%",
+          transform: "translateX(-50%)",
           fontFamily: "Arial, sans-serif",
           fontSize: 12,
           color: TEAL,
           textTransform: "uppercase",
           letterSpacing: 4,
-          opacity: headerOpacity * (0.9 + 0.1 * Math.sin(frame * 0.05)),
+          opacity: headerOpacity,
         }}
       >
         EXAM FOCUS
       </div>
 
-      {/* Poet name */}
+      {/* Two-column layout */}
       <div
         style={{
-          fontFamily: "Georgia, 'Times New Roman', serif",
-          fontSize: 36,
-          color: "#FFFFFF",
-          marginBottom: 48,
-          textShadow: "0 2px 20px rgba(0,0,0,0.5)",
-          opacity: interpolate(frame, [10, 25], [0, 1], {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-            easing: Easing.out(Easing.quad),
-          }),
+          position: "absolute",
+          top: 140,
+          left: 0,
+          right: 0,
+          bottom: 140,
+          display: "flex",
+          flexDirection: "row",
+          paddingLeft: 100,
+          paddingRight: 100,
+          gap: 60,
+          transform: `translateY(${drift}px)`,
         }}
       >
-        {poet}
-      </div>
+        {/* Left column: Question Types */}
+        <div style={{ flex: "0 0 45%", display: "flex", flexDirection: "column" }}>
+          {/* Column header */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: 28,
+              opacity: interpolate(frame, [10, 25], [0, 1], {
+                extrapolateLeft: "clamp",
+                extrapolateRight: "clamp",
+                easing: Easing.out(Easing.quad),
+              }),
+            }}
+          >
+            <div
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: TEAL,
+                flexShrink: 0,
+              }}
+            />
+            <div
+              style={{
+                fontFamily: "Arial, sans-serif",
+                fontSize: 16,
+                fontWeight: "bold",
+                color: "#FFFFFF",
+              }}
+            >
+              Question Types
+            </div>
+          </div>
 
-      {/* Connected poet names with teal dots - staggered */}
-      {connectedPoets.length > 0 && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            gap: 12,
-            marginBottom: 40,
-          }}
-        >
-          {connectedPoets.map((name, i) => {
-            const start = 20 + i * 15;
-            const opacity = interpolate(frame, [start, start + 15], [0, 1], {
+          {/* Question type items */}
+          {questionTypes.map((qt, i) => {
+            const start = 25 + i * 15;
+            const itemOpacity = interpolate(frame, [start, start + 15], [0, 1], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
               easing: Easing.out(Easing.quad),
             });
-            const x = interpolate(frame, [start, start + 15], [12, 0], {
+            const itemY = interpolate(frame, [start, start + 15], [10, 0], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
               easing: Easing.out(Easing.quad),
@@ -164,86 +207,158 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
               <div
                 key={i}
                 style={{
-                  opacity,
-                  transform: `translateX(${x}px)`,
+                  opacity: itemOpacity,
+                  transform: `translateY(${itemY}px)`,
                   display: "flex",
                   alignItems: "center",
                   gap: 12,
+                  marginBottom: 20,
                 }}
               >
                 <div
                   style={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: 3,
-                    backgroundColor: TEAL,
+                    fontFamily: "Arial, sans-serif",
+                    fontSize: 13,
+                    color: TEAL,
                     flexShrink: 0,
                   }}
-                />
+                >
+                  —
+                </div>
                 <div
                   style={{
                     fontFamily: "Georgia, 'Times New Roman', serif",
                     fontSize: 20,
                     color: "rgba(255, 255, 255, 0.8)",
+                    lineHeight: 1.4,
                   }}
                 >
-                  {name}
+                  {qt}
                 </div>
               </div>
             );
           })}
         </div>
-      )}
 
-      {/* Question type labels - staggered, separate group */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: 16,
-          maxWidth: "70%",
-        }}
-      >
-        {questionTypes.map((point, i) => {
-          const start = 20 + connectedPoets.length * 15 + i * 12;
-          const opacity = interpolate(frame, [start, start + 15], [0, 1], {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-            easing: Easing.out(Easing.quad),
-          });
-          const y = interpolate(frame, [start, start + 15], [12, 0], {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-            easing: Easing.out(Easing.quad),
-          });
-
-          return (
+        {/* Right column: Pairs Well With */}
+        <div style={{ flex: "0 0 45%", display: "flex", flexDirection: "column" }}>
+          {/* Column header */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: 28,
+              opacity: interpolate(frame, [10, 25], [0, 1], {
+                extrapolateLeft: "clamp",
+                extrapolateRight: "clamp",
+                easing: Easing.out(Easing.quad),
+              }),
+            }}
+          >
             <div
-              key={i}
               style={{
-                opacity,
-                transform: `translateY(${y}px)`,
-                backgroundColor: "rgba(42, 157, 143, 0.15)",
-                border: "1px solid rgba(42, 157, 143, 0.3)",
-                borderRadius: 8,
-                padding: "12px 24px",
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: TEAL,
+                flexShrink: 0,
+              }}
+            />
+            <div
+              style={{
+                fontFamily: "Arial, sans-serif",
+                fontSize: 16,
+                fontWeight: "bold",
+                color: "#FFFFFF",
               }}
             >
+              Pairs Well With
+            </div>
+          </div>
+
+          {/* Linked poets */}
+          {linkedPoets.map((poetName, i) => {
+            const start = 25 + i * 15;
+            const itemOpacity = interpolate(frame, [start, start + 15], [0, 1], {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            });
+            const itemY = interpolate(frame, [start, start + 15], [10, 0], {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            });
+
+            // Find a linked poem for this poet (match by index if available)
+            const linkedPoem = linkedPoems[i];
+
+            return (
               <div
+                key={i}
                 style={{
-                  fontFamily: "Arial, sans-serif",
-                  fontSize: 14,
-                  color: "#FFFFFF",
-                  letterSpacing: 1,
+                  opacity: itemOpacity,
+                  transform: `translateY(${itemY}px)`,
+                  marginBottom: 20,
                 }}
               >
-                {point}
+                <div
+                  style={{
+                    fontFamily: "Georgia, 'Times New Roman', serif",
+                    fontSize: 22,
+                    fontWeight: "bold",
+                    color: "#FFFFFF",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {poetName}
+                </div>
+                {linkedPoem && (
+                  <div
+                    style={{
+                      fontFamily: "Georgia, 'Times New Roman', serif",
+                      fontSize: 16,
+                      color: "rgba(255, 255, 255, 0.5)",
+                      marginTop: 4,
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {linkedPoem}
+                  </div>
+                )}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
+
+      {/* Exam tip at bottom centre */}
+      {examTip && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 80,
+            left: "50%",
+            transform: `translateX(-50%) translateY(${tipY}px)`,
+            maxWidth: "70%",
+            textAlign: "center",
+            opacity: tipOpacity * fadeOut,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              fontSize: 18,
+              fontStyle: "italic",
+              color: "rgba(255, 255, 255, 0.6)",
+              lineHeight: 1.5,
+            }}
+          >
+            {examTip}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

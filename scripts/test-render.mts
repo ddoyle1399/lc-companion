@@ -103,14 +103,29 @@ const sections: PoemVideoProps["sections"] = [
     highlightLines: [],
     durationInFrames: 12 * FPS,
     audioSrc: "",
-    spokenText: "This poem pairs well with questions on nature, memory,",
+    spokenText: "This poem pairs well with questions on nature, memory, and the contrast between urban and rural life. It connects strongly to Heaney's sense of place and Kavanagh's rural imagery.",
+    examConnection: {
+      questionTypes: [
+        "Nature and sense of place",
+        "Personal response to a poet's work",
+        "The poet's use of imagery and sound",
+      ],
+      linkedPoets: ["Seamus Heaney", "Eavan Boland", "Patrick Kavanagh"],
+      linkedPoems: ["Bogland", "The War Horse", "Epic"],
+      examTip: "This poem suits any question on nature, memory, or the contrast between urban and rural life.",
+    },
   },
   {
     type: "outro",
     highlightLines: [],
     durationInFrames: 5 * FPS,
     audioSrc: "",
-    spokenText: "Know this poem inside out. It comes up regularly.",
+    spokenText: "Know this poem inside out. It comes up regularly and rewards close reading.",
+    outroData: {
+      closingLine: "Know this poem inside out. It comes up regularly and rewards close reading.",
+      poemTitle: "The Lake Isle of Innisfree",
+      poetName: "W.B. Yeats",
+    },
   },
 ];
 

@@ -18,6 +18,17 @@ export interface ScriptSection {
     supportingPoints: string[]; // 2-3 short sentences
     quote?: string; // A key quote that supports this theme
   }[];
+  examConnection?: {
+    questionTypes: string[]; // e.g. ["Nature and place", "Personal response to a poet's work"]
+    linkedPoets: string[]; // e.g. ["Seamus Heaney", "Eavan Boland"]
+    linkedPoems?: string[]; // e.g. ["The Forge", "Bogland"]
+    examTip: string; // One practical sentence of exam advice
+  };
+  outroData?: {
+    closingLine: string; // The key takeaway
+    poemTitle: string;
+    poetName: string;
+  };
 }
 
 export interface ScriptWarning {
@@ -79,6 +90,17 @@ export interface PoemVideoProps {
       supportingPoints: string[];
       quote?: string;
     }[];
+    examConnection?: {
+      questionTypes: string[];
+      linkedPoets: string[];
+      linkedPoems?: string[];
+      examTip: string;
+    };
+    outroData?: {
+      closingLine: string;
+      poemTitle: string;
+      poetName: string;
+    };
   }[];
   titleDurationInFrames: number; // 90 frames = 3s at 30fps
   closingDurationInFrames: number; // 60 frames = 2s at 30fps

@@ -88,11 +88,20 @@ SCRIPT STRUCTURE (follow this order):
    - Name specific exam question patterns and which other poems by this poet it links to
    - No lines highlighted
    - keyQuote and techniques are optional. Only include them if genuinely relevant.
+   - MUST include an "examConnection" object with:
+     - "questionTypes": 2 to 3 specific exam question themes this text suits. Use the actual phrasing examiners use, e.g. "The poet's use of imagery", "Themes of loss and memory", "Personal response". NOT generic descriptions.
+     - "linkedPoets": 2 to 3 poets whose work connects to this text for comparison or linked study. Use full names.
+     - "linkedPoems": Optional. 1 to 3 specific poems by those poets that pair well.
+     - "examTip": One concrete sentence of exam advice. Practical, direct, no waffle.
 
 5. OUTRO section (type: "outro", highlightLines: [])
    - 1 to 2 sentences wrap-up
    - No lines highlighted
    - keyQuote and techniques are optional. Only include them if genuinely relevant.
+   - MUST include an "outroData" object with:
+     - "closingLine": Your final 1 to 2 sentence summary. This should be practical exam advice, not a generic sign-off. Tell the student exactly what to do with this text.
+     - "poemTitle": The title of the poem or text.
+     - "poetName": The poet or author name.
 
 JSON SCHEMA:
 {
@@ -108,7 +117,9 @@ JSON SCHEMA:
       "estimatedDuration": number (seconds, roughly wordCount / 2.5),
       "keyQuote": { "text": "string", "lineIndex": number } | null,
       "techniques": [{ "name": "string", "quote": "string", "effect": "string" }] | null,
-      "themes": [{ "name": "string", "supportingPoints": ["string"], "quote": "string" }] | null
+      "themes": [{ "name": "string", "supportingPoints": ["string"], "quote": "string" }] | null,
+      "examConnection": { "questionTypes": ["string"], "linkedPoets": ["string"], "linkedPoems": ["string"], "examTip": "string" } | null,
+      "outroData": { "closingLine": "string", "poemTitle": "string", "poetName": "string" } | null
     }
   ]
 }

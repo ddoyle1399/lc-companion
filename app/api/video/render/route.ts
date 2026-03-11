@@ -258,6 +258,9 @@ export async function POST(request: NextRequest) {
               spokenText: section.spokenText,
               keyQuote: section.keyQuote,
               techniques: section.techniques,
+              themes: section.themes,
+              examConnection: section.examConnection,
+              outroData: section.outroData,
             };
           });
         } else {
@@ -311,6 +314,9 @@ export async function POST(request: NextRequest) {
               spokenText: finalScript.sections[i].spokenText,
               keyQuote: finalScript.sections[i].keyQuote,
               techniques: finalScript.sections[i].techniques,
+              themes: finalScript.sections[i].themes,
+              examConnection: finalScript.sections[i].examConnection,
+              outroData: finalScript.sections[i].outroData,
             };
           });
         }

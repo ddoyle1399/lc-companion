@@ -16,6 +16,7 @@ import { TechniqueOverlay } from "./components/TechniqueOverlay";
 import { IntroFrame } from "./components/IntroFrame";
 import { ThemeFrame } from "./components/ThemeFrame";
 import { ExamFrame } from "./components/ExamFrame";
+import { OutroFrame } from "./components/OutroFrame";
 
 const TRANSITION_FRAMES = 20;
 
@@ -29,6 +30,17 @@ interface SectionTiming {
   keyQuote?: { text: string; lineIndex: number };
   techniques?: { name: string; quote: string; effect: string }[];
   themes?: { name: string; supportingPoints: string[]; quote?: string }[];
+  examConnection?: {
+    questionTypes: string[];
+    linkedPoets: string[];
+    linkedPoems?: string[];
+    examTip: string;
+  };
+  outroData?: {
+    closingLine: string;
+    poemTitle: string;
+    poetName: string;
+  };
 }
 
 /**
@@ -97,9 +109,10 @@ const AnimatedBackground: React.FC<{
 const SectionContent: React.FC<{
   section: SectionTiming;
   poemLines: string[];
+  poemTitle: string;
   poet: string;
   stanzaIndex: number;
-}> = ({ section, poemLines, poet, stanzaIndex }) => {
+}> = ({ section, poemLines, poemTitle, poet, stanzaIndex }) => {
   if (section.type === "intro") {
     return (
       <IntroFrame
@@ -129,7 +142,7 @@ const SectionContent: React.FC<{
       <ExamFrame
         poet={poet}
         spokenText={section.spokenText}
-        techniques={section.techniques}
+        examConnection={section.examConnection}
         durationInFrames={section.durationInFrames}
       />
     );
@@ -137,12 +150,12 @@ const SectionContent: React.FC<{
 
   if (section.type === "outro") {
     return (
-      <IntroFrame
-        poemLines={poemLines}
-        highlightLines={section.highlightLines}
+      <OutroFrame
         poet={poet}
+        poemTitle={poemTitle}
         durationInFrames={section.durationInFrames}
         spokenText={section.spokenText}
+        outroData={section.outroData}
       />
     );
   }
@@ -229,6 +242,7 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
             <SectionContent
               section={section}
               poemLines={poemLines}
+              poemTitle={poemTitle}
               poet={poet}
               stanzaIndex={stanzaIndices[i]}
             />
