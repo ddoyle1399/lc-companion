@@ -8,24 +8,45 @@ export const ProgressBar: React.FC = () => {
   const { durationInFrames } = useVideoConfig();
   const progress = frame / durationInFrames;
 
+  // Playhead dot pulse
+  const dotScale = 1 + 0.3 * Math.sin(frame * 0.15);
+
   return (
     <div
       style={{
         position: "absolute",
-        bottom: 0,
+        bottom: 8,
         left: 0,
         width: "100%",
-        height: 2,
+        height: 1,
       }}
     >
+      {/* Track */}
       <div
         style={{
           width: `${progress * 100}%`,
           height: "100%",
           backgroundColor: TEAL,
-          opacity: 0.4,
+          opacity: 0.25,
+          position: "relative",
         }}
-      />
+      >
+        {/* Glowing playhead dot */}
+        <div
+          style={{
+            position: "absolute",
+            right: -2,
+            top: -1.5,
+            width: 4,
+            height: 4,
+            borderRadius: 2,
+            backgroundColor: TEAL,
+            opacity: 0.5,
+            transform: `scale(${dotScale})`,
+            boxShadow: `0 0 6px ${TEAL}`,
+          }}
+        />
+      </div>
     </div>
   );
 };

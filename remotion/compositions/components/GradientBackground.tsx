@@ -59,9 +59,13 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
   const frame = useCurrentFrame();
   const spec = BACKGROUNDS[sectionType] || BACKGROUNDS.intro;
 
-  // Slow glow position drift for constant motion (Change 4)
+  // Slow glow position drift
   const glowDriftX = Math.sin(frame * 0.008) * 3;
   const glowDriftY = Math.cos(frame * 0.006) * 2;
+
+  // Grid drift: 0.5px per second at 30fps
+  const gridDriftX = (frame / 30) * 0.5;
+  const gridDriftY = (frame / 30) * 0.5;
 
   return (
     <div
@@ -72,6 +76,7 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
         width: "100%",
         height: "100%",
         backgroundColor: spec.base,
+        overflow: "hidden",
       }}
     >
       {spec.glow && (
@@ -89,6 +94,23 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
           }}
         />
       )}
+
+      {/* Subtle grid overlay */}
+      <div
+        style={{
+          position: "absolute",
+          top: -120,
+          left: -120,
+          width: "calc(100% + 240px)",
+          height: "calc(100% + 240px)",
+          transform: `translate(${gridDriftX % 120}px, ${gridDriftY % 120}px)`,
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.02) 0.5px, transparent 0.5px), " +
+            "linear-gradient(90deg, rgba(255,255,255,0.02) 0.5px, transparent 0.5px)",
+          backgroundSize: "120px 120px",
+          pointerEvents: "none",
+        }}
+      />
     </div>
   );
 };

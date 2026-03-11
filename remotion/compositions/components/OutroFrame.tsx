@@ -1,5 +1,7 @@
 import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
+import { CornerAccent } from "./CornerAccent";
+import { AnimatedDots } from "./AnimatedDots";
 
 const TEAL = "#2A9D8F";
 
@@ -28,10 +30,13 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
   const displayPoet = outroData?.poetName ?? poet;
   const closingLine = outroData?.closingLine ?? spokenText ?? "";
 
-  // Fade out at end
+  // Split closing line into words for typewriter effect
+  const words = closingLine.split(/\s+/).filter((w) => w.length > 0);
+
+  // Fade to black at end (20 frames)
   const fadeOut = interpolate(
     frame,
-    [durationInFrames - 12, durationInFrames],
+    [durationInFrames - 20, durationInFrames],
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
@@ -43,42 +48,39 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
   });
 
   // Poem title fades in first
-  const titleOpacity = interpolate(frame, [0, 15], [0, 1], {
+  const titleOpacity = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
-  const titleY = interpolate(frame, [0, 15], [10, 0], {
+  const titleY = interpolate(frame, [0, 18], [10, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
 
   // Poet name fades in 10 frames after title
-  const poetOpacity = interpolate(frame, [10, 25], [0, 1], {
+  const poetOpacity = interpolate(frame, [10, 28], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
 
-  // Teal line draws itself 15 frames after title
-  const lineWidth = interpolate(frame, [15, 30], [0, 80], {
+  // Teal line draws itself
+  const lineWidth = interpolate(frame, [18, 36], [0, 80], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
 
-  // Closing line fades in 15 frames after the line
-  const closingOpacity = interpolate(frame, [30, 45], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
-  const closingY = interpolate(frame, [30, 45], [8, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
+  // Typewriter: each word fades in over 3 frames with 2-frame gap
+  const typewriterStart = 36;
+  const wordTimings = words.map((_, i) => typewriterStart + i * 5);
+
+  // Dots appear after all words
+  const dotsDelay = words.length > 0
+    ? wordTimings[words.length - 1] + 10
+    : typewriterStart + 10;
 
   return (
     <div
@@ -96,6 +98,10 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
         opacity: fadeOut,
       }}
     >
+      {/* Corner accents */}
+      <CornerAccent corner="topLeft" delay={0} opacity={0.06} />
+      <CornerAccent corner="bottomRight" delay={0} opacity={0.06} />
+
       <div
         style={{
           display: "flex",
@@ -143,27 +149,54 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
             backgroundColor: TEAL,
             marginTop: 28,
             marginBottom: 28,
+            opacity: lineWidth > 0 ? 0.5 : 0,
           }}
         />
 
-        {/* Closing line */}
-        {closingLine && (
+        {/* Closing line - typewriter word by word */}
+        {words.length > 0 && (
           <div
             style={{
-              fontFamily: "Georgia, 'Times New Roman', serif",
-              fontSize: 20,
-              fontStyle: "italic",
-              color: "rgba(255, 255, 255, 0.7)",
-              textAlign: "center",
               maxWidth: "60%",
+              textAlign: "center",
               lineHeight: 1.5,
-              opacity: closingOpacity,
-              transform: `translateY(${closingY}px)`,
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "0 6px",
             }}
           >
-            {closingLine}
+            {words.map((word, i) => {
+              const wordStart = wordTimings[i];
+              const wordOpacity = interpolate(
+                frame,
+                [wordStart, wordStart + 3],
+                [0, 0.7],
+                { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+              );
+
+              return (
+                <span
+                  key={i}
+                  style={{
+                    fontFamily: "Georgia, 'Times New Roman', serif",
+                    fontSize: 20,
+                    fontStyle: "italic",
+                    color: "#FFFFFF",
+                    opacity: wordOpacity,
+                  }}
+                >
+                  {word}
+                </span>
+              );
+            })}
           </div>
         )}
+
+        {/* Final dots */}
+        <div style={{ marginTop: 24 }}>
+          <AnimatedDots delay={dotsDelay} />
+        </div>
       </div>
     </div>
   );

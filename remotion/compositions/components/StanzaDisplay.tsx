@@ -1,8 +1,9 @@
 import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
+import { DecorativeLine } from "./DecorativeLine";
 
 const TEAL = "#2A9D8F";
-const LINE_STAGGER = 8; // frames between each line appearing
+const LINE_STAGGER = 10; // frames between each line appearing
 
 interface StanzaDisplayProps {
   poemLines: string[];
@@ -37,13 +38,13 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
 
   if (linesToShow.length === 0) return null;
 
-  // Key quote spotlight timing: starts at 40% through, lasts 60 frames
+  // Key quote spotlight timing: starts at 40% through, lasts 75 frames
   const spotlightStart = Math.floor(durationInFrames * 0.4);
-  const spotlightEnd = spotlightStart + 60;
+  const spotlightEnd = spotlightStart + 75;
   const hasSpotlight = keyQuote && linesToShow.includes(keyQuote.lineIndex);
 
   const spotlightProgress = hasSpotlight
-    ? interpolate(frame, [spotlightStart, spotlightStart + 12], [0, 1], {
+    ? interpolate(frame, [spotlightStart, spotlightStart + 15], [0, 1], {
         extrapolateLeft: "clamp",
         extrapolateRight: "clamp",
         easing: Easing.out(Easing.quad),
@@ -51,7 +52,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
     : 0;
 
   const spotlightExit = hasSpotlight
-    ? interpolate(frame, [spotlightEnd - 12, spotlightEnd], [0, 1], {
+    ? interpolate(frame, [spotlightEnd - 15, spotlightEnd], [0, 1], {
         extrapolateLeft: "clamp",
         extrapolateRight: "clamp",
         easing: Easing.in(Easing.quad),
@@ -60,12 +61,6 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
 
   const isInSpotlight =
     hasSpotlight && frame >= spotlightStart && frame < spotlightEnd;
-
-  // Section label
-  const labelOpacity = interpolate(frame, [0, 15], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
 
   // Fade out all content at section end
   const fadeOut = interpolate(
@@ -90,7 +85,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
         opacity: fadeOut,
       }}
     >
-      {/* Section indicator top right */}
+      {/* Section indicator top right with vertical decorative line */}
       <div
         style={{
           position: "absolute",
@@ -99,44 +94,36 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-end",
-          opacity: interpolate(frame, [0, 10], [0, 1], {
+          gap: 8,
+          opacity: interpolate(frame, [0, 18], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
           }),
         }}
       >
-        {/* Teal line above label */}
-        <div
-          style={{
-            width: 40,
-            height: 1,
-            backgroundColor: TEAL,
-            marginBottom: 8,
-            opacity: 0.7,
-          }}
-        />
+        <DecorativeLine width={20} direction="vertical" delay={0} thickness={1} />
         <div
           style={{
             fontFamily: "Arial, sans-serif",
-            fontSize: 13,
+            fontSize: 11,
             color: TEAL,
             textTransform: "uppercase",
             letterSpacing: 4,
-            opacity: 0.6 * (0.9 + 0.1 * Math.sin(frame * 0.05)),
+            opacity: 0.5,
           }}
         >
           STANZA {sectionIndex}
         </div>
       </div>
 
-      {/* Poem lines - centred, slow upward drift (constant motion) */}
+      {/* Poem lines - centred, generous spacing */}
       <div
         style={{
-          maxWidth: "60%",
+          maxWidth: "55%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          transform: `translateY(${interpolate(frame, [0, durationInFrames], [0, -3], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
+          transform: `translateY(${interpolate(frame, [0, durationInFrames], [0, -4], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
         }}
       >
         {linesToShow.map((lineIdx, i) => {
@@ -146,7 +133,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           // Staggered fade-in
           const lineOpacity = interpolate(
             frame,
-            [staggerDelay, staggerDelay + 15],
+            [staggerDelay, staggerDelay + 18],
             [0, 1],
             {
               extrapolateLeft: "clamp",
@@ -157,14 +144,24 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
 
           const lineY = interpolate(
             frame,
-            [staggerDelay, staggerDelay + 15],
-            [16, 0],
+            [staggerDelay, staggerDelay + 18],
+            [12, 0],
             {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
               easing: Easing.out(Easing.quad),
             }
           );
+
+          // Highlight sweep: after line fades in, brightness sweeps left to right
+          const sweepStart = staggerDelay + 18;
+          const sweepProgress = interpolate(
+            frame,
+            [sweepStart, sweepStart + 15],
+            [0, 1],
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+          );
+          const isFocusLine = i === 0; // First line is the focus
 
           // Is this the key quote line?
           const isQuoteLine =
@@ -177,25 +174,24 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
               finalOpacity = lineOpacity * 0.95;
             } else {
               const dimAmount = spotlightProgress * (1 - spotlightExit);
-              finalOpacity =
-                lineOpacity * (1 - dimAmount * 0.75); // dim to 0.25
+              finalOpacity = lineOpacity * (0.15 + 0.85 * (1 - dimAmount));
             }
+          } else if (!isFocusLine) {
+            // Non-focus lines slightly dimmer
+            finalOpacity = lineOpacity * (isFocusLine ? 0.95 : 0.35 + 0.6 * sweepProgress);
           }
 
           // Focus line scale during spotlight
           const scale =
             isQuoteLine && isInSpotlight
-              ? 1 + 0.05 * spotlightProgress * (1 - spotlightExit)
+              ? 1 + 0.03 * spotlightProgress * (1 - spotlightExit)
               : 1;
 
           // Glow on focus line during spotlight
-          const glowBlur =
+          const glowIntensity =
             isQuoteLine && isInSpotlight
-              ? 30 * spotlightProgress * (1 - spotlightExit)
+              ? spotlightProgress * (1 - spotlightExit)
               : 0;
-
-          // Teal accent line on first line (focus indicator)
-          const showAccent = i === 0 && !isInSpotlight;
 
           return (
             <div
@@ -206,19 +202,19 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
                 justifyContent: "center",
                 opacity: finalOpacity,
                 transform: `translateY(${lineY}px) scale(${scale})`,
-                marginBottom: 8,
+                marginBottom: 0,
                 width: "100%",
               }}
             >
-              {/* Teal accent bar */}
-              {showAccent && (
+              {/* Teal accent bar on focus line */}
+              {isFocusLine && !isInSpotlight && (
                 <div
                   style={{
                     width: 1.5,
-                    height: 36,
+                    height: 30,
                     backgroundColor: TEAL,
-                    marginRight: 24,
-                    opacity: interpolate(frame, [0, 20], [0, 0.7], {
+                    marginRight: 20,
+                    opacity: interpolate(frame, [0, 18], [0, 0.6], {
                       extrapolateLeft: "clamp",
                       extrapolateRight: "clamp",
                     }),
@@ -226,20 +222,49 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
                   }}
                 />
               )}
+
+              {/* Spotlight bracket lines */}
+              {isQuoteLine && isInSpotlight && (
+                <div
+                  style={{
+                    width: interpolate(spotlightProgress, [0, 1], [0, 40]),
+                    height: 1,
+                    backgroundColor: TEAL,
+                    opacity: 0.3 * spotlightProgress * (1 - spotlightExit),
+                    marginRight: 16,
+                    flexShrink: 0,
+                  }}
+                />
+              )}
+
               <div
                 style={{
                   fontFamily: "Georgia, 'Times New Roman', serif",
-                  fontSize: 36,
+                  fontSize: 34,
                   color: "#FFFFFF",
-                  lineHeight: 2.6,
+                  lineHeight: 2.8,
                   textAlign: "center",
                   textShadow: isQuoteLine && isInSpotlight
-                    ? `0 1px 8px rgba(0,0,0,0.3), 0 0 ${glowBlur}px rgba(42, 157, 143, 0.3)`
+                    ? `0 1px 8px rgba(0,0,0,0.3), 0 0 ${30 * glowIntensity}px rgba(42, 157, 143, 0.15)`
                     : "0 1px 8px rgba(0,0,0,0.3)",
                 }}
               >
                 {line}
               </div>
+
+              {/* Right spotlight bracket */}
+              {isQuoteLine && isInSpotlight && (
+                <div
+                  style={{
+                    width: interpolate(spotlightProgress, [0, 1], [0, 40]),
+                    height: 1,
+                    backgroundColor: TEAL,
+                    opacity: 0.3 * spotlightProgress * (1 - spotlightExit),
+                    marginLeft: 16,
+                    flexShrink: 0,
+                  }}
+                />
+              )}
             </div>
           );
         })}

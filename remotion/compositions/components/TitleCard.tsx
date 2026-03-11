@@ -1,6 +1,9 @@
 import React from "react";
-import { useCurrentFrame, interpolate } from "remotion";
+import { useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { GradientBackground } from "./GradientBackground";
+import { CornerAccent } from "./CornerAccent";
+import { DecorativeLine } from "./DecorativeLine";
+import { AnimatedDots } from "./AnimatedDots";
 
 interface TitleCardProps {
   title: string;
@@ -8,6 +11,7 @@ interface TitleCardProps {
   durationInFrames: number;
 }
 
+const SPRING_CONFIG = { damping: 15, mass: 0.8 };
 const TEAL = "#2A9D8F";
 
 export const TitleCard: React.FC<TitleCardProps> = ({
@@ -16,8 +20,8 @@ export const TitleCard: React.FC<TitleCardProps> = ({
   durationInFrames,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
-  // Fade in: line at 0.5s (15f), title at 1s (30f), poet at 1.5s (45f)
   // Fade out everything over last 15 frames
   const fadeOut = interpolate(
     frame,
@@ -26,30 +30,32 @@ export const TitleCard: React.FC<TitleCardProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  const lineOpacity =
-    interpolate(frame, [0, 15], [0, 1], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    }) * fadeOut;
-
-  const titleOpacity =
-    interpolate(frame, [15, 30], [0, 1], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    }) * fadeOut;
-
-  const titleY = interpolate(frame, [15, 30], [12, 0], {
+  // Title: spring entrance from frame 20
+  const titleSpring = spring({
+    frame: frame - 20,
+    fps,
+    config: SPRING_CONFIG,
+  });
+  const titleOpacity = interpolate(frame, [20, 38], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const titleY = interpolate(titleSpring, [0, 1], [15, 0]);
 
-  const poetOpacity =
-    interpolate(frame, [30, 45], [0, 1], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    }) * fadeOut;
+  // Poet name: fades in from frame 35
+  const poetSpring = spring({
+    frame: frame - 35,
+    fps,
+    config: SPRING_CONFIG,
+  });
+  const poetOpacity = interpolate(frame, [35, 50], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const poetY = interpolate(poetSpring, [0, 1], [10, 0]);
 
-  const poetY = interpolate(frame, [30, 45], [12, 0], {
+  // Year/level text
+  const yearOpacity = interpolate(frame, [50, 65], [0, 0.25], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -57,6 +63,11 @@ export const TitleCard: React.FC<TitleCardProps> = ({
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <GradientBackground sectionType="title" />
+
+      {/* Corner accents */}
+      <CornerAccent corner="topLeft" delay={0} />
+      <CornerAccent corner="bottomRight" delay={0} />
+
       <div
         style={{
           position: "absolute",
@@ -68,53 +79,67 @@ export const TitleCard: React.FC<TitleCardProps> = ({
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          opacity: fadeOut,
         }}
       >
-        {/* Teal accent line */}
+        {/* Poem title above line */}
         <div
           style={{
-            width: 80,
-            height: 2,
-            backgroundColor: TEAL,
-            opacity: lineOpacity,
-            marginBottom: 32,
-          }}
-        />
-
-        {/* Poem title */}
-        <div
-          style={{
-            fontSize: 56,
+            fontSize: 52,
             fontFamily: "Georgia, 'Times New Roman', serif",
             fontWeight: 400,
             color: "#FFFFFF",
             textAlign: "center",
             maxWidth: "70%",
             lineHeight: 1.3,
-            letterSpacing: 2,
+            letterSpacing: 1,
             opacity: titleOpacity,
             transform: `translateY(${titleY}px)`,
             textShadow: "0 2px 30px rgba(0,0,0,0.4)",
+            marginBottom: 24,
           }}
         >
           {title}
         </div>
 
-        {/* Poet name */}
+        {/* Decorative line at centre */}
+        <DecorativeLine width={120} delay={10} />
+
+        {/* Poet name below line */}
         <div
           style={{
-            fontSize: 20,
+            fontSize: 16,
             fontFamily: "Arial, sans-serif",
             color: TEAL,
-            marginTop: 28,
+            marginTop: 24,
             textAlign: "center",
             textTransform: "uppercase",
-            letterSpacing: 4,
+            letterSpacing: 5,
             opacity: poetOpacity,
             transform: `translateY(${poetY}px)`,
           }}
         >
           {poet}
+        </div>
+
+        {/* Animated dots */}
+        <div style={{ marginTop: 20 }}>
+          <AnimatedDots delay={45} />
+        </div>
+
+        {/* Year/level */}
+        <div
+          style={{
+            fontSize: 12,
+            fontFamily: "Arial, sans-serif",
+            color: "#FFFFFF",
+            marginTop: 16,
+            opacity: yearOpacity,
+            letterSpacing: 3,
+            textTransform: "uppercase",
+          }}
+        >
+          Higher Level | 2026
         </div>
       </div>
     </div>

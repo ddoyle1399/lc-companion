@@ -1,7 +1,11 @@
 import React from "react";
-import { useCurrentFrame, interpolate, Easing } from "remotion";
+import { useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import { CornerAccent } from "./CornerAccent";
+import { DecorativeLine } from "./DecorativeLine";
+import { AnimatedDots } from "./AnimatedDots";
 
 const TEAL = "#2A9D8F";
+const SPRING_CONFIG = { damping: 15, mass: 0.8 };
 
 interface IntroFrameProps {
   poemLines: string[];
@@ -12,69 +16,15 @@ interface IntroFrameProps {
 }
 
 /**
- * Curated list of thematically strong words, checked in priority order.
- * If the spokenText contains one of these, it becomes the background keyword.
+ * Split spoken text into display lines for the context area.
  */
-const THEME_WORDS = [
-  "longing", "memory", "loss", "death", "love", "nature", "freedom",
-  "rebellion", "identity", "faith", "grief", "beauty", "time", "war",
-  "home", "exile", "hope", "fear", "solitude", "escape", "belonging",
-  "innocence", "power", "silence", "conflict", "sacrifice", "truth",
-  "desire", "isolation", "transformation", "journey", "darkness", "light",
-  "childhood", "mortality", "dignity", "courage", "defiance", "nostalgia",
-  "wonder", "rage", "sorrow", "peace", "hunger", "pride", "shame", "duty",
-  "betrayal", "regret", "renewal", "decay",
-];
-
-const FALLBACK_STOP_WORDS = new Set([
-  "the", "a", "an", "is", "are", "was", "were", "this", "that", "and",
-  "or", "but", "in", "on", "at", "to", "for", "of", "with", "by",
-  "from", "it", "he", "she", "they", "we", "you", "his", "her", "its",
-  "poem", "poet", "poetry", "today", "looking", "one", "most", "will",
-  "has", "have", "had", "been", "being", "about", "who", "what", "which",
-  "when", "where", "how", "not", "all", "each", "every", "both", "few",
-  "wrote", "their", "years", "while", "living",
-]);
-
-/**
- * Extract a key contextual word from spoken text for the background element.
- * 1. Check for curated theme words in priority order
- * 2. Fall back to longest noun from first sentence
- */
-function extractKeyWord(spokenText?: string): string {
-  if (!spokenText) return "";
-  const textLower = spokenText.toLowerCase();
-
-  // Check curated theme words in priority order
-  for (const word of THEME_WORDS) {
-    if (textLower.includes(word)) {
-      return word;
-    }
-  }
-
-  // Fallback: longest non-stop word from first sentence
-  const firstSentence = spokenText.split(/[.!?]/)[0] || "";
-  const words = firstSentence
-    .replace(/[^a-zA-Z\s]/g, "")
-    .split(/\s+/)
-    .filter((w) => w.length > 4 && !FALLBACK_STOP_WORDS.has(w.toLowerCase()))
-    .filter((w) => !/^\d+$/.test(w));
-
-  if (words.length === 0) return "";
-  words.sort((a, b) => b.length - a.length);
-  return words[0];
-}
-
-/**
- * Extract a brief context line from the first sentence of spoken text.
- */
-function extractContextLine(spokenText?: string): string {
-  if (!spokenText) return "";
-  const firstSentence = spokenText.split(/[.!?]/)[0]?.trim() || "";
-  if (firstSentence.length > 80) {
-    return firstSentence.slice(0, 77) + "...";
-  }
-  return firstSentence;
+function getContextLines(spokenText?: string): string[] {
+  if (!spokenText) return [];
+  const sentences = spokenText
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  return sentences.slice(0, 3);
 }
 
 export const IntroFrame: React.FC<IntroFrameProps> = ({
@@ -83,44 +33,30 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
   spokenText,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
-  const contextLine = extractContextLine(spokenText);
-  const keyWord = extractKeyWord(spokenText);
+  const contextLines = getContextLines(spokenText);
 
-  // Poet name fade in (top area, 30% from top)
-  const poetOpacity = interpolate(frame, [0, 20], [0, 1], {
+  // Poet name spring entrance
+  const poetSpring = spring({
+    frame,
+    fps,
+    config: SPRING_CONFIG,
+  });
+  const poetOpacity = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
   });
-  const poetY = interpolate(frame, [0, 20], [15, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
+  const poetY = interpolate(poetSpring, [0, 1], [12, 0]);
 
-  // Context line fades in 10 frames after poet name
-  const contextOpacity = interpolate(frame, [10, 30], [0, 0.6], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
-
-  // Teal line draws from centre outward (width 0 to 120px over 20 frames)
-  const lineWidth = interpolate(frame, [15, 35], [0, 120], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
-
-  // Background key word: very faint, slowly scaling
-  const keyWordScale = interpolate(frame, [0, durationInFrames], [1.0, 1.3], {
+  // Era/dates placeholder - fades in after poet
+  const eraOpacity = interpolate(frame, [10, 28], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Slow drift upward for poet name (Change 4: constant motion)
-  const poetDrift = interpolate(frame, [0, durationInFrames], [0, -3], {
+  // Slow drift upward
+  const drift = interpolate(frame, [0, durationInFrames], [0, -4], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -147,43 +83,26 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
         opacity: fadeOut,
       }}
     >
-      {/* Background key word - centred, very faint, slowly scaling */}
-      {keyWord && (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: `translate(-50%, -50%) scale(${keyWordScale})`,
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontSize: 48,
-            color: "rgba(255, 255, 255, 0.08)",
-            textTransform: "uppercase",
-            letterSpacing: 8,
-            pointerEvents: "none",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {keyWord}
-        </div>
-      )}
+      {/* Corner accents */}
+      <CornerAccent corner="topRight" delay={5} opacity={0.06} />
+      <CornerAccent corner="bottomLeft" delay={5} opacity={0.06} />
 
-      {/* Main content area - positioned at 30% from top */}
+      {/* Main content area - positioned at 25% from top */}
       <div
         style={{
           position: "absolute",
-          top: "30%",
+          top: "25%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          transform: `translateY(${poetDrift}px)`,
+          transform: `translateY(${drift}px)`,
         }}
       >
         {/* Poet name */}
         <div
           style={{
             fontFamily: "Georgia, 'Times New Roman', serif",
-            fontSize: 44,
+            fontSize: 38,
             color: "#FFFFFF",
             textAlign: "center",
             textShadow: "0 2px 20px rgba(0,0,0,0.5)",
@@ -194,33 +113,84 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
           {poet}
         </div>
 
-        {/* Teal horizontal line */}
+        {/* Era/dates in teal */}
         <div
           style={{
-            width: lineWidth,
-            height: 1.5,
-            backgroundColor: TEAL,
-            marginTop: 24,
-            marginBottom: 24,
+            fontFamily: "Arial, sans-serif",
+            fontSize: 14,
+            color: TEAL,
+            textTransform: "uppercase",
+            letterSpacing: 3,
+            marginTop: 12,
+            opacity: eraOpacity * 0.7,
           }}
-        />
+        >
+          Leaving Certificate Poetry
+        </div>
 
-        {/* Context line */}
-        {contextLine && (
-          <div
-            style={{
-              fontFamily: "Arial, sans-serif",
-              fontSize: 18,
-              color: "#FFFFFF",
-              opacity: contextOpacity,
-              textAlign: "center",
-              maxWidth: "60%",
-              lineHeight: 1.6,
-            }}
-          >
-            {contextLine}
-          </div>
-        )}
+        {/* Decorative line */}
+        <div style={{ marginTop: 20, marginBottom: 20 }}>
+          <DecorativeLine width={80} delay={15} />
+        </div>
+      </div>
+
+      {/* Context text area - positioned at 45% from top */}
+      <div
+        style={{
+          position: "absolute",
+          top: "48%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 12,
+          maxWidth: 700,
+          transform: `translateY(${drift}px)`,
+        }}
+      >
+        {contextLines.map((line, i) => {
+          const lineDelay = 25 + i * 10;
+          const lineOpacity = interpolate(
+            frame,
+            [lineDelay, lineDelay + 18],
+            [0, 0.65],
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+          );
+          const lineY = interpolate(
+            frame,
+            [lineDelay, lineDelay + 18],
+            [8, 0],
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+          );
+
+          return (
+            <div
+              key={i}
+              style={{
+                fontFamily: "Georgia, 'Times New Roman', serif",
+                fontSize: 22,
+                fontStyle: "italic",
+                color: "#FFFFFF",
+                opacity: lineOpacity,
+                transform: `translateY(${lineY}px)`,
+                textAlign: "center",
+                lineHeight: 1.6,
+              }}
+            >
+              {line}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Bottom dots */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 100,
+          transform: `translateY(${drift}px)`,
+        }}
+      >
+        <AnimatedDots delay={50} />
       </div>
     </div>
   );

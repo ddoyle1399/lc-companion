@@ -1,5 +1,8 @@
 import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
+import { CornerAccent } from "./CornerAccent";
+import { AnimatedDots } from "./AnimatedDots";
+import { DecorativeLine } from "./DecorativeLine";
 
 const TEAL = "#2A9D8F";
 
@@ -39,14 +42,12 @@ function extractPoetNames(spokenText?: string, currentPoet?: string): string[] {
 function extractQuestionTypes(spokenText?: string): string[] {
   if (!spokenText) return [];
   const types: string[] = [];
-  // Look for phrases after "question on" or "question about"
   const questionPattern = /questions?\s+(?:on|about)\s+([^,.]+)/gi;
   let match;
   while ((match = questionPattern.exec(spokenText)) !== null) {
     types.push(match[1].trim());
   }
   if (types.length === 0) {
-    // Fall back to first few meaningful phrases
     const sentences = spokenText.split(/[.!?]+/).filter((s) => s.trim());
     for (const s of sentences.slice(0, 3)) {
       const words = s.trim().split(/\s+/).slice(0, 6).join(" ");
@@ -64,14 +65,13 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  // Use structured data or fall back to text extraction
   const questionTypes = examConnection?.questionTypes ?? extractQuestionTypes(spokenText);
   const linkedPoets = examConnection?.linkedPoets ?? extractPoetNames(spokenText, poet);
   const linkedPoems = examConnection?.linkedPoems ?? [];
   const examTip = examConnection?.examTip ?? "";
 
   // Header fade in
-  const headerOpacity = interpolate(frame, [0, 15], [0, 1], {
+  const headerOpacity = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
@@ -85,21 +85,21 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Slow drift for constant motion
+  // Slow drift
   const drift = interpolate(frame, [0, durationInFrames], [0, -4], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Exam tip appears last
+  // Exam tip timing
   const allItemCount = questionTypes.length + linkedPoets.length;
   const tipStartFrame = 30 + allItemCount * 15;
-  const tipOpacity = interpolate(frame, [tipStartFrame, tipStartFrame + 20], [0, 1], {
+  const tipOpacity = interpolate(frame, [tipStartFrame, tipStartFrame + 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
-  const tipY = interpolate(frame, [tipStartFrame, tipStartFrame + 20], [8, 0], {
+  const tipY = interpolate(frame, [tipStartFrame, tipStartFrame + 18], [8, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
@@ -118,6 +118,24 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
         opacity: fadeOut,
       }}
     >
+      {/* Corner accents on all four corners */}
+      <CornerAccent corner="topLeft" delay={0} opacity={0.05} />
+      <CornerAccent corner="topRight" delay={0} opacity={0.05} />
+      <CornerAccent corner="bottomLeft" delay={0} opacity={0.05} />
+      <CornerAccent corner="bottomRight" delay={0} opacity={0.05} />
+
+      {/* Subtle centre horizontal line behind content */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "20%",
+          width: "60%",
+        }}
+      >
+        <DecorativeLine width={1152} delay={5} color="rgba(42, 157, 143, 0.04)" thickness={1} />
+      </div>
+
       {/* EXAM FOCUS header */}
       <div
         style={{
@@ -154,14 +172,13 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
       >
         {/* Left column: Question Types */}
         <div style={{ flex: "0 0 45%", display: "flex", flexDirection: "column" }}>
-          {/* Column header */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: 10,
               marginBottom: 28,
-              opacity: interpolate(frame, [10, 25], [0, 1], {
+              opacity: interpolate(frame, [10, 28], [0, 1], {
                 extrapolateLeft: "clamp",
                 extrapolateRight: "clamp",
                 easing: Easing.out(Easing.quad),
@@ -170,9 +187,9 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           >
             <div
               style={{
-                width: 8,
-                height: 8,
-                borderRadius: 4,
+                width: 6,
+                height: 6,
+                borderRadius: 3,
                 backgroundColor: TEAL,
                 flexShrink: 0,
               }}
@@ -189,15 +206,14 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
             </div>
           </div>
 
-          {/* Question type items */}
           {questionTypes.map((qt, i) => {
             const start = 25 + i * 15;
-            const itemOpacity = interpolate(frame, [start, start + 15], [0, 1], {
+            const itemOpacity = interpolate(frame, [start, start + 18], [0, 1], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
               easing: Easing.out(Easing.quad),
             });
-            const itemY = interpolate(frame, [start, start + 15], [10, 0], {
+            const itemY = interpolate(frame, [start, start + 18], [10, 0], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
               easing: Easing.out(Easing.quad),
@@ -223,7 +239,7 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
                     flexShrink: 0,
                   }}
                 >
-                  —
+                  {"\u2014"}
                 </div>
                 <div
                   style={{
@@ -242,14 +258,13 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
 
         {/* Right column: Pairs Well With */}
         <div style={{ flex: "0 0 45%", display: "flex", flexDirection: "column" }}>
-          {/* Column header */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: 10,
               marginBottom: 28,
-              opacity: interpolate(frame, [10, 25], [0, 1], {
+              opacity: interpolate(frame, [10, 28], [0, 1], {
                 extrapolateLeft: "clamp",
                 extrapolateRight: "clamp",
                 easing: Easing.out(Easing.quad),
@@ -258,9 +273,9 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           >
             <div
               style={{
-                width: 8,
-                height: 8,
-                borderRadius: 4,
+                width: 6,
+                height: 6,
+                borderRadius: 3,
                 backgroundColor: TEAL,
                 flexShrink: 0,
               }}
@@ -277,21 +292,19 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
             </div>
           </div>
 
-          {/* Linked poets */}
           {linkedPoets.map((poetName, i) => {
             const start = 25 + i * 15;
-            const itemOpacity = interpolate(frame, [start, start + 15], [0, 1], {
+            const itemOpacity = interpolate(frame, [start, start + 18], [0, 1], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
               easing: Easing.out(Easing.quad),
             });
-            const itemY = interpolate(frame, [start, start + 15], [10, 0], {
+            const itemY = interpolate(frame, [start, start + 18], [10, 0], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
               easing: Easing.out(Easing.quad),
             });
 
-            // Find a linked poem for this poet (match by index if available)
             const linkedPoem = linkedPoems[i];
 
             return (
@@ -333,12 +346,24 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
         </div>
       </div>
 
+      {/* Animated dots above the exam tip */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 110,
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      >
+        <AnimatedDots delay={tipStartFrame - 10} />
+      </div>
+
       {/* Exam tip at bottom centre */}
       {examTip && (
         <div
           style={{
             position: "absolute",
-            bottom: 80,
+            bottom: 60,
             left: "50%",
             transform: `translateX(-50%) translateY(${tipY}px)`,
             maxWidth: "70%",

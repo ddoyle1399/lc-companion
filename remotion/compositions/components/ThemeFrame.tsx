@@ -1,5 +1,7 @@
 import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
+import { CornerAccent } from "./CornerAccent";
+import { AnimatedDots } from "./AnimatedDots";
 
 const TEAL = "#2A9D8F";
 
@@ -19,7 +21,6 @@ interface ThemeFrameProps {
 
 /**
  * Fallback: extract themes from spokenText when no themes array is provided.
- * Strips common AI prefixes and uses sentences as supporting points.
  */
 function extractThemesFromText(spokenText?: string): ThemeData[] {
   if (!spokenText) return [];
@@ -45,7 +46,6 @@ function extractThemesFromText(spokenText?: string): ThemeData[] {
     /^two themes dominate here\s*/i,
   ];
 
-  // Group sentences into themes: treat short/capitalised fragments as names
   let currentTheme: ThemeData | null = null;
   for (const sentence of sentences) {
     let cleaned = sentence;
@@ -55,10 +55,8 @@ function extractThemesFromText(spokenText?: string): ThemeData[] {
     cleaned = cleaned.trim();
     if (!cleaned) continue;
 
-    // Capitalise first letter
     cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 
-    // Short phrases (under 6 words) are likely theme names
     const wordCount = cleaned.split(/\s+/).length;
     if (wordCount <= 6) {
       if (currentTheme) themes.push(currentTheme);
@@ -66,13 +64,9 @@ function extractThemesFromText(spokenText?: string): ThemeData[] {
     } else if (currentTheme) {
       currentTheme.supportingPoints.push(cleaned);
     } else {
-      // First sentence is long; use first few words as name
       const words = cleaned.split(/\s+/);
       const name = words.slice(0, 4).join(" ");
-      currentTheme = {
-        name,
-        supportingPoints: [cleaned],
-      };
+      currentTheme = { name, supportingPoints: [cleaned] };
     }
   }
   if (currentTheme) themes.push(currentTheme);
@@ -95,7 +89,7 @@ const SingleTheme: React.FC<{
 
   if (frame < startFrame || frame >= endFrame) return null;
 
-  // Fade out (last theme fades with the whole component, others fade at their end)
+  // Fade out with scale-down
   const fadeOutStart = isLast ? duration - 15 : duration - 20;
   const fadeOut = interpolate(
     localFrame,
@@ -103,44 +97,46 @@ const SingleTheme: React.FC<{
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
+  const exitScale = interpolate(
+    localFrame,
+    [fadeOutStart, fadeOutStart + 15],
+    [1, 0.98],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
 
-  // Theme name: fade in over 15 frames with scale 0.95 -> 1.0
-  const nameOpacity = interpolate(localFrame, [0, 15], [0, 1], {
+  // Entrance scale (0.98 to 1.0)
+  const entranceScale = interpolate(localFrame, [0, 18], [0.98, 1.0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
-  const nameScale = interpolate(localFrame, [0, 15], [0.95, 1.0], {
+
+  // Theme name fade in
+  const nameOpacity = interpolate(localFrame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
+
   // Slow upward drift
-  const nameDrift = interpolate(localFrame, [0, duration], [0, -2], {
+  const nameDrift = interpolate(localFrame, [0, duration], [0, -3], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Teal line: draws from centre outward, starts 10 frames after name
-  const lineProgress = interpolate(localFrame, [10, 25], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
-  // Subtle opacity pulse on the line
-  const linePulse = 0.8 + 0.2 * Math.sin(frame * 0.08);
-
-  // Supporting points: staggered appearance
+  // Supporting points
   const pointTimings = theme.supportingPoints.map((_, i) => ({
-    fadeStart: 20 + i * 25,
+    fadeStart: 25 + i * 25,
   }));
 
-  // Quote: appears 15 frames after the last point
+  // Quote appears after last point
   const lastPointStart =
     theme.supportingPoints.length > 0
-      ? 20 + (theme.supportingPoints.length - 1) * 25
-      : 20;
-  const quoteStart = lastPointStart + 15;
+      ? 25 + (theme.supportingPoints.length - 1) * 25
+      : 25;
+  const quoteStart = lastPointStart + 18;
+
+  const combinedScale = entranceScale * exitScale;
 
   return (
     <div
@@ -149,6 +145,7 @@ const SingleTheme: React.FC<{
         flexDirection: "column",
         alignItems: "center",
         opacity: fadeOut,
+        transform: `scale(${combinedScale})`,
       }}
     >
       {/* Theme name */}
@@ -160,7 +157,7 @@ const SingleTheme: React.FC<{
           color: "#FFFFFF",
           textShadow: "0 2px 20px rgba(0,0,0,0.5)",
           opacity: nameOpacity,
-          transform: `scale(${nameScale}) translateY(${nameDrift}px)`,
+          transform: `translateY(${nameDrift}px)`,
           textAlign: "center",
           maxWidth: "80%",
         }}
@@ -168,17 +165,10 @@ const SingleTheme: React.FC<{
         {theme.name}
       </div>
 
-      {/* Teal divider line */}
-      <div
-        style={{
-          width: 80 * lineProgress,
-          height: 1.5,
-          backgroundColor: TEAL,
-          marginTop: 16,
-          marginBottom: 24,
-          opacity: lineProgress > 0 ? linePulse : 0,
-        }}
-      />
+      {/* Animated dots as divider */}
+      <div style={{ marginTop: 16, marginBottom: 20 }}>
+        <AnimatedDots delay={startFrame + 12} />
+      </div>
 
       {/* Supporting points */}
       <div
@@ -193,7 +183,7 @@ const SingleTheme: React.FC<{
           const pointFadeStart = pointTimings[i].fadeStart;
           const pointOpacity = interpolate(
             localFrame,
-            [pointFadeStart, pointFadeStart + 15],
+            [pointFadeStart, pointFadeStart + 18],
             [0, 0.7],
             {
               extrapolateLeft: "clamp",
@@ -201,7 +191,6 @@ const SingleTheme: React.FC<{
               easing: Easing.out(Easing.quad),
             }
           );
-          // Independent slow drift per point
           const pointDrift = interpolate(
             localFrame,
             [pointFadeStart, duration],
@@ -232,7 +221,7 @@ const SingleTheme: React.FC<{
         })}
       </div>
 
-      {/* Quote */}
+      {/* Quote with left-slide entrance */}
       {theme.quote && (
         <div
           style={{
@@ -242,7 +231,7 @@ const SingleTheme: React.FC<{
             color: "#FFFFFF",
             opacity: interpolate(
               localFrame,
-              [quoteStart, quoteStart + 15],
+              [quoteStart, quoteStart + 18],
               [0, 0.5],
               {
                 extrapolateLeft: "clamp",
@@ -250,6 +239,12 @@ const SingleTheme: React.FC<{
                 easing: Easing.out(Easing.quad),
               }
             ),
+            transform: `translateX(${interpolate(
+              localFrame,
+              [quoteStart, quoteStart + 18],
+              [-10, 0],
+              { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+            )}px)`,
             marginTop: 20,
             textAlign: "center",
             maxWidth: 500,
@@ -272,14 +267,13 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  // Resolve themes: prefer structured data, fall back to text extraction
   const themes =
     themesFromProps && themesFromProps.length > 0
       ? themesFromProps
       : extractThemesFromText(spokenText);
 
   // Header fade in
-  const headerOpacity = interpolate(frame, [0, 15], [0, 1], {
+  const headerOpacity = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
@@ -294,8 +288,8 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
   );
 
   // Calculate per-theme timing
-  const themeStartFrame = 15; // after header fades in
-  const gapFrames = 5; // empty gap between themes
+  const themeStartFrame = 18;
+  const gapFrames = 5;
   const themeCount = Math.max(themes.length, 1);
   const totalGapFrames = (themeCount - 1) * gapFrames;
   const availableFrames = durationInFrames - themeStartFrame - 15 - totalGapFrames;
@@ -316,7 +310,11 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
         opacity: fadeOut,
       }}
     >
-      {/* THEMES header with opacity pulse */}
+      {/* Corner accents */}
+      <CornerAccent corner="topLeft" delay={0} opacity={0.06} />
+      <CornerAccent corner="bottomRight" delay={0} opacity={0.06} />
+
+      {/* THEMES header */}
       <div
         style={{
           position: "absolute",
@@ -326,7 +324,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
           color: TEAL,
           textTransform: "uppercase",
           letterSpacing: 4,
-          opacity: headerOpacity * (0.9 + 0.1 * Math.sin(frame * 0.05)),
+          opacity: headerOpacity * 0.9,
         }}
       >
         THEMES
@@ -371,7 +369,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
             color: "rgba(255, 255, 255, 0.4)",
             maxWidth: "60%",
             textAlign: "center",
-            opacity: interpolate(frame, [30, 50], [0, 1], {
+            opacity: interpolate(frame, [30, 48], [0, 1], {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",
             }),
