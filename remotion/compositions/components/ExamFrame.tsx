@@ -1,10 +1,6 @@
 import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
-import { CornerAccent } from "./CornerAccent";
-import { AnimatedDots } from "./AnimatedDots";
-import { DecorativeLine } from "./DecorativeLine";
-
-const TEAL = "#2A9D8F";
+import { COLORS, FONTS, LAYOUT } from "./design";
 
 interface ExamFrameProps {
   poet: string;
@@ -18,26 +14,49 @@ interface ExamFrameProps {
   durationInFrames: number;
 }
 
-/**
- * Fallback: extract question types from spoken text.
- */
 function extractQuestionTypes(spokenText?: string): string[] {
   if (!spokenText) return [];
-  const types: string[] = [];
-  const questionPattern = /questions?\s+(?:on|about)\s+([^,.]+)/gi;
-  let match;
-  while ((match = questionPattern.exec(spokenText)) !== null) {
-    types.push(match[1].trim());
-  }
-  if (types.length === 0) {
-    const sentences = spokenText.split(/[.!?]+/).filter((s) => s.trim());
-    for (const s of sentences.slice(0, 3)) {
-      const words = s.trim().split(/\s+/).slice(0, 6).join(" ");
-      if (words.length > 3) types.push(words);
-    }
-  }
-  return types.slice(0, 3);
+  const sentences = spokenText.match(/[^.!?]+[.!?]+/g) ?? [];
+  return sentences.slice(0, 3).map((s) =>
+    s.trim().split(/\s+/).slice(0, 8).join(" ")
+  );
 }
+
+const Pill: React.FC<{ text: string; frame: number; delay: number }> = ({
+  text,
+  frame,
+  delay,
+}) => {
+  const opacity = interpolate(frame, [delay, delay + 16], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+  const y = interpolate(frame, [delay, delay + 16], [8, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+
+  return (
+    <div
+      style={{
+        background: COLORS.goldDim,
+        border: `1px solid ${COLORS.goldBorder}`,
+        borderRadius: 4,
+        padding: "10px 20px",
+        fontFamily: FONTS.body,
+        fontSize: 20,
+        color: COLORS.cream,
+        lineHeight: 1.4,
+        opacity,
+        transform: `translateY(${y}px)`,
+      }}
+    >
+      {text}
+    </div>
+  );
+};
 
 export const ExamFrame: React.FC<ExamFrameProps> = ({
   poet,
@@ -47,322 +66,205 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
 }) => {
   const frame = useCurrentFrame();
 
-  const questionTypes = examConnection?.questionTypes ?? extractQuestionTypes(spokenText);
+  const questionTypes =
+    examConnection?.questionTypes ?? extractQuestionTypes(spokenText);
   const linkedPoems = examConnection?.linkedPoems ?? [];
   const examTip = examConnection?.examTip ?? "";
 
-  // Header fade in
-  const headerOpacity = interpolate(frame, [0, 18], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
-
-  // Fade out at end
   const fadeOut = interpolate(
     frame,
-    [durationInFrames - 12, durationInFrames],
+    [durationInFrames - 14, durationInFrames],
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Slow drift
-  const drift = interpolate(frame, [0, durationInFrames], [0, -4], {
+  const labelOpacity = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
+  });
+  const headerOpacity = interpolate(frame, [12, 32], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
   });
 
-  // Exam tip timing
-  const allItemCount = questionTypes.length + linkedPoems.length;
-  const tipStartFrame = 30 + allItemCount * 15;
-  const tipOpacity = interpolate(frame, [tipStartFrame, tipStartFrame + 18], [0, 1], {
+  const tipDelay = 35 + questionTypes.length * 14;
+  const tipOpacity = interpolate(frame, [tipDelay, tipDelay + 20], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
-  const tipY = interpolate(frame, [tipStartFrame, tipStartFrame + 18], [8, 0], {
+  const tipY = interpolate(frame, [tipDelay, tipDelay + 20], [10, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
+  });
+
+  const drift = interpolate(frame, [0, durationInFrames], [0, -5], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
   });
 
   return (
     <div
       style={{
         position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
+        inset: 0,
         opacity: fadeOut,
+        transform: `translateY(${drift}px)`,
       }}
     >
-      {/* Corner accents on all four corners */}
-      <CornerAccent corner="topLeft" delay={0} opacity={0.05} />
-      <CornerAccent corner="topRight" delay={0} opacity={0.05} />
-      <CornerAccent corner="bottomLeft" delay={0} opacity={0.05} />
-      <CornerAccent corner="bottomRight" delay={0} opacity={0.05} />
-
-      {/* Subtle centre horizontal line behind content */}
+      {/* Section label */}
       <div
         style={{
           position: "absolute",
-          top: "50%",
-          left: "20%",
-          width: "60%",
+          top: 42,
+          left: LAYOUT.paddingH,
+          fontFamily: FONTS.label,
+          fontSize: 13,
+          color: COLORS.teal,
+          textTransform: "uppercase" as const,
+          letterSpacing: 5,
+          opacity: labelOpacity,
         }}
       >
-        <DecorativeLine width={1152} delay={5} color="rgba(42, 157, 143, 0.04)" thickness={1} />
+        Exam Focus
       </div>
 
-      {/* EXAM FOCUS header */}
+      {/* Two-column content area */}
       <div
         style={{
           position: "absolute",
-          top: 80,
-          left: "50%",
-          transform: "translateX(-50%)",
-          fontFamily: "Arial, sans-serif",
-          fontSize: 12,
-          color: TEAL,
-          textTransform: "uppercase",
-          letterSpacing: 4,
-          opacity: headerOpacity,
-        }}
-      >
-        EXAM FOCUS
-      </div>
-
-      {/* Two-column layout */}
-      <div
-        style={{
-          position: "absolute",
-          top: 140,
-          left: 0,
-          right: 0,
-          bottom: 140,
+          top: 110,
+          left: LAYOUT.paddingH + 100,
+          right: LAYOUT.paddingH + 100,
+          bottom: 100,
           display: "flex",
-          flexDirection: "row",
-          paddingLeft: 100,
-          paddingRight: 100,
-          gap: 60,
-          transform: `translateY(${drift}px)`,
+          gap: 80,
         }}
       >
-        {/* Left column: Question Types */}
-        <div style={{ flex: "0 0 45%", display: "flex", flexDirection: "column" }}>
+        {/* LEFT: Question types */}
+        <div style={{ flex: "0 0 50%" }}>
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              marginBottom: 28,
-              opacity: interpolate(frame, [10, 28], [0, 1], {
-                extrapolateLeft: "clamp",
-                extrapolateRight: "clamp",
-                easing: Easing.out(Easing.quad),
-              }),
+              fontFamily: FONTS.label,
+              fontSize: 13,
+              color: COLORS.teal,
+              textTransform: "uppercase" as const,
+              letterSpacing: 5,
+              marginBottom: 24,
+              opacity: headerOpacity,
             }}
           >
-            <div
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: 3,
-                backgroundColor: TEAL,
-                flexShrink: 0,
-              }}
-            />
-            <div
-              style={{
-                fontFamily: "Arial, sans-serif",
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "#FFFFFF",
-              }}
-            >
-              Question Types
-            </div>
+            Likely Question Types
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {questionTypes.map((q, i) => (
+              <Pill key={i} text={q} frame={frame} delay={22 + i * 14} />
+            ))}
           </div>
 
-          {questionTypes.map((qt, i) => {
-            const start = 25 + i * 15;
-            const itemOpacity = interpolate(frame, [start, start + 18], [0, 1], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            });
-            const itemY = interpolate(frame, [start, start + 18], [10, 0], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            });
-
-            return (
+          {/* Linked poems */}
+          {linkedPoems.length > 0 && (
+            <div style={{ marginTop: 36 }}>
               <div
-                key={i}
                 style={{
-                  opacity: itemOpacity,
-                  transform: `translateY(${itemY}px)`,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  marginBottom: 20,
+                  fontFamily: FONTS.label,
+                  fontSize: 13,
+                  color: COLORS.steel,
+                  textTransform: "uppercase" as const,
+                  letterSpacing: 4,
+                  marginBottom: 16,
+                  opacity: interpolate(frame, [35, 50], [0, 0.7], {
+                    extrapolateLeft: "clamp",
+                    extrapolateRight: "clamp",
+                  }),
                 }}
               >
-                <div
-                  style={{
-                    fontFamily: "Arial, sans-serif",
-                    fontSize: 13,
-                    color: TEAL,
-                    flexShrink: 0,
-                  }}
-                >
-                  {"\u2014"}
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Georgia, 'Times New Roman', serif",
-                    fontSize: 20,
-                    color: "rgba(255, 255, 255, 0.8)",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {qt}
-                </div>
+                Pair with
               </div>
-            );
-          })}
+              {linkedPoems.slice(0, 2).map((poem, i) => (
+                <div
+                  key={i}
+                  style={{
+                    fontFamily: FONTS.body,
+                    fontSize: 19,
+                    color: COLORS.cream,
+                    opacity: interpolate(
+                      frame,
+                      [44 + i * 12, 60 + i * 12],
+                      [0, 0.7],
+                      { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+                    ),
+                    marginBottom: 8,
+                    fontStyle: "italic" as const,
+                  }}
+                >
+                  {poem}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Right column: Linked Poems (same poet) */}
-        <div style={{ flex: "0 0 45%", display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              marginBottom: 28,
-              opacity: interpolate(frame, [10, 28], [0, 1], {
-                extrapolateLeft: "clamp",
-                extrapolateRight: "clamp",
-                easing: Easing.out(Easing.quad),
-              }),
-            }}
-          >
+        {/* RIGHT: Exam tip */}
+        {examTip && (
+          <div style={{ flex: 1, display: "flex", alignItems: "flex-start", paddingTop: 44 }}>
             <div
               style={{
-                width: 6,
-                height: 6,
-                borderRadius: 3,
-                backgroundColor: TEAL,
-                flexShrink: 0,
-              }}
-            />
-            <div
-              style={{
-                fontFamily: "Arial, sans-serif",
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "#FFFFFF",
+                background: "rgba(42, 157, 143, 0.08)",
+                border: `1px solid rgba(42, 157, 143, 0.22)`,
+                borderLeft: `3px solid ${COLORS.teal}`,
+                borderRadius: 4,
+                padding: "24px 28px",
+                opacity: tipOpacity,
+                transform: `translateY(${tipY}px)`,
               }}
             >
-              Also by {poet}
-            </div>
-          </div>
-
-          {linkedPoems.map((poemTitle, i) => {
-            const start = 25 + i * 15;
-            const itemOpacity = interpolate(frame, [start, start + 18], [0, 1], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            });
-            const itemY = interpolate(frame, [start, start + 18], [10, 0], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            });
-
-            return (
               <div
-                key={i}
                 style={{
-                  opacity: itemOpacity,
-                  transform: `translateY(${itemY}px)`,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  marginBottom: 20,
+                  fontFamily: FONTS.label,
+                  fontSize: 11,
+                  color: COLORS.teal,
+                  textTransform: "uppercase" as const,
+                  letterSpacing: 4,
+                  marginBottom: 14,
                 }}
               >
-                <div
-                  style={{
-                    fontFamily: "Arial, sans-serif",
-                    fontSize: 13,
-                    color: TEAL,
-                    flexShrink: 0,
-                  }}
-                >
-                  {"\u2014"}
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Georgia, 'Times New Roman', serif",
-                    fontSize: 20,
-                    color: "rgba(255, 255, 255, 0.8)",
-                    lineHeight: 1.4,
-                    fontStyle: "italic",
-                  }}
-                >
-                  {poemTitle}
-                </div>
+                Exam Tip
               </div>
-            );
-          })}
-        </div>
+              <div
+                style={{
+                  fontFamily: FONTS.body,
+                  fontSize: 21,
+                  color: COLORS.white,
+                  lineHeight: 1.65,
+                  opacity: 0.85,
+                }}
+              >
+                {examTip}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Animated dots above the exam tip */}
+      {/* Brand */}
       <div
         style={{
           position: "absolute",
-          bottom: 110,
-          left: "50%",
-          transform: "translateX(-50%)",
+          bottom: 24,
+          right: LAYOUT.paddingH,
+          fontFamily: FONTS.label,
+          fontSize: 11,
+          color: COLORS.gold,
+          textTransform: "uppercase" as const,
+          letterSpacing: 4,
+          opacity: 0.35,
         }}
       >
-        <AnimatedDots delay={tipStartFrame - 10} />
+        The H1 Club
       </div>
-
-      {/* Exam tip at bottom centre */}
-      {examTip && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: 60,
-            left: "50%",
-            transform: `translateX(-50%) translateY(${tipY}px)`,
-            maxWidth: "70%",
-            textAlign: "center",
-            opacity: tipOpacity * fadeOut,
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "Georgia, 'Times New Roman', serif",
-              fontSize: 18,
-              fontStyle: "italic",
-              color: "rgba(255, 255, 255, 0.6)",
-              lineHeight: 1.5,
-            }}
-          >
-            {examTip}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

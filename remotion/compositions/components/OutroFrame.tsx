@@ -1,9 +1,6 @@
 import React from "react";
-import { useCurrentFrame, interpolate, Easing } from "remotion";
-import { CornerAccent } from "./CornerAccent";
-import { AnimatedDots } from "./AnimatedDots";
-
-const TEAL = "#2A9D8F";
+import { useCurrentFrame, interpolate, spring, useVideoConfig, Easing } from "remotion";
+import { COLORS, FONTS, LAYOUT } from "./design";
 
 interface OutroFrameProps {
   poet: string;
@@ -25,15 +22,13 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
   outroData,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
-  const displayTitle = outroData?.poemTitle ?? poemTitle;
-  const displayPoet = outroData?.poetName ?? poet;
-  const closingLine = outroData?.closingLine ?? spokenText ?? "";
+  const closingLine =
+    outroData?.closingLine ??
+    spokenText?.match(/[^.!?]+[.!?]+/)?.[0]?.trim() ??
+    "";
 
-  // Split closing line into words for typewriter effect
-  const words = closingLine.split(/\s+/).filter((w) => w.length > 0);
-
-  // Fade to black at end (20 frames)
   const fadeOut = interpolate(
     frame,
     [durationInFrames - 20, durationInFrames],
@@ -41,162 +36,130 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Slow drift upward
-  const drift = interpolate(frame, [0, durationInFrames], [0, -4], {
+  const labelOpacity = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Poem title fades in first
-  const titleOpacity = interpolate(frame, [0, 18], [0, 1], {
+  const ruleWidth = interpolate(frame, [8, 38], [0, 100], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
-  const titleY = interpolate(frame, [0, 18], [10, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
   });
 
-  // Poet name fades in 10 frames after title
-  const poetOpacity = interpolate(frame, [10, 28], [0, 1], {
+  const closingSpring = spring({ frame: frame - 30, fps, config: { damping: 18, mass: 1.0 } });
+  const closingOpacity = interpolate(frame, [30, 52], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
+  const closingY = interpolate(closingSpring, [0, 1], [18, 0]);
 
-  // Teal line draws itself
-  const lineWidth = interpolate(frame, [18, 36], [0, 80], {
+  const poemTagOpacity = interpolate(frame, [55, 72], [0, 0.55], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
   });
-
-  // Typewriter: each word fades in over 3 frames with 2-frame gap
-  const typewriterStart = 36;
-  const wordTimings = words.map((_, i) => typewriterStart + i * 5);
-
-  // Dots appear after all words
-  const dotsDelay = words.length > 0
-    ? wordTimings[words.length - 1] + 10
-    : typewriterStart + 10;
 
   return (
     <div
       style={{
         position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#080F1A",
+        inset: 0,
+        opacity: fadeOut,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
-        opacity: fadeOut,
+        paddingLeft: 188,
+        paddingRight: 188,
       }}
     >
-      {/* Corner accents */}
-      <CornerAccent corner="topLeft" delay={0} opacity={0.06} />
-      <CornerAccent corner="bottomRight" delay={0} opacity={0.06} />
+      <div
+        style={{
+          position: "absolute",
+          top: 42,
+          left: LAYOUT.paddingH,
+          fontFamily: FONTS.label,
+          fontSize: 13,
+          color: COLORS.gold,
+          textTransform: "uppercase" as const,
+          letterSpacing: 5,
+          opacity: labelOpacity,
+        }}
+      >
+        Summary
+      </div>
 
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          transform: `translateY(${drift}px)`,
+          fontFamily: FONTS.label,
+          fontSize: 14,
+          color: COLORS.gold,
+          textTransform: "uppercase" as const,
+          letterSpacing: 6,
+          marginBottom: 22,
+          opacity: labelOpacity,
         }}
       >
-        {/* Poem title */}
+        Key Takeaway
+      </div>
+
+      <div
+        style={{
+          width: ruleWidth,
+          height: 1,
+          background: COLORS.gold,
+          opacity: 0.4,
+          marginBottom: 44,
+        }}
+      />
+
+      {closingLine && (
         <div
           style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontSize: 40,
-            fontWeight: "bold",
-            color: "#FFFFFF",
-            textAlign: "center",
-            opacity: titleOpacity,
-            transform: `translateY(${titleY}px)`,
-            maxWidth: "70%",
+            fontFamily: FONTS.display,
+            fontSize: 36,
+            fontStyle: "italic" as const,
+            color: COLORS.cream,
+            lineHeight: 1.55,
+            transform: `translateY(${closingY}px)`,
+            maxWidth: 1300,
+            marginBottom: 44,
+            borderLeft: `2px solid ${COLORS.gold}`,
+            paddingLeft: 32,
+            opacity: closingOpacity * 0.90,
           }}
         >
-          {displayTitle}
+          {closingLine}
         </div>
+      )}
 
-        {/* Poet name */}
-        <div
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: 18,
-            color: TEAL,
-            textTransform: "uppercase",
-            letterSpacing: 3,
-            marginTop: 16,
-            opacity: poetOpacity,
-          }}
-        >
-          {displayPoet}
-        </div>
+      <div
+        style={{
+          fontFamily: FONTS.label,
+          fontSize: 17,
+          color: COLORS.steel,
+          letterSpacing: 3,
+          opacity: poemTagOpacity,
+          textTransform: "uppercase" as const,
+        }}
+      >
+        {poemTitle} · {poet}
+      </div>
 
-        {/* Teal line */}
-        <div
-          style={{
-            width: lineWidth,
-            height: 1.5,
-            backgroundColor: TEAL,
-            marginTop: 28,
-            marginBottom: 28,
-            opacity: lineWidth > 0 ? 0.5 : 0,
-          }}
-        />
-
-        {/* Closing line - typewriter word by word */}
-        {words.length > 0 && (
-          <div
-            style={{
-              maxWidth: "60%",
-              textAlign: "center",
-              lineHeight: 1.5,
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "0 6px",
-            }}
-          >
-            {words.map((word, i) => {
-              const wordStart = wordTimings[i];
-              const wordOpacity = interpolate(
-                frame,
-                [wordStart, wordStart + 3],
-                [0, 0.7],
-                { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-              );
-
-              return (
-                <span
-                  key={i}
-                  style={{
-                    fontFamily: "Georgia, 'Times New Roman', serif",
-                    fontSize: 20,
-                    fontStyle: "italic",
-                    color: "#FFFFFF",
-                    opacity: wordOpacity,
-                  }}
-                >
-                  {word}
-                </span>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Final dots */}
-        <div style={{ marginTop: 24 }}>
-          <AnimatedDots delay={dotsDelay} />
-        </div>
+      {/* Brand */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 24,
+          right: LAYOUT.paddingH,
+          fontFamily: FONTS.label,
+          fontSize: 11,
+          color: COLORS.gold,
+          textTransform: "uppercase" as const,
+          letterSpacing: 4,
+          opacity: 0.35,
+        }}
+      >
+        The H1 Club
       </div>
     </div>
   );

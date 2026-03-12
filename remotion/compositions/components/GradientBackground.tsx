@@ -1,5 +1,6 @@
 import React from "react";
 import { useCurrentFrame } from "remotion";
+import { COLORS } from "./design";
 
 export type SectionType =
   | "title"
@@ -10,42 +11,39 @@ export type SectionType =
   | "outro"
   | "closing";
 
-interface BackgroundSpec {
+interface BgConfig {
   base: string;
-  glow?: {
-    color: string;
-    opacity: number;
-    posX: string; // CSS percentage
-    posY: string;
-  };
+  overlay: string;
 }
 
-const BACKGROUNDS: Record<SectionType, BackgroundSpec> = {
+const BG: Record<SectionType, BgConfig> = {
   title: {
-    base: "#080F1A",
-    glow: { color: "#1A3A4A", opacity: 0.15, posX: "50%", posY: "50%" },
-  },
-  closing: {
-    base: "#080F1A",
-    glow: { color: "#1A3A4A", opacity: 0.15, posX: "50%", posY: "50%" },
+    base: `linear-gradient(160deg, #0D1225 0%, #070A14 100%)`,
+    overlay: `radial-gradient(ellipse 110% 75% at 68% 50%, rgba(196,150,90,0.09) 0%, transparent 65%)`,
   },
   intro: {
-    base: "#0C1220",
+    base: `linear-gradient(160deg, #0A0E1A 0%, #080C18 100%)`,
+    overlay: `radial-gradient(ellipse 90% 65% at 25% 60%, rgba(42,100,155,0.08) 0%, transparent 65%)`,
   },
   stanza_analysis: {
-    base: "#0C1220",
-    glow: { color: "#2A9D8F", opacity: 0.05, posX: "80%", posY: "20%" },
+    base: `linear-gradient(165deg, #09111F 0%, #070D19 100%)`,
+    overlay: `radial-gradient(ellipse 70% 55% at 78% 38%, rgba(196,150,90,0.06) 0%, transparent 60%)`,
   },
   theme: {
-    base: "#100C20",
-    glow: { color: "#4A2A8F", opacity: 0.05, posX: "50%", posY: "50%" },
+    base: `linear-gradient(155deg, #0B0E1E 0%, #08091A 100%)`,
+    overlay: `radial-gradient(ellipse 85% 60% at 50% 55%, rgba(55,75,140,0.08) 0%, transparent 65%)`,
   },
   exam_connection: {
-    base: "#0E0E1A",
+    base: `linear-gradient(160deg, #090D18 0%, #07091400 100%)`,
+    overlay: `radial-gradient(ellipse 65% 50% at 62% 44%, rgba(42,157,143,0.07) 0%, transparent 60%)`,
   },
   outro: {
-    base: "#080F1A",
-    glow: { color: "#1A3A4A", opacity: 0.15, posX: "50%", posY: "50%" },
+    base: `linear-gradient(160deg, #0A0E1A 0%, #060810 100%)`,
+    overlay: `radial-gradient(ellipse 80% 65% at 50% 50%, rgba(196,150,90,0.07) 0%, transparent 65%)`,
+  },
+  closing: {
+    base: `linear-gradient(160deg, #08091A 0%, #020308 100%)`,
+    overlay: `radial-gradient(ellipse 95% 80% at 50% 50%, rgba(196,150,90,0.12) 0%, transparent 70%)`,
   },
 };
 
@@ -57,58 +55,36 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
   sectionType,
 }) => {
   const frame = useCurrentFrame();
-  const spec = BACKGROUNDS[sectionType] || BACKGROUNDS.intro;
+  const cfg = BG[sectionType];
 
-  // Slow glow position drift
-  const glowDriftX = Math.sin(frame * 0.008) * 3;
-  const glowDriftY = Math.cos(frame * 0.006) * 2;
-
-  // Grid drift: 0.5px per second at 30fps
-  const gridDriftX = (frame / 30) * 0.5;
-  const gridDriftY = (frame / 30) * 0.5;
+  // Very slow glow breathe — imperceptible as animation, adds organic life
+  const breatheScale = 1 + 0.025 * Math.sin(frame / 90);
 
   return (
     <div
       style={{
         position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: spec.base,
+        inset: 0,
+        background: cfg.base,
         overflow: "hidden",
       }}
     >
-      {spec.glow && (
-        <div
-          style={{
-            position: "absolute",
-            top: spec.glow.posY,
-            left: spec.glow.posX,
-            transform: `translate(calc(-50% + ${glowDriftX}px), calc(-50% + ${glowDriftY}px))`,
-            width: "60%",
-            height: "60%",
-            borderRadius: "50%",
-            background: `radial-gradient(ellipse, ${spec.glow.color} 0%, transparent 70%)`,
-            opacity: spec.glow.opacity,
-          }}
-        />
-      )}
-
-      {/* Subtle grid overlay */}
+      {/* Radial atmospheric glow */}
       <div
         style={{
           position: "absolute",
-          top: -120,
-          left: -120,
-          width: "calc(100% + 240px)",
-          height: "calc(100% + 240px)",
-          transform: `translate(${gridDriftX % 120}px, ${gridDriftY % 120}px)`,
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.02) 0.5px, transparent 0.5px), " +
-            "linear-gradient(90deg, rgba(255,255,255,0.02) 0.5px, transparent 0.5px)",
-          backgroundSize: "120px 120px",
-          pointerEvents: "none",
+          inset: 0,
+          background: cfg.overlay,
+          transform: `scale(${breatheScale})`,
+          transformOrigin: "center center",
+        }}
+      />
+      {/* Subtle horizontal vignette — adds cinematic letterbox feel */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.45) 100%)`,
         }}
       />
     </div>

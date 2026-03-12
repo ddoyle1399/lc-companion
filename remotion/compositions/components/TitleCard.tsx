@@ -1,18 +1,13 @@
 import React from "react";
 import { useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { GradientBackground } from "./GradientBackground";
-import { CornerAccent } from "./CornerAccent";
-import { DecorativeLine } from "./DecorativeLine";
-import { AnimatedDots } from "./AnimatedDots";
+import { COLORS, FONTS } from "./design";
 
 interface TitleCardProps {
   title: string;
   poet: string;
   durationInFrames: number;
 }
-
-const SPRING_CONFIG = { damping: 15, mass: 0.8 };
-const TEAL = "#2A9D8F";
 
 export const TitleCard: React.FC<TitleCardProps> = ({
   title,
@@ -22,40 +17,55 @@ export const TitleCard: React.FC<TitleCardProps> = ({
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Fade out everything over last 15 frames
   const fadeOut = interpolate(
     frame,
-    [durationInFrames - 15, durationInFrames],
+    [durationInFrames - 20, durationInFrames],
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Title: spring entrance from frame 20
+  // Gold vertical rule grows down from centre
+  const ruleHeight = interpolate(frame, [0, 40], [0, 340], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // Poet eyebrow: slides in from left
+  const eyebrowOpacity = interpolate(frame, [18, 38], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const eyebrowX = interpolate(frame, [18, 38], [-14, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // Separator line under eyebrow: extends right
+  const sepWidth = interpolate(frame, [28, 52], [0, 90], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // Title: spring
   const titleSpring = spring({
-    frame: frame - 20,
+    frame: frame - 45,
     fps,
-    config: SPRING_CONFIG,
+    config: { damping: 20, mass: 1.0 },
   });
-  const titleOpacity = interpolate(frame, [20, 38], [0, 1], {
+  const titleOpacity = interpolate(frame, [45, 68], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const titleY = interpolate(titleSpring, [0, 1], [15, 0]);
+  const titleY = interpolate(titleSpring, [0, 1], [22, 0]);
 
-  // Poet name: fades in from frame 35
-  const poetSpring = spring({
-    frame: frame - 35,
-    fps,
-    config: SPRING_CONFIG,
-  });
-  const poetOpacity = interpolate(frame, [35, 50], [0, 1], {
+  // Subtitle
+  const subOpacity = interpolate(frame, [72, 92], [0, 0.45], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const poetY = interpolate(poetSpring, [0, 1], [10, 0]);
 
-  // Year/level text
-  const yearOpacity = interpolate(frame, [50, 65], [0, 0.25], {
+  // Brand
+  const brandOpacity = interpolate(frame, [82, 105], [0, 0.65], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -64,82 +74,134 @@ export const TitleCard: React.FC<TitleCardProps> = ({
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <GradientBackground sectionType="title" />
 
-      {/* Corner accents */}
-      <CornerAccent corner="topLeft" delay={0} />
-      <CornerAccent corner="bottomRight" delay={0} />
-
       <div
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          inset: 0,
           opacity: fadeOut,
         }}
       >
-        {/* Poem title above line */}
+        {/* Gold vertical rule — editorial left margin marker */}
         <div
           style={{
-            fontSize: 52,
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontWeight: 400,
-            color: "#FFFFFF",
-            textAlign: "center",
-            maxWidth: "70%",
-            lineHeight: 1.3,
-            letterSpacing: 1,
-            opacity: titleOpacity,
-            transform: `translateY(${titleY}px)`,
-            textShadow: "0 2px 30px rgba(0,0,0,0.4)",
-            marginBottom: 24,
+            position: "absolute",
+            left: 148,
+            top: "calc(50% - 170px)",
+            width: 2,
+            height: ruleHeight,
+            background: `linear-gradient(to bottom, transparent 0%, ${COLORS.gold} 15%, ${COLORS.gold} 85%, transparent 100%)`,
           }}
-        >
-          {title}
-        </div>
+        />
 
-        {/* Decorative line at centre */}
-        <DecorativeLine width={120} delay={10} />
-
-        {/* Poet name below line */}
+        {/* Content block — left-aligned, beside the rule */}
         <div
           style={{
-            fontSize: 16,
-            fontFamily: "Arial, sans-serif",
-            color: TEAL,
-            marginTop: 24,
-            textAlign: "center",
-            textTransform: "uppercase",
-            letterSpacing: 5,
-            opacity: poetOpacity,
-            transform: `translateY(${poetY}px)`,
+            position: "absolute",
+            left: 188,
+            top: "50%",
+            transform: "translateY(-50%)",
+            display: "flex",
+            flexDirection: "column",
+            maxWidth: 980,
           }}
         >
-          {poet}
+          {/* Poet — eyebrow label, gold caps */}
+          <div
+            style={{
+              fontFamily: FONTS.label,
+              fontSize: 17,
+              fontWeight: 600,
+              color: COLORS.gold,
+              textTransform: "uppercase" as const,
+              letterSpacing: 7,
+              opacity: eyebrowOpacity,
+              transform: `translateX(${eyebrowX}px)`,
+              marginBottom: 22,
+            }}
+          >
+            {poet}
+          </div>
+
+          {/* Separator */}
+          <div
+            style={{
+              width: sepWidth,
+              height: 1,
+              background: COLORS.gold,
+              opacity: 0.45,
+              marginBottom: 36,
+            }}
+          />
+
+          {/* Poem title — large italic Playfair */}
+          <div
+            style={{
+              fontFamily: FONTS.display,
+              fontSize: 78,
+              fontWeight: 400,
+              fontStyle: "italic" as const,
+              color: COLORS.cream,
+              lineHeight: 1.12,
+              letterSpacing: -0.5,
+              opacity: titleOpacity,
+              transform: `translateY(${titleY}px)`,
+              marginBottom: 44,
+            }}
+          >
+            {title}
+          </div>
+
+          {/* Level / year label */}
+          <div
+            style={{
+              fontFamily: FONTS.label,
+              fontSize: 14,
+              fontWeight: 400,
+              color: COLORS.steel,
+              textTransform: "uppercase" as const,
+              letterSpacing: 5,
+              opacity: subOpacity,
+            }}
+          >
+            Leaving Certificate · Higher Level Poetry
+          </div>
         </div>
 
-        {/* Animated dots */}
-        <div style={{ marginTop: 20 }}>
-          <AnimatedDots delay={45} />
-        </div>
-
-        {/* Year/level */}
+        {/* Brand — bottom right */}
         <div
           style={{
-            fontSize: 12,
-            fontFamily: "Arial, sans-serif",
-            color: "#FFFFFF",
-            marginTop: 16,
-            opacity: yearOpacity,
-            letterSpacing: 3,
-            textTransform: "uppercase",
+            position: "absolute",
+            bottom: 64,
+            right: 84,
+            textAlign: "right" as const,
+            opacity: brandOpacity,
           }}
         >
-          Higher Level | 2026
+          <div
+            style={{
+              fontFamily: FONTS.label,
+              fontSize: 14,
+              fontWeight: 600,
+              color: COLORS.gold,
+              textTransform: "uppercase" as const,
+              letterSpacing: 5,
+            }}
+          >
+            The H1 Club
+          </div>
+          <div
+            style={{
+              fontFamily: FONTS.label,
+              fontSize: 11,
+              color: COLORS.steel,
+              textTransform: "uppercase" as const,
+              letterSpacing: 3,
+              marginTop: 5,
+              opacity: 0.6,
+            }}
+          >
+            theh1club.ie
+          </div>
         </div>
       </div>
     </div>

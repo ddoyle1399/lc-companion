@@ -168,6 +168,8 @@ const SectionContent: React.FC<{
         durationInFrames={section.durationInFrames}
         keyQuote={section.keyQuote}
         sectionIndex={stanzaIndex}
+        techniques={section.techniques}
+        spokenText={section.spokenText}
       />
       <TechniqueOverlay
         techniques={section.techniques || []}

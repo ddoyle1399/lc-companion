@@ -1,9 +1,14 @@
 import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
-import { DecorativeLine } from "./DecorativeLine";
+import { COLORS, FONTS, LAYOUT } from "./design";
 
-const TEAL = "#2A9D8F";
-const LINE_STAGGER = 10; // frames between each line appearing
+const LINE_STAGGER = 7; // frames between each poem line appearing
+
+interface Technique {
+  name: string;
+  quote: string;
+  effect: string;
+}
 
 interface StanzaDisplayProps {
   poemLines: string[];
@@ -11,7 +16,125 @@ interface StanzaDisplayProps {
   durationInFrames: number;
   keyQuote?: { text: string; lineIndex: number };
   sectionIndex: number;
+  techniques?: Technique[];
+  spokenText?: string;
 }
+
+function getFirstSentences(text: string | undefined, count: number): string {
+  if (!text) return "";
+  const sentences = text.match(/[^.!?]+[.!?]+/g) ?? [];
+  return sentences.slice(0, count).join(" ").trim();
+}
+
+function calcFontSize(lineCount: number): number {
+  if (lineCount <= 4) return 36;
+  if (lineCount <= 7) return 32;
+  if (lineCount <= 10) return 28;
+  return 24;
+}
+
+const SectionDot: React.FC<{ filled: boolean; frame: number; delay: number }> = ({
+  filled,
+  frame,
+  delay,
+}) => {
+  const opacity = interpolate(frame, [delay, delay + 12], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return (
+    <div
+      style={{
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        background: filled ? COLORS.gold : "transparent",
+        border: `1px solid ${filled ? COLORS.gold : COLORS.steelDim}`,
+        opacity,
+      }}
+    />
+  );
+};
+
+const TechniqueCard: React.FC<{
+  technique: Technique;
+  frame: number;
+  delay: number;
+}> = ({ technique, frame, delay }) => {
+  const opacity = interpolate(frame, [delay, delay + 18], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+  const x = interpolate(frame, [delay, delay + 18], [14, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+
+  return (
+    <div
+      style={{
+        background: COLORS.glass,
+        border: `1px solid ${COLORS.glassBorder}`,
+        borderLeft: `3px solid ${COLORS.gold}`,
+        borderRadius: 4,
+        padding: "16px 20px",
+        opacity,
+        transform: `translateX(${x}px)`,
+      }}
+    >
+      <div
+        style={{
+          fontFamily: FONTS.label,
+          fontSize: 11,
+          color: COLORS.gold,
+          textTransform: "uppercase" as const,
+          letterSpacing: 4,
+          marginBottom: 6,
+        }}
+      >
+        Literary Technique
+      </div>
+      <div
+        style={{
+          fontFamily: FONTS.body,
+          fontSize: 20,
+          fontWeight: 700,
+          color: COLORS.white,
+          marginBottom: 8,
+        }}
+      >
+        {technique.name}
+      </div>
+      {technique.quote && (
+        <div
+          style={{
+            fontFamily: FONTS.display,
+            fontSize: 17,
+            fontStyle: "italic" as const,
+            color: COLORS.cream,
+            opacity: 0.65,
+            marginBottom: 8,
+            lineHeight: 1.5,
+          }}
+        >
+          &ldquo;{technique.quote}&rdquo;
+        </div>
+      )}
+      <div
+        style={{
+          fontFamily: FONTS.body,
+          fontSize: 17,
+          color: COLORS.steel,
+          lineHeight: 1.55,
+        }}
+      >
+        {technique.effect}
+      </div>
+    </div>
+  );
+};
 
 export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
   poemLines,
@@ -19,255 +142,367 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
   durationInFrames,
   keyQuote,
   sectionIndex,
+  techniques = [],
+  spokenText,
 }) => {
   const frame = useCurrentFrame();
 
-  // Only show the highlighted lines, filtering out blank lines
-  const linesToShow = highlightLines.filter((idx) => {
-    const line = poemLines[idx];
-    return line !== undefined && line.trim() !== "";
-  });
+  const linesToShow = highlightLines.filter(
+    (idx) => poemLines[idx] !== undefined && poemLines[idx].trim() !== ""
+  );
 
-  // Debug logging for stanza verification
-  if (frame === 0) {
-    console.log(
-      `[StanzaDisplay] sectionIndex=${sectionIndex}, highlightLines=[${highlightLines}], ` +
-      `linesToShow=[${linesToShow}], lines: ${linesToShow.map((idx) => `[${idx}]="${poemLines[idx]}"`).join(", ")}`
-    );
-  }
+  // Spotlight timing: 42% through section
+  const spotlightStart = Math.floor(durationInFrames * 0.42);
+  const spotlightEnd = spotlightStart + 80;
+  const inSpotlight =
+    !!keyQuote && frame >= spotlightStart && frame < spotlightEnd;
 
-  if (linesToShow.length === 0) return null;
-
-  // Key quote spotlight timing: starts at 40% through, lasts 75 frames
-  const spotlightStart = Math.floor(durationInFrames * 0.4);
-  const spotlightEnd = spotlightStart + 75;
-  const hasSpotlight = keyQuote && linesToShow.includes(keyQuote.lineIndex);
-
-  const spotlightProgress = hasSpotlight
-    ? interpolate(frame, [spotlightStart, spotlightStart + 15], [0, 1], {
+  const spotlightProgress = keyQuote
+    ? interpolate(frame, [spotlightStart, spotlightStart + 18], [0, 1], {
         extrapolateLeft: "clamp",
         extrapolateRight: "clamp",
         easing: Easing.out(Easing.quad),
       })
     : 0;
 
-  const spotlightExit = hasSpotlight
-    ? interpolate(frame, [spotlightEnd - 15, spotlightEnd], [0, 1], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp",
-        easing: Easing.in(Easing.quad),
-      })
-    : 0;
-
-  const isInSpotlight =
-    hasSpotlight && frame >= spotlightStart && frame < spotlightEnd;
-
-  // Fade out all content at section end
+  // Section fade out
   const fadeOut = interpolate(
     frame,
-    [durationInFrames - 12, durationInFrames],
+    [durationInFrames - 14, durationInFrames],
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
+
+  // Slow upward drift
+  const drift = interpolate(frame, [0, durationInFrames], [0, -6], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const fontSize = calcFontSize(linesToShow.length);
+  const lineHeight = fontSize * 1.85;
+
+  // Analysis text: first 2 sentences of spoken text
+  const analysisText = getFirstSentences(spokenText, 2);
+
+  // Technique cards: max 2
+  const visibleTechniques = techniques.slice(0, 2);
+
+  // Right panel content fade in
+  const analysisOpacity = interpolate(frame, [20, 42], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+  const analysisY = interpolate(frame, [20, 42], [12, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.quad),
+  });
+
+  // During spotlight: right panel shows isolated quote
+  const rightPanelShift = inSpotlight
+    ? interpolate(frame, [spotlightStart, spotlightStart + 18], [0, 1], {
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+      })
+    : 0;
 
   return (
     <div
       style={{
         position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        inset: 0,
         opacity: fadeOut,
       }}
     >
-      {/* Section indicator top right with vertical decorative line */}
+      {/* ── Header: section label + dots ── */}
       <div
         style={{
           position: "absolute",
-          top: 48,
-          right: 64,
+          top: 0,
+          left: 0,
+          right: 0,
+          height: LAYOUT.headerH,
           display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          gap: 8,
-          opacity: interpolate(frame, [0, 18], [0, 1], {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-          }),
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingLeft: LAYOUT.paddingH,
+          paddingRight: LAYOUT.paddingH,
         }}
       >
-        <DecorativeLine width={20} direction="vertical" delay={0} thickness={1} />
         <div
           style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: 11,
-            color: TEAL,
-            textTransform: "uppercase",
-            letterSpacing: 4,
-            opacity: 0.5,
+            fontFamily: FONTS.label,
+            fontSize: 13,
+            fontWeight: 600,
+            color: COLORS.gold,
+            textTransform: "uppercase" as const,
+            letterSpacing: 5,
+            opacity: interpolate(frame, [0, 16], [0, 1], {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+            }),
           }}
         >
-          STANZA {sectionIndex}
+          {sectionIndex > 0 ? `Stanza ${sectionIndex}` : "Analysis"}
+        </div>
+
+        {/* Section progress dots */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {Array.from({ length: Math.min(sectionIndex + 1, 6) }).map((_, i) => (
+            <SectionDot
+              key={i}
+              filled={i < sectionIndex}
+              frame={frame}
+              delay={i * 5}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Poem lines - centred, generous spacing */}
+      {/* ── Left panel: poem lines ── */}
       <div
         style={{
-          maxWidth: "55%",
+          position: "absolute",
+          top: LAYOUT.headerH,
+          left: 0,
+          width: LAYOUT.poemPanelRight,
+          bottom: 70,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          transform: `translateY(${interpolate(frame, [0, durationInFrames], [0, -4], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
+          justifyContent: "center",
+          paddingLeft: LAYOUT.paddingH,
+          paddingRight: 40,
+          transform: `translateY(${drift}px)`,
         }}
       >
-        {linesToShow.map((lineIdx, i) => {
-          const line = poemLines[lineIdx] || "";
-          const staggerDelay = i * LINE_STAGGER;
+        {/* Gold vertical rule */}
+        <div
+          style={{
+            position: "absolute",
+            left: LAYOUT.paddingH - 20,
+            top: 30,
+            bottom: 30,
+            width: 2,
+            background: `linear-gradient(to bottom, transparent, ${COLORS.gold} 20%, ${COLORS.gold} 80%, transparent)`,
+            opacity: 0.6,
+          }}
+        />
 
-          // Staggered fade-in
+        {linesToShow.map((lineIdx, i) => {
+          const isKeyLine = keyQuote?.lineIndex === lineIdx;
+
+          // Each line enters with stagger
           const lineOpacity = interpolate(
             frame,
-            [staggerDelay, staggerDelay + 18],
+            [i * LINE_STAGGER, i * LINE_STAGGER + 16],
             [0, 1],
-            {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            }
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.quad) }
           );
-
           const lineY = interpolate(
             frame,
-            [staggerDelay, staggerDelay + 18],
-            [12, 0],
-            {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-              easing: Easing.out(Easing.quad),
-            }
+            [i * LINE_STAGGER, i * LINE_STAGGER + 16],
+            [14, 0],
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.quad) }
           );
 
-          // Highlight sweep: after line fades in, brightness sweeps left to right
-          const sweepStart = staggerDelay + 18;
-          const sweepProgress = interpolate(
-            frame,
-            [sweepStart, sweepStart + 15],
-            [0, 1],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-          );
-          const isFocusLine = i === 0; // First line is the focus
-
-          // Is this the key quote line?
-          const isQuoteLine =
-            hasSpotlight && keyQuote && lineIdx === keyQuote.lineIndex;
-
-          // During spotlight: focus line is bright, others dim
-          let finalOpacity = lineOpacity;
-          if (isInSpotlight) {
-            if (isQuoteLine) {
-              finalOpacity = lineOpacity * 0.95;
-            } else {
-              const dimAmount = spotlightProgress * (1 - spotlightExit);
-              finalOpacity = lineOpacity * (0.15 + 0.85 * (1 - dimAmount));
-            }
-          } else if (!isFocusLine) {
-            // Non-focus lines slightly dimmer
-            finalOpacity = lineOpacity * (isFocusLine ? 0.95 : 0.35 + 0.6 * sweepProgress);
-          }
-
-          // Focus line scale during spotlight
-          const scale =
-            isQuoteLine && isInSpotlight
-              ? 1 + 0.03 * spotlightProgress * (1 - spotlightExit)
+          // Spotlight: key line scales up, others dim
+          const isInSpotlightMode = inSpotlight && !!keyQuote;
+          const lineScale =
+            isInSpotlightMode && isKeyLine
+              ? interpolate(spotlightProgress, [0, 1], [1, 1.06], {
+                  extrapolateLeft: "clamp",
+                  extrapolateRight: "clamp",
+                })
               : 1;
-
-          // Glow on focus line during spotlight
-          const glowIntensity =
-            isQuoteLine && isInSpotlight
-              ? spotlightProgress * (1 - spotlightExit)
-              : 0;
+          const lineDimOpacity =
+            isInSpotlightMode && !isKeyLine ? 0.28 : 1;
 
           return (
             <div
               key={lineIdx}
               style={{
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                opacity: finalOpacity,
-                transform: `translateY(${lineY}px) scale(${scale})`,
-                marginBottom: 0,
-                width: "100%",
+                alignItems: "baseline",
+                gap: 16,
+                height: lineHeight,
+                opacity: lineOpacity * lineDimOpacity,
+                transform: `translateY(${lineY}px) scale(${lineScale})`,
+                transformOrigin: "left center",
+                position: "relative",
               }}
             >
-              {/* Teal accent bar on focus line */}
-              {isFocusLine && !isInSpotlight && (
-                <div
-                  style={{
-                    width: 1.5,
-                    height: 30,
-                    backgroundColor: TEAL,
-                    marginRight: 20,
-                    opacity: interpolate(frame, [0, 18], [0, 0.6], {
-                      extrapolateLeft: "clamp",
-                      extrapolateRight: "clamp",
-                    }),
-                    flexShrink: 0,
-                  }}
-                />
-              )}
-
-              {/* Spotlight bracket lines */}
-              {isQuoteLine && isInSpotlight && (
-                <div
-                  style={{
-                    width: interpolate(spotlightProgress, [0, 1], [0, 40]),
-                    height: 1,
-                    backgroundColor: TEAL,
-                    opacity: 0.3 * spotlightProgress * (1 - spotlightExit),
-                    marginRight: 16,
-                    flexShrink: 0,
-                  }}
-                />
-              )}
-
+              {/* Line number */}
               <div
                 style={{
-                  fontFamily: "Georgia, 'Times New Roman', serif",
-                  fontSize: 34,
-                  color: "#FFFFFF",
-                  lineHeight: 2.8,
-                  textAlign: "center",
-                  textShadow: isQuoteLine && isInSpotlight
-                    ? `0 1px 8px rgba(0,0,0,0.3), 0 0 ${30 * glowIntensity}px rgba(42, 157, 143, 0.15)`
-                    : "0 1px 8px rgba(0,0,0,0.3)",
+                  fontFamily: FONTS.label,
+                  fontSize: 13,
+                  color: COLORS.steelDim,
+                  width: 28,
+                  textAlign: "right" as const,
+                  letterSpacing: 1,
+                  flexShrink: 0,
+                  lineHeight: 1,
+                  paddingTop: 3,
                 }}
               >
-                {line}
+                {lineIdx + 1}
               </div>
 
-              {/* Right spotlight bracket */}
-              {isQuoteLine && isInSpotlight && (
+              {/* Key line marker */}
+              {isKeyLine && inSpotlight && (
                 <div
                   style={{
-                    width: interpolate(spotlightProgress, [0, 1], [0, 40]),
-                    height: 1,
-                    backgroundColor: TEAL,
-                    opacity: 0.3 * spotlightProgress * (1 - spotlightExit),
-                    marginLeft: 16,
-                    flexShrink: 0,
+                    position: "absolute",
+                    left: -20,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: 4,
+                    height: fontSize + 4,
+                    background: COLORS.gold,
+                    borderRadius: 2,
+                    opacity: spotlightProgress,
                   }}
                 />
               )}
+
+              {/* Poem line text */}
+              <div
+                style={{
+                  fontFamily: FONTS.display,
+                  fontSize,
+                  fontStyle: "italic" as const,
+                  color: isKeyLine && inSpotlight ? COLORS.goldLight : COLORS.cream,
+                  lineHeight: 1,
+                  letterSpacing: 0.2,
+                  transition: "color 0.3s",
+                  textShadow:
+                    isKeyLine && inSpotlight
+                      ? `0 0 40px rgba(196, 150, 90, 0.35)`
+                      : "none",
+                }}
+              >
+                {poemLines[lineIdx]}
+              </div>
             </div>
           );
         })}
+      </div>
+
+      {/* ── Vertical panel separator ── */}
+      <div
+        style={{
+          position: "absolute",
+          left: LAYOUT.poemPanelRight + 30,
+          top: LAYOUT.headerH + 30,
+          bottom: 90,
+          width: 1,
+          background: `linear-gradient(to bottom, transparent, ${COLORS.goldDivider} 20%, ${COLORS.goldDivider} 80%, transparent)`,
+          opacity: interpolate(frame, [10, 30], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          }),
+        }}
+      />
+
+      {/* ── Right panel: analysis + techniques ── */}
+      <div
+        style={{
+          position: "absolute",
+          top: LAYOUT.headerH,
+          left: LAYOUT.analysisPanelLeft,
+          right: 0,
+          bottom: 70,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          paddingLeft: 48,
+          paddingRight: LAYOUT.paddingH,
+          gap: 32,
+          transform: `translateY(${drift}px)`,
+        }}
+      >
+        {/* Spotlight mode: show isolated quote */}
+        {inSpotlight && keyQuote ? (
+          <div
+            style={{
+              opacity: spotlightProgress,
+              transform: `translateY(${interpolate(spotlightProgress, [0, 1], [12, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
+            }}
+          >
+            <div
+              style={{
+                fontFamily: FONTS.label,
+                fontSize: 12,
+                color: COLORS.gold,
+                textTransform: "uppercase" as const,
+                letterSpacing: 5,
+                marginBottom: 20,
+              }}
+            >
+              Key Quotation
+            </div>
+            <div
+              style={{
+                fontFamily: FONTS.display,
+                fontSize: 38,
+                fontStyle: "italic" as const,
+                color: COLORS.cream,
+                lineHeight: 1.45,
+                borderLeft: `3px solid ${COLORS.gold}`,
+                paddingLeft: 28,
+              }}
+            >
+              &ldquo;{keyQuote.text}&rdquo;
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Normal mode: analysis text */}
+            {analysisText && (
+              <div
+                style={{
+                  fontFamily: FONTS.body,
+                  fontSize: 24,
+                  color: COLORS.white,
+                  lineHeight: 1.75,
+                  opacity: analysisOpacity * 0.80,
+                  transform: `translateY(${analysisY}px)`,
+                }}
+              >
+                {analysisText}
+              </div>
+            )}
+
+            {/* Technique cards */}
+            {visibleTechniques.map((t, i) => (
+              <TechniqueCard
+                key={i}
+                technique={t}
+                frame={frame}
+                delay={30 + i * 20}
+              />
+            ))}
+          </>
+        )}
+      </div>
+
+      {/* ── Bottom brand strip ── */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 24,
+          right: LAYOUT.paddingH,
+          fontFamily: FONTS.label,
+          fontSize: 11,
+          color: COLORS.gold,
+          textTransform: "uppercase" as const,
+          letterSpacing: 4,
+          opacity: 0.35,
+        }}
+      >
+        The H1 Club
       </div>
     </div>
   );

@@ -1,82 +1,60 @@
 import React from "react";
 import { useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { GradientBackground } from "./GradientBackground";
-import { CornerAccent } from "./CornerAccent";
-import { DecorativeLine } from "./DecorativeLine";
+import { COLORS, FONTS } from "./design";
 
 interface ClosingCardProps {
   durationInFrames: number;
 }
 
-const TEAL = "#2A9D8F";
-const SPRING_CONFIG = { damping: 15, mass: 0.8 };
-
-export const ClosingCard: React.FC<ClosingCardProps> = ({
-  durationInFrames,
-}) => {
+export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Fade in from black
-  const fadeIn = interpolate(frame, [0, 15], [0, 1], {
+  const fadeIn = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-
-  // Fade to solid black at end
   const fadeOut = interpolate(
     frame,
-    [durationInFrames - 15, durationInFrames],
+    [durationInFrames - 20, durationInFrames],
     [1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
-
   const masterOpacity = fadeIn * fadeOut;
 
-  // Subtle breathing scale
-  const breathe = 1 + 0.005 * (frame / durationInFrames);
-
-  // Brand name spring entrance
-  const brandSpring = spring({
-    frame: frame - 5,
-    fps,
-    config: SPRING_CONFIG,
-  });
-  const brandOpacity = interpolate(frame, [5, 20], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const brandY = interpolate(brandSpring, [0, 1], [12, 0]);
-
-  // Subtitle
-  const subOpacity = interpolate(frame, [15, 30], [0, 1], {
+  const ruleWidth = interpolate(frame, [5, 40], [0, 140], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // URL
-  const urlOpacity = interpolate(frame, [22, 35], [0, 0.4], {
+  const brandSpring = spring({ frame: frame - 8, fps, config: { damping: 18, mass: 0.9 } });
+  const brandOpacity = interpolate(frame, [8, 26], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const brandY = interpolate(brandSpring, [0, 1], [14, 0]);
+
+  const tagOpacity = interpolate(frame, [22, 40], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const urlOpacity = interpolate(frame, [35, 52], [0, 0.45], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  const breathe = 1 + 0.008 * Math.sin(frame / 60);
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <GradientBackground sectionType="closing" />
 
-      {/* Corner accents */}
-      <CornerAccent corner="topLeft" delay={3} opacity={0.06} />
-      <CornerAccent corner="topRight" delay={3} opacity={0.06} />
-      <CornerAccent corner="bottomLeft" delay={3} opacity={0.06} />
-      <CornerAccent corner="bottomRight" delay={3} opacity={0.06} />
-
       <div
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
+          inset: 0,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -85,50 +63,72 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({
           transform: `scale(${breathe})`,
         }}
       >
-        {/* Brand name */}
         <div
           style={{
-            fontSize: 40,
-            fontFamily: "Georgia, 'Times New Roman', serif",
+            width: ruleWidth,
+            height: 1,
+            background: `linear-gradient(to right, transparent, ${COLORS.gold}, transparent)`,
+            marginBottom: 40,
+          }}
+        />
+
+        <div
+          style={{
+            fontFamily: FONTS.display,
+            fontSize: 58,
             fontWeight: 400,
-            color: "#FFFFFF",
+            fontStyle: "italic" as const,
+            color: COLORS.cream,
+            letterSpacing: 1,
             opacity: brandOpacity,
             transform: `translateY(${brandY}px)`,
-            textShadow: "0 2px 20px rgba(0,0,0,0.3)",
+            marginBottom: 16,
+            textAlign: "center" as const,
           }}
         >
           The H1 Club
         </div>
 
-        {/* Decorative line */}
-        <div style={{ marginTop: 20, marginBottom: 20 }}>
-          <DecorativeLine width={60} delay={10} />
-        </div>
-
-        {/* Subtitle */}
         <div
           style={{
+            fontFamily: FONTS.label,
             fontSize: 14,
-            fontFamily: "Arial, sans-serif",
-            color: TEAL,
-            opacity: subOpacity,
-            letterSpacing: 3,
+            color: COLORS.gold,
+            textTransform: "uppercase" as const,
+            letterSpacing: 6,
+            opacity: tagOpacity,
+            textAlign: "center" as const,
+            marginBottom: 40,
           }}
         >
           by LC English Hub
         </div>
 
-        {/* URL */}
         <div
           style={{
-            fontSize: 13,
-            fontFamily: "Arial, sans-serif",
-            color: "#FFFFFF",
-            marginTop: 16,
-            opacity: urlOpacity,
+            width: ruleWidth * 0.7,
+            height: 1,
+            background: `linear-gradient(to right, transparent, ${COLORS.gold}, transparent)`,
+            opacity: 0.5,
+            marginBottom: 44,
           }}
-        >
-          theh1club.ie
+        />
+
+        <div style={{ display: "flex", gap: 48, opacity: urlOpacity }}>
+          {["theh1club.ie", "lcenglishhub.ie"].map((url) => (
+            <div
+              key={url}
+              style={{
+                fontFamily: FONTS.label,
+                fontSize: 16,
+                color: COLORS.steel,
+                textTransform: "uppercase" as const,
+                letterSpacing: 4,
+              }}
+            >
+              {url}
+            </div>
+          ))}
         </div>
       </div>
     </div>
