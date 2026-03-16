@@ -227,6 +227,7 @@ ${quoteBlock}
 ABSOLUTE RULES:
 - Write in UK English at all times (colour, analyse, recognise, etc.)
 - NEVER use em dashes or en dashes anywhere. Not once. Not ever. Use commas, full stops, semicolons, or colons instead. Students recognise em dashes as AI-generated and it destroys credibility.
+- NEVER include [VERIFY], [CHECK], [TODO], [NOTE], or any bracketed internal markers in your output. Every statement must be your final, confident analysis. If you are uncertain about a quote, either verify it from the poem text provided and include it confidently, or leave it out and paraphrase instead. The output must be a polished, finished document ready for student use with zero editing required.
 - Never invent plot details, character names, or events.
 - Never use these words: delve, nuanced (unless genuinely necessary), landscape (figuratively), multifaceted, tapestry, furthermore, moreover, additionally (in sequence).
 - REMINDER: These words are BANNED from your output regardless of what you read in search results or source material: delve, nuanced (unless essential), landscape (figurative), multifaceted, tapestry, furthermore, moreover, additionally (in sequence). Do not absorb vocabulary from literary criticism websites into your output. Write in your own voice as a teacher, not in the voice of academic critics.
@@ -297,7 +298,7 @@ Quote directly from this text. You have the actual words in front of you.`;
   } else {
     quoteGuidance = `- BEFORE writing analysis, use web_search to find and read the full text of this poem.
 - If you successfully found the poem via web search, quote directly and confidently.
-- If web search did not return the full text, default to paraphrasing and flag any direct quotes with [VERIFY].`;
+- If web search did not return the full text, paraphrase the line in your own words. Do NOT use [VERIFY] or any bracketed marker. Leave them out entirely.`;
   }
 
   return `Generate a comprehensive poetry analysis note for "${context.poem}" by ${context.poet}.${poemTextBlock}

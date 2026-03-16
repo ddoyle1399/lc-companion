@@ -16,6 +16,54 @@ import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-p
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
 
+// Strips [VERIFY], [CHECK], [TODO], [NOTE] and similar bracketed internal markers
+// from streamed text, handling markers that may span chunk boundaries.
+function createVerifyStripper(poem?: string) {
+  let buffer = "";
+  const PATTERN = /\[(?:VERIFY|CHECK|TODO|NOTE)[^\]]*\]/gi;
+  const MAX_LOOKAHEAD = 60;
+
+  function process(incoming: string, flush = false): string {
+    buffer += incoming;
+
+    if (flush) {
+      const cleaned = buffer.replace(PATTERN, (match) => {
+        console.warn(
+          `Warning: verification marker stripped from output${poem ? ` for "${poem}"` : ""}: ${match}`
+        );
+        return "";
+      });
+      buffer = "";
+      return cleaned;
+    }
+
+    const lastOpen = buffer.lastIndexOf("[");
+    if (lastOpen === -1 || buffer.length - lastOpen > MAX_LOOKAHEAD) {
+      const safe = lastOpen === -1 ? buffer : buffer.slice(0, lastOpen);
+      const hold = lastOpen === -1 ? "" : buffer.slice(lastOpen);
+      const cleaned = safe.replace(PATTERN, (match) => {
+        console.warn(
+          `Warning: verification marker stripped from output${poem ? ` for "${poem}"` : ""}: ${match}`
+        );
+        return "";
+      });
+      buffer = hold;
+      return cleaned;
+    }
+
+    const safe = buffer.slice(0, lastOpen);
+    buffer = buffer.slice(lastOpen);
+    return safe.replace(PATTERN, (match) => {
+      console.warn(
+        `Warning: verification marker stripped from output${poem ? ` for "${poem}"` : ""}: ${match}`
+      );
+      return "";
+    });
+  }
+
+  return { process };
+}
+
 function errorResponse(message: string, status = 400) {
   return new Response(
     JSON.stringify({ error: message }),
@@ -185,6 +233,7 @@ export async function POST(request: NextRequest) {
     });
 
     const encoder = new TextEncoder();
+    const stripper = createVerifyStripper(context.poem ?? context.textTitle);
     const readableStream = new ReadableStream({
       async start(controller) {
         try {
@@ -193,8 +242,11 @@ export async function POST(request: NextRequest) {
               event.type === "content_block_delta" &&
               event.delta.type === "text_delta"
             ) {
-              const chunk = `data: ${JSON.stringify({ text: event.delta.text })}\n\n`;
-              controller.enqueue(encoder.encode(chunk));
+              const cleaned = stripper.process(event.delta.text);
+              if (cleaned) {
+                const chunk = `data: ${JSON.stringify({ text: cleaned })}\n\n`;
+                controller.enqueue(encoder.encode(chunk));
+              }
             }
             if (
               event.type === "content_block_start" &&
@@ -204,6 +256,10 @@ export async function POST(request: NextRequest) {
               const status = `data: ${JSON.stringify({ status: "searching" })}\n\n`;
               controller.enqueue(encoder.encode(status));
             }
+          }
+          const tail = stripper.process("", true);
+          if (tail) {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: tail })}\n\n`));
           }
           controller.enqueue(encoder.encode("data: [DONE]\n\n"));
           controller.close();
