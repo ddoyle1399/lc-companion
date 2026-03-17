@@ -319,15 +319,13 @@ Every stanza in the poem must receive its own analysis section. Do not skip or c
 
 Use stanza-by-stanza breakdown by default. Only go line-by-line if the poem is exceptionally dense (e.g., Prufrock, A Valediction Forbidding Mourning, Fireman's Lift).
 
-For each stanza, include ALL FOUR of the following (target 200-250 words per stanza):
+For each stanza, include ALL THREE of the following (target 200-250 words per stanza):
 
 **Plain Meaning (2-3 sentences):** Start by explaining what is literally happening in this stanza in simple, clear language. What is the speaker saying or doing? What situation are we in? Do not assume the student already understands the poem. Write as if explaining to someone reading it for the very first time.
 
 **Technique Analysis (3-4 sentences):** Identify 2-3 poetic techniques from the approved LC list. For each: name the technique, quote the specific words that show it, and explain the effect it creates. Use only approved devices (imagery, metaphor, simile, personification, alliteration, assonance, onomatopoeia, enjambment, caesura, rhyme, repetition, contrast, symbolism, tone shifts, juxtaposition, direct address). Never name a technique without explaining what it does and why it matters.
 
 **Deeper Insight (2-3 sentences):** Go beyond identifying techniques. Explain what makes this stanza significant in the context of the whole poem. How does it develop the poem's themes? How does it shift the tone or mood? What would an examiner specifically reward a student for noticing? Give the student something original and perceptive that will stand out from generic answers.
-
-**Exam-Ready Sentence (1 sentence):** One polished analytical sentence the student could adapt directly into an exam essay. Combine a technique, a quote, and an insight about effect or meaning. This should model how to write about poetry at a high level.
 
 ${quoteGuidance}
 
