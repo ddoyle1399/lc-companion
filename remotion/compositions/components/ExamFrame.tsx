@@ -41,13 +41,13 @@ const Pill: React.FC<{ text: string; frame: number; delay: number }> = ({
   return (
     <div
       style={{
-        background: COLORS.goldDim,
-        border: `1px solid ${COLORS.goldBorder}`,
+        background: COLORS.tealDim,
+        border: `1px solid ${COLORS.tealBorder}`,
         borderRadius: 4,
         padding: "10px 20px",
         fontFamily: FONTS.body,
         fontSize: 20,
-        color: COLORS.cream,
+        color: COLORS.navy,
         lineHeight: 1.4,
         opacity,
         transform: `translateY(${y}px)`,
@@ -59,7 +59,6 @@ const Pill: React.FC<{ text: string; frame: number; delay: number }> = ({
 };
 
 export const ExamFrame: React.FC<ExamFrameProps> = ({
-  poet,
   spokenText,
   examConnection,
   durationInFrames,
@@ -131,7 +130,7 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
         Exam Focus
       </div>
 
-      {/* Two-column content area */}
+      {/* Two-column content */}
       <div
         style={{
           position: "absolute",
@@ -164,14 +163,13 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
             ))}
           </div>
 
-          {/* Linked poems */}
           {linkedPoems.length > 0 && (
             <div style={{ marginTop: 36 }}>
               <div
                 style={{
                   fontFamily: FONTS.label,
                   fontSize: 13,
-                  color: COLORS.steel,
+                  color: COLORS.navyMid,
                   textTransform: "uppercase" as const,
                   letterSpacing: 4,
                   marginBottom: 16,
@@ -189,11 +187,11 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
                   style={{
                     fontFamily: FONTS.body,
                     fontSize: 19,
-                    color: COLORS.cream,
+                    color: COLORS.navy,
                     opacity: interpolate(
                       frame,
                       [44 + i * 12, 60 + i * 12],
-                      [0, 0.7],
+                      [0, 0.70],
                       { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
                     ),
                     marginBottom: 8,
@@ -212,8 +210,9 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           <div style={{ flex: 1, display: "flex", alignItems: "flex-start", paddingTop: 44 }}>
             <div
               style={{
-                background: "rgba(42, 157, 143, 0.08)",
-                border: `1px solid rgba(42, 157, 143, 0.22)`,
+                background: COLORS.cardBg,
+                boxShadow: COLORS.cardShadow,
+                border: `1px solid ${COLORS.tealBorder}`,
                 borderLeft: `3px solid ${COLORS.teal}`,
                 borderRadius: 4,
                 padding: "24px 28px",
@@ -237,9 +236,10 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
                 style={{
                   fontFamily: FONTS.body,
                   fontSize: 21,
-                  color: COLORS.white,
+                  color: COLORS.navy,
                   lineHeight: 1.65,
-                  opacity: 0.85,
+                  opacity: 0.80,
+                  fontStyle: "italic" as const,
                 }}
               >
                 {examTip}
@@ -257,10 +257,10 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           right: LAYOUT.paddingH,
           fontFamily: FONTS.label,
           fontSize: 11,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 4,
-          opacity: 0.35,
+          opacity: 0.30,
         }}
       >
         The H1 Club

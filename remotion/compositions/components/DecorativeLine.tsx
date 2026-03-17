@@ -1,8 +1,6 @@
 import React from "react";
 import { useCurrentFrame, interpolate } from "remotion";
 
-const TEAL = "#2A9D8F";
-
 interface DecorativeLineProps {
   width: number;
   direction?: "horizontal" | "vertical";
@@ -15,7 +13,7 @@ export const DecorativeLine: React.FC<DecorativeLineProps> = ({
   width,
   direction = "horizontal",
   delay = 0,
-  color = `rgba(42, 157, 143, 0.4)`,
+  color = `rgba(42, 157, 143, 0.30)`,
   thickness = 1.5,
 }) => {
   const frame = useCurrentFrame();
@@ -25,11 +23,10 @@ export const DecorativeLine: React.FC<DecorativeLineProps> = ({
     extrapolateRight: "clamp",
   });
 
-  // Subtle opacity pulse after drawn
   const pulse =
     drawProgress >= 1
-      ? 0.35 + 0.1 * Math.sin((frame - delay - 20) * 0.03)
-      : drawProgress * 0.45;
+      ? 0.30 + 0.08 * Math.sin((frame - delay - 20) * 0.03)
+      : drawProgress * 0.38;
 
   if (direction === "vertical") {
     return (

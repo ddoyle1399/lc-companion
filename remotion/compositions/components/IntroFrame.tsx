@@ -33,19 +33,16 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Gold rule grows down
   const ruleHeight = interpolate(frame, [0, 35], [0, 240], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Label: "Introduction"
   const labelOpacity = interpolate(frame, [10, 28], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Poet name — spring entrance
   const poetSpring = spring({ frame: frame - 22, fps, config: { damping: 18, mass: 0.9 } });
   const poetOpacity = interpolate(frame, [22, 44], [0, 1], {
     extrapolateLeft: "clamp",
@@ -53,13 +50,11 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
   });
   const poetY = interpolate(poetSpring, [0, 1], [18, 0]);
 
-  // Separator
   const sepWidth = interpolate(frame, [36, 58], [0, 110], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Sentences stagger in
   const sentenceEntrances = sentences.map((_, i) => {
     const delay = 55 + i * 22;
     return {
@@ -95,7 +90,7 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
         transform: `translateY(${drift}px)`,
       }}
     >
-      {/* Section label top-left */}
+      {/* Section label */}
       <div
         style={{
           position: "absolute",
@@ -103,7 +98,7 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
           left: LAYOUT.paddingH,
           fontFamily: FONTS.label,
           fontSize: 13,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 5,
           opacity: labelOpacity,
@@ -112,7 +107,7 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
         Introduction
       </div>
 
-      {/* Gold vertical rule */}
+      {/* Teal vertical rule */}
       <div
         style={{
           position: "absolute",
@@ -120,7 +115,8 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
           top: "calc(50% - 120px)",
           width: 2,
           height: ruleHeight,
-          background: `linear-gradient(to bottom, transparent, ${COLORS.gold}, transparent)`,
+          background: `linear-gradient(to bottom, transparent, ${COLORS.teal}, transparent)`,
+          opacity: 0.5,
         }}
       />
 
@@ -130,7 +126,7 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
           fontFamily: FONTS.label,
           fontSize: 17,
           fontWeight: 600,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 7,
           opacity: poetOpacity,
@@ -145,22 +141,15 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
       <div
         style={{
           width: sepWidth,
-          height: 1,
-          background: COLORS.gold,
-          opacity: 0.4,
+          height: 1.5,
+          background: COLORS.teal,
+          opacity: 0.35,
           marginBottom: 44,
         }}
       />
 
       {/* Context sentences */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 22,
-          maxWidth: 1100,
-        }}
-      >
+      <div style={{ display: "flex", flexDirection: "column", gap: 22, maxWidth: 1100 }}>
         {sentences.map((sentence, i) => (
           <div
             key={i}
@@ -168,9 +157,9 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
               fontFamily: i === 0 ? FONTS.display : FONTS.body,
               fontSize: i === 0 ? 32 : 26,
               fontStyle: i === 0 ? ("italic" as const) : ("normal" as const),
-              color: i === 0 ? COLORS.cream : COLORS.white,
+              color: COLORS.navy,
               lineHeight: 1.65,
-              opacity: sentenceEntrances[i].opacity * (i === 0 ? 1 : 0.78),
+              opacity: sentenceEntrances[i].opacity * (i === 0 ? 1 : 0.70),
               transform: `translateY(${sentenceEntrances[i].y}px)`,
               letterSpacing: i === 0 ? 0.2 : 0,
             }}
@@ -188,10 +177,10 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
           right: LAYOUT.paddingH,
           fontFamily: FONTS.label,
           fontSize: 11,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 4,
-          opacity: 0.35,
+          opacity: 0.30,
         }}
       >
         The H1 Club

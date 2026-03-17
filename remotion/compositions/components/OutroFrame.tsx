@@ -79,7 +79,7 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
           left: LAYOUT.paddingH,
           fontFamily: FONTS.label,
           fontSize: 13,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 5,
           opacity: labelOpacity,
@@ -92,7 +92,7 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
         style={{
           fontFamily: FONTS.label,
           fontSize: 14,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 6,
           marginBottom: 22,
@@ -105,9 +105,9 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
       <div
         style={{
           width: ruleWidth,
-          height: 1,
-          background: COLORS.gold,
-          opacity: 0.4,
+          height: 1.5,
+          background: COLORS.teal,
+          opacity: 0.35,
           marginBottom: 44,
         }}
       />
@@ -118,14 +118,14 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
             fontFamily: FONTS.display,
             fontSize: 36,
             fontStyle: "italic" as const,
-            color: COLORS.cream,
+            color: COLORS.navy,
             lineHeight: 1.55,
             transform: `translateY(${closingY}px)`,
             maxWidth: 1300,
             marginBottom: 44,
-            borderLeft: `2px solid ${COLORS.gold}`,
+            borderLeft: `2px solid ${COLORS.teal}`,
             paddingLeft: 32,
-            opacity: closingOpacity * 0.90,
+            opacity: closingOpacity * 0.88,
           }}
         >
           {closingLine}
@@ -136,7 +136,7 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
         style={{
           fontFamily: FONTS.label,
           fontSize: 17,
-          color: COLORS.steel,
+          color: COLORS.teal,
           letterSpacing: 3,
           opacity: poemTagOpacity,
           textTransform: "uppercase" as const,
@@ -153,10 +153,10 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
           right: LAYOUT.paddingH,
           fontFamily: FONTS.label,
           fontSize: 11,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 4,
-          opacity: 0.35,
+          opacity: 0.30,
         }}
       >
         The H1 Club

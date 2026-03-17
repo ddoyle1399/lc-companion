@@ -30,6 +30,7 @@ const sections: PoemVideoProps["sections"] = [
     durationInFrames: 15 * FPS,
     audioSrc: "",
     spokenText: "Yeats wrote this poem in 1890 while living in London. It captures a deep longing for nature and escape from city life.",
+    imagePrompt: "Soft watercolour of an old writing desk overlooking a misty Irish lake, warm golden light, with plenty of empty space on the left for text overlay",
   },
   {
     type: "stanza_analysis",
@@ -38,6 +39,7 @@ const sections: PoemVideoProps["sections"] = [
     audioSrc: "",
     spokenText: "Look at the opening. 'I will arise and go now.'",
     keyQuote: { text: "I will arise and go now", lineIndex: 0 },
+    imagePrompt: "Gentle watercolour of a small rustic cabin surrounded by wildflowers and beehives, warm morning light, with plenty of empty space on the left for text overlay",
     techniques: [
       { name: "Biblical Allusion", quote: "I will arise and go", effect: "Echoes the parable of the prodigal son, giving the speaker's desire a sense of spiritual urgency" },
       { name: "Concrete Imagery", quote: "clay and wattles made", effect: "Grounds the fantasy of escape in physical, achievable detail" },
@@ -50,6 +52,7 @@ const sections: PoemVideoProps["sections"] = [
     audioSrc: "",
     spokenText: "The second stanza shifts from action to stillness.",
     keyQuote: { text: "peace comes dropping slow", lineIndex: 5 },
+    imagePrompt: "Soft watercolour of a peaceful lake at twilight with gentle ripples, purple and gold sky, with plenty of empty space on the left for text overlay",
     techniques: [
       { name: "Assonance", quote: "dropping, veils, glimmer, glow", effect: "Long vowel sounds slow the rhythm, mirroring the peacefulness described" },
       { name: "Sensory Imagery", quote: "midnight's all a glimmer, and noon a purple glow", effect: "Appeals to sight and colour to create a vivid, almost dreamlike picture of Innisfree" },
@@ -62,6 +65,7 @@ const sections: PoemVideoProps["sections"] = [
     audioSrc: "",
     spokenText: "The final stanza brings you back to reality.",
     keyQuote: { text: "I hear it in the deep heart's core", lineIndex: 13 },
+    imagePrompt: "Gentle watercolour of a person standing on a grey city pavement looking up at the sky, warm tones breaking through clouds, with plenty of empty space on the left for text overlay",
     techniques: [
       { name: "Contrast", quote: "roadway...pavements grey", effect: "Juxtaposes dull urban reality with the vivid natural world of Innisfree" },
       { name: "Metaphor", quote: "the deep heart's core", effect: "Innisfree becomes an internal place, not just a physical destination" },
@@ -73,6 +77,7 @@ const sections: PoemVideoProps["sections"] = [
     durationInFrames: 20 * FPS,
     audioSrc: "",
     spokenText: "Two themes dominate here. First, nature as escape. Innisfree represents freedom from the grey urban world of London. Every sensory detail builds a paradise of sound and colour. Second, memory and longing. The speaker does not physically go to Innisfree. He hears it in his mind. Innisfree lives in the deep heart's core, not on any map.",
+    imagePrompt: "Soft watercolour of a winding path between a forest and a city, warm dreamy atmosphere, with plenty of empty space on the left for text overlay",
     keyQuote: { text: "bee-loud glade", lineIndex: 3 },
     techniques: [
       { name: "Onomatopoeia", quote: "bee-loud", effect: "Makes the natural world audible, reinforcing nature as a living, sensory escape" },
@@ -104,6 +109,7 @@ const sections: PoemVideoProps["sections"] = [
     durationInFrames: 12 * FPS,
     audioSrc: "",
     spokenText: "This poem pairs well with questions on nature, memory, and the contrast between urban and rural life. It connects strongly to other Yeats poems that explore the tension between the real and the ideal.",
+    imagePrompt: "Clean soft watercolour of an open notebook with a pen on a wooden desk, warm studious atmosphere, with plenty of empty space on the left for text overlay",
     examConnection: {
       questionTypes: [
         "Nature and sense of place",
@@ -124,6 +130,7 @@ const sections: PoemVideoProps["sections"] = [
     durationInFrames: 5 * FPS,
     audioSrc: "",
     spokenText: "Know this poem inside out. It comes up regularly and rewards close reading.",
+    imagePrompt: "Soft watercolour of a peaceful Irish landscape with rolling green hills and a distant lake, golden hour light, with plenty of empty space on the left for text overlay",
     outroData: {
       closingLine: "Know this poem inside out. It comes up regularly and rewards close reading.",
       poemTitle: "The Lake Isle of Innisfree",
@@ -151,6 +158,10 @@ const totalFrames =
   closingDurationInFrames;
 
 async function main() {
+  if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === "placeholder_for_image_generation") {
+    console.log("Skipping image generation (no OPENAI_API_KEY). Using solid colour backgrounds.");
+  }
+
   console.log("Bundling Remotion composition...");
   const entryPoint = path.resolve("remotion/index.ts");
   const bundled = await bundle({

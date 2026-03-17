@@ -8,7 +8,7 @@ interface AnimatedDotsProps {
 
 export const AnimatedDots: React.FC<AnimatedDotsProps> = ({
   delay = 0,
-  color = "rgba(42, 157, 143, 0.3)",
+  color = "rgba(42, 157, 143, 0.25)",
 }) => {
   const frame = useCurrentFrame();
 
@@ -21,7 +21,6 @@ export const AnimatedDots: React.FC<AnimatedDotsProps> = ({
           extrapolateRight: "clamp",
         });
 
-        // Ripple scale pulse once visible
         const pulsePhase = (frame - dotDelay - 10) * 0.06 + i * 2.1;
         const scale =
           opacity >= 1

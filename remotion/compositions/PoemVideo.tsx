@@ -11,6 +11,7 @@ import { TitleCard } from "./components/TitleCard";
 import { ClosingCard } from "./components/ClosingCard";
 import { ProgressBar } from "./components/ProgressBar";
 import { GradientBackground, type SectionType } from "./components/GradientBackground";
+import { BackgroundImage } from "./components/BackgroundImage";
 import { StanzaDisplay } from "./components/StanzaDisplay";
 import { TechniqueOverlay } from "./components/TechniqueOverlay";
 import { IntroFrame } from "./components/IntroFrame";
@@ -26,6 +27,7 @@ interface SectionTiming {
   durationInFrames: number;
   audioSrc: string;
   from: number;
+  imageSrc?: string;
   spokenText?: string;
   keyQuote?: { text: string; lineIndex: number };
   techniques?: { name: string; quote: string; effect: string }[];
@@ -43,8 +45,8 @@ interface SectionTiming {
 }
 
 /**
- * Renders the animated background layer: gradient crossfades + particles + vignette.
- * Sits behind all content and transitions smoothly between section colours.
+ * Animated background layer: crossfades gradient colours between sections.
+ * When a section has an image, it shows the BackgroundImage instead of gradient.
  */
 const AnimatedBackground: React.FC<{
   sectionTimings: SectionTiming[];
@@ -90,21 +92,31 @@ const AnimatedBackground: React.FC<{
   return (
     <>
       <AbsoluteFill style={{ opacity: 1 - crossFade }}>
-        <GradientBackground sectionType={currentSectionType} />
+        {current.imageSrc ? (
+          <BackgroundImage
+            src={current.imageSrc}
+            durationInFrames={current.durationInFrames}
+          />
+        ) : (
+          <GradientBackground sectionType={currentSectionType} />
+        )}
       </AbsoluteFill>
-      {inTransition && (
+      {inTransition && next && (
         <AbsoluteFill style={{ opacity: crossFade }}>
-          <GradientBackground sectionType={nextSectionType} />
+          {next.imageSrc ? (
+            <BackgroundImage
+              src={next.imageSrc}
+              durationInFrames={next.durationInFrames}
+            />
+          ) : (
+            <GradientBackground sectionType={nextSectionType} />
+          )}
         </AbsoluteFill>
       )}
     </>
   );
 };
 
-/**
- * Renders the content for a single analysis section based on its type.
- * Full-screen layout: no two-column split, no full poem display.
- */
 const SectionContent: React.FC<{
   section: SectionTiming;
   poemLines: string[];
@@ -186,22 +198,29 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
   sections,
   titleDurationInFrames,
   closingDurationInFrames,
+  sectionImages = [],
 }) => {
+  // Build a lookup from sectionId (index) -> imageSrc
+  const imageMap = new Map(sectionImages.map((img) => [img.sectionId, img.imagePath]));
+
   let currentFrame = 0;
   const titleFrom = currentFrame;
   currentFrame += titleDurationInFrames;
 
-  const sectionTimings: SectionTiming[] = sections.map((section) => {
+  const sectionTimings: SectionTiming[] = sections.map((section, i) => {
     const from = currentFrame;
     currentFrame += section.durationInFrames;
-    return { ...section, from };
+    return {
+      ...section,
+      from,
+      imageSrc: imageMap.get(i),
+    };
   });
 
   const closingFrom = currentFrame;
   const contentStart = titleDurationInFrames;
   const contentEnd = closingFrom;
 
-  // Track stanza index for section indicators
   let stanzaCounter = 0;
   const stanzaIndices = sectionTimings.map((s) => {
     if (s.type === "stanza_analysis") {
@@ -212,7 +231,7 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
   });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0B1628" }}>
+    <AbsoluteFill style={{ backgroundColor: "#FFF8EE" }}>
       {/* Animated background for analysis sections */}
       <Sequence from={contentStart} durationInFrames={contentEnd - contentStart}>
         <AnimatedBackground
@@ -232,7 +251,7 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
         />
       </Sequence>
 
-      {/* Analysis sections: full-screen content + audio */}
+      {/* Analysis sections */}
       {sectionTimings.map((section, i) => (
         <Sequence
           key={i}

@@ -2,7 +2,7 @@ import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
 import { COLORS, FONTS, LAYOUT } from "./design";
 
-const LINE_STAGGER = 7; // frames between each poem line appearing
+const LINE_STAGGER = 7;
 
 interface Technique {
   name: string;
@@ -48,8 +48,8 @@ const SectionDot: React.FC<{ filled: boolean; frame: number; delay: number }> = 
         width: 6,
         height: 6,
         borderRadius: 3,
-        background: filled ? COLORS.gold : "transparent",
-        border: `1px solid ${filled ? COLORS.gold : COLORS.steelDim}`,
+        background: filled ? COLORS.teal : "transparent",
+        border: `1px solid ${filled ? COLORS.teal : COLORS.steelDim}`,
         opacity,
       }}
     />
@@ -75,9 +75,10 @@ const TechniqueCard: React.FC<{
   return (
     <div
       style={{
-        background: COLORS.glass,
+        background: COLORS.cardBg,
+        boxShadow: COLORS.cardShadow,
         border: `1px solid ${COLORS.glassBorder}`,
-        borderLeft: `3px solid ${COLORS.gold}`,
+        borderLeft: `3px solid ${COLORS.teal}`,
         borderRadius: 4,
         padding: "16px 20px",
         opacity,
@@ -88,10 +89,11 @@ const TechniqueCard: React.FC<{
         style={{
           fontFamily: FONTS.label,
           fontSize: 11,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 4,
           marginBottom: 6,
+          fontWeight: 600,
         }}
       >
         Literary Technique
@@ -101,7 +103,7 @@ const TechniqueCard: React.FC<{
           fontFamily: FONTS.body,
           fontSize: 20,
           fontWeight: 700,
-          color: COLORS.white,
+          color: COLORS.navy,
           marginBottom: 8,
         }}
       >
@@ -113,8 +115,8 @@ const TechniqueCard: React.FC<{
             fontFamily: FONTS.display,
             fontSize: 17,
             fontStyle: "italic" as const,
-            color: COLORS.cream,
-            opacity: 0.65,
+            color: COLORS.navy,
+            opacity: 0.70,
             marginBottom: 8,
             lineHeight: 1.5,
           }}
@@ -126,7 +128,7 @@ const TechniqueCard: React.FC<{
         style={{
           fontFamily: FONTS.body,
           fontSize: 17,
-          color: COLORS.steel,
+          color: COLORS.navyMid,
           lineHeight: 1.55,
         }}
       >
@@ -151,11 +153,9 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
     (idx) => poemLines[idx] !== undefined && poemLines[idx].trim() !== ""
   );
 
-  // Spotlight timing: 42% through section
   const spotlightStart = Math.floor(durationInFrames * 0.42);
   const spotlightEnd = spotlightStart + 80;
-  const inSpotlight =
-    !!keyQuote && frame >= spotlightStart && frame < spotlightEnd;
+  const inSpotlight = !!keyQuote && frame >= spotlightStart && frame < spotlightEnd;
 
   const spotlightProgress = keyQuote
     ? interpolate(frame, [spotlightStart, spotlightStart + 18], [0, 1], {
@@ -165,7 +165,6 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
       })
     : 0;
 
-  // Section fade out
   const fadeOut = interpolate(
     frame,
     [durationInFrames - 14, durationInFrames],
@@ -173,7 +172,6 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Slow upward drift
   const drift = interpolate(frame, [0, durationInFrames], [0, -6], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -182,13 +180,9 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
   const fontSize = calcFontSize(linesToShow.length);
   const lineHeight = fontSize * 1.85;
 
-  // Analysis text: first 2 sentences of spoken text
   const analysisText = getFirstSentences(spokenText, 2);
-
-  // Technique cards: max 2
   const visibleTechniques = techniques.slice(0, 2);
 
-  // Right panel content fade in
   const analysisOpacity = interpolate(frame, [20, 42], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -200,23 +194,9 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
     easing: Easing.out(Easing.quad),
   });
 
-  // During spotlight: right panel shows isolated quote
-  const rightPanelShift = inSpotlight
-    ? interpolate(frame, [spotlightStart, spotlightStart + 18], [0, 1], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp",
-      })
-    : 0;
-
   return (
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        opacity: fadeOut,
-      }}
-    >
-      {/* ── Header: section label + dots ── */}
+    <div style={{ position: "absolute", inset: 0, opacity: fadeOut }}>
+      {/* Header */}
       <div
         style={{
           position: "absolute",
@@ -236,7 +216,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
             fontFamily: FONTS.label,
             fontSize: 13,
             fontWeight: 600,
-            color: COLORS.gold,
+            color: COLORS.teal,
             textTransform: "uppercase" as const,
             letterSpacing: 5,
             opacity: interpolate(frame, [0, 16], [0, 1], {
@@ -248,7 +228,6 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           {sectionIndex > 0 ? `Stanza ${sectionIndex}` : "Analysis"}
         </div>
 
-        {/* Section progress dots */}
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           {Array.from({ length: Math.min(sectionIndex + 1, 6) }).map((_, i) => (
             <SectionDot
@@ -261,7 +240,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
         </div>
       </div>
 
-      {/* ── Left panel: poem lines ── */}
+      {/* Left panel: poem lines */}
       <div
         style={{
           position: "absolute",
@@ -277,7 +256,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           transform: `translateY(${drift}px)`,
         }}
       >
-        {/* Gold vertical rule */}
+        {/* Teal vertical rule */}
         <div
           style={{
             position: "absolute",
@@ -285,15 +264,15 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
             top: 30,
             bottom: 30,
             width: 2,
-            background: `linear-gradient(to bottom, transparent, ${COLORS.gold} 20%, ${COLORS.gold} 80%, transparent)`,
-            opacity: 0.6,
+            background: `linear-gradient(to bottom, transparent, ${COLORS.teal} 20%, ${COLORS.teal} 80%, transparent)`,
+            opacity: 0.35,
           }}
         />
 
         {linesToShow.map((lineIdx, i) => {
           const isKeyLine = keyQuote?.lineIndex === lineIdx;
+          const isInSpotlightMode = inSpotlight && !!keyQuote;
 
-          // Each line enters with stagger
           const lineOpacity = interpolate(
             frame,
             [i * LINE_STAGGER, i * LINE_STAGGER + 16],
@@ -307,17 +286,25 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
             { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.quad) }
           );
 
-          // Spotlight: key line scales up, others dim
-          const isInSpotlightMode = inSpotlight && !!keyQuote;
           const lineScale =
             isInSpotlightMode && isKeyLine
-              ? interpolate(spotlightProgress, [0, 1], [1, 1.06], {
+              ? interpolate(spotlightProgress, [0, 1], [1, 1.04], {
                   extrapolateLeft: "clamp",
                   extrapolateRight: "clamp",
                 })
               : 1;
-          const lineDimOpacity =
-            isInSpotlightMode && !isKeyLine ? 0.28 : 1;
+          const lineDimOpacity = isInSpotlightMode && !isKeyLine ? 0.22 : 1;
+
+          // Gold marker highlight sweep — animates width 0 -> 100% over 12 frames
+          const highlightWidth =
+            isKeyLine && inSpotlight
+              ? interpolate(
+                  frame,
+                  [spotlightStart, spotlightStart + 12],
+                  [0, 100],
+                  { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+                )
+              : 0;
 
           return (
             <div
@@ -333,6 +320,23 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
                 position: "relative",
               }}
             >
+              {/* Gold marker highlight band */}
+              {isKeyLine && inSpotlight && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 44,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: `${highlightWidth}%`,
+                    height: fontSize + 10,
+                    background: COLORS.goldHighlight,
+                    borderRadius: 3,
+                    pointerEvents: "none",
+                  }}
+                />
+              )}
+
               {/* Line number */}
               <div
                 style={{
@@ -350,7 +354,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
                 {lineIdx + 1}
               </div>
 
-              {/* Key line marker */}
+              {/* Left accent bar on focus line */}
               {isKeyLine && inSpotlight && (
                 <div
                   style={{
@@ -358,9 +362,9 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
                     left: -20,
                     top: "50%",
                     transform: "translateY(-50%)",
-                    width: 4,
+                    width: 3,
                     height: fontSize + 4,
-                    background: COLORS.gold,
+                    background: COLORS.teal,
                     borderRadius: 2,
                     opacity: spotlightProgress,
                   }}
@@ -373,14 +377,12 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
                   fontFamily: FONTS.display,
                   fontSize,
                   fontStyle: "italic" as const,
-                  color: isKeyLine && inSpotlight ? COLORS.goldLight : COLORS.cream,
+                  color: isKeyLine && inSpotlight ? COLORS.navy : COLORS.navy,
                   lineHeight: 1,
                   letterSpacing: 0.2,
-                  transition: "color 0.3s",
-                  textShadow:
-                    isKeyLine && inSpotlight
-                      ? `0 0 40px rgba(196, 150, 90, 0.35)`
-                      : "none",
+                  opacity: isKeyLine && inSpotlight ? 1 : 0.85,
+                  position: "relative",
+                  zIndex: 1,
                 }}
               >
                 {poemLines[lineIdx]}
@@ -390,7 +392,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
         })}
       </div>
 
-      {/* ── Vertical panel separator ── */}
+      {/* Vertical panel separator */}
       <div
         style={{
           position: "absolute",
@@ -398,7 +400,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           top: LAYOUT.headerH + 30,
           bottom: 90,
           width: 1,
-          background: `linear-gradient(to bottom, transparent, ${COLORS.goldDivider} 20%, ${COLORS.goldDivider} 80%, transparent)`,
+          background: `linear-gradient(to bottom, transparent, ${COLORS.tealDivider} 20%, ${COLORS.tealDivider} 80%, transparent)`,
           opacity: interpolate(frame, [10, 30], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
@@ -406,7 +408,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
         }}
       />
 
-      {/* ── Right panel: analysis + techniques ── */}
+      {/* Right panel: analysis + techniques */}
       <div
         style={{
           position: "absolute",
@@ -423,7 +425,6 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           transform: `translateY(${drift}px)`,
         }}
       >
-        {/* Spotlight mode: show isolated quote */}
         {inSpotlight && keyQuote ? (
           <div
             style={{
@@ -435,7 +436,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
               style={{
                 fontFamily: FONTS.label,
                 fontSize: 12,
-                color: COLORS.gold,
+                color: COLORS.teal,
                 textTransform: "uppercase" as const,
                 letterSpacing: 5,
                 marginBottom: 20,
@@ -446,11 +447,11 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
             <div
               style={{
                 fontFamily: FONTS.display,
-                fontSize: 38,
+                fontSize: 36,
                 fontStyle: "italic" as const,
-                color: COLORS.cream,
+                color: COLORS.navy,
                 lineHeight: 1.45,
-                borderLeft: `3px solid ${COLORS.gold}`,
+                borderLeft: `3px solid ${COLORS.teal}`,
                 paddingLeft: 28,
               }}
             >
@@ -459,15 +460,14 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           </div>
         ) : (
           <>
-            {/* Normal mode: analysis text */}
             {analysisText && (
               <div
                 style={{
                   fontFamily: FONTS.body,
                   fontSize: 24,
-                  color: COLORS.white,
+                  color: COLORS.navy,
                   lineHeight: 1.75,
-                  opacity: analysisOpacity * 0.80,
+                  opacity: analysisOpacity * 0.75,
                   transform: `translateY(${analysisY}px)`,
                 }}
               >
@@ -475,7 +475,6 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
               </div>
             )}
 
-            {/* Technique cards */}
             {visibleTechniques.map((t, i) => (
               <TechniqueCard
                 key={i}
@@ -488,7 +487,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
         )}
       </div>
 
-      {/* ── Bottom brand strip ── */}
+      {/* Brand strip */}
       <div
         style={{
           position: "absolute",
@@ -496,10 +495,10 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           right: LAYOUT.paddingH,
           fontFamily: FONTS.label,
           fontSize: 11,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 4,
-          opacity: 0.35,
+          opacity: 0.30,
         }}
       >
         The H1 Club

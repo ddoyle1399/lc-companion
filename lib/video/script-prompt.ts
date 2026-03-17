@@ -102,6 +102,21 @@ SCRIPT STRUCTURE (follow this order):
      - "poemTitle": The title of the poem or text.
      - "poetName": The poet or author name.
 
+IMAGE PROMPTS:
+Every section must include an "imagePrompt" field. This generates a DALL-E 3 background illustration shown behind the video content.
+Rules:
+- Describe a simple, evocative scene related to the content in that section
+- NEVER include text, words, letters, or numbers in the prompt
+- Use a watercolour or soft illustration style
+- Always end with: "with plenty of empty space on the left for text overlay"
+- Keep under 100 words. Focus on mood and atmosphere.
+Examples:
+- Intro about a poet: "Soft watercolour of an old writing desk with an inkwell and quill by a window, warm light, with plenty of empty space on the left for text overlay"
+- Nature stanza: "Soft watercolour of a peaceful lake surrounded by trees at dawn, warm golden light, with plenty of empty space on the left for text overlay"
+- Theme of memory/loss: "Gentle watercolour of autumn leaves falling from a bare tree, muted warm tones, with plenty of empty space on the left for text overlay"
+- Exam focus section: "Clean soft watercolour of an open notebook with a pen on a desk, warm studious atmosphere, with plenty of empty space on the left for text overlay"
+- Outro/summary: "Soft watercolour of a peaceful Irish landscape with rolling green hills and a distant lake, golden hour light, with plenty of empty space on the left for text overlay"
+
 JSON SCHEMA:
 {
   "poemTitle": "string",
@@ -114,6 +129,7 @@ JSON SCHEMA:
       "spokenText": "string (the words the voiceover will say)",
       "highlightLines": [0, 1, 2, 3],
       "estimatedDuration": number (seconds, roughly wordCount / 2.5),
+      "imagePrompt": "string (DALL-E background prompt — evocative scene, no text/words/letters, watercolour style, ends with 'with plenty of empty space on the left for text overlay')",
       "keyQuote": { "text": "string", "lineIndex": number } | null,
       "techniques": [{ "name": "string", "quote": "string", "effect": "string" }] | null,
       "themes": [{ "name": "string", "supportingPoints": ["string"], "quote": "string" }] | null,

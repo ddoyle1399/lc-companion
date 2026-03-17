@@ -35,9 +35,10 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
   return (
     <div
       style={{
-        background: COLORS.glass,
+        background: COLORS.cardBg,
+        boxShadow: COLORS.cardShadow,
         border: `1px solid ${COLORS.glassBorder}`,
-        borderLeft: `3px solid ${COLORS.gold}`,
+        borderLeft: `3px solid ${COLORS.teal}`,
         borderRadius: 4,
         padding: "20px 28px",
         opacity,
@@ -49,7 +50,7 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
           fontFamily: FONTS.body,
           fontSize: 22,
           fontWeight: 700,
-          color: COLORS.white,
+          color: COLORS.navy,
           marginBottom: 12,
           letterSpacing: 0.1,
         }}
@@ -62,11 +63,11 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
           style={{
             fontFamily: FONTS.body,
             fontSize: 18,
-            color: COLORS.steel,
+            color: COLORS.navyMid,
             lineHeight: 1.6,
             marginBottom: 6,
             paddingLeft: 14,
-            borderLeft: `1px solid ${COLORS.steelDim}`,
+            borderLeft: `1px solid ${COLORS.tealBorder}`,
           }}
         >
           {point}
@@ -78,8 +79,8 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
             fontFamily: FONTS.display,
             fontSize: 18,
             fontStyle: "italic" as const,
-            color: COLORS.cream,
-            opacity: 0.6,
+            color: COLORS.teal,
+            opacity: 0.80,
             marginTop: 10,
           }}
         >
@@ -93,7 +94,6 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
 export const ThemeFrame: React.FC<ThemeFrameProps> = ({
   spokenText,
   themes = [],
-  keyQuote,
   durationInFrames,
 }) => {
   const frame = useCurrentFrame();
@@ -126,7 +126,6 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
     extrapolateRight: "clamp",
   });
 
-  // Intro sentence from spoken text
   const intro = spokenText?.match(/[^.!?]+[.!?]+/)?.[0]?.trim() ?? "";
 
   return (
@@ -151,7 +150,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
           left: LAYOUT.paddingH,
           fontFamily: FONTS.label,
           fontSize: 13,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 5,
           opacity: labelOpacity,
@@ -166,7 +165,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
           fontFamily: FONTS.label,
           fontSize: 17,
           fontWeight: 600,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 6,
           marginBottom: 18,
@@ -178,9 +177,9 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
       <div
         style={{
           width: ruleWidth,
-          height: 1,
-          background: COLORS.gold,
-          opacity: 0.4,
+          height: 1.5,
+          background: COLORS.teal,
+          opacity: 0.35,
           marginBottom: 36,
         }}
       />
@@ -191,9 +190,9 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
           style={{
             fontFamily: FONTS.body,
             fontSize: 24,
-            color: COLORS.white,
+            color: COLORS.navy,
             lineHeight: 1.7,
-            opacity: introOpacity * 0.75,
+            opacity: introOpacity * 0.70,
             marginBottom: 36,
             maxWidth: 1400,
           }}
@@ -203,14 +202,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
       )}
 
       {/* Theme cards */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 20,
-          maxWidth: 1400,
-        }}
-      >
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 1400 }}>
         {themes.slice(0, 3).map((theme, i) => (
           <ThemeCard key={i} theme={theme} frame={frame} delay={40 + i * 22} />
         ))}
@@ -224,10 +216,10 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
           right: LAYOUT.paddingH,
           fontFamily: FONTS.label,
           fontSize: 11,
-          color: COLORS.gold,
+          color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 4,
-          opacity: 0.35,
+          opacity: 0.30,
         }}
       >
         The H1 Club

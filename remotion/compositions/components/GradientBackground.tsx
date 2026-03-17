@@ -1,6 +1,5 @@
 import React from "react";
 import { useCurrentFrame } from "remotion";
-import { COLORS } from "./design";
 
 export type SectionType =
   | "title"
@@ -18,32 +17,32 @@ interface BgConfig {
 
 const BG: Record<SectionType, BgConfig> = {
   title: {
-    base: `linear-gradient(160deg, #0D1225 0%, #070A14 100%)`,
-    overlay: `radial-gradient(ellipse 110% 75% at 68% 50%, rgba(196,150,90,0.09) 0%, transparent 65%)`,
+    base: `linear-gradient(160deg, #FFF8EE 0%, #FFF2DC 100%)`,
+    overlay: `radial-gradient(ellipse 90% 70% at 70% 50%, rgba(42,157,143,0.07) 0%, transparent 65%)`,
   },
   intro: {
-    base: `linear-gradient(160deg, #0A0E1A 0%, #080C18 100%)`,
-    overlay: `radial-gradient(ellipse 90% 65% at 25% 60%, rgba(42,100,155,0.08) 0%, transparent 65%)`,
+    base: `linear-gradient(160deg, #FFF0E0 0%, #FFFDF7 100%)`,
+    overlay: `radial-gradient(ellipse 80% 60% at 25% 60%, rgba(212,168,75,0.08) 0%, transparent 65%)`,
   },
   stanza_analysis: {
-    base: `linear-gradient(165deg, #09111F 0%, #070D19 100%)`,
-    overlay: `radial-gradient(ellipse 70% 55% at 78% 38%, rgba(196,150,90,0.06) 0%, transparent 60%)`,
+    base: `linear-gradient(165deg, #FFFDF7 0%, #FFF8EE 100%)`,
+    overlay: `radial-gradient(ellipse 70% 55% at 78% 38%, rgba(42,157,143,0.05) 0%, transparent 60%)`,
   },
   theme: {
-    base: `linear-gradient(155deg, #0B0E1E 0%, #08091A 100%)`,
-    overlay: `radial-gradient(ellipse 85% 60% at 50% 55%, rgba(55,75,140,0.08) 0%, transparent 65%)`,
+    base: `linear-gradient(155deg, #F5F0FF 0%, #EEF0FF 100%)`,
+    overlay: `radial-gradient(ellipse 85% 60% at 50% 55%, rgba(42,157,143,0.06) 0%, transparent 65%)`,
   },
   exam_connection: {
-    base: `linear-gradient(160deg, #090D18 0%, #07091400 100%)`,
-    overlay: `radial-gradient(ellipse 65% 50% at 62% 44%, rgba(42,157,143,0.07) 0%, transparent 60%)`,
+    base: `linear-gradient(160deg, #F0F5FF 0%, #EAF4F2 100%)`,
+    overlay: `radial-gradient(ellipse 65% 50% at 62% 44%, rgba(42,157,143,0.08) 0%, transparent 60%)`,
   },
   outro: {
-    base: `linear-gradient(160deg, #0A0E1A 0%, #060810 100%)`,
-    overlay: `radial-gradient(ellipse 80% 65% at 50% 50%, rgba(196,150,90,0.07) 0%, transparent 65%)`,
+    base: `linear-gradient(160deg, #FFFDF7 0%, #FFF8EE 100%)`,
+    overlay: `radial-gradient(ellipse 80% 65% at 50% 50%, rgba(212,168,75,0.06) 0%, transparent 65%)`,
   },
   closing: {
-    base: `linear-gradient(160deg, #08091A 0%, #020308 100%)`,
-    overlay: `radial-gradient(ellipse 95% 80% at 50% 50%, rgba(196,150,90,0.12) 0%, transparent 70%)`,
+    base: `linear-gradient(160deg, #FFF8EE 0%, #FFF2DC 100%)`,
+    overlay: `radial-gradient(ellipse 95% 80% at 50% 50%, rgba(42,157,143,0.08) 0%, transparent 70%)`,
   },
 };
 
@@ -57,8 +56,8 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
   const frame = useCurrentFrame();
   const cfg = BG[sectionType];
 
-  // Very slow glow breathe — imperceptible as animation, adds organic life
-  const breatheScale = 1 + 0.025 * Math.sin(frame / 90);
+  // Very slow glow breathe — adds organic warmth without obvious animation
+  const breatheScale = 1 + 0.018 * Math.sin(frame / 100);
 
   return (
     <div
@@ -69,7 +68,7 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
         overflow: "hidden",
       }}
     >
-      {/* Radial atmospheric glow */}
+      {/* Radial warm glow */}
       <div
         style={{
           position: "absolute",
@@ -77,14 +76,6 @@ export const GradientBackground: React.FC<GradientBackgroundProps> = ({
           background: cfg.overlay,
           transform: `scale(${breatheScale})`,
           transformOrigin: "center center",
-        }}
-      />
-      {/* Subtle horizontal vignette — adds cinematic letterbox feel */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: `linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 18%, transparent 82%, rgba(0,0,0,0.45) 100%)`,
         }}
       />
     </div>

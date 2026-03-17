@@ -4,6 +4,7 @@ export interface ScriptSection {
   spokenText: string;
   highlightLines: number[]; // 0-indexed poem line numbers
   estimatedDuration: number; // seconds, roughly 1s per 2.5 words
+  imagePrompt?: string; // DALL-E prompt for this section's background image
   keyQuote?: {
     text: string; // The exact quote from the poem
     lineIndex: number; // Which poem line it comes from (0-indexed)
@@ -74,6 +75,7 @@ export interface PoemVideoProps {
     highlightLines: number[];
     durationInFrames: number;
     audioSrc: string;
+    imagePrompt?: string;
     spokenText?: string;
     keyQuote?: {
       text: string;
@@ -102,4 +104,5 @@ export interface PoemVideoProps {
   }[];
   titleDurationInFrames: number; // 90 frames = 3s at 30fps
   closingDurationInFrames: number; // 60 frames = 2s at 30fps
+  sectionImages?: { sectionId: number; imagePath: string }[];
 }

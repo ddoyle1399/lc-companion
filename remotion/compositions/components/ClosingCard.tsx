@@ -40,7 +40,7 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
     extrapolateRight: "clamp",
   });
 
-  const urlOpacity = interpolate(frame, [35, 52], [0, 0.45], {
+  const urlOpacity = interpolate(frame, [35, 52], [0, 0.40], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -66,9 +66,10 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
         <div
           style={{
             width: ruleWidth,
-            height: 1,
-            background: `linear-gradient(to right, transparent, ${COLORS.gold}, transparent)`,
+            height: 1.5,
+            background: `linear-gradient(to right, transparent, ${COLORS.teal}, transparent)`,
             marginBottom: 40,
+            opacity: 0.5,
           }}
         />
 
@@ -76,10 +77,10 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
           style={{
             fontFamily: FONTS.display,
             fontSize: 58,
-            fontWeight: 400,
+            fontWeight: 700,
             fontStyle: "italic" as const,
-            color: COLORS.cream,
-            letterSpacing: 1,
+            color: COLORS.navy,
+            letterSpacing: 0.5,
             opacity: brandOpacity,
             transform: `translateY(${brandY}px)`,
             marginBottom: 16,
@@ -93,7 +94,7 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
           style={{
             fontFamily: FONTS.label,
             fontSize: 14,
-            color: COLORS.gold,
+            color: COLORS.teal,
             textTransform: "uppercase" as const,
             letterSpacing: 6,
             opacity: tagOpacity,
@@ -108,8 +109,8 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
           style={{
             width: ruleWidth * 0.7,
             height: 1,
-            background: `linear-gradient(to right, transparent, ${COLORS.gold}, transparent)`,
-            opacity: 0.5,
+            background: `linear-gradient(to right, transparent, ${COLORS.teal}, transparent)`,
+            opacity: 0.3,
             marginBottom: 44,
           }}
         />
@@ -121,9 +122,10 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
               style={{
                 fontFamily: FONTS.label,
                 fontSize: 16,
-                color: COLORS.steel,
+                color: COLORS.navy,
                 textTransform: "uppercase" as const,
                 letterSpacing: 4,
+                opacity: 0.40,
               }}
             >
               {url}

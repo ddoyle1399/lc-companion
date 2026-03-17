@@ -12,7 +12,7 @@ export const CornerAccent: React.FC<CornerAccentProps> = ({
   corner,
   delay = 0,
   size = 40,
-  opacity: maxOpacity = 0.08,
+  opacity: maxOpacity = 0.10,
 }) => {
   const frame = useCurrentFrame();
 
@@ -33,7 +33,7 @@ export const CornerAccent: React.FC<CornerAccentProps> = ({
   let vLine: React.CSSProperties = {};
 
   const color = "rgba(42, 157, 143, 1)";
-  const t = 1;
+  const t = 1.5;
 
   switch (corner) {
     case "topLeft":

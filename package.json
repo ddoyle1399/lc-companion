@@ -19,6 +19,7 @@
     "@remotion/renderer": "^4.0.431",
     "docx": "^9.6.0",
     "next": "16.1.6",
+    "openai": "^6.31.0",
     "pptxgenjs": "^4.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",

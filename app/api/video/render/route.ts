@@ -10,6 +10,7 @@ import {
 import type { VideoScript, PoemVideoProps, VideoPipelineEvent } from "@/lib/video/types";
 import { getCopyrightMode } from "@/src/data/poets.config";
 import { generateVideoScript } from "@/lib/video/script-formatter";
+import { generateVideoImages } from "@/lib/video/image-generator";
 import { getClient } from "@/lib/claude/client";
 import {
   buildSystemPrompt,
@@ -340,6 +341,28 @@ export async function POST(request: NextRequest) {
 
         console.log(`[video-render] Composition sections audioSrc values:`, compositionSections.map((s, i) => `${i}: "${s.audioSrc}"`));
 
+        // Generate background images (optional — falls back silently if no OPENAI_API_KEY)
+        let sectionImages: { sectionId: number; imagePath: string }[] = [];
+        try {
+          const total = finalScript.sections.length;
+          send({
+            stage: "render",
+            progress: 0,
+            message: `Generating visuals: section 1 of ${total}...`,
+          });
+          const imgDir = path.join(tmpDir, "images");
+          const generated = await generateVideoImages(finalScript, imgDir);
+          sectionImages = generated.map((img) => ({
+            sectionId: img.sectionId,
+            imagePath: `file://${img.imagePath}`,
+          }));
+          if (generated.length > 0) {
+            send({ stage: "render", progress: 0, message: `${generated.length} background images generated.` });
+          }
+        } catch (imgErr) {
+          console.warn("[video-render] Image generation failed, continuing without images:", imgErr instanceof Error ? imgErr.message : imgErr);
+        }
+
         const inputProps: PoemVideoProps = {
           poemTitle: finalScript.poemTitle,
           poet: finalScript.poet,
@@ -348,6 +371,7 @@ export async function POST(request: NextRequest) {
           sections: compositionSections,
           titleDurationInFrames,
           closingDurationInFrames,
+          sectionImages,
         };
 
         const totalFrames =

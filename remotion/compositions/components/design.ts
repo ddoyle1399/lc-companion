@@ -14,30 +14,44 @@ export const FONTS = {
 } as const;
 
 export const COLORS = {
-  // Backgrounds
-  bg: "#0A0E1A",
-  bgDeep: "#060810",
-  // Primary accent — warm editorial gold (Penguin Classics / Faber)
-  gold: "#C4965A",
-  goldLight: "#D4AA72",
-  goldDim: "rgba(196, 150, 90, 0.22)",
-  goldGlow: "rgba(196, 150, 90, 0.10)",
-  goldBorder: "rgba(196, 150, 90, 0.28)",
-  // Text
-  cream: "#F2E8D5",    // Poem text — warm, like aged paper
-  white: "#FFFFFF",
-  muted: "rgba(255, 255, 255, 0.50)",
-  // Secondary UI
-  steel: "#7D9BB5",
-  steelDim: "rgba(125, 155, 181, 0.35)",
-  // Glass panels
-  glass: "rgba(255, 255, 255, 0.04)",
-  glassBorder: "rgba(255, 255, 255, 0.09)",
-  // Dividers
-  divider: "rgba(255, 255, 255, 0.07)",
-  goldDivider: "rgba(196, 150, 90, 0.25)",
-  // Brand teal — keep for consistency
+  // Backgrounds — warm, bright, student-friendly
+  bg: "#FFF8EE",
+  bgSoft: "#FFFDF7",
+  bgPeach: "#FFF0E0",
+  bgLavender: "#F5F0FF",
+  bgBlue: "#F0F5FF",
+  // Text — dark navy, not pure black
+  navy: "#1B2838",
+  navyMid: "rgba(27, 40, 56, 0.60)",
+  navyDim: "rgba(27, 40, 56, 0.30)",
+  navyFaint: "rgba(27, 40, 56, 0.08)",
+  // Brand teal — primary accent
   teal: "#2A9D8F",
+  tealDim: "rgba(42, 157, 143, 0.15)",
+  tealBorder: "rgba(42, 157, 143, 0.30)",
+  // Coral — secondary accent for emphasis
+  coral: "#E07A5F",
+  // Gold — highlight and accents
+  gold: "#D4A84B",
+  goldHighlight: "rgba(212, 168, 75, 0.15)",
+  goldBorder: "rgba(212, 168, 75, 0.35)",
+  // Cards
+  cardBg: "rgba(255, 255, 255, 0.88)",
+  cardShadow: "0 4px 20px rgba(0,0,0,0.08)",
+  // Dividers
+  divider: "rgba(27, 40, 56, 0.08)",
+  tealDivider: "rgba(42, 157, 143, 0.25)",
+  // Legacy aliases kept so old refs in design system still resolve
+  cream: "#FFF8EE",
+  white: "#FFFFFF",
+  muted: "rgba(27, 40, 56, 0.50)",
+  steel: "#5A7A8A",
+  steelDim: "rgba(90, 122, 138, 0.30)",
+  glass: "rgba(255, 255, 255, 0.80)",
+  glassBorder: "rgba(27, 40, 56, 0.10)",
+  goldDivider: "rgba(212, 168, 75, 0.25)",
+  goldDim: "rgba(212, 168, 75, 0.15)",
+  goldLight: "#E8C06A",
 } as const;
 
 export const LAYOUT = {
