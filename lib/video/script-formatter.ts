@@ -133,7 +133,7 @@ export async function generateVideoScript(
     try {
       const response = await client.messages.create({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 8000,
+        max_tokens: 16000,
         system: systemPrompt,
         messages: [{ role: "user", content: userPrompt }],
       });
@@ -152,14 +152,19 @@ export async function generateVideoScript(
       return script;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      // Only retry on parse errors, not API errors
+      // Only retry on JSON parse errors. Bail immediately on API/network errors.
       if (
         lastError.message.includes("API") ||
         lastError.message.includes("rate") ||
-        lastError.message.includes("authentication")
+        lastError.message.includes("authentication") ||
+        lastError.message.includes("Connection error") ||
+        lastError.message.includes("connection") ||
+        lastError.message.includes("network")
       ) {
+        console.error("[script-formatter] Non-retryable error on attempt", attempt + 1, ":", lastError.message);
         throw lastError;
       }
+      console.warn("[script-formatter] Parse error on attempt", attempt + 1, "- retrying:", lastError.message);
     }
   }
 

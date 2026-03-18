@@ -191,7 +191,14 @@ export async function POST(request: NextRequest) {
             message: "Generating poetry note...",
           });
 
-          poetryNote = await generatePoetryNote(poet, poem, poemText, year, level);
+          console.log(`[video-render] Step 1: Generating poetry note for "${poem}" by ${poet}`);
+          try {
+            poetryNote = await generatePoetryNote(poet, poem, poemText, year, level);
+          } catch (noteErr) {
+            console.error("[video-render] Step 1 FAILED (poetry note generation):", noteErr instanceof Error ? noteErr.message : noteErr);
+            if (noteErr instanceof Error && noteErr.stack) console.error(noteErr.stack);
+            throw noteErr;
+          }
 
           send({
             stage: "note",
@@ -209,7 +216,14 @@ export async function POST(request: NextRequest) {
             message: "Generating video script...",
           });
 
-          script = await generateVideoScript(poet, poem, poemText, poetryNote, year, level);
+          console.log(`[video-render] Step 2: Generating video script (note length: ${poetryNote.length} chars)`);
+          try {
+            script = await generateVideoScript(poet, poem, poemText, poetryNote, year, level);
+          } catch (scriptErr) {
+            console.error("[video-render] Step 2 FAILED (script generation):", scriptErr instanceof Error ? scriptErr.message : scriptErr);
+            if (scriptErr instanceof Error && scriptErr.stack) console.error(scriptErr.stack);
+            throw scriptErr;
+          }
 
           send({
             stage: "script",
@@ -466,6 +480,8 @@ export async function POST(request: NextRequest) {
         if (audioServer) audioServer.server.close();
         const message =
           error instanceof Error ? error.message : "Render failed";
+        console.error("[video-render] Pipeline error:", message);
+        if (error instanceof Error && error.stack) console.error(error.stack);
         send({ stage: "error", progress: 0, message });
       }
 
