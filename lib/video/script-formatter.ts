@@ -1,15 +1,58 @@
+import fs from "fs";
+import path from "path";
 import { getClient } from "@/lib/claude/client";
 import { buildScriptSystemPrompt, buildScriptUserPrompt } from "./script-prompt";
 import type { VideoScript, ScriptWarning } from "./types";
 
-function parseScriptJSON(raw: string): VideoScript {
+function repairJSON(raw: string): string {
   let cleaned = raw.trim();
+
   // Strip markdown code fences if present
-  if (cleaned.startsWith("```")) {
-    cleaned = cleaned
-      .replace(/^```(?:json)?\s*\n?/, "")
-      .replace(/\n?```\s*$/, "");
+  cleaned = cleaned.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```\s*$/, "").trim();
+
+  // Fix trailing commas before closing braces/brackets
+  cleaned = cleaned.replace(/,\s*}/g, "}").replace(/,\s*]/g, "]");
+
+  // Fix missing commas between object properties: }" followed by "
+  cleaned = cleaned.replace(/}"\s*"/g, '},"');
+
+  // If JSON is truncated (doesn't end with }), try to close it
+  const trimmed = cleaned.trimEnd();
+  if (!trimmed.endsWith("}")) {
+    let braces = 0;
+    let brackets = 0;
+    let inString = false;
+    let escape = false;
+    for (const char of trimmed) {
+      if (escape) { escape = false; continue; }
+      if (char === "\\" && inString) { escape = true; continue; }
+      if (char === '"') { inString = !inString; continue; }
+      if (inString) continue;
+      if (char === "{") braces++;
+      if (char === "}") braces--;
+      if (char === "[") brackets++;
+      if (char === "]") brackets--;
+    }
+    while (brackets > 0) { cleaned += "]"; brackets--; }
+    while (braces > 0) { cleaned += "}"; braces--; }
   }
+
+  return cleaned;
+}
+
+function saveDebugResponse(raw: string): void {
+  try {
+    const debugPath = path.join(process.cwd(), "data", "debug-last-script-response.txt");
+    fs.mkdirSync(path.dirname(debugPath), { recursive: true });
+    fs.writeFileSync(debugPath, raw, "utf-8");
+    console.error("[script-formatter] Script JSON parsing failed. Raw response saved to data/debug-last-script-response.txt for inspection.");
+  } catch {
+    console.error("[script-formatter] Could not save debug response to file.");
+  }
+}
+
+function parseScriptJSON(raw: string): VideoScript {
+  const cleaned = repairJSON(raw);
 
   const parsed = JSON.parse(cleaned);
 
@@ -127,15 +170,20 @@ export async function generateVideoScript(
   );
 
   let lastError: Error | null = null;
+  let lastRawResponse: string | null = null;
 
   // Up to 2 attempts
   for (let attempt = 0; attempt < 2; attempt++) {
+    const retryInstruction = attempt > 0
+      ? "\n\nIMPORTANT: Your previous response contained malformed JSON. This time, ensure your response is ONLY valid JSON. Double-check all commas, closing braces, and closing brackets before responding. Do not include any text outside the JSON object."
+      : "";
+
     try {
       const response = await client.messages.create({
         model: "claude-sonnet-4-20250514",
         max_tokens: 16000,
         system: systemPrompt,
-        messages: [{ role: "user", content: userPrompt }],
+        messages: [{ role: "user", content: userPrompt + retryInstruction }],
       });
 
       // Extract text from the response
@@ -144,6 +192,7 @@ export async function generateVideoScript(
         throw new Error("No text content in Claude response");
       }
 
+      lastRawResponse = textBlock.text;
       const script = parseScriptJSON(textBlock.text);
       const warnings = validateScript(script, poetryNote, poemText);
       if (warnings.length > 0) {
@@ -163,6 +212,9 @@ export async function generateVideoScript(
       ) {
         console.error("[script-formatter] Non-retryable error on attempt", attempt + 1, ":", lastError.message);
         throw lastError;
+      }
+      if (lastRawResponse) {
+        saveDebugResponse(lastRawResponse);
       }
       console.warn("[script-formatter] Parse error on attempt", attempt + 1, "- retrying:", lastError.message);
     }
