@@ -303,6 +303,10 @@ Quote directly from this text. You have the actual words in front of you.`;
 
   return `Generate a comprehensive poetry analysis note for "${context.poem}" by ${context.poet}.${poemTextBlock}
 
+WRITING RULES — apply to every sentence in this note:
+- Never use em dashes anywhere. If you find yourself reaching for an em dash, use a full stop or rewrite the sentence instead.
+- Language must be accessible at all times. Write as if explaining to a motivated but not exceptional student. No academic jargon without an immediate plain-English explanation. Short sentences are better than long complex ones.
+
 TARGET LENGTH: 2000-3000 words total. The stanza analysis sections should make up approximately 60% of the note. The extra length comes from fuller stanza analysis, not padding. Do not pad other sections.
 
 STRUCTURE (follow this exactly):
@@ -319,13 +323,15 @@ Every stanza in the poem must receive its own analysis section. Do not skip or c
 
 Use stanza-by-stanza breakdown by default. Only go line-by-line if the poem is exceptionally dense (e.g., Prufrock, A Valediction Forbidding Mourning, Fireman's Lift).
 
-For each stanza, include ALL THREE of the following (target 200-250 words per stanza):
+For each stanza, include ALL FOUR of the following. Target 5-8 sentences per stanza minimum. A three-sentence stanza analysis is never enough. The student must be able to take at least three or four distinct points from each stanza and use them independently in an exam answer.
 
 **Plain Meaning (2-3 sentences):** Start by explaining what is literally happening in this stanza in simple, clear language. What is the speaker saying or doing? What situation are we in? Do not assume the student already understands the poem. Write as if explaining to someone reading it for the very first time.
 
-**Technique Analysis (3-4 sentences):** Identify 2-3 poetic techniques from the approved LC list. For each: name the technique, quote the specific words that show it, and explain the effect it creates. Use only approved devices (imagery, metaphor, simile, personification, alliteration, assonance, onomatopoeia, enjambment, caesura, rhyme, repetition, contrast, symbolism, tone shifts, juxtaposition, direct address). Never name a technique without explaining what it does and why it matters.
+**Technique Analysis (3-4 sentences):** Identify 2-3 poetic techniques from the approved LC list. For each: name the technique, quote the specific words that show it, and explain the effect it creates. Use only approved devices (imagery, metaphor, simile, personification, alliteration, assonance, onomatopoeia, enjambment, caesura, rhyme, repetition, contrast, symbolism, tone shifts, juxtaposition, direct address). Never name a technique without explaining what it does and why it matters. Never write that something is "effective" without explaining exactly what effect it creates and why an examiner would reward a student for identifying it.
 
-**Deeper Insight (2-3 sentences):** Go beyond identifying techniques. Explain what makes this stanza significant in the context of the whole poem. How does it develop the poem's themes? How does it shift the tone or mood? What would an examiner specifically reward a student for noticing? Give the student something original and perceptive that will stand out from generic answers.
+**Deeper Insight (2-3 sentences):** Go beyond identifying techniques. Explain what makes this stanza significant in the context of the whole poem. How does it develop the poem's themes? How does it shift the tone or mood? Point out anything that connects this stanza to another part of the poem or to the poet's wider concerns across their body of work.
+
+**Exam Angle (1-2 sentences):** Give the student at least one specific idea they could use in an exam answer. Phrase it as: "If a question asks about [exam angle], go to this stanza because..." Connect the exam angle to both the technique used and the theme it expresses.
 
 ${quoteGuidance}
 

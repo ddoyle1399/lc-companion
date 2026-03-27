@@ -19,6 +19,12 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Allow internal API calls authenticated via X-Internal-API-Key header
+  const internalKey = process.env.INTERNAL_API_KEY;
+  if (internalKey && request.headers.get("x-internal-api-key") === internalKey) {
+    return NextResponse.next();
+  }
+
   // Check for session cookie
   const session = request.cookies.get("lc-companion-session");
   if (!session?.value) {
