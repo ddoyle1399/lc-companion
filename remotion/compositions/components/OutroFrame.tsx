@@ -1,6 +1,7 @@
 import React from "react";
-import { useCurrentFrame, interpolate, spring, useVideoConfig, Easing } from "remotion";
+import { useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { COLORS, FONTS, LAYOUT } from "./design";
+import { WordByWord } from "./WordByWord";
 
 interface OutroFrameProps {
   poet: string;
@@ -46,15 +47,19 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
     extrapolateRight: "clamp",
   });
 
-  const closingSpring = spring({ frame: frame - 30, fps, config: { damping: 18, mass: 1.0 } });
-  const closingOpacity = interpolate(frame, [30, 52], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-    easing: Easing.out(Easing.quad),
-  });
-  const closingY = interpolate(closingSpring, [0, 1], [18, 0]);
+  const closingRevealStart = 30;
+  // Word-by-word runs until durationInFrames - 30 (leaving room for poem tag)
+  const closingRevealDuration = Math.max(60, durationInFrames - closingRevealStart - 30);
 
   const poemTagOpacity = interpolate(frame, [55, 72], [0, 0.55], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // Container springs in to frame the word-by-word text
+  const containerSpring = spring({ frame: frame - closingRevealStart, fps, config: { damping: 18, mass: 1.0 } });
+  const containerY = interpolate(containerSpring, [0, 1], [18, 0]);
+  const containerOpacity = interpolate(frame, [closingRevealStart, closingRevealStart + 14], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -77,8 +82,8 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
           position: "absolute",
           top: 42,
           left: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
-          fontSize: 13,
+          fontFamily: FONTS.ui,
+          fontSize: 12,
           color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 5,
@@ -90,8 +95,8 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
 
       <div
         style={{
-          fontFamily: FONTS.label,
-          fontSize: 14,
+          fontFamily: FONTS.ui,
+          fontSize: 13,
           color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 6,
@@ -112,23 +117,28 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
         }}
       />
 
+      {/* UPGRADE 3: Word-by-word animation for the closing line */}
       {closingLine && (
         <div
           style={{
-            fontFamily: FONTS.display,
-            fontSize: 36,
-            fontStyle: "italic" as const,
-            color: COLORS.navy,
-            lineHeight: 1.55,
-            transform: `translateY(${closingY}px)`,
-            maxWidth: 1300,
-            marginBottom: 44,
             borderLeft: `2px solid ${COLORS.teal}`,
             paddingLeft: 32,
-            opacity: closingOpacity * 0.88,
+            maxWidth: 1300,
+            marginBottom: 44,
+            opacity: containerOpacity,
+            transform: `translateY(${containerY}px)`,
           }}
         >
-          {closingLine}
+          <WordByWord
+            text={closingLine}
+            durationInFrames={closingRevealDuration}
+            fontFamily={FONTS.display}
+            fontSize={34}
+            fontStyle="italic"
+            color={COLORS.navy}
+            highlightColor={COLORS.teal}
+            lineHeight={1.6}
+          />
         </div>
       )}
 
@@ -151,7 +161,7 @@ export const OutroFrame: React.FC<OutroFrameProps> = ({
           position: "absolute",
           bottom: 24,
           right: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
+          fontFamily: FONTS.ui,
           fontSize: 11,
           color: COLORS.teal,
           textTransform: "uppercase" as const,

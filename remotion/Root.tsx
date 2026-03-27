@@ -1,6 +1,6 @@
 import React from "react";
 import { Composition } from "remotion";
-import { PoemVideo } from "./compositions/PoemVideo";
+import { PoemVideo, TITLE_TRANSITION_FRAMES, CLOSING_TRANSITION_FRAMES } from "./compositions/PoemVideo";
 import type { PoemVideoProps } from "../lib/video/types";
 
 const DEFAULT_PROPS: PoemVideoProps = {
@@ -71,10 +71,16 @@ const DEFAULT_PROPS: PoemVideoProps = {
   closingDurationInFrames: 60,
 };
 
+// PoemVideo uses two Transitions that shorten the total timeline:
+//   1. Title → first section: slide (TITLE_TRANSITION_FRAMES)
+//   2. Last section → closing: fade (CLOSING_TRANSITION_FRAMES)
+// Subtract their overlap so the Remotion Studio preview duration is accurate.
 const totalFrames =
   DEFAULT_PROPS.titleDurationInFrames +
   DEFAULT_PROPS.sections.reduce((sum, s) => sum + s.durationInFrames, 0) +
-  DEFAULT_PROPS.closingDurationInFrames;
+  DEFAULT_PROPS.closingDurationInFrames -
+  TITLE_TRANSITION_FRAMES -
+  CLOSING_TRANSITION_FRAMES;
 
 export const RemotionRoot: React.FC = () => {
   return (

@@ -1,6 +1,7 @@
 import React from "react";
 import { useCurrentFrame, interpolate, spring, useVideoConfig, Easing } from "remotion";
 import { COLORS, FONTS, LAYOUT } from "./design";
+import { LottieIcon } from "./LottieIcon";
 
 interface IntroFrameProps {
   poemLines: string[];
@@ -76,6 +77,12 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
     extrapolateRight: "clamp",
   });
 
+  // Lottie icon fades in gently after the poet name appears
+  const lottieOpacity = interpolate(frame, [50, 75], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   return (
     <div
       style={{
@@ -96,8 +103,8 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
           position: "absolute",
           top: 42,
           left: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
-          fontSize: 13,
+          fontFamily: FONTS.ui,
+          fontSize: 12,
           color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 5,
@@ -105,6 +112,25 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
         }}
       >
         Introduction
+      </div>
+
+      {/* UPGRADE 5: Lottie quill icon — top-right corner
+       * Set src="lottie/quill.json" once the file is downloaded.
+       * See LottieIcon.tsx for download instructions.
+       */}
+      <div
+        style={{
+          position: "absolute",
+          top: 36,
+          right: 84,
+          opacity: lottieOpacity,
+        }}
+      >
+        <LottieIcon
+          src={null /* TODO: set to "lottie/quill.json" after downloading */}
+          size={72}
+          opacity={0.55}
+        />
       </div>
 
       {/* Teal vertical rule */}
@@ -175,7 +201,7 @@ export const IntroFrame: React.FC<IntroFrameProps> = ({
           position: "absolute",
           bottom: 24,
           right: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
+          fontFamily: FONTS.ui,
           fontSize: 11,
           color: COLORS.teal,
           textTransform: "uppercase" as const,

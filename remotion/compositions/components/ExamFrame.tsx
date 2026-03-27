@@ -1,6 +1,7 @@
 import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
 import { COLORS, FONTS, LAYOUT } from "./design";
+import { LottieIcon } from "./LottieIcon";
 
 interface ExamFrameProps {
   poet: string;
@@ -45,8 +46,8 @@ const Pill: React.FC<{ text: string; frame: number; delay: number }> = ({
         border: `1px solid ${COLORS.tealBorder}`,
         borderRadius: 4,
         padding: "10px 20px",
-        fontFamily: FONTS.body,
-        fontSize: 20,
+        fontFamily: FONTS.ui,
+        fontSize: 19,
         color: COLORS.navy,
         lineHeight: 1.4,
         opacity,
@@ -104,6 +105,12 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
     extrapolateRight: "clamp",
   });
 
+  // Lottie lightbulb icon fades in with the exam tip card
+  const lottieOpacity = interpolate(frame, [tipDelay, tipDelay + 22], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   return (
     <div
       style={{
@@ -119,8 +126,8 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           position: "absolute",
           top: 42,
           left: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
-          fontSize: 13,
+          fontFamily: FONTS.ui,
+          fontSize: 12,
           color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 5,
@@ -128,6 +135,25 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
         }}
       >
         Exam Focus
+      </div>
+
+      {/* UPGRADE 5: Lottie lightbulb icon — top-right
+       * Set src="lottie/lightbulb.json" once the file is downloaded.
+       * See LottieIcon.tsx for download instructions.
+       */}
+      <div
+        style={{
+          position: "absolute",
+          top: 32,
+          right: 84,
+          opacity: lottieOpacity,
+        }}
+      >
+        <LottieIcon
+          src={null /* TODO: set to "lottie/lightbulb.json" after downloading */}
+          size={72}
+          opacity={0.55}
+        />
       </div>
 
       {/* Two-column content */}
@@ -146,8 +172,8 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
         <div style={{ flex: "0 0 50%" }}>
           <div
             style={{
-              fontFamily: FONTS.label,
-              fontSize: 13,
+              fontFamily: FONTS.ui,
+              fontSize: 12,
               color: COLORS.teal,
               textTransform: "uppercase" as const,
               letterSpacing: 5,
@@ -167,8 +193,8 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
             <div style={{ marginTop: 36 }}>
               <div
                 style={{
-                  fontFamily: FONTS.label,
-                  fontSize: 13,
+                  fontFamily: FONTS.ui,
+                  fontSize: 12,
                   color: COLORS.navyMid,
                   textTransform: "uppercase" as const,
                   letterSpacing: 4,
@@ -218,12 +244,13 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
                 padding: "24px 28px",
                 opacity: tipOpacity,
                 transform: `translateY(${tipY}px)`,
+                width: "100%",
               }}
             >
               <div
                 style={{
-                  fontFamily: FONTS.label,
-                  fontSize: 11,
+                  fontFamily: FONTS.ui,
+                  fontSize: 10,
                   color: COLORS.teal,
                   textTransform: "uppercase" as const,
                   letterSpacing: 4,
@@ -255,7 +282,7 @@ export const ExamFrame: React.FC<ExamFrameProps> = ({
           position: "absolute",
           bottom: 24,
           right: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
+          fontFamily: FONTS.ui,
           fontSize: 11,
           color: COLORS.teal,
           textTransform: "uppercase" as const,

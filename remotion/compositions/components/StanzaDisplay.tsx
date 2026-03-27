@@ -1,8 +1,16 @@
 import React from "react";
-import { useCurrentFrame, interpolate, Easing } from "remotion";
+import { useCurrentFrame, interpolate, Easing, useVideoConfig } from "remotion";
+import { fitText } from "@remotion/layout-utils";
 import { COLORS, FONTS, LAYOUT } from "./design";
+import { WordByWord } from "./WordByWord";
 
 const LINE_STAGGER = 7;
+
+// Left panel available width for poem lines (pixels):
+//   poemPanelRight(820) - paddingH(80) - paddingRight(40) - lineNum(28) - gap(16) = 656
+const POEM_LINE_WIDTH = 656;
+const MAX_LINE_FONT = 36;
+const MIN_LINE_FONT = 18;
 
 interface Technique {
   name: string;
@@ -26,11 +34,31 @@ function getFirstSentences(text: string | undefined, count: number): string {
   return sentences.slice(0, count).join(" ").trim();
 }
 
-function calcFontSize(lineCount: number): number {
-  if (lineCount <= 4) return 36;
-  if (lineCount <= 7) return 32;
-  if (lineCount <= 10) return 28;
-  return 24;
+/**
+ * Compute a safe font size that fits even the longest visible poem line
+ * within the poem panel width, capped between MIN and MAX.
+ */
+function calcFontSize(lines: string[]): number {
+  if (lines.length === 0) return MAX_LINE_FONT;
+
+  const longest = lines.reduce((a, b) => (a.length > b.length ? a : b), "");
+
+  try {
+    const { fontSize } = fitText({
+      text: longest,
+      withinWidth: POEM_LINE_WIDTH,
+      fontFamily: FONTS.display,
+      fontWeight: "400",
+    });
+    return Math.min(MAX_LINE_FONT, Math.max(MIN_LINE_FONT, Math.floor(fontSize)));
+  } catch {
+    // fitText can fail before the font is loaded; fall back to line-count heuristic
+    const count = lines.length;
+    if (count <= 4) return 36;
+    if (count <= 7) return 32;
+    if (count <= 10) return 28;
+    return 24;
+  }
 }
 
 const SectionDot: React.FC<{ filled: boolean; frame: number; delay: number }> = ({
@@ -87,8 +115,8 @@ const TechniqueCard: React.FC<{
     >
       <div
         style={{
-          fontFamily: FONTS.label,
-          fontSize: 11,
+          fontFamily: FONTS.ui,
+          fontSize: 10,
           color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 4,
@@ -98,13 +126,15 @@ const TechniqueCard: React.FC<{
       >
         Literary Technique
       </div>
+      {/* Technique name uses Space Mono for a technical/academic feel */}
       <div
         style={{
-          fontFamily: FONTS.body,
-          fontSize: 20,
+          fontFamily: FONTS.mono,
+          fontSize: 17,
           fontWeight: 700,
           color: COLORS.navy,
           marginBottom: 8,
+          letterSpacing: 0.5,
         }}
       >
         {technique.name}
@@ -113,7 +143,7 @@ const TechniqueCard: React.FC<{
         <div
           style={{
             fontFamily: FONTS.display,
-            fontSize: 17,
+            fontSize: 16,
             fontStyle: "italic" as const,
             color: COLORS.navy,
             opacity: 0.70,
@@ -127,7 +157,7 @@ const TechniqueCard: React.FC<{
       <div
         style={{
           fontFamily: FONTS.body,
-          fontSize: 17,
+          fontSize: 16,
           color: COLORS.navyMid,
           lineHeight: 1.55,
         }}
@@ -148,10 +178,16 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
   spokenText,
 }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
   const linesToShow = highlightLines.filter(
     (idx) => poemLines[idx] !== undefined && poemLines[idx].trim() !== ""
   );
+
+  // Compute font size that fits the longest visible line (UPGRADE 6)
+  const visibleLineTexts = linesToShow.map((idx) => poemLines[idx] ?? "");
+  const fontSize = calcFontSize(visibleLineTexts);
+  const lineHeight = fontSize * 1.85;
 
   const spotlightStart = Math.floor(durationInFrames * 0.42);
   const spotlightEnd = spotlightStart + 80;
@@ -177,9 +213,6 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
     extrapolateRight: "clamp",
   });
 
-  const fontSize = calcFontSize(linesToShow.length);
-  const lineHeight = fontSize * 1.85;
-
   const analysisText = getFirstSentences(spokenText, 2);
   const visibleTechniques = techniques.slice(0, 2);
 
@@ -193,6 +226,12 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.quad),
   });
+
+  // Spotlight duration for the word-by-word keyQuote animation
+  const spotlightDuration = spotlightEnd - spotlightStart;
+
+  // Suppress unused fps warning — used in WordByWord via useVideoConfig internally
+  void fps;
 
   return (
     <div style={{ position: "absolute", inset: 0, opacity: fadeOut }}>
@@ -213,8 +252,8 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
       >
         <div
           style={{
-            fontFamily: FONTS.label,
-            fontSize: 13,
+            fontFamily: FONTS.ui,
+            fontSize: 12,
             fontWeight: 600,
             color: COLORS.teal,
             textTransform: "uppercase" as const,
@@ -277,13 +316,21 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
             frame,
             [i * LINE_STAGGER, i * LINE_STAGGER + 16],
             [0, 1],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.quad) }
+            {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            }
           );
           const lineY = interpolate(
             frame,
             [i * LINE_STAGGER, i * LINE_STAGGER + 16],
             [14, 0],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.quad) }
+            {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+              easing: Easing.out(Easing.quad),
+            }
           );
 
           const lineScale =
@@ -295,7 +342,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
               : 1;
           const lineDimOpacity = isInSpotlightMode && !isKeyLine ? 0.22 : 1;
 
-          // Gold marker highlight sweep — animates width 0 -> 100% over 12 frames
+          // Gold marker highlight sweep
           const highlightWidth =
             isKeyLine && inSpotlight
               ? interpolate(
@@ -340,8 +387,8 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
               {/* Line number */}
               <div
                 style={{
-                  fontFamily: FONTS.label,
-                  fontSize: 13,
+                  fontFamily: FONTS.mono,
+                  fontSize: 11,
                   color: COLORS.steelDim,
                   width: 28,
                   textAlign: "right" as const,
@@ -377,12 +424,17 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
                   fontFamily: FONTS.display,
                   fontSize,
                   fontStyle: "italic" as const,
-                  color: isKeyLine && inSpotlight ? COLORS.navy : COLORS.navy,
+                  color: COLORS.navy,
                   lineHeight: 1,
                   letterSpacing: 0.2,
                   opacity: isKeyLine && inSpotlight ? 1 : 0.85,
                   position: "relative",
                   zIndex: 1,
+                  // Prevent overflow for very long lines (UPGRADE 6 safety)
+                  maxWidth: POEM_LINE_WIDTH,
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
                 }}
               >
                 {poemLines[lineIdx]}
@@ -429,13 +481,16 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           <div
             style={{
               opacity: spotlightProgress,
-              transform: `translateY(${interpolate(spotlightProgress, [0, 1], [12, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
+              transform: `translateY(${interpolate(spotlightProgress, [0, 1], [12, 0], {
+                extrapolateLeft: "clamp",
+                extrapolateRight: "clamp",
+              })}px)`,
             }}
           >
             <div
               style={{
-                fontFamily: FONTS.label,
-                fontSize: 12,
+                fontFamily: FONTS.ui,
+                fontSize: 11,
                 color: COLORS.teal,
                 textTransform: "uppercase" as const,
                 letterSpacing: 5,
@@ -444,18 +499,23 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
             >
               Key Quotation
             </div>
+            {/* UPGRADE 3: Word-by-word animation for the key quote spotlight */}
             <div
               style={{
-                fontFamily: FONTS.display,
-                fontSize: 36,
-                fontStyle: "italic" as const,
-                color: COLORS.navy,
-                lineHeight: 1.45,
                 borderLeft: `3px solid ${COLORS.teal}`,
                 paddingLeft: 28,
               }}
             >
-              &ldquo;{keyQuote.text}&rdquo;
+              <WordByWord
+                text={keyQuote.text}
+                durationInFrames={spotlightDuration}
+                fontFamily={FONTS.display}
+                fontSize={34}
+                fontStyle="italic"
+                color={COLORS.navy}
+                highlightColor={COLORS.teal}
+                lineHeight={1.5}
+              />
             </div>
           </div>
         ) : (
@@ -493,7 +553,7 @@ export const StanzaDisplay: React.FC<StanzaDisplayProps> = ({
           position: "absolute",
           bottom: 24,
           right: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
+          fontFamily: FONTS.ui,
           fontSize: 11,
           color: COLORS.teal,
           textTransform: "uppercase" as const,

@@ -2,6 +2,7 @@ import React from "react";
 import { useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { GradientBackground } from "./GradientBackground";
 import { COLORS, FONTS } from "./design";
+import { LottieIcon } from "./LottieIcon";
 
 interface ClosingCardProps {
   durationInFrames: number;
@@ -45,6 +46,12 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
     extrapolateRight: "clamp",
   });
 
+  // Lottie sparkle fades in near the brand name
+  const lottieOpacity = interpolate(frame, [14, 38], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   const breathe = 1 + 0.008 * Math.sin(frame / 60);
 
   return (
@@ -63,6 +70,18 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
           transform: `scale(${breathe})`,
         }}
       >
+        {/* UPGRADE 5: Lottie sparkle — centred above the brand name
+         * Set src="lottie/sparkle.json" once the file is downloaded.
+         * See LottieIcon.tsx for download instructions.
+         */}
+        <div style={{ opacity: lottieOpacity, marginBottom: 12 }}>
+          <LottieIcon
+            src={null /* TODO: set to "lottie/sparkle.json" after downloading */}
+            size={64}
+            opacity={0.6}
+          />
+        </div>
+
         <div
           style={{
             width: ruleWidth,
@@ -120,7 +139,7 @@ export const ClosingCard: React.FC<ClosingCardProps> = ({ durationInFrames }) =>
             <div
               key={url}
               style={{
-                fontFamily: FONTS.label,
+                fontFamily: FONTS.ui,
                 fontSize: 16,
                 color: COLORS.navy,
                 textTransform: "uppercase" as const,

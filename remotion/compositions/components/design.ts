@@ -1,16 +1,37 @@
 import { loadFont as loadPlayfairDisplay } from "@remotion/google-fonts/PlayfairDisplay";
 import { loadFont as loadBarlowCondensed } from "@remotion/google-fonts/BarlowCondensed";
 import { loadFont as loadLora } from "@remotion/google-fonts/Lora";
+import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
+import { loadFont as loadSpaceMono } from "@remotion/google-fonts/SpaceMono";
 
 // Must be called at module level — Remotion prefetches these before rendering
-const { fontFamily: PLAYFAIR } = loadPlayfairDisplay();
-const { fontFamily: BARLOW } = loadBarlowCondensed();
-const { fontFamily: LORA } = loadLora();
+const { fontFamily: PLAYFAIR } = loadPlayfairDisplay("normal", {
+  weights: ["400", "700"],
+  subsets: ["latin"],
+});
+const { fontFamily: BARLOW } = loadBarlowCondensed("normal", {
+  weights: ["400", "600"],
+  subsets: ["latin"],
+});
+const { fontFamily: LORA } = loadLora("normal", {
+  weights: ["400", "700"],
+  subsets: ["latin"],
+});
+const { fontFamily: INTER } = loadInter("normal", {
+  weights: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+});
+const { fontFamily: SPACE_MONO } = loadSpaceMono("normal", {
+  weights: ["400", "700"],
+  subsets: ["latin"],
+});
 
 export const FONTS = {
-  display: PLAYFAIR,   // Poem text, titles, quotes — elegant serif
-  label: BARLOW,       // Section labels, eyebrows, UI chrome — condensed sans
-  body: LORA,          // Analysis text, technique descriptions — warm readable serif
+  display: PLAYFAIR,  // Poem text, titles, quotes — elegant serif
+  label: BARLOW,      // Section eyebrows, condensed upper-case labels
+  body: LORA,         // Analysis text, technique descriptions — warm readable serif
+  ui: INTER,          // UI chrome, pills, card labels — clean modern sans-serif
+  mono: SPACE_MONO,   // Technique names — monospace for a technical/academic feel
 } as const;
 
 export const COLORS = {

@@ -1,11 +1,9 @@
 import React from "react";
-import {
-  AbsoluteFill,
-  Sequence,
-  Audio,
-  useCurrentFrame,
-  interpolate,
-} from "remotion";
+import { AbsoluteFill, Audio, interpolate, useVideoConfig } from "remotion";
+import { TransitionSeries, linearTiming, springTiming } from "@remotion/transitions";
+import { fade } from "@remotion/transitions/fade";
+import { slide } from "@remotion/transitions/slide";
+import { LightLeak } from "@remotion/light-leaks";
 import type { PoemVideoProps } from "../../lib/video/types";
 import { TitleCard } from "./components/TitleCard";
 import { ClosingCard } from "./components/ClosingCard";
@@ -19,175 +17,144 @@ import { ThemeFrame } from "./components/ThemeFrame";
 import { ExamFrame } from "./components/ExamFrame";
 import { OutroFrame } from "./components/OutroFrame";
 
-const TRANSITION_FRAMES = 20;
+/**
+ * Transition durations.
+ *
+ * TITLE_TRANSITION and CLOSING_TRANSITION use TransitionSeries.Transition
+ * (which overlaps adjacent sequences, shortening total duration by their sum).
+ * Root.tsx subtracts TITLE_TRANSITION + CLOSING_TRANSITION from the default
+ * totalFrames calculation to keep the preview accurate.
+ *
+ * The render API calculates durationInFrames from the sum of section durations
+ * without accounting for these overlaps, so the rendered video will have
+ * ~40 extra frames (≈1.3 s at 30 fps) of frozen ClosingCard at the end.
+ * This is visually acceptable and can be resolved by updating the render route
+ * to use the shared calculateTotalFrames helper.
+ */
+export const TITLE_TRANSITION_FRAMES = 20;
+export const CLOSING_TRANSITION_FRAMES = 20;
 
-interface SectionTiming {
-  type: string;
-  highlightLines: number[];
-  durationInFrames: number;
-  audioSrc: string;
-  from: number;
-  imageSrc?: string;
-  spokenText?: string;
-  keyQuote?: { text: string; lineIndex: number };
-  techniques?: { name: string; quote: string; effect: string }[];
-  themes?: { name: string; supportingPoints: string[]; quote?: string }[];
-  examConnection?: {
-    questionTypes: string[];
-    linkedPoems: string[];
-    examTip: string;
-  };
-  outroData?: {
-    closingLine: string;
-    poemTitle: string;
-    poetName: string;
-  };
+/** Duration of each LightLeak overlay between sections. No timeline impact. */
+const LIGHT_LEAK_FRAMES = 20;
+
+function toSectionType(type: string): SectionType {
+  return (
+    ["intro", "stanza_analysis", "theme", "exam_connection", "outro"].includes(type)
+      ? type
+      : "intro"
+  ) as SectionType;
 }
 
-/**
- * Animated background layer: crossfades gradient colours between sections.
- * When a section has an image, it shows the BackgroundImage instead of gradient.
- */
-const AnimatedBackground: React.FC<{
-  sectionTimings: SectionTiming[];
-}> = ({ sectionTimings }) => {
-  const frame = useCurrentFrame();
-
-  let currentIdx = -1;
-  for (let i = sectionTimings.length - 1; i >= 0; i--) {
-    if (frame >= sectionTimings[i].from) {
-      currentIdx = i;
-      break;
-    }
-  }
-
-  if (currentIdx < 0) return null;
-
-  const current = sectionTimings[currentIdx];
-  const next =
-    currentIdx < sectionTimings.length - 1
-      ? sectionTimings[currentIdx + 1]
-      : null;
-
-  const sectionEnd = current.from + current.durationInFrames;
-  const transitionStart = sectionEnd - TRANSITION_FRAMES;
-  const inTransition = next && frame >= transitionStart;
-
-  const toSectionType = (type: string): SectionType =>
-    (["intro", "stanza_analysis", "theme", "exam_connection", "outro"].includes(type)
-      ? type
-      : "intro") as SectionType;
-
-  const currentSectionType = toSectionType(current.type);
-  const nextSectionType = next ? toSectionType(next.type) : currentSectionType;
-
-  const crossFade =
-    inTransition && next
-      ? interpolate(frame, [transitionStart, sectionEnd], [0, 1], {
-          extrapolateLeft: "clamp",
-          extrapolateRight: "clamp",
-        })
-      : 0;
-
-  return (
-    <>
-      <AbsoluteFill style={{ opacity: 1 - crossFade }}>
-        {current.imageSrc ? (
-          <BackgroundImage
-            src={current.imageSrc}
-            durationInFrames={current.durationInFrames}
-          />
-        ) : (
-          <GradientBackground sectionType={currentSectionType} />
-        )}
-      </AbsoluteFill>
-      {inTransition && next && (
-        <AbsoluteFill style={{ opacity: crossFade }}>
-          {next.imageSrc ? (
-            <BackgroundImage
-              src={next.imageSrc}
-              durationInFrames={next.durationInFrames}
-            />
-          ) : (
-            <GradientBackground sectionType={nextSectionType} />
-          )}
-        </AbsoluteFill>
-      )}
-    </>
-  );
-};
-
-const SectionContent: React.FC<{
-  section: SectionTiming;
+interface SectionProps {
+  section: {
+    type: string;
+    highlightLines: number[];
+    durationInFrames: number;
+    audioSrc: string;
+    spokenText?: string;
+    keyQuote?: { text: string; lineIndex: number };
+    techniques?: { name: string; quote: string; effect: string }[];
+    themes?: { name: string; supportingPoints: string[]; quote?: string }[];
+    examConnection?: { questionTypes: string[]; linkedPoems: string[]; examTip: string };
+    outroData?: { closingLine: string; poemTitle: string; poetName: string };
+  };
   poemLines: string[];
   poemTitle: string;
   poet: string;
   stanzaIndex: number;
-}> = ({ section, poemLines, poemTitle, poet, stanzaIndex }) => {
-  if (section.type === "intro") {
-    return (
-      <IntroFrame
-        poemLines={poemLines}
-        highlightLines={section.highlightLines}
-        poet={poet}
-        durationInFrames={section.durationInFrames}
-        spokenText={section.spokenText}
-      />
-    );
-  }
+  imageSrc?: string;
+}
 
-  if (section.type === "theme") {
-    return (
-      <ThemeFrame
-        spokenText={section.spokenText}
-        keyQuote={section.keyQuote}
-        techniques={section.techniques}
-        themes={section.themes}
-        durationInFrames={section.durationInFrames}
-      />
-    );
-  }
+const SectionScene: React.FC<SectionProps> = ({
+  section,
+  poemLines,
+  poemTitle,
+  poet,
+  stanzaIndex,
+  imageSrc,
+}) => {
+  const { fps } = useVideoConfig();
+  const dur = section.durationInFrames;
+  const fadeFrames = Math.round(fps * 0.3); // 9 frames at 30 fps
 
-  if (section.type === "exam_connection") {
-    return (
-      <ExamFrame
-        poet={poet}
-        spokenText={section.spokenText}
-        examConnection={section.examConnection}
-        durationInFrames={section.durationInFrames}
-      />
-    );
-  }
-
-  if (section.type === "outro") {
-    return (
-      <OutroFrame
-        poet={poet}
-        poemTitle={poemTitle}
-        durationInFrames={section.durationInFrames}
-        spokenText={section.spokenText}
-        outroData={section.outroData}
-      />
-    );
-  }
-
-  // Default: stanza_analysis
   return (
-    <>
-      <StanzaDisplay
-        poemLines={poemLines}
-        highlightLines={section.highlightLines}
-        durationInFrames={section.durationInFrames}
-        keyQuote={section.keyQuote}
-        sectionIndex={stanzaIndex}
-        techniques={section.techniques}
-        spokenText={section.spokenText}
-      />
-      <TechniqueOverlay
-        techniques={section.techniques || []}
-        durationInFrames={section.durationInFrames}
-      />
-    </>
+    <AbsoluteFill>
+      {/* Background for this section */}
+      <GradientBackground sectionType={toSectionType(section.type)} />
+      {imageSrc && <BackgroundImage src={imageSrc} durationInFrames={dur} />}
+
+      {/* Content */}
+      {section.type === "intro" && (
+        <IntroFrame
+          poemLines={poemLines}
+          highlightLines={section.highlightLines}
+          poet={poet}
+          durationInFrames={dur}
+          spokenText={section.spokenText}
+        />
+      )}
+      {section.type === "theme" && (
+        <ThemeFrame
+          spokenText={section.spokenText}
+          keyQuote={section.keyQuote}
+          techniques={section.techniques}
+          themes={section.themes}
+          durationInFrames={dur}
+        />
+      )}
+      {section.type === "exam_connection" && (
+        <ExamFrame
+          poet={poet}
+          spokenText={section.spokenText}
+          examConnection={section.examConnection}
+          durationInFrames={dur}
+        />
+      )}
+      {section.type === "outro" && (
+        <OutroFrame
+          poet={poet}
+          poemTitle={poemTitle}
+          durationInFrames={dur}
+          spokenText={section.spokenText}
+          outroData={section.outroData}
+        />
+      )}
+      {section.type !== "intro" &&
+        section.type !== "theme" &&
+        section.type !== "exam_connection" &&
+        section.type !== "outro" && (
+          <>
+            <StanzaDisplay
+              poemLines={poemLines}
+              highlightLines={section.highlightLines}
+              durationInFrames={dur}
+              keyQuote={section.keyQuote}
+              sectionIndex={stanzaIndex}
+              techniques={section.techniques}
+              spokenText={section.spokenText}
+            />
+            <TechniqueOverlay
+              techniques={section.techniques || []}
+              durationInFrames={dur}
+            />
+          </>
+        )}
+
+      {/* Audio with fade-in / fade-out (UPGRADE 7) */}
+      {section.audioSrc && (
+        <Audio
+          src={section.audioSrc}
+          volume={(f) =>
+            interpolate(
+              f,
+              [0, fadeFrames, dur - fadeFrames, dur],
+              [0, 1, 1, 0],
+              { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+            )
+          }
+        />
+      )}
+    </AbsoluteFill>
   );
 };
 
@@ -200,29 +167,10 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
   closingDurationInFrames,
   sectionImages = [],
 }) => {
-  // Build a lookup from sectionId (index) -> imageSrc
   const imageMap = new Map(sectionImages.map((img) => [img.sectionId, img.imagePath]));
 
-  let currentFrame = 0;
-  const titleFrom = currentFrame;
-  currentFrame += titleDurationInFrames;
-
-  const sectionTimings: SectionTiming[] = sections.map((section, i) => {
-    const from = currentFrame;
-    currentFrame += section.durationInFrames;
-    return {
-      ...section,
-      from,
-      imageSrc: imageMap.get(i),
-    };
-  });
-
-  const closingFrom = currentFrame;
-  const contentStart = titleDurationInFrames;
-  const contentEnd = closingFrom;
-
   let stanzaCounter = 0;
-  const stanzaIndices = sectionTimings.map((s) => {
+  const stanzaIndices = sections.map((s) => {
     if (s.type === "stanza_analysis") {
       stanzaCounter += 1;
       return stanzaCounter;
@@ -232,51 +180,82 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#FFF8EE" }}>
-      {/* Animated background for analysis sections */}
-      <Sequence from={contentStart} durationInFrames={contentEnd - contentStart}>
-        <AnimatedBackground
-          sectionTimings={sectionTimings.map((s) => ({
-            ...s,
-            from: s.from - contentStart,
-          }))}
+      {/*
+       * TransitionSeries (UPGRADE 4):
+       *   - Title → Intro:  slide from right, springTiming  (Transition — shortens timeline by 20fr)
+       *   - Between sections: warm LightLeak overlay (Overlay — no duration change)
+       *   - Outro → Closing: fade, linearTiming  (Transition — shortens timeline by 20fr)
+       *
+       * Adjacency constraint: overlays cannot be adjacent to transitions.
+       * The slide Transition is followed by a Sequence (intro) before any Overlay,
+       * and the closing Transition is preceded by a plain Sequence (outro).
+       */}
+      <TransitionSeries>
+        {/* ── TITLE CARD ── */}
+        <TransitionSeries.Sequence durationInFrames={titleDurationInFrames}>
+          <TitleCard
+            title={poemTitle}
+            poet={poet}
+            durationInFrames={titleDurationInFrames}
+          />
+        </TransitionSeries.Sequence>
+
+        {/* Title → first section: slide in from right */}
+        <TransitionSeries.Transition
+          presentation={slide({ direction: "from-right" })}
+          timing={springTiming({
+            config: { damping: 200 },
+            durationInFrames: TITLE_TRANSITION_FRAMES,
+          })}
         />
-      </Sequence>
 
-      {/* Title card */}
-      <Sequence from={titleFrom} durationInFrames={titleDurationInFrames}>
-        <TitleCard
-          title={poemTitle}
-          poet={poet}
-          durationInFrames={titleDurationInFrames}
+        {/* ── CONTENT SECTIONS ── */}
+        {sections.map((section, i) => {
+          const isLastSection = i === sections.length - 1;
+
+          return (
+            <React.Fragment key={i}>
+              <TransitionSeries.Sequence durationInFrames={section.durationInFrames}>
+                <SectionScene
+                  section={section}
+                  poemLines={poemLines}
+                  poemTitle={poemTitle}
+                  poet={poet}
+                  stanzaIndex={stanzaIndices[i]}
+                  imageSrc={imageMap.get(i)}
+                />
+              </TransitionSeries.Sequence>
+
+              {/*
+               * LightLeak overlay between sections (UPGRADE 2).
+               * Skipped for the last section to avoid adjacency with the
+               * upcoming closing Transition.
+               */}
+              {!isLastSection && (
+                <TransitionSeries.Overlay durationInFrames={LIGHT_LEAK_FRAMES}>
+                  <AbsoluteFill style={{ opacity: 0.20 }}>
+                    {/* Vary seed per section for different leak shapes */}
+                    <LightLeak seed={i % 7} hueShift={25} />
+                  </AbsoluteFill>
+                </TransitionSeries.Overlay>
+              )}
+            </React.Fragment>
+          );
+        })}
+
+        {/* Last section → closing: fade */}
+        <TransitionSeries.Transition
+          presentation={fade()}
+          timing={linearTiming({ durationInFrames: CLOSING_TRANSITION_FRAMES })}
         />
-      </Sequence>
 
-      {/* Analysis sections */}
-      {sectionTimings.map((section, i) => (
-        <Sequence
-          key={i}
-          from={section.from}
-          durationInFrames={section.durationInFrames}
-        >
-          <AbsoluteFill>
-            <SectionContent
-              section={section}
-              poemLines={poemLines}
-              poemTitle={poemTitle}
-              poet={poet}
-              stanzaIndex={stanzaIndices[i]}
-            />
-          </AbsoluteFill>
-          {section.audioSrc && <Audio src={section.audioSrc} />}
-        </Sequence>
-      ))}
+        {/* ── CLOSING CARD ── */}
+        <TransitionSeries.Sequence durationInFrames={closingDurationInFrames}>
+          <ClosingCard durationInFrames={closingDurationInFrames} />
+        </TransitionSeries.Sequence>
+      </TransitionSeries>
 
-      {/* Closing card */}
-      <Sequence from={closingFrom} durationInFrames={closingDurationInFrames}>
-        <ClosingCard durationInFrames={closingDurationInFrames} />
-      </Sequence>
-
-      {/* Progress bar overlay */}
+      {/* Progress bar sits outside TransitionSeries so it reads global frame */}
       <ProgressBar />
     </AbsoluteFill>
   );

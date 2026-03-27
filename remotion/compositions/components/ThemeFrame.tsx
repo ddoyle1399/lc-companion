@@ -1,6 +1,8 @@
 import React from "react";
 import { useCurrentFrame, interpolate, Easing } from "remotion";
+import { fitText } from "@remotion/layout-utils";
 import { COLORS, FONTS, LAYOUT } from "./design";
+import { LottieIcon } from "./LottieIcon";
 
 interface Theme {
   name: string;
@@ -14,6 +16,26 @@ interface ThemeFrameProps {
   techniques?: { name: string; quote: string; effect: string }[];
   themes?: Theme[];
   durationInFrames: number;
+}
+
+// Theme name container width inside the card (pixels):
+//   maxWidth(1400) - paddingH(188*2) + card padding(28*2) minus margins ≈ 900
+const THEME_NAME_MAX_WIDTH = 860;
+const THEME_NAME_MAX_FONT = 22;
+const THEME_NAME_MIN_FONT = 14;
+
+function calcThemeNameFontSize(name: string): number {
+  try {
+    const { fontSize } = fitText({
+      text: name,
+      withinWidth: THEME_NAME_MAX_WIDTH,
+      fontFamily: FONTS.body,
+      fontWeight: "700",
+    });
+    return Math.min(THEME_NAME_MAX_FONT, Math.max(THEME_NAME_MIN_FONT, Math.floor(fontSize)));
+  } catch {
+    return THEME_NAME_MAX_FONT;
+  }
 }
 
 const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
@@ -32,6 +54,9 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
     easing: Easing.out(Easing.quad),
   });
 
+  // UPGRADE 6: Scale theme name font size to fit within card width
+  const nameFontSize = calcThemeNameFontSize(theme.name);
+
   return (
     <div
       style={{
@@ -48,11 +73,15 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
       <div
         style={{
           fontFamily: FONTS.body,
-          fontSize: 22,
+          fontSize: nameFontSize,
           fontWeight: 700,
           color: COLORS.navy,
           marginBottom: 12,
           letterSpacing: 0.1,
+          // Overflow safety for extremely long names
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
         }}
       >
         {theme.name}
@@ -62,7 +91,7 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
           key={i}
           style={{
             fontFamily: FONTS.body,
-            fontSize: 18,
+            fontSize: 17,
             color: COLORS.navyMid,
             lineHeight: 1.6,
             marginBottom: 6,
@@ -77,7 +106,7 @@ const ThemeCard: React.FC<{ theme: Theme; frame: number; delay: number }> = ({
         <div
           style={{
             fontFamily: FONTS.display,
-            fontSize: 18,
+            fontSize: 17,
             fontStyle: "italic" as const,
             color: COLORS.teal,
             opacity: 0.80,
@@ -126,6 +155,12 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
     extrapolateRight: "clamp",
   });
 
+  // Lottie icon fades in alongside the themes heading
+  const lottieOpacity = interpolate(frame, [18, 42], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   const intro = spokenText?.match(/[^.!?]+[.!?]+/)?.[0]?.trim() ?? "";
 
   return (
@@ -148,8 +183,8 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
           position: "absolute",
           top: 42,
           left: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
-          fontSize: 13,
+          fontFamily: FONTS.ui,
+          fontSize: 12,
           color: COLORS.teal,
           textTransform: "uppercase" as const,
           letterSpacing: 5,
@@ -157,6 +192,25 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
         }}
       >
         Themes
+      </div>
+
+      {/* UPGRADE 5: Lottie book icon — top-right
+       * Set src="lottie/book.json" once the file is downloaded.
+       * See LottieIcon.tsx for download instructions.
+       */}
+      <div
+        style={{
+          position: "absolute",
+          top: 32,
+          right: 84,
+          opacity: lottieOpacity,
+        }}
+      >
+        <LottieIcon
+          src={null /* TODO: set to "lottie/book.json" after downloading */}
+          size={72}
+          opacity={0.55}
+        />
       </div>
 
       {/* Heading + separator */}
@@ -214,7 +268,7 @@ export const ThemeFrame: React.FC<ThemeFrameProps> = ({
           position: "absolute",
           bottom: 24,
           right: LAYOUT.paddingH,
-          fontFamily: FONTS.label,
+          fontFamily: FONTS.ui,
           fontSize: 11,
           color: COLORS.teal,
           textTransform: "uppercase" as const,

@@ -191,6 +191,8 @@ async function main() {
     codec: "h264",
     jpegQuality: 95,
     outputLocation: outputPath,
+    // @remotion/light-leaks uses WebGL — swangle uses software rendering (no GPU required)
+    gl: "swangle",
     inputProps: inputProps as unknown as Record<string, unknown>,
     onProgress: ({ progress }) => {
       if (Math.round(progress * 100) % 10 === 0) {
