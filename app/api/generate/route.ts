@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
 
     switch (contentType) {
       case "poetry": {
-        const { poet, poem } = body;
+        const { poet, poem, textbookAnalysis } = body;
         if (!poet || !poem) {
           return errorResponse("Poetry notes require poet and poem");
         }
@@ -112,6 +112,10 @@ export async function POST(request: NextRequest) {
           if (storedText) {
             context.poemText = storedText;
           }
+        }
+
+        if (textbookAnalysis) {
+          context.textbookAnalysis = textbookAnalysis;
         }
 
         useWebSearch = !context.poemText;

@@ -22,6 +22,19 @@ export interface PromptContext {
   prescribedPoems?: string[];
   poemText?: string;
   comparativeExamPattern?: string;
+  // Textbook analysis grounding (from Supabase poem_analysis table)
+  textbookAnalysis?: {
+    formStructure: string;
+    themes: string;
+    literaryTechniques: string;
+    toneAndMood: string;
+    imagery: string;
+    historicalContext: string;
+    stanzaSummary: string;
+    keyQuotations: string;
+    examAngles: string;
+    comparativeLinks: string;
+  };
   // Worksheet-specific
   worksheetContentType?: "poetry" | "single_text" | "comparative" | "unseen_poetry" | "comprehension" | "composition";
   activityTypes?: string[];
@@ -291,6 +304,27 @@ ${context.poemText}
 Quote directly from this text. You have the actual words in front of you.`;
   }
 
+  let textbookBlock = "";
+  if (context.textbookAnalysis) {
+    const t = context.textbookAnalysis;
+    textbookBlock = `
+
+=== TEXTBOOK REFERENCE (Poetry Focus 2026) ===
+Your note must be consistent with this analysis. You may go deeper, add insight, and expand on any point, but do not contradict it.
+
+Form & Structure: ${t.formStructure}
+Themes: ${t.themes}
+Literary Techniques: ${t.literaryTechniques}
+Tone & Mood: ${t.toneAndMood}
+Imagery: ${t.imagery}
+Historical & Biographical Context: ${t.historicalContext}
+Stanza-by-Stanza Summary: ${t.stanzaSummary}
+Key Quotations: ${t.keyQuotations}
+Exam Angles: ${t.examAngles}
+Comparative Links: ${t.comparativeLinks}
+=== END TEXTBOOK REFERENCE ===`;
+  }
+
   let quoteGuidance: string;
   if (context.poemText) {
     quoteGuidance = `- Quote directly from the provided poem text. No [VERIFY] tags needed.
@@ -301,7 +335,7 @@ Quote directly from this text. You have the actual words in front of you.`;
 - If web search did not return the full text, paraphrase the line in your own words. Do NOT use [VERIFY] or any bracketed marker. Leave them out entirely.`;
   }
 
-  return `Generate a comprehensive poetry analysis note for "${context.poem}" by ${context.poet}.${poemTextBlock}
+  return `Generate a comprehensive poetry analysis note for "${context.poem}" by ${context.poet}.${poemTextBlock}${textbookBlock}
 
 WRITING RULES — apply to every sentence in this note:
 - Never use em dashes anywhere. If you find yourself reaching for an em dash, use a full stop or rewrite the sentence instead.
