@@ -3,7 +3,7 @@ import { AbsoluteFill, Audio, interpolate, useVideoConfig } from "remotion";
 import { TransitionSeries, linearTiming, springTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { slide } from "@remotion/transitions/slide";
-import { LightLeak } from "@remotion/light-leaks";
+import { CSSLightLeak } from "./components/CSSLightLeak";
 import type { PoemVideoProps } from "../../lib/video/types";
 import { TitleCard } from "./components/TitleCard";
 import { ClosingCard } from "./components/ClosingCard";
@@ -233,10 +233,12 @@ export const PoemVideo: React.FC<PoemVideoProps> = ({
                */}
               {!isLastSection && (
                 <TransitionSeries.Overlay durationInFrames={LIGHT_LEAK_FRAMES}>
-                  <AbsoluteFill style={{ opacity: 0.20 }}>
-                    {/* Vary seed per section for different leak shapes */}
-                    <LightLeak seed={i % 7} hueShift={25} />
-                  </AbsoluteFill>
+                  {/* CSS light leak — no WebGL required, warm tones */}
+                  <CSSLightLeak
+                    seed={i % 7}
+                    opacity={0.20}
+                    durationInFrames={LIGHT_LEAK_FRAMES}
+                  />
                 </TransitionSeries.Overlay>
               )}
             </React.Fragment>
