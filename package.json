@@ -21,6 +21,7 @@
     "@remotion/lottie": "4.0.431",
     "@remotion/renderer": "^4.0.431",
     "@remotion/transitions": "4.0.431",
+    "@supabase/supabase-js": "^2.103.0",
     "docx": "^9.6.0",
     "marked": "^17.0.5",
     "next": "16.1.6",
