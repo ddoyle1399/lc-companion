@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { marked } from "marked";
 import { getClient } from "@/lib/claude/client";
 import {
   buildSystemPrompt,
@@ -15,6 +16,8 @@ import {
 import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
+import { saveNote } from "@/lib/supabase/saveNote";
+import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
 
 // Strips [VERIFY], [CHECK], [TODO], [NOTE] and similar bracketed internal markers
 // from streamed text, handling markers that may span chunk boundaries.
@@ -240,6 +243,8 @@ export async function POST(request: NextRequest) {
     const stripper = createVerifyStripper(context.poem ?? context.textTitle);
     const readableStream = new ReadableStream({
       async start(controller) {
+        let accumulatedText = "";
+
         try {
           for await (const event of stream) {
             if (
@@ -248,6 +253,7 @@ export async function POST(request: NextRequest) {
             ) {
               const cleaned = stripper.process(event.delta.text);
               if (cleaned) {
+                accumulatedText += cleaned;
                 const chunk = `data: ${JSON.stringify({ text: cleaned })}\n\n`;
                 controller.enqueue(encoder.encode(chunk));
               }
@@ -261,10 +267,39 @@ export async function POST(request: NextRequest) {
               controller.enqueue(encoder.encode(status));
             }
           }
+
           const tail = stripper.process("", true);
           if (tail) {
+            accumulatedText += tail;
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: tail })}\n\n`));
           }
+
+          // Stream completed cleanly. Persist the note.
+          if (accumulatedText) {
+            try {
+              const bodyText = accumulatedText;
+              const bodyHtml = marked.parse(bodyText) as string;
+              const noteInput = mapPromptContextToNoteInput(
+                context,
+                bodyHtml,
+                bodyText,
+                "claude-sonnet-4-20250514"
+              );
+              const saveResult = await saveNote(noteInput);
+              controller.enqueue(
+                encoder.encode(`data: ${JSON.stringify({ save: saveResult })}\n\n`)
+              );
+            } catch (saveErr) {
+              const errMsg = saveErr instanceof Error ? saveErr.message : "Save failed";
+              console.error("[generate] save error:", saveErr);
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({ save: { ok: false, error: errMsg } })}\n\n`
+                )
+              );
+            }
+          }
+
           controller.enqueue(encoder.encode("data: [DONE]\n\n"));
           controller.close();
         } catch (error) {
