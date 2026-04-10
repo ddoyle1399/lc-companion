@@ -13,6 +13,8 @@ interface UseStreamGenerateReturn {
   generating: boolean;
   error: string;
   searchStatus: string;
+  noteId: string | null;
+  saveError: string | null;
   generate: (body: Record<string, unknown>) => Promise<void>;
   stop: () => void;
   reset: () => void;
@@ -27,6 +29,8 @@ export function useStreamGenerate(
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
+  const [noteId, setNoteId] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const rawOutputRef = useRef("");
   const foundHeadingRef = useRef(false);
@@ -38,6 +42,8 @@ export function useStreamGenerate(
       setOutput("");
       setError("");
       setSearchStatus("");
+      setNoteId(null);
+      setSaveError(null);
       rawOutputRef.current = "";
       foundHeadingRef.current = false;
 
@@ -81,6 +87,12 @@ export function useStreamGenerate(
                   setError(parsed.error);
                 } else if (parsed.status === "searching") {
                   setSearchStatus("Searching for text...");
+                } else if (parsed.save) {
+                  if (parsed.save.ok) {
+                    setNoteId(parsed.save.noteId);
+                  } else {
+                    setSaveError(parsed.save.error);
+                  }
                 } else if (parsed.text) {
                   setSearchStatus("");
                   rawOutputRef.current += parsed.text;
@@ -135,6 +147,8 @@ export function useStreamGenerate(
     setOutput("");
     setError("");
     setSearchStatus("");
+    setNoteId(null);
+    setSaveError(null);
     rawOutputRef.current = "";
     foundHeadingRef.current = false;
   }, []);
@@ -145,6 +159,8 @@ export function useStreamGenerate(
     generating,
     error,
     searchStatus,
+    noteId,
+    saveError,
     generate,
     stop,
     reset,
