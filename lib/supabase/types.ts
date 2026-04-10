@@ -26,8 +26,8 @@ export interface SaveNoteInput {
   title: string;
   body_html: string;
   body_text: string;
-  quotes?: unknown | null;
-  themes?: unknown | null;
+  quotes?: string[] | null;
+  themes?: string[] | null;
   metadata?: unknown | null;
   generation_model?: string | null;
   status?: string;

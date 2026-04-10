@@ -18,6 +18,7 @@ import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
 import { saveNote } from "@/lib/supabase/saveNote";
 import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
+import { extractQuotesAndThemes } from "@/lib/claude/extractQuotesAndThemes";
 
 // Strips [VERIFY], [CHECK], [TODO], [NOTE] and similar bracketed internal markers
 // from streamed text, handling markers that may span chunk boundaries.
@@ -274,16 +275,41 @@ export async function POST(request: NextRequest) {
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: tail })}\n\n`));
           }
 
-          // Stream completed cleanly. Persist the note.
+          // Stream completed cleanly. Extract quotes/themes, then persist.
           if (accumulatedText) {
             try {
               const bodyText = accumulatedText;
+
+              // Run extraction before save. Never blocks the user's note display.
+              const extractionResult = await extractQuotesAndThemes(bodyText);
+              const quotes = extractionResult.ok ? extractionResult.quotes : null;
+              const themes = extractionResult.ok ? extractionResult.themes : null;
+
+              if (!extractionResult.ok) {
+                console.error("[generate] extraction failed:", extractionResult.error);
+              }
+
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({
+                    extraction: {
+                      ok: extractionResult.ok,
+                      quotesCount: quotes?.length ?? 0,
+                      themesCount: themes?.length ?? 0,
+                      ...(extractionResult.ok ? {} : { error: extractionResult.error }),
+                    },
+                  })}\n\n`
+                )
+              );
+
               const bodyHtml = marked.parse(bodyText) as string;
               const noteInput = mapPromptContextToNoteInput(
                 context,
                 bodyHtml,
                 bodyText,
-                "claude-sonnet-4-20250514"
+                "claude-sonnet-4-20250514",
+                quotes,
+                themes
               );
               const saveResult = await saveNote(noteInput);
               controller.enqueue(

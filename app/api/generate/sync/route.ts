@@ -18,6 +18,7 @@ import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
 import { saveNote } from "@/lib/supabase/saveNote";
 import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
+import { extractQuotesAndThemes } from "@/lib/claude/extractQuotesAndThemes";
 
 function errorResponse(message: string, status = 400) {
   return new Response(
@@ -201,6 +202,23 @@ export async function POST(request: NextRequest) {
 
     let noteId: string | undefined;
     let saveError: string | undefined;
+    let extraction: { ok: boolean; quotesCount: number; themesCount: number; error?: string };
+
+    // Run extraction before save.
+    const extractionResult = await extractQuotesAndThemes(content);
+    const quotes = extractionResult.ok ? extractionResult.quotes : null;
+    const themes = extractionResult.ok ? extractionResult.themes : null;
+
+    if (!extractionResult.ok) {
+      console.error("[sync/generate] extraction failed:", extractionResult.error);
+    }
+
+    extraction = {
+      ok: extractionResult.ok,
+      quotesCount: quotes?.length ?? 0,
+      themesCount: themes?.length ?? 0,
+      ...(extractionResult.ok ? {} : { error: extractionResult.error }),
+    };
 
     try {
       const bodyText = content;
@@ -209,7 +227,9 @@ export async function POST(request: NextRequest) {
         context,
         bodyHtml,
         bodyText,
-        "claude-sonnet-4-20250514"
+        "claude-sonnet-4-20250514",
+        quotes,
+        themes
       );
       const saveResult = await saveNote(noteInput);
       if (saveResult.ok) {
@@ -223,7 +243,7 @@ export async function POST(request: NextRequest) {
     }
 
     return new Response(
-      JSON.stringify({ content, contentType, noteId, saveError }),
+      JSON.stringify({ content, contentType, noteId, saveError, extraction }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {

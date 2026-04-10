@@ -13,7 +13,9 @@ export function mapPromptContextToNoteInput(
   context: PromptContext,
   bodyHtml: string,
   bodyText: string,
-  generationModel: string
+  generationModel: string,
+  quotes?: string[] | null,
+  themes?: string[] | null
 ): SaveNoteInput {
   const { contentType } = context;
 
@@ -129,8 +131,8 @@ export function mapPromptContextToNoteInput(
     title,
     body_html: bodyHtml,
     body_text: bodyText,
-    quotes: null,
-    themes: null,
+    quotes: quotes ?? null,
+    themes: themes ?? null,
     metadata: { promptContext: slimContext },
     generation_model: generationModel,
   };

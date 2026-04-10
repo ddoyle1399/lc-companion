@@ -238,6 +238,7 @@ Your guide must:
 ${quoteBlock}
 
 ABSOLUTE RULES:
+- Begin your response directly with the markdown heading. Do not include any preamble, meta-commentary, or narration about your process. Do not write phrases like "Based on the search results" or "Let me compile" or "Here is the note". Start with the # heading on the first line.
 - Write in UK English at all times (colour, analyse, recognise, etc.)
 - NEVER use em dashes or en dashes anywhere. Not once. Not ever. Use commas, full stops, semicolons, or colons instead. Students recognise em dashes as AI-generated and it destroys credibility.
 - NEVER include [VERIFY], [CHECK], [TODO], [NOTE], or any bracketed internal markers in your output. Every statement must be your final, confident analysis. If you are uncertain about a quote, either verify it from the poem text provided and include it confidently, or leave it out and paraphrase instead. The output must be a polished, finished document ready for student use with zero editing required.
