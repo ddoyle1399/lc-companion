@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { marked } from "marked";
 import { getClient } from "@/lib/claude/client";
 import {
   buildSystemPrompt,
@@ -15,6 +16,8 @@ import {
 import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
+import { saveNote } from "@/lib/supabase/saveNote";
+import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
 
 function errorResponse(message: string, status = 400) {
   return new Response(
@@ -196,8 +199,31 @@ export async function POST(request: NextRequest) {
       return errorResponse("No text content in Claude response", 500);
     }
 
+    let noteId: string | undefined;
+    let saveError: string | undefined;
+
+    try {
+      const bodyText = content;
+      const bodyHtml = marked.parse(bodyText) as string;
+      const noteInput = mapPromptContextToNoteInput(
+        context,
+        bodyHtml,
+        bodyText,
+        "claude-sonnet-4-20250514"
+      );
+      const saveResult = await saveNote(noteInput);
+      if (saveResult.ok) {
+        noteId = saveResult.noteId;
+      } else {
+        saveError = saveResult.error;
+      }
+    } catch (saveErr) {
+      saveError = saveErr instanceof Error ? saveErr.message : "Save mapping failed";
+      console.error("[sync/generate] save error:", saveErr);
+    }
+
     return new Response(
-      JSON.stringify({ content, contentType }),
+      JSON.stringify({ content, contentType, noteId, saveError }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
