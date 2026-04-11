@@ -24,7 +24,7 @@ interface UseStreamGenerateReturn {
   } | null;
   outlinesSaveStatus: {
     ok: boolean;
-    inserted?: number;
+    inserted: number;
     error?: string;
   } | null;
   generate: (body: Record<string, unknown>) => Promise<void>;
@@ -52,7 +52,7 @@ export function useStreamGenerate(
   } | null>(null);
   const [outlinesSaveStatus, setOutlinesSaveStatus] = useState<{
     ok: boolean;
-    inserted?: number;
+    inserted: number;
     error?: string;
   } | null>(null);
 

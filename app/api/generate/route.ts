@@ -309,10 +309,10 @@ export async function POST(request: NextRequest) {
               // Generate outlines for every matching past question.
               let pendingOutlines: Array<{ questionId: string; outline: OutlineSuccess }> = [];
               const subjectKey = context.poet ?? context.textTitle ?? context.comparativeMode ?? null;
-              const level: "higher" | "ordinary" = context.level === "HL" ? "higher" : "ordinary";
+              const outlineLevel: "higher" | "ordinary" = context.level === "HL" ? "higher" : "ordinary";
 
               if (subjectKey) {
-                const matches = await findMatchingQuestions({ subjectKey, level });
+                const matches = await findMatchingQuestions({ subjectKey, level: outlineLevel });
 
                 if (matches.length === 0) {
                   controller.enqueue(
