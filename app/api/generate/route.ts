@@ -19,6 +19,10 @@ import { getPoemText } from "@/lib/poems/store";
 import { saveNote } from "@/lib/supabase/saveNote";
 import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
 import { extractQuotesAndThemes } from "@/lib/claude/extractQuotesAndThemes";
+import { generateOutline, type OutlineSuccess } from "@/lib/claude/generateOutline";
+import { findMatchingQuestions } from "@/lib/supabase/findMatchingQuestions";
+import { saveOutlines } from "@/lib/supabase/saveOutlines";
+import { runWithConcurrency } from "@/lib/util/concurrency";
 
 // Strips [VERIFY], [CHECK], [TODO], [NOTE] and similar bracketed internal markers
 // from streamed text, handling markers that may span chunk boundaries.
@@ -275,7 +279,7 @@ export async function POST(request: NextRequest) {
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: tail })}\n\n`));
           }
 
-          // Stream completed cleanly. Extract quotes/themes, then persist.
+          // Stream completed cleanly. Extract quotes/themes, generate outlines, then persist.
           if (accumulatedText) {
             try {
               const bodyText = accumulatedText;
@@ -302,6 +306,70 @@ export async function POST(request: NextRequest) {
                 )
               );
 
+              // Generate outlines for every matching past question.
+              let pendingOutlines: Array<{ questionId: string; outline: OutlineSuccess }> = [];
+              const subjectKey = context.poet ?? context.textTitle ?? context.comparativeMode ?? null;
+              const level: "higher" | "ordinary" = context.level === "HL" ? "higher" : "ordinary";
+
+              if (subjectKey) {
+                const matches = await findMatchingQuestions({ subjectKey, level });
+
+                if (matches.length === 0) {
+                  controller.enqueue(
+                    encoder.encode(
+                      `data: ${JSON.stringify({
+                        outlines: { ok: true, matched: 0, generated: 0, failed: 0, note: "no_past_questions" },
+                      })}\n\n`
+                    )
+                  );
+                } else {
+                  const outlineQuotes = extractionResult.ok ? extractionResult.quotes : [];
+                  const outlineThemes = extractionResult.ok ? extractionResult.themes : [];
+
+                  const results = await runWithConcurrency(matches, 3, async (q) => {
+                    const outline = await generateOutline({
+                      questionId: q.id,
+                      questionText: q.question_text,
+                      questionYear: q.exam_year,
+                      questionPaper: q.paper,
+                      questionLevel: q.level,
+                      questionSection: q.section,
+                      poet: context.poet ?? subjectKey,
+                      poem: context.poem ?? null,
+                      noteBody: bodyText,
+                      noteQuotes: outlineQuotes,
+                      noteThemes: outlineThemes,
+                    });
+                    return { questionId: q.id, outline };
+                  });
+
+                  pendingOutlines = results.filter(
+                    (r): r is { questionId: string; outline: OutlineSuccess } => r.outline.ok
+                  );
+
+                  controller.enqueue(
+                    encoder.encode(
+                      `data: ${JSON.stringify({
+                        outlines: {
+                          ok: true,
+                          matched: matches.length,
+                          generated: pendingOutlines.length,
+                          failed: results.length - pendingOutlines.length,
+                        },
+                      })}\n\n`
+                    )
+                  );
+                }
+              } else {
+                controller.enqueue(
+                  encoder.encode(
+                    `data: ${JSON.stringify({
+                      outlines: { ok: true, matched: 0, generated: 0, failed: 0, note: "no_subject_key" },
+                    })}\n\n`
+                  )
+                );
+              }
+
               const bodyHtml = marked.parse(bodyText) as string;
               const noteInput = mapPromptContextToNoteInput(
                 context,
@@ -315,6 +383,17 @@ export async function POST(request: NextRequest) {
               controller.enqueue(
                 encoder.encode(`data: ${JSON.stringify({ save: saveResult })}\n\n`)
               );
+
+              // Save outlines only once we have a noteId.
+              if (saveResult.ok && pendingOutlines.length > 0) {
+                const outlinesResult = await saveOutlines({
+                  noteId: saveResult.noteId,
+                  outlines: pendingOutlines,
+                });
+                controller.enqueue(
+                  encoder.encode(`data: ${JSON.stringify({ outlinesSave: outlinesResult })}\n\n`)
+                );
+              }
             } catch (saveErr) {
               const errMsg = saveErr instanceof Error ? saveErr.message : "Save failed";
               console.error("[generate] save error:", saveErr);
