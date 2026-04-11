@@ -23,7 +23,10 @@ export async function findMatchingQuestions(params: {
       .eq("level", params.level)
       .order("exam_year", { ascending: false });
 
-    if (error) return [];
+    if (error) {
+      console.error("[findMatchingQuestions] query failed", error);
+      return [];
+    }
     return (data as MatchingQuestion[]) ?? [];
   } catch {
     return [];
