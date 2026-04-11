@@ -101,7 +101,9 @@ export async function generateOutline(input: OutlineInput): Promise<OutlineResul
       return { ok: false, error: "no text block in outline response" };
     }
 
-    const raw = textBlock.text.trim();
+    const raw = textBlock.text.trim()
+      .replace(/^```(?:json)?\n?/, "")
+      .replace(/\n?```$/, "");
 
     let parsed: unknown;
     try {
@@ -121,7 +123,8 @@ export async function generateOutline(input: OutlineInput): Promise<OutlineResul
       thesis_line: parsed.thesis_line,
       body_moves: parsed.body_moves,
       closing_move: parsed.closing_move,
-      examiner_note: parsed.examiner_note,
+      // Normalise "null" string to JSON null in case model ignores the literal null instruction.
+      examiner_note: parsed.examiner_note === "null" ? null : parsed.examiner_note,
       model: OUTLINE_MODEL,
     };
   } catch (err) {
