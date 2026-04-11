@@ -19,6 +19,10 @@ import { getPoemText } from "@/lib/poems/store";
 import { saveNote } from "@/lib/supabase/saveNote";
 import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
 import { extractQuotesAndThemes } from "@/lib/claude/extractQuotesAndThemes";
+import { generateOutline, type OutlineSuccess } from "@/lib/claude/generateOutline";
+import { findMatchingQuestions } from "@/lib/supabase/findMatchingQuestions";
+import { saveOutlines } from "@/lib/supabase/saveOutlines";
+import { runWithConcurrency } from "@/lib/util/concurrency";
 
 function errorResponse(message: string, status = 400) {
   return new Response(
@@ -203,6 +207,8 @@ export async function POST(request: NextRequest) {
     let noteId: string | undefined;
     let saveError: string | undefined;
     let extraction: { ok: boolean; quotesCount: number; themesCount: number; error?: string };
+    let outlines: { ok: boolean; matched: number; generated: number; failed: number; note?: string };
+    let outlinesSave: { ok: boolean; inserted: number; error?: string } | undefined;
 
     // Run extraction before save.
     const extractionResult = await extractQuotesAndThemes(content);
@@ -220,6 +226,52 @@ export async function POST(request: NextRequest) {
       ...(extractionResult.ok ? {} : { error: extractionResult.error }),
     };
 
+    // Generate outlines for every matching past question.
+    let pendingOutlines: Array<{ questionId: string; outline: OutlineSuccess }> = [];
+    const subjectKey = context.poet ?? context.textTitle ?? context.comparativeMode ?? null;
+    const outlineLevel: "higher" | "ordinary" = context.level === "HL" ? "higher" : "ordinary";
+
+    if (subjectKey) {
+      const matches = await findMatchingQuestions({ subjectKey, level: outlineLevel });
+
+      if (matches.length === 0) {
+        outlines = { ok: true, matched: 0, generated: 0, failed: 0, note: "no_past_questions" };
+      } else {
+        const outlineQuotes = extractionResult.ok ? extractionResult.quotes : [];
+        const outlineThemes = extractionResult.ok ? extractionResult.themes : [];
+
+        const results = await runWithConcurrency(matches, 3, async (q) => {
+          const outline = await generateOutline({
+            questionId: q.id,
+            questionText: q.question_text,
+            questionYear: q.exam_year,
+            questionPaper: q.paper,
+            questionLevel: q.level,
+            questionSection: q.section,
+            poet: context.poet ?? subjectKey,
+            poem: context.poem ?? null,
+            noteBody: content,
+            noteQuotes: outlineQuotes,
+            noteThemes: outlineThemes,
+          });
+          return { questionId: q.id, outline };
+        });
+
+        pendingOutlines = results.filter(
+          (r): r is { questionId: string; outline: OutlineSuccess } => r.outline.ok
+        );
+
+        outlines = {
+          ok: true,
+          matched: matches.length,
+          generated: pendingOutlines.length,
+          failed: results.length - pendingOutlines.length,
+        };
+      }
+    } else {
+      outlines = { ok: true, matched: 0, generated: 0, failed: 0, note: "no_subject_key" };
+    }
+
     try {
       const bodyText = content;
       const bodyHtml = marked.parse(bodyText) as string;
@@ -234,6 +286,15 @@ export async function POST(request: NextRequest) {
       const saveResult = await saveNote(noteInput);
       if (saveResult.ok) {
         noteId = saveResult.noteId;
+
+        // Save outlines once we have a noteId.
+        if (pendingOutlines.length > 0) {
+          const outlinesResult = await saveOutlines({
+            noteId: saveResult.noteId,
+            outlines: pendingOutlines,
+          });
+          outlinesSave = outlinesResult;
+        }
       } else {
         saveError = saveResult.error;
       }
@@ -243,7 +304,7 @@ export async function POST(request: NextRequest) {
     }
 
     return new Response(
-      JSON.stringify({ content, contentType, noteId, saveError, extraction }),
+      JSON.stringify({ content, contentType, noteId, saveError, extraction, outlines, outlinesSave }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
