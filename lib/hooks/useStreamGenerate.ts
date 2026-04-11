@@ -15,6 +15,18 @@ interface UseStreamGenerateReturn {
   searchStatus: string;
   noteId: string | null;
   saveError: string | null;
+  outlinesStatus: {
+    ok: boolean;
+    matched: number;
+    generated: number;
+    failed: number;
+    note?: string;
+  } | null;
+  outlinesSaveStatus: {
+    ok: boolean;
+    inserted?: number;
+    error?: string;
+  } | null;
   generate: (body: Record<string, unknown>) => Promise<void>;
   stop: () => void;
   reset: () => void;
@@ -31,6 +43,18 @@ export function useStreamGenerate(
   const [searchStatus, setSearchStatus] = useState("");
   const [noteId, setNoteId] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [outlinesStatus, setOutlinesStatus] = useState<{
+    ok: boolean;
+    matched: number;
+    generated: number;
+    failed: number;
+    note?: string;
+  } | null>(null);
+  const [outlinesSaveStatus, setOutlinesSaveStatus] = useState<{
+    ok: boolean;
+    inserted?: number;
+    error?: string;
+  } | null>(null);
 
   const rawOutputRef = useRef("");
   const foundHeadingRef = useRef(false);
@@ -44,6 +68,8 @@ export function useStreamGenerate(
       setSearchStatus("");
       setNoteId(null);
       setSaveError(null);
+      setOutlinesStatus(null);
+      setOutlinesSaveStatus(null);
       rawOutputRef.current = "";
       foundHeadingRef.current = false;
 
@@ -93,6 +119,10 @@ export function useStreamGenerate(
                   } else {
                     setSaveError(parsed.save.error);
                   }
+                } else if (parsed.outlines) {
+                  setOutlinesStatus(parsed.outlines);
+                } else if (parsed.outlinesSave) {
+                  setOutlinesSaveStatus(parsed.outlinesSave);
                 } else if (parsed.text) {
                   setSearchStatus("");
                   rawOutputRef.current += parsed.text;
@@ -149,6 +179,8 @@ export function useStreamGenerate(
     setSearchStatus("");
     setNoteId(null);
     setSaveError(null);
+    setOutlinesStatus(null);
+    setOutlinesSaveStatus(null);
     rawOutputRef.current = "";
     foundHeadingRef.current = false;
   }, []);
@@ -161,6 +193,8 @@ export function useStreamGenerate(
     searchStatus,
     noteId,
     saveError,
+    outlinesStatus,
+    outlinesSaveStatus,
     generate,
     stop,
     reset,
