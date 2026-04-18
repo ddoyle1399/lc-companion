@@ -4,7 +4,7 @@
 export const VERIFIED_POEM_WHITELIST: ReadonlyArray<{
   subject_key: string;
   sub_key: string;
-}> = [{ subject_key: "kavanagh", sub_key: "advent" }];
+}> = [{ subject_key: "Patrick Kavanagh", sub_key: "Advent" }];
 
 export function isPoemVerified(
   subject_key: string,
