@@ -5,6 +5,22 @@ export interface ComparativeTextEntry {
   category: string;
 }
 
+export interface PoemQuote {
+  text: string;
+  line_start?: number;
+  line_end?: number;
+  stanza_index?: number;
+}
+
+export interface PoemMetadata {
+  total_lines?: number;
+  stanza_breaks?: number[][];
+  section_breaks?: string[] | null;
+  form?: string;
+  structure_confidence?: string;
+  quote_text_anchored?: boolean;
+}
+
 export interface PromptContext {
   year: number;
   circular: string;
@@ -46,6 +62,9 @@ export interface PromptContext {
   focusArea?: "question_a" | "question_b" | "both";
   // Composition-specific
   compositionType?: "personal_essay" | "short_story" | "speech" | "discursive" | "feature_article" | "descriptive";
+  // Structured poem metadata and quotes (populated by route when an outline exists)
+  poemMetadata?: PoemMetadata;
+  structuredQuotes?: Array<string | PoemQuote>;
 }
 
 function getReadingLevel(level: "HL" | "OL"): string {
@@ -148,26 +167,29 @@ If unsure, paraphrase or flag with [VERIFY].`;
 }
 
 export function buildSystemPrompt(context: PromptContext): string {
+  if (context.contentType === 'poetry') {
+    return `You are an experienced Leaving Certificate English teacher writing per-poem study notes for Higher Level students. You write the way a teacher talks to a student in a one-to-one grind, not the way a textbook publishes filler. Your job is to make the poem usable in an exam, not to pad a page.
+
+<absolute_rules>
+1. Every double-quoted phrase must appear verbatim in <quote_bank>. Do not invent, paraphrase, or modernise quotes inside quotation marks.
+2. Produce exactly the number of stanza sections specified by <structure.stanza_breaks>. Not more, not fewer. If <structure.confidence> is "unverified", omit the stanza-by-stanza section entirely and use the theme-led structure described in <output_format.degraded_mode>.
+3. Any stanza-count claim in the Overview must equal the number of stanza sections you produce. If they disagree, regenerate.
+4. UK English. Banned spellings: color, analyze, organize, recognize, honor, defense, behavior, favorite, neighborhood.
+5. No em dashes (—). No en dashes (–) in prose. Use commas, full stops, colons, semicolons, parentheses.
+6. Banned phrases (case-insensitive): "this line captures", "the poet employs", "masterfully", "evocative language and imagery", "deceptively simple", "visual imagery dominates", "creates a vivid picture", "establishes the poem's central metaphor", "powerful statement underscores", "reinforcing the idea that", "Furthermore", "Moreover", "In conclusion", "It is important to note", "comprehensive", "revolutionise", "unlock your potential". If your draft contains any of these, rewrite the sentence.
+7. Begin the response directly with the markdown H1 title. No preamble, no meta-commentary, no narration of your process.
+</absolute_rules>
+
+<voice>
+Direct and specific. "Kavanagh is being deliberately ironic here", not "the poet employs irony". Vary sentence length. Address the student as "you" or "we", never "the reader". Name techniques only when you can also name what they actually do in this poem. Cut any sentence whose deletion would lose nothing.
+</voice>`;
+  }
+
   const readingLevel = getReadingLevel(context.level);
   const modes = getComparativeModes(context.year, context.level);
   const quoteBlock = buildQuoteAccuracyBlock(context);
 
   let examAlignmentBlock = "";
-  if (context.contentType === "poetry" && context.examSummary) {
-    examAlignmentBlock = `
-
-EXAM ALIGNMENT REQUIREMENT:
-Poetry questions always combine a claim about the poet's STYLE/LANGUAGE with a claim about their THEMES/CONCERNS. Your note must prepare students to address BOTH dimensions. For this poet, past and predicted exam angles include:
-
-${context.examSummary}
-
-Your note must:
-(1) Identify techniques and stylistic features for style-focused questions
-(2) Connect every theme to specific textual evidence usable in an exam answer
-(3) In Exam-Ready Takeaways, explicitly state which exam question types this poem suits
-(4) Frame analysis using SEC phrasing like "powerful imagery", "exploration of contradictions", "deceptively simple style"`;
-  }
-
   if (context.contentType === "comparative" && context.comparativeExamPattern) {
     examAlignmentBlock = `
 
@@ -280,120 +302,77 @@ The student is studying at ${context.level} Level.${examAlignmentBlock}`;
 }
 
 export function buildPoetryNotePrompt(context: PromptContext): string {
-  const userInstr = context.userInstructions
-    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
-    : "";
+  const title = context.poem ?? 'Unknown Poem';
+  const poet = context.poet ?? 'Unknown Poet';
+  const exam_year = context.year;
+  const metadata = context.poemMetadata ?? { structure_confidence: 'unverified' };
+  const quotes = context.structuredQuotes ?? [];
 
-  let prescribedListConstraint = "";
-  if (context.prescribedPoems && context.prescribedPoems.length > 0) {
-    const poemList = context.prescribedPoems
-      .filter((p) => p !== context.poem)
-      .map((p) => `"${p}"`)
-      .join(", ");
-    prescribedListConstraint = `
-CRITICAL: You must ONLY link to poems on the prescribed list for ${context.year} at ${context.level}. The prescribed poems for ${context.poet} are: ${poemList}. Do NOT reference any poem not on this list. Linking to non-prescribed poems is misleading and harmful to exam preparation.`;
-  }
+  return `<task>
+Write study notes for "${title}" by ${poet} for HL ${exam_year}.
+</task>
 
-  let poemTextBlock = "";
-  if (context.poemText) {
-    poemTextBlock = `
+<structure>
+total_lines: ${metadata.total_lines ?? 'unknown'}
+stanza_breaks: ${JSON.stringify(metadata.stanza_breaks ?? null)}
+section_breaks: ${JSON.stringify(metadata.section_breaks ?? null)}
+form: ${metadata.form ?? 'unknown'}
+confidence: ${metadata.structure_confidence ?? 'unverified'}
+quote_text_anchored: ${metadata.quote_text_anchored ?? false}
+</structure>
 
-POEM TEXT (verified, use this as your primary source):
----
-${context.poemText}
----
-Quote directly from this text. You have the actual words in front of you.`;
-  }
+<quote_bank>
+${quotes.length > 0
+    ? quotes.map((q, i) => {
+        const text = typeof q === 'string' ? q : (q.text ?? '');
+        const lineRef = typeof q !== 'string' && q.line_start
+          ? ` [L${q.line_start}${q.line_end !== q.line_start ? `-${q.line_end}` : ''}]`
+          : '';
+        const stanzaRef = typeof q !== 'string' && q.stanza_index
+          ? ` (stanza ${q.stanza_index})`
+          : '';
+        return `${i + 1}. "${text}"${lineRef}${stanzaRef}`;
+      }).join('\n')
+    : '(no verified quotes available)'}
+</quote_bank>
 
-  let textbookBlock = "";
-  if (context.textbookAnalysis) {
-    const t = context.textbookAnalysis;
-    textbookBlock = `
+<output_format>
+# "${title}" by ${poet}
 
-=== TEXTBOOK REFERENCE (Poetry Focus 2026) ===
-Your note must be consistent with this analysis. You may go deeper, add insight, and expand on any point, but do not contradict it.
+## 1. Overview
+One paragraph, 3-5 sentences. What the poem does, when it was published, the form (use the form field). Do not state a stanza count that contradicts <structure.stanza_breaks>.
 
-Form & Structure: ${t.formStructure}
-Themes: ${t.themes}
-Literary Techniques: ${t.literaryTechniques}
-Tone & Mood: ${t.toneAndMood}
-Imagery: ${t.imagery}
-Historical & Biographical Context: ${t.historicalContext}
-Stanza-by-Stanza Summary: ${t.stanzaSummary}
-Key Quotations: ${t.keyQuotations}
-Exam Angles: ${t.examAngles}
-Comparative Links: ${t.comparativeLinks}
-=== END TEXTBOOK REFERENCE ===`;
-  }
+## 2. Stanza-by-Stanza
+For each entry in <structure.stanza_breaks>, produce one ### heading. If <structure.section_breaks> is set, group stanzas under #### Part I / #### Part II headings. Each stanza block has three labelled paragraphs:
 
-  let quoteGuidance: string;
-  if (context.poemText) {
-    quoteGuidance = `- Quote directly from the provided poem text. No [VERIFY] tags needed.
-- Cross-reference every quotation against the provided text before including it.`;
-  } else {
-    quoteGuidance = `- BEFORE writing analysis, use web_search to find and read the full text of this poem.
-- If you successfully found the poem via web search, quote directly and confidently.
-- If web search did not return the full text, paraphrase the line in your own words. Do NOT use [VERIFY] or any bracketed marker. Leave them out entirely.`;
-  }
+**Plain meaning**: 2-3 sentences, literal only.
+**Technique**: name AT MOST two techniques, quote the example, say what it does in this poem specifically.
+**Use in an essay**: 1-2 sentences, which question type and which paired poem.
 
-  return `Generate a comprehensive poetry analysis note for "${context.poem}" by ${context.poet}.${poemTextBlock}${textbookBlock}
+## 3. Themes (max 3, ranked)
+One paragraph each. Name the theme, give the strongest 1-2 quotes from <quote_bank>, state the argument a student would build with it.
 
-WRITING RULES — apply to every sentence in this note:
-- Never use em dashes anywhere. If you find yourself reaching for an em dash, use a full stop or rewrite the sentence instead.
-- Language must be accessible at all times. Write as if explaining to a motivated but not exceptional student. No academic jargon without an immediate plain-English explanation. Short sentences are better than long complex ones.
+## 4. Exam Use
+3-5 sentences in prose. Strongest essay angle, two quotes worth memorising verbatim, the easiest mistake to make on this poem.
 
-TARGET LENGTH: 2000-3000 words total. The stanza analysis sections should make up approximately 60% of the note. The extra length comes from fuller stanza analysis, not padding. Do not pad other sections.
+## 5. Pairings
+2-3 sentences naming other poems by ${poet} this pairs with, one reason each.
 
-STRUCTURE (follow this exactly):
+<degraded_mode>
+If <structure.confidence> is "unverified": skip section 2 entirely. Replace with one italicised line: *"Stanza-by-stanza analysis is not available for this poem until structure is verified."* Then proceed to sections 3-5 as normal, drawing all quotes from <quote_bank> grouped by theme.
+</degraded_mode>
+</output_format>
 
-## 1. Poem Overview
-3-5 sentences maximum. Cover:
-- What the poem is about at surface level
-- The central theme(s) in one sentence
-- Where it sits in the poet's broader concerns (link to their recurring themes)
-- Brief note on form/structure if relevant
-
-## 2. Stanza/Line Breakdown
-Every stanza in the poem must receive its own analysis section. Do not skip or combine stanzas unless they are genuinely a single unit of meaning. The stanza analysis is the most important part of this note. Students spend 80% of their study time here. It must be thorough.
-
-Use stanza-by-stanza breakdown by default. Only go line-by-line if the poem is exceptionally dense (e.g., Prufrock, A Valediction Forbidding Mourning, Fireman's Lift).
-
-For each stanza, include ALL FOUR of the following. Target 5-8 sentences per stanza minimum. A three-sentence stanza analysis is never enough. The student must be able to take at least three or four distinct points from each stanza and use them independently in an exam answer.
-
-**Plain Meaning (2-3 sentences):** Start by explaining what is literally happening in this stanza in simple, clear language. What is the speaker saying or doing? What situation are we in? Do not assume the student already understands the poem. Write as if explaining to someone reading it for the very first time.
-
-**Technique Analysis (3-4 sentences):** Identify 2-3 poetic techniques from the approved LC list. For each: name the technique, quote the specific words that show it, and explain the effect it creates. Use only approved devices (imagery, metaphor, simile, personification, alliteration, assonance, onomatopoeia, enjambment, caesura, rhyme, repetition, contrast, symbolism, tone shifts, juxtaposition, direct address). Never name a technique without explaining what it does and why it matters. Never write that something is "effective" without explaining exactly what effect it creates and why an examiner would reward a student for identifying it.
-
-**Deeper Insight (2-3 sentences):** Go beyond identifying techniques. Explain what makes this stanza significant in the context of the whole poem. How does it develop the poem's themes? How does it shift the tone or mood? Point out anything that connects this stanza to another part of the poem or to the poet's wider concerns across their body of work.
-
-**Exam Angle (1-2 sentences):** Give the student at least one specific idea they could use in an exam answer. Phrase it as: "If a question asks about [exam angle], go to this stanza because..." Connect the exam angle to both the technique used and the theme it expresses.
-
-${quoteGuidance}
-
-NEVER summarise what a stanza is "about" in vague terms. Be specific.
-Bad example: "The poet uses imagery to create atmosphere."
-Good example: "The description of mushrooms crowding together in darkness creates a claustrophobic atmosphere that mirrors the confinement of forgotten communities."
-
-## 3. Key Themes
-2-3 sentences per theme. Only themes genuinely central to this poem.
-- Connected to the poet's wider body of work where relevant
-- Oriented toward exam questions (e.g., "A question on [poet] and memory would draw heavily on this poem because...")
-
-## 4. Exam-Ready Takeaways
-3-5 sentences a student could adapt directly into an exam answer.
-- Pre-built phrases demonstrating strong analytical language
-- Specific to this poem, not generic
-
-### Likely Exam Angles for This Poem
-List 2-3 specific exam question angles this poem would suit, based on past SEC question patterns for ${context.poet}. For each angle:
-- State the exam angle (e.g., "a question on Yeats and contradiction" or "a question on powerful imagery")
-- Give brief guidance on what to emphasise from this poem when answering that angle
-- Reference the style AND theme dimensions the student should address
-
-## 5. Links to Other Poems by ${context.poet}
-Brief connections (1-2 sentences each) to other prescribed poems by the same poet that share themes or techniques.
-Useful for the "discuss the poetry of [poet]" style questions.${prescribedListConstraint}${userInstr}`;
+<self_check>
+Before returning, verify:
+- Number of ### stanza headings equals length of <structure.stanza_breaks> (or zero if degraded mode).
+- Overview's stanza-count claim matches the body, or makes no count claim.
+- No banned phrases, no em/en dashes in prose, no US spellings.
+- Every "..." traces verbatim to a <quote_bank> entry.
+If any check fails, fix before returning.
+</self_check>`;
 }
+
 
 export function buildComparativePrompt(context: PromptContext): string {
   const userInstr = context.userInstructions
