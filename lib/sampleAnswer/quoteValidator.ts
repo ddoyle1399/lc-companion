@@ -40,9 +40,9 @@ export function validateQuotes(
 
   // Extract substrings inside double (incl. curly) or single quotes
   const quoteRegex =
-    /["\u201C]([^"\u201D\u201C]+?)["\u201D]|'([^']+?)'/g;
+    /["\u201C]([^"\u201D\u201C]+?)["\u201D]|(?<!\w)'([^']+?)'/g;
   const extracted = [...answerText.matchAll(quoteRegex)]
-    .map((m) => (m[1] ?? m[2] ?? "").trim())
+    .map((m) => (m[1] ?? m[2] ?? "").trim().replace(/[,\.;:!?]+$/, ""))
     .filter((s) => s.length >= 3);
 
   const flagged: string[] = [];

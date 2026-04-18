@@ -32,17 +32,17 @@ export async function POST(request: NextRequest) {
   if (
     typeof body !== "object" ||
     body === null ||
-    typeof (body as Record<string, unknown>).outlineId !== "string" ||
+    typeof (body as Record<string, unknown>).outline_id !== "string" ||
     ((body as Record<string, unknown>).tier !== "H1" &&
       (body as Record<string, unknown>).tier !== "H4")
   ) {
     return NextResponse.json(
-      { error: "missing_or_invalid_fields", required: ["outlineId", "tier (H1|H4)"] },
+      { error: "missing_or_invalid_fields", required: ["outline_id", "tier (H1|H4)"] },
       { status: 400 },
     );
   }
 
-  const { outlineId, tier } = body as { outlineId: string; tier: "H1" | "H4" };
+  const { outline_id: outlineId, tier } = body as { outline_id: string; tier: "H1" | "H4" };
 
   const outline = await findOutlineById(outlineId);
   if (!outline) {
