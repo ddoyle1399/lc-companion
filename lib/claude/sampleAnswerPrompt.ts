@@ -50,21 +50,37 @@ Anti-patterns — do NOT produce:
 - Generic adjectives ("profound", "striking", "powerful") without specifics.`;
 
 const H4_RULES = `
-YOU ARE WRITING AN H4-LEVEL ANSWER.
+YOU ARE WRITING AN H4 ANSWER. This is a 30/50 script. H4 means shallow-but-correct, not wrong. You must deliberately produce weaknesses that mark the script as H4 rather than H1.
 
-Behaviours required:
-- Clear thesis that addresses the question but treated at surface level.
-- Quotes present and correctly chosen but dropped in rather than integrated. It is acceptable, and realistic, for this answer to introduce quotes with phrases like "For example, Kavanagh writes,".
-- More uniform sentence length than an H1 answer.
-- Structure present but transitions are mechanical ("Another theme is...", "The poet also...").
-- Some genuine observation but retells the poem rather than argues with it.
-- Correct UK spelling and grammar. The M score is still high at H4. Mechanics is not where H4 loses marks.
-- Occasional repetition of ideas across paragraphs is realistic for this tier.
+MANDATORY BEHAVIOURS (each must appear at least once in the final answer):
 
-Anti-patterns — do NOT produce:
-- Wrong quotes, misquoted lines, invented quotes.
-- Analysis that is actively wrong. H4 students are not wrong, they are shallow.
-- Perfect thesis and sophisticated argument. That is H1 work, not H4.`;
+1. Retell before analyse. In at least TWO body paragraphs, spend two or more sentences describing what happens in the poem before offering any interpretation.
+
+2. Quote-drop with flat restatement. At least THREE of your quotes must be followed by a sentence that restates the quote in slightly different words rather than analysing it. Use this pattern: "Kavanagh writes 'X'. This shows that [restatement of X in different words]."
+
+3. Engage unevenly with the statement. The question has two halves. Discuss ONE half in detail across two or three paragraphs. Mention the other half in only one paragraph, briefly.
+
+4. Weak paragraph openings. At least TWO body paragraphs must begin with one of these exact phrases: "Also", "Another point is", "Furthermore Kavanagh", "Another theme is", "The poet also". Do not use topic sentences that develop a line of argument.
+
+5. No thesis development. State a thematic claim in the introduction. Move through separate observations. Do NOT return to the thesis in the conclusion or tie observations back to it.
+
+6. Flat conclusion. One to two sentences. Either restate the introduction or end on a generic statement about the poet's skill.
+
+7. Evaluative vocabulary. Use at least TWO of: "beautiful", "powerful", "interesting", "really shows", "clearly".
+
+VOCABULARY YOU MUST NOT USE:
+- enigmatic, liminal, diagnoses, interrogates, constructs, oxymoron, paradox (as an analysed technique)
+- "bridges the ordinary and extraordinary" or similar synthesising phrases
+- Any claim that the poem "must solve", "works through", or "enacts" anything
+- Mid-sentence quote integration (embedding a quote fragment inside a larger analytical sentence)
+
+HARD NO:
+- Invented, wrong, or misquoted lines
+- Analysis that is factually wrong. H4 is shallow, not incorrect.
+- Developed thesis sustained across paragraphs
+- Sophisticated topic sentences that signal argumentative structure
+
+Mechanics stay clean. The M score is still high at H4. UK spelling, correct grammar. The weaknesses appear in P (shallow engagement) and C (weak organisation), not M.`;
 
 export function buildSampleAnswerSystemPrompt(tier: "H1" | "H4"): string {
   return SHARED_RULES + (tier === "H1" ? H1_RULES : H4_RULES);
