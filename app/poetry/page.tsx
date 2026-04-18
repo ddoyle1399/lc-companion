@@ -12,6 +12,7 @@ import poetryHL2026 from "@/data/circulars/2026-poetry-hl.json";
 import poetryOL2026 from "@/data/circulars/2026-poetry-ol.json";
 import poetryHL2027 from "@/data/circulars/2027-poetry-hl.json";
 import poetryOL2027 from "@/data/circulars/2027-poetry-ol.json";
+import { QuestionOutlines } from "@/components/QuestionOutlines";
 
 type Level = "HL" | "OL";
 
@@ -60,8 +61,17 @@ export default function PoetryPage() {
   const outputRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const { output, generating, error, searchStatus, generate, stop } =
-    useStreamGenerate();
+  const {
+    output,
+    generating,
+    error,
+    searchStatus,
+    generate,
+    stop,
+    noteId,
+    outlinesStatus,
+    outlinesSaveStatus,
+  } = useStreamGenerate();
 
   const poets = getPoets(year, level);
   const poems = poet ? getPoems(year, level, poet) : [];
@@ -331,6 +341,27 @@ export default function PoetryPage() {
                 <span className="text-gray-400">Waiting for response...</span>
               )}
             </div>
+          </div>
+        )}
+
+        {/* Outline loading: note saved but outlines not yet confirmed */}
+        {noteId && !outlinesSaveStatus && (
+          <p className="text-xs text-teal mt-3">
+            Matching past exam questions...
+          </p>
+        )}
+
+        {/* Empty case: no past questions for this subject */}
+        {noteId && outlinesSaveStatus && outlinesStatus?.note === "no_past_questions" && (
+          <div className="mt-6 bg-white border border-gray-200 rounded-lg px-5 py-4 text-sm text-gray-500">
+            This poet has not appeared on the SEC paper in recent years.
+          </div>
+        )}
+
+        {/* Outlines ready */}
+        {noteId && outlinesSaveStatus?.ok && outlinesStatus?.note !== "no_past_questions" && (
+          <div className="mt-6">
+            <QuestionOutlines noteId={noteId} />
           </div>
         )}
       </main>
