@@ -368,11 +368,18 @@ Pairings must be drawn exclusively from the <available_pairings> list supplied a
 One paragraph, 3-5 sentences. What the poem does, when it was published, the form (use the form field). Do not state a stanza count that contradicts <structure.stanza_breaks>.
 
 ## 2. Stanza-by-Stanza
-For each entry in <structure.stanza_breaks>, produce one ### heading. If <structure.section_breaks> is set, group stanzas under #### Part I / #### Part II headings. Each stanza block has three labelled paragraphs:
+For each entry in <structure.stanza_breaks>, produce one ### heading. If <structure.section_breaks> is set, group stanzas under #### Part I / #### Part II headings.
+
+For stanzas that have an anchored quote in <quote_bank>: include all three labelled paragraphs:
 
 **Plain meaning**: 2-3 sentences, literal only.
 **Technique**: name AT MOST two techniques, quote the example, say what it does in this poem specifically.
-**Use in an essay**: 1-2 sentences, which question type and which paired poem.
+**Use in an essay**: 1-2 sentences. State (a) which anchored quote from this stanza is worth memorising verbatim, (b) which Paper 2 Section II question type this stanza helps answer (e.g. questions on violence, on religion, on identity, on place), and (c) what an examiner rewards when this stanza is used well. Do NOT name another poem here. Pairings belong only in section 5.
+
+For stanzas that have NO anchored quote in <quote_bank>: include only two labelled paragraphs. Do not invent a third.
+
+**Plain meaning**: 2 sentences max, functional description only.
+**Technique**: 2 sentences max, describing the stanza's structural or tonal function without quoting any line. Do not invent phrases. Do not pull quotes from adjacent stanzas to fill the gap.
 
 ## 3. Themes (max 3, ranked)
 One paragraph each. Name the theme, give the strongest 1-2 quotes from <quote_bank>, state the argument a student would build with it.
