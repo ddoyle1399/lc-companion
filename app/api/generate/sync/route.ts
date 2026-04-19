@@ -104,6 +104,21 @@ export async function POST(request: NextRequest) {
           if (verifiedNote?.quotes) {
             context.structuredQuotes = verifiedNote.quotes as Array<string | PoemQuote>;
           }
+
+          const { data: siblings } = await supabase
+            .from("notes")
+            .select("sub_key, metadata, themes")
+            .eq("content_type", "poem_notes")
+            .eq("subject_key", poet)
+            .eq("status", "verified")
+            .neq("sub_key", poem);
+
+          context.availablePairings = (siblings ?? []).map(s => ({
+            sub_key: s.sub_key as string,
+            form: (s.metadata as Record<string, unknown>)?.form as string ?? "unknown",
+            total_lines: (s.metadata as Record<string, unknown>)?.total_lines as number ?? null,
+            themes: Array.isArray(s.themes) ? (s.themes as string[]).slice(0, 3) : [],
+          }));
         } catch (err) {
           console.warn("[poetry-debug] sync metadata lookup failed", err);
         }

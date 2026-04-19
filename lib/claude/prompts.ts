@@ -65,6 +65,12 @@ export interface PromptContext {
   // Structured poem metadata and quotes (populated by route when an outline exists)
   poemMetadata?: PoemMetadata;
   structuredQuotes?: Array<string | PoemQuote>;
+  availablePairings?: Array<{
+    sub_key: string;
+    form: string;
+    total_lines: number | null;
+    themes?: string[];
+  }>;
 }
 
 function getReadingLevel(level: "HL" | "OL"): string {
@@ -307,6 +313,7 @@ export function buildPoetryNotePrompt(context: PromptContext): string {
   const exam_year = context.year;
   const metadata = context.poemMetadata ?? { structure_confidence: 'unverified' };
   const quotes = context.structuredQuotes ?? [];
+  const pairings = context.availablePairings ?? [];
 
   return `<task>
 Write study notes for "${title}" by ${poet} for HL ${exam_year}.
@@ -335,6 +342,24 @@ ${quotes.length > 0
       }).join('\n')
     : '(no verified quotes available)'}
 </quote_bank>
+
+<available_pairings>
+${pairings.length > 0
+    ? pairings.map(p => {
+        const themes = p.themes && p.themes.length > 0 ? p.themes.join(', ') : 'none';
+        const lines = p.total_lines != null ? p.total_lines : 'unknown';
+        return `- ${p.sub_key} (form: ${p.form}, lines: ${lines}, themes: ${themes})`;
+      }).join('\n')
+    : '(no verified pairings available)'}
+</available_pairings>
+
+<hard_rules>
+RULE A — QUOTE RESTRICTION:
+You may only quote text that appears verbatim in the anchored_quotes array supplied in <quote_bank>. You must not quote any other line of the poem, even if you remember it from training. If a stanza has no anchored quote, write its Technique and Use-in-essay analysis by describing the stanza's tonal, structural, or transitional function in 2-3 sentences, without quoting any line. Do not invent phrases. Do not paraphrase lines as if they were quotes. Do not use quotation marks around anything that is not in <quote_bank>.
+
+RULE B — PAIRINGS RESTRICTION:
+Pairings must be drawn exclusively from the <available_pairings> list supplied above. You must not recommend any poem that is not in that list, even if you believe it is thematically relevant. If fewer than three strong pairings exist in the list, recommend fewer. Do not fabricate pairings to reach a target count.
+</hard_rules>
 
 <output_format>
 # "${title}" by ${poet}

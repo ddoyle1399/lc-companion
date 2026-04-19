@@ -16,7 +16,10 @@ import {
   buildSystemPrompt,
   buildPoetryNotePrompt,
   type PromptContext,
+  type PoemMetadata,
+  type PoemQuote,
 } from "@/lib/claude/prompts";
+import { getServerSupabase } from "@/lib/supabase/server";
 import { buildPoetExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
@@ -115,6 +118,52 @@ async function generatePoetryNote(
     if (storedText) {
       context.poemText = storedText;
     }
+  }
+
+  try {
+    const supabase = getServerSupabase();
+    const { data: verifiedNote } = await supabase
+      .from("notes")
+      .select("metadata, quotes")
+      .eq("content_type", "poem_notes")
+      .eq("subject_key", poet)
+      .eq("sub_key", poem)
+      .eq("status", "verified")
+      .limit(1)
+      .maybeSingle();
+
+    if (verifiedNote?.metadata) {
+      const m = verifiedNote.metadata as Record<string, unknown>;
+      context.poemMetadata = {
+        total_lines: m.total_lines as PoemMetadata["total_lines"],
+        stanza_breaks: m.stanza_breaks as PoemMetadata["stanza_breaks"],
+        section_breaks: m.section_breaks as PoemMetadata["section_breaks"],
+        form: m.form as PoemMetadata["form"],
+        structure_confidence: m.structure_confidence as PoemMetadata["structure_confidence"],
+        quote_text_anchored: m.quote_text_anchored as PoemMetadata["quote_text_anchored"],
+      };
+    }
+
+    if (verifiedNote?.quotes) {
+      context.structuredQuotes = verifiedNote.quotes as Array<string | PoemQuote>;
+    }
+
+    const { data: siblings } = await supabase
+      .from("notes")
+      .select("sub_key, metadata, themes")
+      .eq("content_type", "poem_notes")
+      .eq("subject_key", poet)
+      .eq("status", "verified")
+      .neq("sub_key", poem);
+
+    context.availablePairings = (siblings ?? []).map(s => ({
+      sub_key: s.sub_key as string,
+      form: (s.metadata as Record<string, unknown>)?.form as string ?? "unknown",
+      total_lines: (s.metadata as Record<string, unknown>)?.total_lines as number ?? null,
+      themes: Array.isArray(s.themes) ? (s.themes as string[]).slice(0, 3) : [],
+    }));
+  } catch (err) {
+    console.warn("[video-render] poem metadata lookup failed, continuing without it", err);
   }
 
   const useWebSearch = !context.poemText;
