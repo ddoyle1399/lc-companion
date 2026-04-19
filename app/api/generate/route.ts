@@ -133,15 +133,35 @@ export async function POST(request: NextRequest) {
         // These are set manually or by the extraction pipeline after first generation.
         try {
           const supabase = getServerSupabase();
-          const { data: existingNote } = await supabase
+          const { data: existingNote, error: noteError } = await supabase
             .from("notes")
-            .select("metadata, quotes")
-            .eq("content_type", "poetry")
+            .select("id, status, content_type, subject_key, sub_key, metadata, quotes")
+            .eq("content_type", "poem_notes")
             .eq("subject_key", poet)
             .eq("sub_key", poem)
             .eq("status", "verified")
             .limit(1)
             .maybeSingle();
+
+          console.log("[poetry-debug-query]", {
+            poet,
+            poem,
+            error: noteError?.message ?? null,
+            rowFound: !!existingNote,
+            rowId: existingNote?.id ?? null,
+            rowStatus: existingNote?.status ?? null,
+          });
+
+          // If verified query found nothing, log all rows for this poem to diagnose
+          if (!existingNote) {
+            const { data: allRows } = await supabase
+              .from("notes")
+              .select("id, status, content_type, subject_key, sub_key")
+              .eq("subject_key", poet)
+              .eq("sub_key", poem)
+              .limit(5);
+            console.log("[poetry-debug-allrows]", allRows ?? []);
+          }
 
           if (existingNote?.metadata) {
             const m = existingNote.metadata as Record<string, unknown>;

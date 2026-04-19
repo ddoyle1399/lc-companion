@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
           const { data: verifiedNote } = await supabase
             .from("notes")
             .select("metadata, quotes")
-            .eq("content_type", "poetry")
+            .eq("content_type", "poem_notes")
             .eq("subject_key", poet)
             .eq("sub_key", poem)
             .eq("status", "verified")
