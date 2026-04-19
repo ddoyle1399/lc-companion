@@ -12,7 +12,10 @@ import {
   buildComprehensionPrompt,
   buildCompositionPrompt,
   PromptContext,
+  type PoemMetadata,
+  type PoemQuote,
 } from "@/lib/claude/prompts";
+import { getServerSupabase } from "@/lib/supabase/server";
 import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
@@ -72,6 +75,39 @@ export async function POST(request: NextRequest) {
           if (storedText) {
             context.poemText = storedText;
           }
+        }
+
+        try {
+          const supabase = getServerSupabase();
+          const { data: verifiedNote } = await supabase
+            .from("notes")
+            .select("metadata, quotes")
+            .eq("content_type", "poetry")
+            .eq("subject_key", poet)
+            .eq("sub_key", poem)
+            .eq("level", level === "HL" ? "higher" : "ordinary")
+            .eq("exam_year", year)
+            .eq("status", "verified")
+            .limit(1)
+            .maybeSingle();
+
+          if (verifiedNote?.metadata) {
+            const m = verifiedNote.metadata as Record<string, unknown>;
+            context.poemMetadata = {
+              total_lines: m.total_lines as PoemMetadata["total_lines"],
+              stanza_breaks: m.stanza_breaks as PoemMetadata["stanza_breaks"],
+              section_breaks: m.section_breaks as PoemMetadata["section_breaks"],
+              form: m.form as PoemMetadata["form"],
+              structure_confidence: m.structure_confidence as PoemMetadata["structure_confidence"],
+              quote_text_anchored: m.quote_text_anchored as PoemMetadata["quote_text_anchored"],
+            };
+          }
+
+          if (verifiedNote?.quotes) {
+            context.structuredQuotes = verifiedNote.quotes as Array<string | PoemQuote>;
+          }
+        } catch (err) {
+          console.warn("[poetry-debug] sync metadata lookup failed", err);
         }
 
         useWebSearch = !context.poemText;

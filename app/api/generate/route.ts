@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
             .eq("sub_key", poem)
             .eq("level", level === "HL" ? "higher" : "ordinary")
             .eq("exam_year", year)
-            .order("generated_at", { ascending: false })
+            .eq("status", "verified")
             .limit(1)
             .maybeSingle();
 
