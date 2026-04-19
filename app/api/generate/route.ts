@@ -6,6 +6,8 @@ import {
   buildPoetryNotePrompt,
   buildComparativePrompt,
   buildWorksheetPrompt,
+  type PoemMetadata,
+  type PoemQuote,
   buildSlidesPrompt,
   buildSingleTextPrompt,
   buildUnseenPoetryPrompt,
@@ -18,6 +20,7 @@ import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
 import { saveNote } from "@/lib/supabase/saveNote";
 import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
+import { getServerSupabase } from "@/lib/supabase/server";
 import { extractQuotesAndThemes } from "@/lib/claude/extractQuotesAndThemes";
 import { generateOutline, type OutlineSuccess } from "@/lib/claude/generateOutline";
 import { findMatchingQuestions } from "@/lib/supabase/findMatchingQuestions";
@@ -125,6 +128,47 @@ export async function POST(request: NextRequest) {
         if (textbookAnalysis) {
           context.textbookAnalysis = textbookAnalysis;
         }
+
+        // Read metadata and quotes from the most recent saved note for this poem.
+        // These are set manually or by the extraction pipeline after first generation.
+        try {
+          const supabase = getServerSupabase();
+          const { data: existingNote } = await supabase
+            .from("notes")
+            .select("metadata, quotes")
+            .eq("content_type", "poetry")
+            .eq("subject_key", poet)
+            .eq("sub_key", poem)
+            .eq("level", level === "HL" ? "higher" : "ordinary")
+            .eq("exam_year", year)
+            .order("generated_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+          if (existingNote?.metadata) {
+            const m = existingNote.metadata as Record<string, unknown>;
+            context.poemMetadata = {
+              total_lines: m.total_lines as PoemMetadata["total_lines"],
+              stanza_breaks: m.stanza_breaks as PoemMetadata["stanza_breaks"],
+              section_breaks: m.section_breaks as PoemMetadata["section_breaks"],
+              form: m.form as PoemMetadata["form"],
+              structure_confidence: m.structure_confidence as PoemMetadata["structure_confidence"],
+              quote_text_anchored: m.quote_text_anchored as PoemMetadata["quote_text_anchored"],
+            };
+          }
+
+          if (existingNote?.quotes) {
+            context.structuredQuotes = existingNote.quotes as Array<string | PoemQuote>;
+          }
+        } catch (err) {
+          console.warn("[poetry-debug] metadata lookup failed, continuing without it", err);
+        }
+
+        console.log("[poetry-debug]", {
+          hasMetadata: !!context.poemMetadata,
+          conf: context.poemMetadata?.structure_confidence,
+          quoteCount: context.structuredQuotes?.length ?? 0,
+        });
 
         useWebSearch = !context.poemText;
         userPrompt = buildPoetryNotePrompt(context);
