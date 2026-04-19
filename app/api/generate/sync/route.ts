@@ -85,8 +85,6 @@ export async function POST(request: NextRequest) {
             .eq("content_type", "poetry")
             .eq("subject_key", poet)
             .eq("sub_key", poem)
-            .eq("level", level === "HL" ? "higher" : "ordinary")
-            .eq("exam_year", year)
             .eq("status", "verified")
             .limit(1)
             .maybeSingle();
