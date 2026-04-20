@@ -221,7 +221,14 @@ export async function POST(request: NextRequest) {
 
         useWebSearch = !context.poemText;
         {
-          const { system: pSystem, user: pUser } = buildPoetryNotePrompt(context);
+          const poetryCtx: PromptContext = {
+            ...context,
+            subject: poet,
+            subKey: poem,
+            metadata: context.poemMetadata,
+            quotes: context.structuredQuotes?.filter((q): q is PoemQuote => typeof q !== 'string'),
+          };
+          const { system: pSystem, user: pUser } = buildPoetryNotePrompt(poetryCtx);
           poetrySystemOverride = pSystem;
           userPrompt = pUser;
         }
