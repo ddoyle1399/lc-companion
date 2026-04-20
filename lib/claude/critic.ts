@@ -13,6 +13,7 @@ export interface CriticFlag {
   line_or_quote: string;
   issue: string;
   recommended_fix: string;
+  is_confirmed_violation: boolean;
 }
 
 export interface CriticResult {
@@ -28,29 +29,6 @@ the teacher in front of students or cost marks in a Higher Level essay.
 
 You check the note against the row's authorised metadata. Anything in the note
 that is not supported by that metadata is a flag.
-
-Return a JSON object exactly matching this shape (no prose outside the JSON):
-
-{
-  "blockFlags": [
-    {
-      "severity": "block",
-      "section": "Stanza 8 Technique",
-      "line_or_quote": "called a euphemism",
-      "issue": "Tell-tale skin and teeth is understatement or synecdoche, not a euphemism.",
-      "recommended_fix": "Relabel as understatement (or synecdoche) and explain the part-for-whole effect."
-    }
-  ],
-  "warnFlags": [
-    {
-      "severity": "warn",
-      "section": "Stanza 1 Technique",
-      "line_or_quote": "potential for growth",
-      "issue": "Overreach. The figure is a dead man; growth is unsupported.",
-      "recommended_fix": "Drop growth. Keep the gentleness reading."
-    }
-  ]
-}
 
 Block-level flags (hard fail, regenerate):
 1. Any quote in the note not present in anchored_quotes (character-for-character).
@@ -128,9 +106,73 @@ Warn-level flags (non-blocking, log for review):
 Be conservative on blocks. Only block when you can point to a clear rule violation.
 Everything else is a warn.
 
-If the note is clean, return:
-{ "blockFlags": [], "warnFlags": [] }
+If the note is clean, call report_critic_findings with empty arrays for both blockFlags and warnFlags.
+
+When you use the report_critic_findings tool, only include findings that are confirmed violations
+with is_confirmed_violation: true. If you find yourself writing "actually this is fine" or
+"retracting" or "no action needed" inside a flag's issue or recommended_fix field, DO NOT include
+that flag. If you are unsure, set is_confirmed_violation: false and the caller will filter it out.
+Do NOT use the issue or recommended_fix fields as a scratchpad for reasoning.
 `.trim();
+
+const CRITIC_TOOL = {
+  name: 'report_critic_findings',
+  description:
+    'Report block flags and warn flags found in the generated poetry note. ' +
+    'Only include a finding if you have already decided it is a real violation. ' +
+    'Do not include retracted, uncertain, or self-doubted findings. ' +
+    'Set is_confirmed_violation to true only when you are certain; set to false for soft or speculative findings and they will be filtered out.',
+  input_schema: {
+    type: 'object',
+    properties: {
+      blockFlags: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            severity: { type: 'string', enum: ['block'] },
+            section: { type: 'string' },
+            line_or_quote: { type: 'string' },
+            issue: { type: 'string' },
+            recommended_fix: { type: 'string' },
+            is_confirmed_violation: { type: 'boolean' },
+          },
+          required: [
+            'severity',
+            'section',
+            'line_or_quote',
+            'issue',
+            'recommended_fix',
+            'is_confirmed_violation',
+          ],
+        },
+      },
+      warnFlags: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            severity: { type: 'string', enum: ['warn'] },
+            section: { type: 'string' },
+            line_or_quote: { type: 'string' },
+            issue: { type: 'string' },
+            recommended_fix: { type: 'string' },
+            is_confirmed_violation: { type: 'boolean' },
+          },
+          required: [
+            'severity',
+            'section',
+            'line_or_quote',
+            'issue',
+            'recommended_fix',
+            'is_confirmed_violation',
+          ],
+        },
+      },
+    },
+    required: ['blockFlags', 'warnFlags'],
+  },
+} as const;
 
 function buildCriticUserMessage(input: CriticInput): string {
   const structuralBlock =
@@ -167,7 +209,7 @@ function buildCriticUserMessage(input: CriticInput): string {
     `=== TECHNIQUE GLOSSARY ===`,
     input.techniqueGlossary,
     ``,
-    `Now audit the note. Return the JSON object.`,
+    `Now audit the note and call the report_critic_findings tool with your findings.`,
   ].join('\n');
 }
 
@@ -177,59 +219,55 @@ export async function runCriticPass(
   opts: { model?: string; maxTokens?: number } = {}
 ): Promise<CriticResult> {
   const model = opts.model ?? 'claude-sonnet-4-6';
-  const maxTokens = opts.maxTokens ?? 4096;
+  const maxTokens = opts.maxTokens ?? 8192;
 
   const response = await client.messages.create({
     model,
     max_tokens: maxTokens,
     system: CRITIC_SYSTEM_PROMPT,
+    tools: [CRITIC_TOOL as any],
+    tool_choice: { type: 'tool', name: 'report_critic_findings' } as any,
     messages: [{ role: 'user', content: buildCriticUserMessage(input) }],
   });
 
-  const textBlock = response.content.find((b: any) => b.type === 'text') as
-    | { type: 'text'; text: string }
+  const toolUse = response.content.find((b: any) => b.type === 'tool_use') as
+    | { type: 'tool_use'; name: string; input: unknown }
     | undefined;
-  const raw = textBlock?.text ?? '';
 
-  const jsonMatch = raw.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
+  if (!toolUse || toolUse.name !== 'report_critic_findings') {
     return {
       blockFlags: [
         {
           severity: 'block',
           section: 'critic',
           line_or_quote: '',
-          issue: 'Critic returned no JSON.',
+          issue: 'Critic did not invoke the tool.',
           recommended_fix: 'Retry critic pass.',
+          is_confirmed_violation: true,
         },
       ],
       warnFlags: [],
-      rawResponse: raw,
+      rawResponse: JSON.stringify(response.content),
     };
   }
 
-  try {
-    const parsed = JSON.parse(jsonMatch[0]);
-    return {
-      blockFlags: Array.isArray(parsed.blockFlags) ? parsed.blockFlags : [],
-      warnFlags: Array.isArray(parsed.warnFlags) ? parsed.warnFlags : [],
-      rawResponse: raw,
-    };
-  } catch (err) {
-    return {
-      blockFlags: [
-        {
-          severity: 'block',
-          section: 'critic',
-          line_or_quote: '',
-          issue: `Critic JSON parse failed: ${(err as Error).message}`,
-          recommended_fix: 'Retry critic pass.',
-        },
-      ],
-      warnFlags: [],
-      rawResponse: raw,
-    };
-  }
+  const findings = toolUse.input as {
+    blockFlags?: CriticFlag[];
+    warnFlags?: CriticFlag[];
+  };
+
+  const rawBlocks = Array.isArray(findings.blockFlags) ? findings.blockFlags : [];
+  const rawWarns = Array.isArray(findings.warnFlags) ? findings.warnFlags : [];
+
+  // Only keep findings the critic has confirmed.
+  const blockFlags = rawBlocks.filter((f) => f.is_confirmed_violation === true);
+  const warnFlags = rawWarns.filter((f) => f.is_confirmed_violation === true);
+
+  return {
+    blockFlags,
+    warnFlags,
+    rawResponse: JSON.stringify(toolUse.input),
+  };
 }
 
 export function formatFlagsForRetry(flags: CriticFlag[]): string {

@@ -30,7 +30,33 @@ BASE_URL="http://localhost:$PORT"
 COOKIE_JAR="$(mktemp /tmp/lc-cookies.XXXXXX)"
 trap 'rm -f "$COOKIE_JAR"' EXIT
 
+# ========================================================================
+echo ""
+echo "=== 1: Static wiring checks ==="
+
+# audit_failed terminal status is wired in generate/route.ts
+if grep -q "audit_failed" "$PROJECT_DIR/app/api/generate/route.ts"; then
+  pass "audit_failed wired in app/api/generate/route.ts"
+else
+  fail "audit_failed NOT found in app/api/generate/route.ts"
+fi
+
+# tool_use / report_critic_findings is wired in critic.ts
+if grep -qE "report_critic_findings|tool_use" "$PROJECT_DIR/lib/claude/critic.ts"; then
+  pass "report_critic_findings wired in lib/claude/critic.ts"
+else
+  fail "report_critic_findings NOT found in lib/claude/critic.ts"
+fi
+
+# QUOTE CORRECTION block is wired in generate/route.ts
+if grep -q "QUOTE CORRECTION" "$PROJECT_DIR/app/api/generate/route.ts"; then
+  pass "QUOTE CORRECTION block wired in app/api/generate/route.ts"
+else
+  fail "QUOTE CORRECTION block NOT found in app/api/generate/route.ts"
+fi
+
 # ---- Login ------------------------------------------------------------
+echo ""
 echo "Logging in..."
 LOGIN_RESULT=$(curl -s -c "$COOKIE_JAR" -X POST "$BASE_URL/api/auth" \
   -H "Content-Type: application/json" \
@@ -112,22 +138,39 @@ generate() {
 
 # ========================================================================
 echo ""
-echo "=== 4.1: Baseline regression check (The Forge) ==="
+echo "=== 2: The Forge regression + capitalisation check ==="
 
-generate "Seamus Heaney" "The Forge" /tmp/baseline-after.md
+generate "Seamus Heaney" "The Forge" /tmp/forge-after.md
+# Also save as baseline-after for section 3 regression comparison
+cp /tmp/forge-after.md /tmp/baseline-after.md
 
-# Stanza count unchanged (accept both ### Stanza N and **Stanza N** formats)
-BEFORE_STANZAS=$(grep -cE "(^#{3,4} Stanza [0-9]|^\*\*Stanza [0-9])" /tmp/baseline-before.md || true)
-AFTER_STANZAS=$(grep -cE "(^#{3,4} Stanza [0-9]|^\*\*Stanza [0-9])" /tmp/baseline-after.md || true)
-if [ "$BEFORE_STANZAS" -eq "$AFTER_STANZAS" ]; then
-  pass "Baseline stanza count unchanged: $BEFORE_STANZAS"
+# 2a. Quote capitalisation: capital-T version must NOT appear
+if grep -q '"The hammered anvil'\''s short-pitched ring"' /tmp/forge-after.md || \
+   grep -q '"The hammered anvil'\''s short-pitched ring"' /tmp/forge-after.md; then
+  fail "Capital-T quote still present: 'The hammered anvil's short-pitched ring'"
 else
-  fail "Baseline stanza count changed: before=$BEFORE_STANZAS after=$AFTER_STANZAS"
+  pass "Capital-T quote absent: 'The hammered anvil's short-pitched ring'"
 fi
 
-# No new apostrophe labels (count must not increase)
+# 2b. Lowercase version must appear (the correct anchored form)
+if grep -qi "the hammered anvil" /tmp/forge-after.md; then
+  pass "Anchored lowercase quote present in forge-after.md"
+else
+  fail "Anchored lowercase quote missing from forge-after.md"
+fi
+
+# 2c. Stanza count unchanged vs baseline-before.md
+BEFORE_STANZAS=$(grep -cE "(^#{3,4} Stanza [0-9]|^\*\*Stanza [0-9])" /tmp/baseline-before.md || true)
+AFTER_STANZAS=$(grep -cE "(^#{3,4} Stanza [0-9]|^\*\*Stanza [0-9])" /tmp/forge-after.md || true)
+if [ "$BEFORE_STANZAS" -eq "$AFTER_STANZAS" ]; then
+  pass "Forge stanza count unchanged: $BEFORE_STANZAS"
+else
+  fail "Forge stanza count changed: before=$BEFORE_STANZAS after=$AFTER_STANZAS"
+fi
+
+# 2d. No new apostrophe labels
 BEFORE_APO=$(grep -ic "apostrophe" /tmp/baseline-before.md || true)
-AFTER_APO=$(grep -ic "apostrophe" /tmp/baseline-after.md || true)
+AFTER_APO=$(grep -ic "apostrophe" /tmp/forge-after.md || true)
 BEFORE_APO=${BEFORE_APO:-0}
 AFTER_APO=${AFTER_APO:-0}
 if [ "$AFTER_APO" -le "$BEFORE_APO" ]; then
@@ -136,35 +179,67 @@ else
   fail "New apostrophe labels appeared (before=$BEFORE_APO after=$AFTER_APO)"
 fi
 
-# Core section headings present in both
+# 2e. Core section headings present
 for section in "Overview" "Form and Structure" "Stanza-by-Stanza" "Themes" "Tone" "Exam" "Pairings"; do
   IN_BEFORE=$(grep -ic "$section" /tmp/baseline-before.md || true)
-  IN_AFTER=$(grep -ic "$section" /tmp/baseline-after.md || true)
+  IN_AFTER=$(grep -ic "$section" /tmp/forge-after.md || true)
   IN_BEFORE=${IN_BEFORE:-0}
   IN_AFTER=${IN_AFTER:-0}
   if [ "$IN_BEFORE" -gt 0 ] && [ "$IN_AFTER" -gt 0 ]; then
-    pass "Baseline section present in both: $section"
+    pass "Forge section present in both: $section"
   elif [ "$IN_BEFORE" -eq 0 ] && [ "$IN_AFTER" -eq 0 ]; then
-    pass "Baseline section absent in both (no regression): $section"
+    pass "Forge section absent in both (no regression): $section"
   else
-    fail "Baseline section mismatch: '$section' before=$IN_BEFORE after=$IN_AFTER"
+    fail "Forge section mismatch: '$section' before=$IN_BEFORE after=$IN_AFTER"
   fi
 done
 
+# 2f. Forge audit row: block_flag_count_final <= 1
+echo "  Querying Forge audit row..."
+FORGE_AUDIT_JSON=$(curl -s \
+  -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+  "${NEXT_PUBLIC_SUPABASE_URL}/rest/v1/generation_audit?subject_key=eq.Seamus%20Heaney&sub_key=eq.The%20Forge&order=created_at.desc&limit=1&select=status,block_flag_count_final,block_flags")
+
+FORGE_STATUS=$(echo "$FORGE_AUDIT_JSON" | python3 -c "import sys,json; rows=json.load(sys.stdin); print(rows[0]['status'] if rows else 'NONE')" 2>/dev/null || echo "ERROR")
+FORGE_BLOCKS=$(echo "$FORGE_AUDIT_JSON" | python3 -c "import sys,json; rows=json.load(sys.stdin); print(rows[0]['block_flag_count_final'] if rows else -1)" 2>/dev/null || echo "-1")
+
+if python3 -c "import sys; sys.exit(0 if int('$FORGE_BLOCKS') <= 1 else 1)" 2>/dev/null; then
+  pass "Forge block_flag_count_final <= 1: $FORGE_BLOCKS"
+else
+  fail "Forge block_flag_count_final > 1: $FORGE_BLOCKS"
+fi
+
+# 2g. No self-retracted flags in stored Forge block_flags
+RETRACT_COUNT=$(echo "$FORGE_AUDIT_JSON" | python3 -c "
+import sys, json
+rows = json.load(sys.stdin)
+if not rows: print(0); sys.exit(0)
+flags = rows[0].get('block_flags') or []
+count = sum(1 for f in flags if any(w in (f.get('issue','') + f.get('recommended_fix','')).lower() for w in ['retract','no action needed','no block','actually this is fine']))
+print(count)
+" 2>/dev/null || echo "0")
+RETRACT_COUNT=${RETRACT_COUNT:-0}
+if [ "$RETRACT_COUNT" -eq 0 ]; then
+  pass "No self-retracted flags in stored Forge block_flags"
+else
+  fail "Self-retracted flags found in stored Forge block_flags: count=$RETRACT_COUNT"
+fi
+
 # ========================================================================
 echo ""
-echo "=== 4.2: Tollund Man generation ==="
+echo "=== 3: Tollund Man — round-2 critic must not be audit_failed ==="
 
 generate "Seamus Heaney" "The Tollund Man" /tmp/tollund-after.md
 
-# H1 contains title and author
+# 3a. H1 contains title and author
 if grep -qi "tollund man" /tmp/tollund-after.md && grep -qi "heaney" /tmp/tollund-after.md; then
   pass "Title and author present"
 else
-  fail "Title or author missing from H1"
+  fail "Title or author missing from Tollund Man note"
 fi
 
-# Exactly 11 stanza markers (accept ### Stanza N heading or **Stanza N** bold)
+# 3b. Exactly 11 stanza markers
 STANZA_COUNT=$(grep -cE "(^#{3,4} Stanza [0-9]|^\*\*Stanza [0-9])" /tmp/tollund-after.md || true)
 STANZA_COUNT=${STANZA_COUNT:-0}
 if [ "$STANZA_COUNT" -eq 11 ]; then
@@ -173,7 +248,7 @@ else
   fail "Expected 11 stanza markers, found $STANZA_COUNT"
 fi
 
-# Each stanza 1..11 present
+# 3c. Each stanza 1..11 present
 STANZA_SEQ_OK=true
 for N in 1 2 3 4 5 6 7 8 9 10 11; do
   if grep -qE "(^#{3,4} Stanza $N(\b| )|^\*\*Stanza $N\*\*)" /tmp/tollund-after.md; then
@@ -187,7 +262,7 @@ if $STANZA_SEQ_OK; then
   pass "All stanzas 1-11 present"
 fi
 
-# Part I / II / III headings
+# 3d. Part I / II / III headings
 for part in "Part I" "Part II" "Part III"; do
   if grep -q "^### $part" /tmp/tollund-after.md; then
     pass "### $part present"
@@ -196,7 +271,7 @@ for part in "Part I" "Part II" "Part III"; do
   fi
 done
 
-# No apostrophe in Stanza 1 block (match ### Stanza 1 heading or **Stanza 1** bold)
+# 3e. No apostrophe in Stanza 1 block
 STANZA1_BLOCK=$(python3 - <<'PYEOF' /tmp/tollund-after.md
 import sys, re
 lines = open(sys.argv[1]).readlines()
@@ -207,7 +282,6 @@ for line in lines:
         capturing = True
         continue
     if capturing:
-        # Stop at next stanza marker or section heading
         if re.match(r'^#{3,4} Stanza [0-9]', line) or re.match(r'^\*\*Stanza [0-9]', line) or re.match(r'^#', line):
             break
         block.append(line)
@@ -220,7 +294,7 @@ else
   pass "No apostrophe label in Stanza 1 block"
 fi
 
-# No tumbril/tumbrel split
+# 3f. No tumbril/tumbrel split
 HAS_TUMBRIL=$(grep -ic "tumbril" /tmp/tollund-after.md || true)
 HAS_TUMBREL=$(grep -ic "tumbrel" /tmp/tollund-after.md || true)
 HAS_TUMBRIL=${HAS_TUMBRIL:-0}
@@ -231,7 +305,7 @@ else
   pass "No tumbril/tumbrel split (tumbril=$HAS_TUMBRIL tumbrel=$HAS_TUMBREL)"
 fi
 
-# Every stanza (1-11) has Technique OR Function in the poem
+# 3g. Technique/Function coverage
 TECHNIQUE_COUNT=$(grep -c "\*\*Technique\*\*" /tmp/tollund-after.md || true)
 FUNCTION_COUNT=$(grep -c "\*\*Function in the poem\*\*" /tmp/tollund-after.md || true)
 TECHNIQUE_COUNT=${TECHNIQUE_COUNT:-0}
@@ -243,7 +317,7 @@ else
   fail "Insufficient Technique/Function coverage: $TOTAL_COVERED < 11 (Technique=$TECHNIQUE_COUNT Function=$FUNCTION_COUNT)"
 fi
 
-# Required section headings
+# 3h. Required section headings
 for section in "Overview" "Form and Structure" "Stanza-by-Stanza" "Themes" "Tone" "Exam" "Pairings"; do
   if grep -qi "$section" /tmp/tollund-after.md; then
     pass "Section present: $section"
@@ -252,10 +326,8 @@ for section in "Overview" "Form and Structure" "Stanza-by-Stanza" "Themes" "Tone
   fi
 done
 
-# ========================================================================
-echo ""
-echo "=== 4.3: generation_audit row ==="
-
+# 3i. Tollund Man audit row: status must NOT be audit_failed; block_flag_count_final numeric and <= 1
+echo "  Querying Tollund Man audit row..."
 AUDIT_JSON=$(curl -s \
   -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
   -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
@@ -266,33 +338,35 @@ AUDIT_ELAPSED=$(echo "$AUDIT_JSON" | python3 -c "import sys,json; rows=json.load
 AUDIT_BLOCKS=$(echo "$AUDIT_JSON" | python3 -c "import sys,json; rows=json.load(sys.stdin); print(rows[0]['block_flag_count_final'] if rows else -1)" 2>/dev/null || echo "-1")
 AUDIT_WARNS=$(echo "$AUDIT_JSON" | python3 -c "import sys,json; rows=json.load(sys.stdin); print(rows[0]['warn_flag_count'] if rows else -1)" 2>/dev/null || echo "-1")
 
-if [ "$AUDIT_STATUS" = "success" ] || [ "$AUDIT_STATUS" = "retry_success" ]; then
-  pass "Audit status: $AUDIT_STATUS"
+if [ "$AUDIT_STATUS" = "audit_failed" ]; then
+  fail "Tollund Man audit status is audit_failed — round-2 critic still failing"
+elif [ "$AUDIT_STATUS" = "success" ] || [ "$AUDIT_STATUS" = "retry_success" ]; then
+  pass "Tollund Man audit status: $AUDIT_STATUS"
 else
-  fail "Audit status unexpected: '$AUDIT_STATUS' (expected success or retry_success)"
+  fail "Tollund Man audit status unexpected: '$AUDIT_STATUS'"
 fi
 
 if python3 -c "import sys; sys.exit(0 if int('$AUDIT_ELAPSED') > 0 else 1)" 2>/dev/null; then
-  pass "Audit elapsed_ms > 0: ${AUDIT_ELAPSED}ms"
+  pass "Tollund Man audit elapsed_ms > 0: ${AUDIT_ELAPSED}ms"
 else
-  fail "Audit elapsed_ms not > 0: $AUDIT_ELAPSED"
+  fail "Tollund Man audit elapsed_ms not > 0: $AUDIT_ELAPSED"
 fi
 
-if python3 -c "import sys; sys.exit(0 if '$AUDIT_BLOCKS'.lstrip('-').isdigit() else 1)" 2>/dev/null; then
-  pass "Audit block_flag_count_final is numeric: $AUDIT_BLOCKS"
+if python3 -c "import sys; b=int('$AUDIT_BLOCKS'); sys.exit(0 if 0 <= b <= 1 else 1)" 2>/dev/null; then
+  pass "Tollund Man block_flag_count_final <= 1: $AUDIT_BLOCKS"
 else
-  fail "Audit block_flag_count_final is not numeric: $AUDIT_BLOCKS"
+  fail "Tollund Man block_flag_count_final out of range: $AUDIT_BLOCKS (expected 0 or 1)"
 fi
 
 if python3 -c "import sys; sys.exit(0 if '$AUDIT_WARNS'.lstrip('-').isdigit() else 1)" 2>/dev/null; then
-  pass "Audit warn_flag_count is numeric: $AUDIT_WARNS"
+  pass "Tollund Man warn_flag_count is numeric: $AUDIT_WARNS"
 else
-  fail "Audit warn_flag_count is not numeric: $AUDIT_WARNS"
+  fail "Tollund Man warn_flag_count is not numeric: $AUDIT_WARNS"
 fi
 
 # ========================================================================
 echo ""
-echo "=== 4.4: TypeScript ==="
+echo "=== 4: TypeScript ==="
 
 cd "$PROJECT_DIR"
 TSC_OUT=$(npx tsc --noEmit 2>&1 || true)

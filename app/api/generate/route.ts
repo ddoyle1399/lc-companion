@@ -428,7 +428,7 @@ export async function POST(request: NextRequest) {
             const criticStartMs = Date.now();
 
             // Audit variables declared outside try so audit always runs even if critic throws.
-            let auditStatus: 'success' | 'retry_success' | 'fallback' | 'critic_error' = 'critic_error';
+            let auditStatus: 'success' | 'retry_success' | 'fallback' | 'critic_error' | 'audit_failed' = 'critic_error';
             let initialBlockCount = 0;
             let finalBlockCount = 0;
             let finalWarnCount = 0;
@@ -473,11 +473,60 @@ export async function POST(request: NextRequest) {
                       ].join('\n')
                     : '';
 
+                // Build QUOTE CORRECTION block for quote-mismatch flags.
+                const normalizeQuote = (s: string): string =>
+                  s.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+
+                const quoteFlags = criticResult.blockFlags.filter((f) => {
+                  const issue = f.issue.toLowerCase();
+                  return (
+                    issue.includes('quote') &&
+                    (issue.includes('mismatch') ||
+                      issue.includes('capital') ||
+                      issue.includes('character') ||
+                      issue.includes('exact') ||
+                      issue.includes('verbatim'))
+                  );
+                });
+
+                const anchoredQuotes = poetCtx.quotes ?? [];
+                const quoteCorrectionItems: string[] = [];
+                for (const qf of quoteFlags) {
+                  const normFlag = normalizeQuote(qf.line_or_quote);
+                  const matched = anchoredQuotes.find(
+                    (aq) => normalizeQuote(aq.text) === normFlag
+                  );
+                  if (matched) {
+                    quoteCorrectionItems.push(
+                      `Replace: "${qf.line_or_quote}"\n   With (exact): "${matched.text}"`
+                    );
+                  } else {
+                    console.log(
+                      `[generate] quote correction: no anchored match for "${qf.line_or_quote}" — skipping`
+                    );
+                  }
+                }
+
+                const quoteCorrection =
+                  quoteCorrectionItems.length > 0
+                    ? [
+                        ``,
+                        `=== QUOTE CORRECTION ===`,
+                        `The previous draft contained quote text that does not match the anchored quote bank. Replace each flagged quote with the exact anchored text, character-for-character, including capitalisation and punctuation:`,
+                        ``,
+                        ...quoteCorrectionItems.map((item, i) => `${i + 1}. ${item}`),
+                        ``,
+                        `Every quote in your note must match its entry in ANCHORED QUOTES character-for-character.`,
+                        `========================`,
+                      ].join('\n')
+                    : '';
+
                 const retryUser = [
                   userPrompt,
                   ``,
                   `Your previous attempt had the following issues. Rewrite the note to resolve every block flag:`,
                   formatFlagsForRetry(criticResult.blockFlags),
+                  quoteCorrection,
                   structuralEmphasis,
                 ]
                   .filter((s) => s !== '')
@@ -514,21 +563,19 @@ export async function POST(request: NextRequest) {
                     finalWarnFlags = retryCriticResult.warnFlags;
                     finalBlockCount = retryCriticResult.blockFlags.length;
                     finalWarnCount = retryCriticResult.warnFlags.length;
-                    if (retryCriticResult.blockFlags.length === 0) {
-                      finalText = retryText;
-                      auditStatus = 'retry_success';
-                    } else {
-                      // Retry reduced (or matched) blocks — ship it anyway. A note with remaining
-                      // flags is better than a 140-char fallback message. Audit records the flag count.
-                      finalText = retryText;
-                      auditStatus = 'retry_success';
-                    }
+                    // Sentinel flag means the critic itself failed structurally (tool not invoked),
+                    // not a real content finding. Ship the retry but mark as audit_failed.
+                    const isSentinelFailure = retryCriticResult.blockFlags.some(
+                      (f) => f.issue === 'Critic did not invoke the tool.'
+                    );
+                    finalText = retryText;
+                    auditStatus = isSentinelFailure ? 'audit_failed' : 'retry_success';
                     controller.enqueue(encoder.encode(`data: ${JSON.stringify({ replace: retryText })}\n\n`));
                   } catch (critic2Err) {
                     console.error('[generate] round-2 critic failed:', critic2Err);
-                    // Round-2 critic unavailable — ship the retry draft (better than fallback)
+                    // Round-2 critic threw — ship the retry draft but flag the audit failure.
                     finalText = retryText;
-                    auditStatus = 'retry_success';
+                    auditStatus = 'audit_failed';
                     controller.enqueue(encoder.encode(`data: ${JSON.stringify({ replace: retryText })}\n\n`));
                   }
                 } else {
