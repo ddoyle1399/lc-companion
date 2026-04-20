@@ -168,7 +168,8 @@ Sound:
 Structure / syntax:
 - enjambment, caesura, end-stopped line, volta, anaphora, asyndeton, polysyndeton, inversion.
 
-Imagery: visual, auditory, tactile, olfactory, gustatory, kinaesthetic, synaesthesia.
+Imagery: visual (or "visual imagery"), auditory, tactile, olfactory, gustatory, kinaesthetic,
+  synaesthesia, religious imagery (when sacred or spiritual images are used), death imagery.
 
 Register / mode:
 - syncretism: blending two religious or cultural frameworks (e.g. Christian register applied to pagan sacrifice).

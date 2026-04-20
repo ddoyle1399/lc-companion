@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { marked } from "marked";
+import https from "node:https";
 import Anthropic from "@anthropic-ai/sdk";
 import { getClient } from "@/lib/claude/client";
 import {
@@ -8,6 +9,7 @@ import {
   buildComparativePrompt,
   buildWorksheetPrompt,
   buildCriticInput,
+  buildStanzaPlan,
   type PoemMetadata,
   type PoemQuote,
   buildSlidesPrompt,
@@ -17,7 +19,7 @@ import {
   buildCompositionPrompt,
   PromptContext,
 } from "@/lib/claude/prompts";
-import { runCriticPass } from "@/lib/claude/critic";
+import { runCriticPass, formatFlagsForRetry } from "@/lib/claude/critic";
 import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
@@ -29,6 +31,35 @@ import { generateOutline, type OutlineSuccess } from "@/lib/claude/generateOutli
 import { findMatchingQuestions } from "@/lib/supabase/findMatchingQuestions";
 import { saveOutlines } from "@/lib/supabase/saveOutlines";
 import { runWithConcurrency } from "@/lib/util/concurrency";
+
+function makeFreshAnthropicClient(): Anthropic {
+  const agent = new https.Agent({ keepAlive: false });
+  const freshFetch: typeof globalThis.fetch = async (input, init) => {
+    const url = typeof input === "string" ? input : (input as Request).url;
+    const method = ((init?.method ?? "POST") as string).toUpperCase();
+    const headers: Record<string, string> = {};
+    if (init?.headers) {
+      new Headers(init.headers as HeadersInit).forEach((v, k) => { headers[k] = v; });
+    }
+    const body = init?.body != null ? String(init.body) : undefined;
+    return new Promise<Response>((resolve, reject) => {
+      const parsed = new URL(url);
+      const req = https.request(
+        { hostname: parsed.hostname, port: 443, path: parsed.pathname + parsed.search, method, headers, agent },
+        (res) => {
+          const chunks: Buffer[] = [];
+          res.on("data", (c: Buffer) => chunks.push(c));
+          res.on("end", () => resolve(new Response(Buffer.concat(chunks), { status: res.statusCode!, headers: res.headers as Record<string, string> })));
+          res.on("error", reject);
+        }
+      );
+      req.on("error", reject);
+      if (body) req.write(body);
+      req.end();
+    });
+  };
+  return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY!, fetch: freshFetch });
+}
 
 // Strips [VERIFY], [CHECK], [TODO], [NOTE] and similar bracketed internal markers
 // from streamed text, handling markers that may span chunk boundaries.
@@ -85,6 +116,8 @@ function errorResponse(message: string, status = 400) {
   );
 }
 
+const FALLBACK_MESSAGE = `This note is being reviewed for accuracy and is temporarily unavailable. Please try another poem from your selection, or check back shortly.`;
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -104,6 +137,7 @@ export async function POST(request: NextRequest) {
 
     let userPrompt: string;
     let poetrySystemOverride: string | undefined;
+    let poetryPromptCtx: PromptContext | undefined;
     let useWebSearch = false;
     let webSearchMaxUses = 3;
 
@@ -221,14 +255,14 @@ export async function POST(request: NextRequest) {
 
         useWebSearch = !context.poemText;
         {
-          const poetryCtx: PromptContext = {
+          poetryPromptCtx = {
             ...context,
             subject: poet,
             subKey: poem,
             metadata: context.poemMetadata,
             quotes: context.structuredQuotes?.filter((q): q is PoemQuote => typeof q !== 'string'),
           };
-          const { system: pSystem, user: pUser } = buildPoetryNotePrompt(poetryCtx);
+          const { system: pSystem, user: pUser } = buildPoetryNotePrompt(poetryPromptCtx);
           poetrySystemOverride = pSystem;
           userPrompt = pUser;
         }
@@ -383,25 +417,183 @@ export async function POST(request: NextRequest) {
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: tail })}\n\n`));
           }
 
-          // Critic pass (poetry strict-mode only — flags emitted as SSE event, no retry since text already streamed).
-          if (accumulatedText && context.contentType === "poetry" && poetrySystemOverride) {
+          // Critic pass + retry + audit (strict-mode poetry only).
+          // Critic requires anchored quotes — skip for legacy-mode poems where anchoredQuotes is empty.
+          const _criticMeta = poetryPromptCtx?.metadata ?? {};
+          const _isStrictMode =
+            _criticMeta.structure_confidence === 'high' && _criticMeta.quote_text_anchored === true;
+
+          if (accumulatedText && context.contentType === "poetry" && poetrySystemOverride && poetryPromptCtx && _isStrictMode) {
+            const poetCtx = poetryPromptCtx;
+            const criticStartMs = Date.now();
+
+            // Audit variables declared outside try so audit always runs even if critic throws.
+            let auditStatus: 'success' | 'retry_success' | 'fallback' | 'critic_error' = 'critic_error';
+            let initialBlockCount = 0;
+            let finalBlockCount = 0;
+            let finalWarnCount = 0;
+            let finalBlockFlags: import('@/lib/claude/critic').CriticFlag[] = [];
+            let finalWarnFlags: import('@/lib/claude/critic').CriticFlag[] = [];
+            let finalText = accumulatedText;
+            let criticResult: import('@/lib/claude/critic').CriticResult | null = null;
+
             try {
-              const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
-              const criticInput = buildCriticInput(accumulatedText, context);
-              const criticResult = await runCriticPass(anthropic, criticInput);
+              // Round 1 critic — fresh client
+              const criticClient1 = makeFreshAnthropicClient();
+              criticResult = await runCriticPass(criticClient1, buildCriticInput(accumulatedText, poetCtx));
+              initialBlockCount = criticResult.blockFlags.length;
+              finalBlockCount = criticResult.blockFlags.length;
+              finalWarnCount = criticResult.warnFlags.length;
+              finalBlockFlags = criticResult.blockFlags;
+              finalWarnFlags = criticResult.warnFlags;
+              auditStatus = 'success';
+
+              if (criticResult.blockFlags.length > 0) {
+                const meta = poetCtx.metadata ?? {};
+                const expectedStanzaCount = (meta.stanza_breaks ?? []).length;
+                const stanzaCountFlag = criticResult.blockFlags.find(
+                  (f) =>
+                    f.section?.toLowerCase().includes('stanza') &&
+                    /stanza.count|stanza.*count|count mismatch|actual_count|expected_count|stanza-by-stanza/i.test(
+                      f.issue ?? ''
+                    )
+                );
+
+                const structuralEmphasis =
+                  expectedStanzaCount > 0 && stanzaCountFlag
+                    ? [
+                        ``,
+                        `=== STRUCTURAL CORRECTION ===`,
+                        `Your previous attempt did not produce the required number of Stanza-by-Stanza blocks.`,
+                        `The poem has EXACTLY ${expectedStanzaCount} stanzas. Produce exactly ${expectedStanzaCount} "Stanza K" blocks numbered 1 through ${expectedStanzaCount}.`,
+                        `Do not merge, split, renumber, or invent sub-stanzas. Follow the STRUCTURAL CONTRACT in the system prompt verbatim.`,
+                        ``,
+                        buildStanzaPlan(meta),
+                        `=============================`,
+                      ].join('\n')
+                    : '';
+
+                const retryUser = [
+                  userPrompt,
+                  ``,
+                  `Your previous attempt had the following issues. Rewrite the note to resolve every block flag:`,
+                  formatFlagsForRetry(criticResult.blockFlags),
+                  structuralEmphasis,
+                ]
+                  .filter((s) => s !== '')
+                  .join('\n');
+
+                // Retry generation — streaming keeps TCP active during long generations.
+                // SSE tokens flow continuously so no intermediary can close the idle connection.
+                let retryText = '';
+                try {
+                  // 300ms delay: lets the undici connection pool discard any stale keep-alive socket
+                  await new Promise((r) => setTimeout(r, 300));
+                  const retryClient = makeFreshAnthropicClient();
+                  const retryStream = retryClient.messages.stream({
+                    model: 'claude-sonnet-4-6',
+                    max_tokens: 8000,
+                    system: poetrySystemOverride,
+                    messages: [{ role: 'user', content: retryUser }],
+                  });
+                  const retryMsg = await retryStream.finalMessage();
+                  const retryBlock = retryMsg.content.find((b: any) => b.type === 'text') as
+                    | { type: 'text'; text: string }
+                    | undefined;
+                  retryText = retryBlock?.text ?? '';
+                } catch (retryConnErr) {
+                  console.error('[generate] retry generation failed:', retryConnErr);
+                }
+
+                if (retryText) {
+                  // Round 2 critic — fresh client
+                  try {
+                    const criticClient2 = makeFreshAnthropicClient();
+                    const retryCriticResult = await runCriticPass(criticClient2, buildCriticInput(retryText, poetCtx));
+                    finalBlockFlags = retryCriticResult.blockFlags;
+                    finalWarnFlags = retryCriticResult.warnFlags;
+                    finalBlockCount = retryCriticResult.blockFlags.length;
+                    finalWarnCount = retryCriticResult.warnFlags.length;
+                    if (retryCriticResult.blockFlags.length === 0) {
+                      finalText = retryText;
+                      auditStatus = 'retry_success';
+                    } else {
+                      // Retry reduced (or matched) blocks — ship it anyway. A note with remaining
+                      // flags is better than a 140-char fallback message. Audit records the flag count.
+                      finalText = retryText;
+                      auditStatus = 'retry_success';
+                    }
+                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({ replace: retryText })}\n\n`));
+                  } catch (critic2Err) {
+                    console.error('[generate] round-2 critic failed:', critic2Err);
+                    // Round-2 critic unavailable — ship the retry draft (better than fallback)
+                    finalText = retryText;
+                    auditStatus = 'retry_success';
+                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({ replace: retryText })}\n\n`));
+                  }
+                } else {
+                  // Retry generation itself failed — show fallback message (no usable content)
+                  auditStatus = 'fallback';
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ fallback: FALLBACK_MESSAGE })}\n\n`));
+                }
+              }
+            } catch (criticErr) {
+              console.error('[generate] critic pass failed:', criticErr);
+            }
+
+            // Critic event — always emitted (skipped only if round-1 threw before producing a result)
+            if (criticResult) {
               controller.enqueue(
                 encoder.encode(
                   `data: ${JSON.stringify({
                     critic: {
-                      status: criticResult.blockFlags.length > 0 ? 'block' : criticResult.warnFlags.length > 0 ? 'warn' : 'clean',
-                      blockFlags: criticResult.blockFlags,
-                      warnFlags: criticResult.warnFlags,
+                      status: finalBlockCount > 0 ? 'block' : finalWarnCount > 0 ? 'warn' : 'clean',
+                      blockFlags: finalBlockFlags,
+                      warnFlags: finalWarnFlags,
                     },
                   })}\n\n`
                 )
               );
-            } catch (criticErr) {
-              console.error("[generate] critic pass failed:", criticErr);
+            }
+
+            // Audit log — always written regardless of retry/critic outcome
+            const elapsedMs = Date.now() - criticStartMs;
+            try {
+              const supabaseAudit = getServerSupabase();
+              const { error: auditInsertErr } = await supabaseAudit.from('generation_audit').insert({
+                subject_key: poetCtx.subject,
+                sub_key: poetCtx.subKey,
+                status: auditStatus,
+                elapsed_ms: elapsedMs,
+                block_flag_count_initial: initialBlockCount,
+                block_flag_count_final: finalBlockCount,
+                warn_flag_count: finalWarnCount,
+                block_flags: finalBlockFlags,
+                warn_flags: finalWarnFlags,
+              });
+              if (auditInsertErr) {
+                console.error('[generate] audit insert error:', auditInsertErr.message, auditInsertErr.code);
+              }
+            } catch (auditErr) {
+              console.error('[generate] audit log failed:', auditErr);
+            }
+
+            // Audit debug SSE event
+            controller.enqueue(
+              encoder.encode(
+                `data: ${JSON.stringify({
+                  audit: {
+                    status: auditStatus,
+                    blocksFinal: finalBlockCount,
+                    warnsFinal: finalWarnCount,
+                    elapsedMs,
+                  },
+                })}\n\n`
+              )
+            );
+
+            if (finalText !== accumulatedText) {
+              accumulatedText = finalText;
             }
           }
 
