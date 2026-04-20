@@ -156,7 +156,7 @@ Tropes / figures:
 - paradox: a self-contradictory statement that reveals a truth.
 - irony (verbal, situational, or dramatic, state which).
 - euphemism: softer substitute for something harsh ("passed away"). NOT for brutal plain naming.
-- understatement / litotes: deliberately downplays ("tell-tale skin and teeth" understates mass murder).
+- understatement (litotes): deliberately downplays ("tell-tale skin and teeth" understates mass murder).
 - hyperbole: deliberate exaggeration.
 - symbolism: object stands for an abstract idea.
 - allusion: reference to another text or historical event (name the source).
