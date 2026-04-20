@@ -1,3 +1,28 @@
+/**
+ * lib/claude/prompts.ts
+ *
+ * Poetry note prompt builders for the LC Companion App.
+ * Implements the Poetry Note Production Spec v1.0 (19 April 2026).
+ *
+ * Key contract:
+ *  - Generator must only quote from `anchored_quotes` (no training-memory quotes).
+ *  - Generator must only recommend pairings from `available_pairings`.
+ *  - Generator must produce all 6 mandatory sections, in order.
+ *  - Generator labels techniques only from the controlled glossary.
+ *  - No overreach (speculative readings without textual license).
+ *  - Historical claims may only come from `historical_context` and `named_figures`.
+ *  - Textual variants flagged with guidance.
+ *
+ * Any row missing `metadata.structure_confidence='high'` or
+ * `metadata.quote_text_anchored=true` falls back to the legacy prompt path
+ * (kept at end of file) and logs a warning.
+ */
+
+// -----------------------------------------------------------------------------
+// Types
+// -----------------------------------------------------------------------------
+
+// Legacy interface required by comparative note builder
 export interface ComparativeTextEntry {
   title: string;
   author?: string;
@@ -7,25 +32,77 @@ export interface ComparativeTextEntry {
 
 export interface PoemQuote {
   text: string;
-  line_start?: number;
-  line_end?: number;
-  stanza_index?: number;
+  line_start: number;
+  line_end: number;
+  stanza_index: number;
+  section_index?: number;
+  tags?: string[];
 }
 
 export interface PoemMetadata {
+  quote_schema_version?: number;
   total_lines?: number;
-  stanza_breaks?: number[][];
-  section_breaks?: string[] | null;
+  stanza_breaks?: number[];
+  section_breaks?: number[] | null;
   form?: string;
   structure_confidence?: string;
   quote_text_anchored?: boolean;
+  quote_bank_source?: string;
+  edition_source?: string;
+  historical_context?: HistoricalContext;
+  named_figures?: NamedFigure[];
+  textual_variants?: TextualVariant[];
+  selection_years?: string[];
+  selection_years_confirmed?: boolean;
+}
+
+export interface HistoricalContext {
+  composition_date?: string;
+  collection?: string;
+  publisher?: string;
+  real_world_events?: Array<{ event: string; date: string; relevance: string }>;
+  source_texts?: Array<{ author: string; title: string; year: string; relevance: string }>;
+  disputed_readings?: Array<{ detail: string; options: string[]; guidance: string }>;
+  biographical_anchors?: string[];
+}
+
+export interface NamedFigure {
+  name: string;
+  role: string;
+  appears_as: string;
+  source: string | null;
+  use_in_essay: string;
+}
+
+export interface TextualVariant {
+  line_number: number;
+  phrase_in_our_edition: string;
+  alternate_readings: string[];
+  alternate_sources: string[];
+  our_source: string;
+  guidance: string;
+}
+
+export interface PairingCandidate {
+  subject_key: string;
+  sub_key: string;
+  one_line_summary?: string;
 }
 
 export interface PromptContext {
-  year: number;
-  circular: string;
-  level: "HL" | "OL";
-  contentType: "poetry" | "comparative" | "worksheet" | "slides" | "single_text" | "unseen_poetry" | "comprehension" | "composition";
+  // New strict-mode poetry pipeline fields
+  subject?: string;
+  subKey?: string;
+  metadata?: PoemMetadata;
+  quotes?: PoemQuote[];
+  availablePairings?: PairingCandidate[] | Array<{ sub_key: string; form: string; total_lines: number | null; themes?: string[] }>;
+  studentYear?: '2026' | '2027';
+
+  // Legacy fields used by streaming route (app/api/generate/route.ts)
+  year?: number;
+  circular?: string;
+  level?: 'HL' | 'OL';
+  contentType?: 'poetry' | 'comparative' | 'worksheet' | 'slides' | 'single_text' | 'unseen_poetry' | 'comprehension' | 'composition';
   poet?: string;
   poem?: string;
   author?: string;
@@ -33,12 +110,10 @@ export interface PromptContext {
   comparativeMode?: string;
   comparativeTexts?: ComparativeTextEntry[];
   userInstructions?: string;
-  // Injected by the API route before prompt building
   examSummary?: string;
   prescribedPoems?: string[];
   poemText?: string;
   comparativeExamPattern?: string;
-  // Textbook analysis grounding (from Supabase poem_analysis table)
   textbookAnalysis?: {
     formStructure: string;
     themes: string;
@@ -51,27 +126,363 @@ export interface PromptContext {
     examAngles: string;
     comparativeLinks: string;
   };
-  // Worksheet-specific
-  worksheetContentType?: "poetry" | "single_text" | "comparative" | "unseen_poetry" | "comprehension" | "composition";
+  worksheetContentType?: 'poetry' | 'single_text' | 'comparative' | 'unseen_poetry' | 'comprehension' | 'composition';
   activityTypes?: string[];
-  // Slides-specific
-  slidesContentType?: "poetry" | "comparative" | "general" | "single_text" | "unseen_poetry" | "comprehension" | "composition";
-  // Single text-specific
-  textType?: "shakespeare" | "novel" | "play";
-  // Comprehension-specific
-  focusArea?: "question_a" | "question_b" | "both";
-  // Composition-specific
-  compositionType?: "personal_essay" | "short_story" | "speech" | "discursive" | "feature_article" | "descriptive";
-  // Structured poem metadata and quotes (populated by route when an outline exists)
+  slidesContentType?: 'poetry' | 'comparative' | 'general' | 'single_text' | 'unseen_poetry' | 'comprehension' | 'composition';
+  textType?: 'shakespeare' | 'novel' | 'play';
+  focusArea?: 'question_a' | 'question_b' | 'both';
+  compositionType?: 'personal_essay' | 'short_story' | 'speech' | 'discursive' | 'feature_article' | 'descriptive';
   poemMetadata?: PoemMetadata;
   structuredQuotes?: Array<string | PoemQuote>;
-  availablePairings?: Array<{
-    sub_key: string;
-    form: string;
-    total_lines: number | null;
-    themes?: string[];
-  }>;
 }
+
+// -----------------------------------------------------------------------------
+// Controlled technique glossary (spec section 4)
+// -----------------------------------------------------------------------------
+
+export const TECHNIQUE_GLOSSARY = `
+Controlled technique glossary. You may ONLY label a device with one of these terms.
+If a line's effect does not match any term below, describe it in plain language
+without naming a device. Never invent a term.
+
+Tropes / figures:
+- metaphor: A is B directly.
+- simile: A is like/as B.
+- metonymy: part-for-associated (e.g. "the crown" for the monarchy).
+- synecdoche: part-for-whole or whole-for-part (e.g. "skin and teeth" for the bodies).
+- personification: inanimate given human attributes.
+- apostrophe: direct address to absent, dead, or non-human addressee.
+- oxymoron: two contradictory terms placed together (e.g. "sad freedom").
+- paradox: a self-contradictory statement that reveals a truth.
+- irony (verbal, situational, or dramatic, state which).
+- euphemism: softer substitute for something harsh ("passed away"). NOT for brutal plain naming.
+- understatement / litotes: deliberately downplays ("tell-tale skin and teeth" understates mass murder).
+- hyperbole: deliberate exaggeration.
+- symbolism: object stands for an abstract idea.
+- allusion: reference to another text or historical event (name the source).
+- pathetic fallacy: nature reflects human emotion.
+
+Sound:
+- alliteration, assonance, consonance, sibilance, onomatopoeia, cacophony, euphony.
+
+Structure / syntax:
+- enjambment, caesura, end-stopped line, volta, anaphora, asyndeton, polysyndeton, inversion.
+
+Imagery: visual, auditory, tactile, olfactory, gustatory, kinaesthetic, synaesthesia.
+
+Register / mode:
+- syncretism: blending two religious or cultural frameworks (e.g. Christian register applied to pagan sacrifice).
+- dramatic monologue: single speaker addresses an implied listener.
+
+BANNED labels (do not use):
+- "biblical echoes", too vague. Use "allusion to [specific source]" or "Christian register" or "syncretism".
+- "powerful", "evocative", "striking", "beautiful", not techniques.
+- "captures", "underscores", "highlights", "evokes" without specifying what, filler verbs.
+- "the poet masterfully" or any sentence starting with this, AI filler.
+`.trim();
+
+// -----------------------------------------------------------------------------
+// Structural contract (derived from verified metadata, injected into prompt)
+// -----------------------------------------------------------------------------
+
+/**
+ * Turns stanza_breaks + section_breaks + total_lines + form into a human-readable
+ * block that tells the generator exactly how many stanzas to produce, what line
+ * ranges each stanza covers, and how stanzas group into Parts. Returns '' if
+ * metadata is too thin to compute a plan.
+ */
+export function buildStanzaPlan(meta: PoemMetadata): string {
+  const breaks = meta.stanza_breaks ?? [];
+  const total = meta.total_lines;
+  const form = meta.form ?? 'unspecified';
+  const sections = meta.section_breaks ?? [];
+
+  if (breaks.length === 0 || !total || total <= 0) {
+    return '';
+  }
+
+  const stanzaCount = breaks.length;
+
+  const ranges = breaks.map((start, i) => {
+    const end = i < breaks.length - 1 ? breaks[i + 1] - 1 : total;
+    return { index: i + 1, start, end };
+  });
+
+  const romanNumeral = (n: number): string => {
+    const map = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+    return map[n - 1] ?? String(n);
+  };
+
+  const sectionAssignments: Array<{ part: number; stanzas: number[] }> = [];
+  if (sections.length > 0) {
+    for (let s = 0; s < sections.length; s++) {
+      const secStart = sections[s];
+      const secEnd = s < sections.length - 1 ? sections[s + 1] - 1 : total;
+      const stanzasIn = ranges
+        .filter((r) => r.start >= secStart && r.end <= secEnd)
+        .map((r) => r.index);
+      if (stanzasIn.length > 0) {
+        sectionAssignments.push({ part: s + 1, stanzas: stanzasIn });
+      }
+    }
+  }
+
+  const lines: string[] = [];
+  lines.push(`STRUCTURAL CONTRACT (derived from verified metadata, do not deviate):`);
+  lines.push(``);
+  lines.push(`- Form: ${form}`);
+  lines.push(`- Total lines: ${total}`);
+  lines.push(`- Total stanzas: ${stanzaCount}`);
+  if (sectionAssignments.length > 0) {
+    lines.push(`- Parts: ${sectionAssignments.length}`);
+  }
+  lines.push(``);
+  lines.push(`Stanza line ranges:`);
+  for (const r of ranges) {
+    lines.push(`  Stanza ${r.index}: lines ${r.start}-${r.end}`);
+  }
+
+  if (sectionAssignments.length > 0) {
+    lines.push(``);
+    lines.push(`Part grouping:`);
+    for (const a of sectionAssignments) {
+      const first = a.stanzas[0];
+      const last = a.stanzas[a.stanzas.length - 1];
+      lines.push(`  Part ${romanNumeral(a.part)}: stanzas ${first}-${last}`);
+    }
+  }
+
+  lines.push(``);
+  lines.push(
+    `In Section 3 (Stanza-by-Stanza), produce EXACTLY ${stanzaCount} blocks labelled`
+  );
+  lines.push(
+    `"Stanza 1" through "Stanza ${stanzaCount}". Do not merge, split, renumber, or invent`
+  );
+  lines.push(
+    `sub-stanzas. If a stanza has no anchored quote, still produce its block and`
+  );
+  lines.push(
+    `describe its function without quoting, as specified in the OUTPUT TEMPLATE.`
+  );
+  if (sectionAssignments.length > 0) {
+    lines.push(
+      `Group the Stanza-by-Stanza blocks under "### Part I", "### Part II", etc. per the Part grouping above.`
+    );
+  }
+
+  return lines.join('\n');
+}
+
+// -----------------------------------------------------------------------------
+// Core poetry prompt builders
+// -----------------------------------------------------------------------------
+
+const OVERREACH_RULE = `
+OVERREACH RULE: One well-supported reading beats three speculative ones.
+Every interpretive claim must name the textual feature that licenses it.
+If you cannot point to a specific word, image, sound, or structural feature
+that supports the reading, drop the reading. Do not pad.
+
+Known patterns to avoid:
+- "suggests potential for growth" from images of dead/static things (e.g. seed-pods of corpse eyelids)
+- "sweetness emerging from darkness" from industrial/labour imagery (e.g. turf-cutting scars)
+- "evokes" without specifying what it evokes
+- treating literal description as symbolic without textual warrant
+`.trim();
+
+const CONSISTENCY_RULE = `
+CONSISTENCY RULE:
+- Any word you quote must be spelled the same way in your commentary. If the poem
+  spells it "tumbril", your gloss spells it "tumbril", not "tumbrel".
+- Any named person, place, date, or event you mention must appear in the row's
+  historical_context or named_figures. Do not cite dates or people from memory.
+- Any pairing you recommend must appear in the available_pairings list for the
+  student's selection year. Never recommend a poem not on that list.
+- Any quote you use must appear verbatim in the anchored_quotes array.
+  If a stanza has no anchored quote coverage, describe its function without quoting.
+`.trim();
+
+const OUTPUT_TEMPLATE = `
+MANDATORY OUTPUT TEMPLATE. Produce all seven sections, in this order, with these exact headings:
+
+# "{{title}}" by {{poet}}
+
+## 1. Overview
+3 to 6 sentences. Must include: collection, composition date, one sentence of
+historical or biographical context (drawn ONLY from historical_context), one
+sentence on what the poem does. No filler.
+
+## 2. Form and Structure
+MANDATORY. Line count. Stanza shape. Parts or sections if any. Rhyme scheme (or
+note its absence). Meter tendency. Sound-pattern tendencies. Pacing effects of
+short or long lines. 4 to 7 sentences.
+
+## 3. Stanza-by-Stanza
+One block per stanza. For numbered parts, use "### Part I", "### Part II", etc.
+Then each stanza:
+
+### Stanza N
+**Plain meaning**: 1-2 sentences.
+**Technique**: named devices from the glossary only, tied to specific anchored quote.
+**Use in an essay**: specific exam utility (what it proves, what question type it fits,
+what a memorable quote is). Never a pairing line here.
+
+If a stanza has no anchored quote coverage, write:
+### Stanza N
+**Plain meaning**: 1-2 sentences.
+**Function in the poem**: describe role (transitional, pivot, climactic, etc.) without quoting.
+
+## 4. Themes
+2 to 4 themes. Each theme backed by at least two anchored quotes. Each theme
+has: theme name in bold, 2-4 sentences of analysis, concrete exam angle.
+
+## 5. Tone
+MANDATORY. Describe tone and how it changes across the poem. For multi-part
+poems, tone per part. 3 to 5 sentences.
+
+## 6. Exam Use
+Strongest essay angles. One or two quotes worth memorising. The most common
+student mistake on this poem. 4 to 6 sentences.
+
+## 7. Pairings
+2 to 3 poems ONLY from available_pairings for the student's selection year.
+For each pairing: one sentence on the shared element, one sentence on the
+productive contrast.
+`.trim();
+
+// -----------------------------------------------------------------------------
+// Prompt assembly
+// -----------------------------------------------------------------------------
+
+export function buildPoetrySystemPrompt(ctx: PromptContext): string {
+  const meta = ctx.metadata ?? {};
+  const isStrict = meta?.structure_confidence === 'high' && meta?.quote_text_anchored === true;
+
+  if (!isStrict) {
+    return buildLegacyPoetrySystemPrompt(ctx);
+  }
+
+  const anchoredQuotesBlock = JSON.stringify(ctx.quotes ?? [], null, 2);
+  const historicalBlock = JSON.stringify(meta.historical_context ?? {}, null, 2);
+  const figuresBlock = JSON.stringify(meta.named_figures ?? [], null, 2);
+  const variantsBlock = JSON.stringify(meta.textual_variants ?? [], null, 2);
+  const pairingsBlock = JSON.stringify(ctx.availablePairings ?? [], null, 2);
+  const editionSource = meta.edition_source ?? 'unspecified (flag to user)';
+  const selectionYear = ctx.studentYear ?? '2026';
+  const stanzaPlan = buildStanzaPlan(meta);
+
+  return [
+    `You are an experienced Leaving Certificate Higher Level English teacher writing study notes for Irish LC students.`,
+    `You write in UK English. You do not use em dashes anywhere. You write in clear, direct, exam-relevant prose.`,
+    ``,
+    `CURRENT TASK: produce a study note on "${ctx.subKey}" by ${ctx.subject}.`,
+    `Student is preparing for the ${selectionYear} exam.`,
+    `Edition source: ${editionSource}.`,
+    ``,
+    `STRICT MODE: this poem has an anchored quote bank and verified structural metadata.`,
+    `You MUST follow the contract below. Violations are caught by a critic pass and block publication.`,
+    ``,
+    `===== ANCHORED QUOTES (the only quotes you may use) =====`,
+    anchoredQuotesBlock,
+    `==========================================================`,
+    ``,
+    `===== HISTORICAL CONTEXT (the only factual anchors you may cite) =====`,
+    historicalBlock,
+    `======================================================================`,
+    ``,
+    `===== NAMED FIGURES (names, roles, and essay-use notes) =====`,
+    figuresBlock,
+    `=============================================================`,
+    ``,
+    `===== TEXTUAL VARIANTS (flag with guidance where relevant) =====`,
+    variantsBlock,
+    `================================================================`,
+    ``,
+    `===== AVAILABLE PAIRINGS (the only poems you may recommend) =====`,
+    pairingsBlock,
+    `=================================================================`,
+    ``,
+    TECHNIQUE_GLOSSARY,
+    ``,
+    OVERREACH_RULE,
+    ``,
+    CONSISTENCY_RULE,
+    ``,
+    // Structural contract (only if metadata is rich enough to compute one).
+    ...(stanzaPlan ? [stanzaPlan, ``] : []),
+    OUTPUT_TEMPLATE.replace('{{title}}', ctx.subKey ?? '').replace('{{poet}}', ctx.subject ?? ''),
+    ``,
+    `Begin. Do not preface with any meta commentary. Go straight into the H1 heading.`,
+  ].join('\n');
+}
+
+export function buildPoetryNotePrompt(ctx: PromptContext): {
+  system: string;
+  user: string;
+} {
+  const system = buildPoetrySystemPrompt(ctx);
+  const user = `Write the full study note for "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''} per the contract above.`;
+  return { system, user };
+}
+
+// -----------------------------------------------------------------------------
+// Legacy fallback (only used when strict-mode row flags missing)
+// -----------------------------------------------------------------------------
+
+function buildLegacyPoetrySystemPrompt(ctx: PromptContext): string {
+  return [
+    `You are an experienced LC English teacher. Write a study note on "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}.`,
+    `WARNING: this poem row is NOT in strict mode. Historical claims and pairings may be unreliable.`,
+    `Use only quotes that look canonical. Do not fabricate stanzas. Six-section template (Overview, Form, Stanza-by-Stanza, Themes, Tone, Exam Use, Pairings).`,
+    ``,
+    `Available quote seeds (may be incomplete): ${JSON.stringify(ctx.quotes ?? [])}`,
+  ].join('\n');
+}
+
+// -----------------------------------------------------------------------------
+// Utility: build the critic-pass input from a generated note + row
+// -----------------------------------------------------------------------------
+
+export interface CriticInput {
+  generatedNote: string;
+  anchoredQuotes: PoemQuote[];
+  historicalContext: HistoricalContext | null;
+  namedFigures: NamedFigure[];
+  textualVariants: TextualVariant[];
+  availablePairings: PairingCandidate[];
+  techniqueGlossary: string;
+  subject: string;
+  subKey: string;
+  stanzaPlan: string;
+  expectedStanzaCount: number | null;
+}
+
+export function buildCriticInput(
+  generatedNote: string,
+  ctx: PromptContext
+): CriticInput {
+  const meta = ctx.metadata ?? {};
+  const breaks = meta.stanza_breaks ?? [];
+  const pairings = (ctx.availablePairings ?? []) as PairingCandidate[];
+  return {
+    generatedNote,
+    anchoredQuotes: (ctx.quotes ?? []) as PoemQuote[],
+    historicalContext: meta.historical_context ?? null,
+    namedFigures: meta.named_figures ?? [],
+    textualVariants: meta.textual_variants ?? [],
+    availablePairings: pairings,
+    techniqueGlossary: TECHNIQUE_GLOSSARY,
+    subject: ctx.subject ?? '',
+    subKey: ctx.subKey ?? '',
+    stanzaPlan: buildStanzaPlan(meta),
+    expectedStanzaCount: breaks.length > 0 ? breaks.length : null,
+  };
+}
+
+// =============================================================================
+// LEGACY PROMPT BUILDERS (used by app/api/generate/route.ts streaming endpoint)
+// =============================================================================
 
 function getReadingLevel(level: "HL" | "OL"): string {
   if (level === "OL") {
@@ -191,8 +602,8 @@ Direct and specific. "Kavanagh is being deliberately ironic here", not "the poet
 </voice>`;
   }
 
-  const readingLevel = getReadingLevel(context.level);
-  const modes = getComparativeModes(context.year, context.level);
+  const readingLevel = getReadingLevel(context.level ?? 'HL');
+  const modes = getComparativeModes(context.year ?? 2026, context.level ?? 'HL');
   const quoteBlock = buildQuoteAccuracyBlock(context);
 
   let examAlignmentBlock = "";
@@ -305,104 +716,6 @@ You are generating content for the ${context.year} Leaving Certificate English e
 The prescribed material is defined by Circular ${context.circular}.
 The comparative modes for ${context.year} Higher Level are: ${modes}.
 The student is studying at ${context.level} Level.${examAlignmentBlock}`;
-}
-
-export function buildPoetryNotePrompt(context: PromptContext): string {
-  const title = context.poem ?? 'Unknown Poem';
-  const poet = context.poet ?? 'Unknown Poet';
-  const exam_year = context.year;
-  const metadata = context.poemMetadata ?? { structure_confidence: 'unverified' };
-  const quotes = context.structuredQuotes ?? [];
-  const pairings = context.availablePairings ?? [];
-
-  return `<task>
-Write study notes for "${title}" by ${poet} for HL ${exam_year}.
-</task>
-
-<structure>
-total_lines: ${metadata.total_lines ?? 'unknown'}
-stanza_breaks: ${JSON.stringify(metadata.stanza_breaks ?? null)}
-section_breaks: ${JSON.stringify(metadata.section_breaks ?? null)}
-form: ${metadata.form ?? 'unknown'}
-confidence: ${metadata.structure_confidence ?? 'unverified'}
-quote_text_anchored: ${metadata.quote_text_anchored ?? false}
-</structure>
-
-<quote_bank>
-${quotes.length > 0
-    ? quotes.map((q, i) => {
-        const text = typeof q === 'string' ? q : (q.text ?? '');
-        const lineRef = typeof q !== 'string' && q.line_start
-          ? ` [L${q.line_start}${q.line_end !== q.line_start ? `-${q.line_end}` : ''}]`
-          : '';
-        const stanzaRef = typeof q !== 'string' && q.stanza_index
-          ? ` (stanza ${q.stanza_index})`
-          : '';
-        return `${i + 1}. "${text}"${lineRef}${stanzaRef}`;
-      }).join('\n')
-    : '(no verified quotes available)'}
-</quote_bank>
-
-<available_pairings>
-${pairings.length > 0
-    ? pairings.map(p => {
-        const themes = p.themes && p.themes.length > 0 ? p.themes.join(', ') : 'none';
-        const lines = p.total_lines != null ? p.total_lines : 'unknown';
-        return `- ${p.sub_key} (form: ${p.form}, lines: ${lines}, themes: ${themes})`;
-      }).join('\n')
-    : '(no verified pairings available)'}
-</available_pairings>
-
-<hard_rules>
-RULE A — QUOTE RESTRICTION:
-You may only quote text that appears verbatim in the anchored_quotes array supplied in <quote_bank>. You must not quote any other line of the poem, even if you remember it from training. If a stanza has no anchored quote, write its Technique and Use-in-essay analysis by describing the stanza's tonal, structural, or transitional function in 2-3 sentences, without quoting any line. Do not invent phrases. Do not paraphrase lines as if they were quotes. Do not use quotation marks around anything that is not in <quote_bank>.
-
-RULE B — PAIRINGS RESTRICTION:
-Pairings must be drawn exclusively from the <available_pairings> list supplied above. You must not recommend any poem that is not in that list, even if you believe it is thematically relevant. If fewer than three strong pairings exist in the list, recommend fewer. Do not fabricate pairings to reach a target count.
-</hard_rules>
-
-<output_format>
-# "${title}" by ${poet}
-
-## 1. Overview
-One paragraph, 3-5 sentences. What the poem does, when it was published, the form (use the form field). Do not state a stanza count that contradicts <structure.stanza_breaks>.
-
-## 2. Stanza-by-Stanza
-For each entry in <structure.stanza_breaks>, produce one ### heading. If <structure.section_breaks> is set, group stanzas under #### Part I / #### Part II headings.
-
-For stanzas that have an anchored quote in <quote_bank>: include all three labelled paragraphs:
-
-**Plain meaning**: 2-3 sentences, literal only.
-**Technique**: name AT MOST two techniques, quote the example, say what it does in this poem specifically.
-**Use in an essay**: 1-2 sentences. State (a) which anchored quote from this stanza is worth memorising verbatim, (b) which Paper 2 Section II question type this stanza helps answer (e.g. questions on violence, on religion, on identity, on place), and (c) what an examiner rewards when this stanza is used well. Do NOT name another poem here. Pairings belong only in section 5.
-
-For stanzas that have NO anchored quote in <quote_bank>: include only two labelled paragraphs. Do not invent a third.
-
-**Plain meaning**: 2 sentences max, functional description only.
-**Technique**: 2 sentences max, describing the stanza's structural or tonal function without quoting any line. Do not invent phrases. Do not pull quotes from adjacent stanzas to fill the gap.
-
-## 3. Themes (max 3, ranked)
-One paragraph each. Name the theme, give the strongest 1-2 quotes from <quote_bank>, state the argument a student would build with it.
-
-## 4. Exam Use
-3-5 sentences in prose. Strongest essay angle, two quotes worth memorising verbatim, the easiest mistake to make on this poem.
-
-## 5. Pairings
-2-3 sentences naming other poems by ${poet} this pairs with, one reason each.
-
-<degraded_mode>
-If <structure.confidence> is "unverified": skip section 2 entirely. Replace with one italicised line: *"Stanza-by-stanza analysis is not available for this poem until structure is verified."* Then proceed to sections 3-5 as normal, drawing all quotes from <quote_bank> grouped by theme.
-</degraded_mode>
-</output_format>
-
-<self_check>
-Before returning, verify:
-- Number of ### stanza headings equals length of <structure.stanza_breaks> (or zero if degraded mode).
-- Overview's stanza-count claim matches the body, or makes no count claim.
-- No banned phrases, no em/en dashes in prose, no US spellings.
-- Every "..." traces verbatim to a <quote_bank> entry.
-If any check fails, fix before returning.
-</self_check>`;
 }
 
 

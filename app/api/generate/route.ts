@@ -1,11 +1,13 @@
 import { NextRequest } from "next/server";
 import { marked } from "marked";
+import Anthropic from "@anthropic-ai/sdk";
 import { getClient } from "@/lib/claude/client";
 import {
   buildSystemPrompt,
   buildPoetryNotePrompt,
   buildComparativePrompt,
   buildWorksheetPrompt,
+  buildCriticInput,
   type PoemMetadata,
   type PoemQuote,
   buildSlidesPrompt,
@@ -15,6 +17,7 @@ import {
   buildCompositionPrompt,
   PromptContext,
 } from "@/lib/claude/prompts";
+import { runCriticPass } from "@/lib/claude/critic";
 import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
 import { getPoemText } from "@/lib/poems/store";
@@ -100,6 +103,7 @@ export async function POST(request: NextRequest) {
     };
 
     let userPrompt: string;
+    let poetrySystemOverride: string | undefined;
     let useWebSearch = false;
     let webSearchMaxUses = 3;
 
@@ -172,6 +176,10 @@ export async function POST(request: NextRequest) {
               form: m.form as PoemMetadata["form"],
               structure_confidence: m.structure_confidence as PoemMetadata["structure_confidence"],
               quote_text_anchored: m.quote_text_anchored as PoemMetadata["quote_text_anchored"],
+              edition_source: m.edition_source as PoemMetadata["edition_source"],
+              historical_context: m.historical_context as PoemMetadata["historical_context"],
+              named_figures: m.named_figures as PoemMetadata["named_figures"],
+              textual_variants: m.textual_variants as PoemMetadata["textual_variants"],
             };
           }
 
@@ -181,21 +189,28 @@ export async function POST(request: NextRequest) {
 
           const { data: siblings } = await supabase
             .from("notes")
-            .select("sub_key, metadata, themes")
+            .select("sub_key, metadata")
             .eq("content_type", "poem_notes")
             .eq("subject_key", poet)
             .eq("status", "verified")
             .neq("sub_key", poem);
 
-          context.availablePairings = (siblings ?? []).map(s => ({
-            sub_key: s.sub_key as string,
-            form: (s.metadata as Record<string, unknown>)?.form as string ?? "unknown",
-            total_lines: (s.metadata as Record<string, unknown>)?.total_lines as number ?? null,
-            themes: Array.isArray(s.themes) ? (s.themes as string[]).slice(0, 3) : [],
-          }));
+          const studentYearStr = String(year);
+          context.availablePairings = (siblings ?? [])
+            .filter((s) => {
+              const years = (s.metadata as Record<string, unknown>)?.selection_years as string[] ?? [];
+              return years.length === 0 || years.includes(studentYearStr);
+            })
+            .map((s) => ({
+              subject_key: poet,
+              sub_key: s.sub_key as string,
+              one_line_summary: (s.metadata as Record<string, unknown>)?.one_line_summary as string | undefined,
+            }));
         } catch (err) {
           console.warn("[poetry-debug] metadata lookup failed, continuing without it", err);
         }
+
+        context.studentYear = String(year) as '2026' | '2027';
 
         console.log("[poetry-debug]", {
           hasMetadata: !!context.poemMetadata,
@@ -205,7 +220,11 @@ export async function POST(request: NextRequest) {
         });
 
         useWebSearch = !context.poemText;
-        userPrompt = buildPoetryNotePrompt(context);
+        {
+          const { system: pSystem, user: pUser } = buildPoetryNotePrompt(context);
+          poetrySystemOverride = pSystem;
+          userPrompt = pUser;
+        }
         break;
       }
 
@@ -301,7 +320,7 @@ export async function POST(request: NextRequest) {
         return errorResponse(`Content type "${contentType}" is not supported`);
     }
 
-    const systemPrompt = buildSystemPrompt(context);
+    const systemPrompt = poetrySystemOverride ?? buildSystemPrompt(context);
     const client = getClient();
 
     const stream = await client.messages.stream({
@@ -355,6 +374,28 @@ export async function POST(request: NextRequest) {
           if (tail) {
             accumulatedText += tail;
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: tail })}\n\n`));
+          }
+
+          // Critic pass (poetry strict-mode only — flags emitted as SSE event, no retry since text already streamed).
+          if (accumulatedText && context.contentType === "poetry" && poetrySystemOverride) {
+            try {
+              const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
+              const criticInput = buildCriticInput(accumulatedText, context);
+              const criticResult = await runCriticPass(anthropic, criticInput);
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({
+                    critic: {
+                      status: criticResult.blockFlags.length > 0 ? 'block' : criticResult.warnFlags.length > 0 ? 'warn' : 'clean',
+                      blockFlags: criticResult.blockFlags,
+                      warnFlags: criticResult.warnFlags,
+                    },
+                  })}\n\n`
+                )
+              );
+            } catch (criticErr) {
+              console.error("[generate] critic pass failed:", criticErr);
+            }
           }
 
           // Stream completed cleanly. Extract quotes/themes, generate outlines, then persist.

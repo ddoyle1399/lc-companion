@@ -1,7 +1,7 @@
 import type { PromptContext } from "@/lib/claude/prompts";
 import type { SaveNoteInput } from "./types";
 
-function levelLabel(level: "HL" | "OL"): "higher" | "ordinary" {
+function levelLabel(level: "HL" | "OL" | undefined): "higher" | "ordinary" {
   return level === "HL" ? "higher" : "ordinary";
 }
 
@@ -107,9 +107,9 @@ export function mapPromptContextToNoteInput(
     }
 
     default: {
-      const exhaustive: never = contentType;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       throw new Error(
-        `mapPromptContextToNoteInput: unknown contentType ${exhaustive}`
+        `mapPromptContextToNoteInput: unknown contentType ${contentType as any}`
       );
     }
   }
@@ -127,7 +127,7 @@ export function mapPromptContextToNoteInput(
     subject_key: subjectKey,
     sub_key: subKey,
     level: levelLabel(context.level),
-    exam_year: context.year,
+    exam_year: context.year ?? 0,
     title,
     body_html: bodyHtml,
     body_text: bodyText,

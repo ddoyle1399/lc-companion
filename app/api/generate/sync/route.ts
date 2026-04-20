@@ -1,364 +1,233 @@
-import { NextRequest } from "next/server";
-import { marked } from "marked";
-import { getClient } from "@/lib/claude/client";
-import {
-  buildSystemPrompt,
-  buildPoetryNotePrompt,
-  buildComparativePrompt,
-  buildWorksheetPrompt,
-  buildSlidesPrompt,
-  buildSingleTextPrompt,
-  buildUnseenPoetryPrompt,
-  buildComprehensionPrompt,
-  buildCompositionPrompt,
-  PromptContext,
-  type PoemMetadata,
-  type PoemQuote,
-} from "@/lib/claude/prompts";
-import { getServerSupabase } from "@/lib/supabase/server";
-import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
-import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
-import { getPoemText } from "@/lib/poems/store";
-import { saveNote } from "@/lib/supabase/saveNote";
-import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
-import { extractQuotesAndThemes } from "@/lib/claude/extractQuotesAndThemes";
-import { generateOutline, type OutlineSuccess } from "@/lib/claude/generateOutline";
-import { findMatchingQuestions } from "@/lib/supabase/findMatchingQuestions";
-import { saveOutlines } from "@/lib/supabase/saveOutlines";
-import { runWithConcurrency } from "@/lib/util/concurrency";
+/**
+ * app/api/generate/sync/route.ts
+ *
+ * Full pipeline with critic pass and one retry. Falls back if retry still blocked.
+ */
 
-function errorResponse(message: string, status = 400) {
-  return new Response(
-    JSON.stringify({ error: message }),
-    { status, headers: { "Content-Type": "application/json" } }
+import { NextRequest, NextResponse } from 'next/server';
+import Anthropic from '@anthropic-ai/sdk';
+import { createClient } from '@supabase/supabase-js';
+import {
+  PromptContext,
+  PoemQuote,
+  PoemMetadata,
+  PairingCandidate,
+  buildPoetryNotePrompt,
+  buildCriticInput,
+  buildStanzaPlan,
+} from '@/lib/claude/prompts';
+import { runCriticPass, formatFlagsForRetry, CriticFlag } from '@/lib/claude/critic';
+
+const FALLBACK_MESSAGE = `This note is being reviewed for accuracy and is temporarily unavailable. Please try another poem from your selection, or check back shortly.`;
+
+const GENERATION_MODEL = 'claude-sonnet-4-6';
+const GENERATION_MAX_TOKENS = 8000;
+
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { subject, subKey, studentYear } = body as {
+    subject: string;
+    subKey: string;
+    studentYear: '2026' | '2027';
+  };
+
+  if (!subject || !subKey || !studentYear) {
+    return NextResponse.json(
+      { error: 'subject, subKey, studentYear required' },
+      { status: 400 }
+    );
+  }
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
+
+  const { data: row, error: rowErr } = await (supabase as any)
+    .from('notes')
+    .select('id, subject_key, sub_key, metadata, quotes')
+    .eq('subject_key', subject)
+    .eq('sub_key', subKey)
+    .eq('status', 'verified')
+    .single();
+
+  if (rowErr || !row) {
+    return NextResponse.json(
+      { error: 'Verified poem row not found', detail: rowErr?.message },
+      { status: 404 }
+    );
+  }
+
+  const metadata = (row.metadata ?? {}) as PoemMetadata;
+  const quotes = (row.quotes ?? []) as PoemQuote[];
+
+  const { data: siblings } = await (supabase as any)
+    .from('notes')
+    .select('sub_key, metadata')
+    .eq('subject_key', subject)
+    .eq('status', 'verified')
+    .neq('sub_key', subKey);
+
+  const availablePairings: PairingCandidate[] = (siblings ?? [])
+    .filter((s: any) => {
+      const years = (s.metadata?.selection_years ?? []) as string[];
+      return years.includes(studentYear);
+    })
+    .map((s: any) => ({
+      subject_key: subject,
+      sub_key: s.sub_key,
+      one_line_summary: s.metadata?.one_line_summary,
+    }));
+
+  const ctx: PromptContext = {
+    subject,
+    subKey,
+    metadata,
+    quotes,
+    availablePairings,
+    studentYear,
+  };
+
+  const { system, user } = buildPoetryNotePrompt(ctx);
+  let generated = await callGenerator(anthropic, system, user);
+
+  console.log('[poetry-debug]', {
+    sub: subKey,
+    hasMetadata: Boolean(metadata),
+    conf: metadata?.structure_confidence,
+    quoteCount: quotes.length,
+    pairings: availablePairings.length,
+    studentYear,
+  });
+
+  const criticInput = buildCriticInput(generated, ctx);
+  let criticResult = await runCriticPass(anthropic, criticInput);
+
+  if (criticResult.blockFlags.length > 0) {
+    console.log('[critic-block-round1]', {
+      sub: subKey,
+      blockCount: criticResult.blockFlags.length,
+      warnCount: criticResult.warnFlags.length,
+    });
+
+    const expectedStanzaCount = (metadata.stanza_breaks ?? []).length;
+    const stanzaCountFlag = criticResult.blockFlags.find(
+      (f) =>
+        f.section?.toLowerCase().includes('stanza') &&
+        /stanza.count|stanza.*count|count mismatch|actual_count|expected_count|stanza-by-stanza/i.test(
+          f.issue ?? ''
+        )
+    );
+
+    const structuralEmphasis =
+      expectedStanzaCount > 0 && stanzaCountFlag
+        ? [
+            ``,
+            `=== STRUCTURAL CORRECTION ===`,
+            `Your previous attempt did not produce the required number of Stanza-by-Stanza blocks.`,
+            `The poem has EXACTLY ${expectedStanzaCount} stanzas. Produce exactly ${expectedStanzaCount} "Stanza K" blocks numbered 1 through ${expectedStanzaCount}.`,
+            `Do not merge, split, renumber, or invent sub-stanzas. Follow the STRUCTURAL CONTRACT in the system prompt verbatim.`,
+            ``,
+            buildStanzaPlan(metadata),
+            `=============================`,
+          ].join('\n')
+        : '';
+
+    const retryUser = [
+      user,
+      ``,
+      `Your previous attempt had the following issues. Rewrite the note to resolve every block flag:`,
+      formatFlagsForRetry(criticResult.blockFlags),
+      structuralEmphasis,
+    ]
+      .filter((s) => s !== '')
+      .join('\n');
+
+    generated = await callGenerator(anthropic, system, retryUser);
+    const retryCriticInput = buildCriticInput(generated, ctx);
+    criticResult = await runCriticPass(anthropic, retryCriticInput);
+  }
+
+  if (criticResult.blockFlags.length > 0) {
+    console.log('[critic-block-final]', {
+      sub: subKey,
+      blockCount: criticResult.blockFlags.length,
+    });
+
+    await logGenerationAudit(supabase, {
+      rowId: row.id,
+      status: 'blocked',
+      blockFlags: criticResult.blockFlags,
+      warnFlags: criticResult.warnFlags,
+      note: generated,
+    });
+
+    return NextResponse.json(
+      {
+        note: FALLBACK_MESSAGE,
+        status: 'needs_review',
+        flags: criticResult.blockFlags,
+      },
+      { status: 200 }
+    );
+  }
+
+  await logGenerationAudit(supabase, {
+    rowId: row.id,
+    status: criticResult.warnFlags.length > 0 ? 'warn' : 'clean',
+    blockFlags: [],
+    warnFlags: criticResult.warnFlags,
+    note: generated,
+  });
+
+  return NextResponse.json(
+    {
+      note: generated,
+      status: criticResult.warnFlags.length > 0 ? 'warn' : 'clean',
+      warnFlags: criticResult.warnFlags,
+    },
+    { status: 200 }
   );
 }
 
-export async function POST(request: NextRequest) {
+async function callGenerator(
+  client: Anthropic,
+  system: string,
+  user: string
+): Promise<string> {
+  const response = await client.messages.create({
+    model: GENERATION_MODEL,
+    max_tokens: GENERATION_MAX_TOKENS,
+    system,
+    messages: [{ role: 'user', content: user }],
+  });
+
+  const textBlock = response.content.find((b: any) => b.type === 'text') as
+    | { type: 'text'; text: string }
+    | undefined;
+  return textBlock?.text ?? '';
+}
+
+async function logGenerationAudit(
+  supabase: ReturnType<typeof createClient<any>>,
+  payload: {
+    rowId: string;
+    status: 'clean' | 'warn' | 'blocked';
+    blockFlags: CriticFlag[];
+    warnFlags: CriticFlag[];
+    note: string;
+  }
+) {
   try {
-    const body = await request.json();
-    const { year, circular, level, contentType, userInstructions } = body;
-
-    if (!year || !level || !contentType) {
-      return errorResponse("Missing required fields: year, level, contentType");
-    }
-
-    const context: PromptContext = {
-      year,
-      circular: circular || "0016/2024",
-      level,
-      contentType,
-      userInstructions,
-    };
-
-    let userPrompt: string;
-    let useWebSearch = false;
-    let webSearchMaxUses = 3;
-
-    switch (contentType) {
-      case "poetry": {
-        const { poet, poem } = body;
-        if (!poet || !poem) {
-          return errorResponse("Poetry notes require poet and poem");
-        }
-        context.poet = poet;
-        context.poem = poem;
-        context.examSummary = buildPoetExamSummary(poet);
-
-        const prescribedPoems = level === "HL"
-          ? getPoemsForPoet(year, poet)
-          : getOLPoemsForPoet(year, poet);
-        context.prescribedPoems = prescribedPoems;
-
-        if (poem) {
-          const storedText = await getPoemText(poet, poem);
-          if (storedText) {
-            context.poemText = storedText;
-          }
-        }
-
-        try {
-          const supabase = getServerSupabase();
-          const { data: verifiedNote } = await supabase
-            .from("notes")
-            .select("metadata, quotes")
-            .eq("content_type", "poem_notes")
-            .eq("subject_key", poet)
-            .eq("sub_key", poem)
-            .eq("status", "verified")
-            .limit(1)
-            .maybeSingle();
-
-          if (verifiedNote?.metadata) {
-            const m = verifiedNote.metadata as Record<string, unknown>;
-            context.poemMetadata = {
-              total_lines: m.total_lines as PoemMetadata["total_lines"],
-              stanza_breaks: m.stanza_breaks as PoemMetadata["stanza_breaks"],
-              section_breaks: m.section_breaks as PoemMetadata["section_breaks"],
-              form: m.form as PoemMetadata["form"],
-              structure_confidence: m.structure_confidence as PoemMetadata["structure_confidence"],
-              quote_text_anchored: m.quote_text_anchored as PoemMetadata["quote_text_anchored"],
-            };
-          }
-
-          if (verifiedNote?.quotes) {
-            context.structuredQuotes = verifiedNote.quotes as Array<string | PoemQuote>;
-          }
-
-          const { data: siblings } = await supabase
-            .from("notes")
-            .select("sub_key, metadata, themes")
-            .eq("content_type", "poem_notes")
-            .eq("subject_key", poet)
-            .eq("status", "verified")
-            .neq("sub_key", poem);
-
-          context.availablePairings = (siblings ?? []).map(s => ({
-            sub_key: s.sub_key as string,
-            form: (s.metadata as Record<string, unknown>)?.form as string ?? "unknown",
-            total_lines: (s.metadata as Record<string, unknown>)?.total_lines as number ?? null,
-            themes: Array.isArray(s.themes) ? (s.themes as string[]).slice(0, 3) : [],
-          }));
-        } catch (err) {
-          console.warn("[poetry-debug] sync metadata lookup failed", err);
-        }
-
-        useWebSearch = !context.poemText;
-        userPrompt = buildPoetryNotePrompt(context);
-        break;
-      }
-
-      case "comparative": {
-        const { comparativeMode, comparativeTexts } = body;
-        if (!comparativeMode || !comparativeTexts || comparativeTexts.length !== 3) {
-          return errorResponse("Comparative notes require a mode and exactly 3 texts");
-        }
-        context.comparativeMode = comparativeMode;
-        context.comparativeTexts = comparativeTexts;
-        context.comparativeExamPattern = buildComparativeExamSummary(comparativeMode);
-
-        useWebSearch = true;
-        webSearchMaxUses = 5;
-        userPrompt = buildComparativePrompt(context);
-        break;
-      }
-
-      case "worksheet": {
-        const { worksheetContentType, activityTypes, poet, poem, author, textTitle, comparativeMode, comparativeTexts } = body;
-        context.worksheetContentType = worksheetContentType;
-        context.activityTypes = activityTypes;
-        context.poet = poet;
-        context.poem = poem;
-        context.author = author;
-        context.textTitle = textTitle;
-        context.comparativeMode = comparativeMode;
-        context.comparativeTexts = comparativeTexts;
-
-        useWebSearch = true;
-        userPrompt = buildWorksheetPrompt(context);
-        break;
-      }
-
-      case "slides": {
-        const { slidesContentType, poet, poem, author, textTitle, comparativeMode, comparativeTexts } = body;
-        context.slidesContentType = slidesContentType;
-        context.poet = poet;
-        context.poem = poem;
-        context.author = author;
-        context.textTitle = textTitle;
-        context.comparativeMode = comparativeMode;
-        context.comparativeTexts = comparativeTexts;
-
-        useWebSearch = true;
-        userPrompt = buildSlidesPrompt(context);
-        break;
-      }
-
-      case "single_text": {
-        const { author, textTitle, textType } = body;
-        if (!author || !textTitle) {
-          return errorResponse("Single text notes require author and textTitle");
-        }
-        context.author = author;
-        context.textTitle = textTitle;
-        context.textType = textType;
-
-        useWebSearch = true;
-        webSearchMaxUses = 5;
-        userPrompt = buildSingleTextPrompt(context);
-        break;
-      }
-
-      case "unseen_poetry": {
-        useWebSearch = false;
-        userPrompt = buildUnseenPoetryPrompt(context);
-        break;
-      }
-
-      case "comprehension": {
-        const { focusArea } = body;
-        context.focusArea = focusArea || "both";
-
-        useWebSearch = false;
-        userPrompt = buildComprehensionPrompt(context);
-        break;
-      }
-
-      case "composition": {
-        const { compositionType } = body;
-        if (!compositionType) {
-          return errorResponse("Composition notes require a compositionType");
-        }
-        context.compositionType = compositionType;
-
-        useWebSearch = false;
-        userPrompt = buildCompositionPrompt(context);
-        break;
-      }
-
-      default:
-        return errorResponse(`Content type "${contentType}" is not supported`);
-    }
-
-    const systemPrompt = buildSystemPrompt(context);
-    const client = getClient();
-
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 16000,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }],
-      ...(useWebSearch
-        ? {
-            tools: [
-              {
-                type: "web_search_20250305" as const,
-                name: "web_search" as const,
-                max_uses: webSearchMaxUses,
-              },
-            ],
-          }
-        : {}),
+    await (supabase as any).from('generation_audit').insert({
+      note_id: payload.rowId,
+      status: payload.status,
+      block_flags: payload.blockFlags,
+      warn_flags: payload.warnFlags,
+      note_snapshot: payload.note,
     });
-
-    // Collect all text blocks (web search may produce multiple)
-    const VERIFY_PATTERN = /\[(?:VERIFY|CHECK|TODO|NOTE)[^\]]*\]/gi;
-    const content = response.content
-      .filter((b): b is Extract<typeof b, { type: "text" }> => b.type === "text")
-      .map((b) => b.text.replace(VERIFY_PATTERN, ""))
-      .join("\n\n")
-      .trim();
-
-    if (!content) {
-      return errorResponse("No text content in Claude response", 500);
-    }
-
-    let noteId: string | undefined;
-    let saveError: string | undefined;
-    let extraction: { ok: boolean; quotesCount: number; themesCount: number; error?: string };
-    let outlines: { ok: boolean; matched: number; generated: number; failed: number; note?: string };
-    let outlinesSave: { ok: boolean; inserted: number; error?: string } | undefined;
-
-    // Run extraction before save.
-    const extractionResult = await extractQuotesAndThemes(content);
-    const quotes = extractionResult.ok ? extractionResult.quotes : null;
-    const themes = extractionResult.ok ? extractionResult.themes : null;
-
-    if (!extractionResult.ok) {
-      console.error("[sync/generate] extraction failed:", extractionResult.error);
-    }
-
-    extraction = {
-      ok: extractionResult.ok,
-      quotesCount: quotes?.length ?? 0,
-      themesCount: themes?.length ?? 0,
-      ...(extractionResult.ok ? {} : { error: extractionResult.error }),
-    };
-
-    // Generate outlines for every matching past question.
-    let pendingOutlines: Array<{ questionId: string; outline: OutlineSuccess }> = [];
-    const subjectKey = context.poet ?? context.textTitle ?? context.comparativeMode ?? null;
-    const outlineLevel: "higher" | "ordinary" = context.level === "HL" ? "higher" : "ordinary";
-
-    if (subjectKey) {
-      const matches = await findMatchingQuestions({ subjectKey, level: outlineLevel });
-
-      if (matches.length === 0) {
-        outlines = { ok: true, matched: 0, generated: 0, failed: 0, note: "no_past_questions" };
-      } else {
-        const outlineQuotes = extractionResult.ok ? extractionResult.quotes : [];
-        const outlineThemes = extractionResult.ok ? extractionResult.themes : [];
-
-        const results = await runWithConcurrency(matches, 3, async (q) => {
-          const outline = await generateOutline({
-            questionId: q.id,
-            questionText: q.question_text,
-            questionYear: q.exam_year,
-            questionPaper: q.paper,
-            questionLevel: q.level,
-            questionSection: q.section,
-            poet: context.poet ?? subjectKey,
-            poem: context.poem ?? null,
-            noteBody: content,
-            noteQuotes: outlineQuotes,
-            noteThemes: outlineThemes,
-          });
-          return { questionId: q.id, outline };
-        });
-
-        pendingOutlines = results.filter(
-          (r): r is { questionId: string; outline: OutlineSuccess } => r.outline.ok
-        );
-
-        outlines = {
-          ok: true,
-          matched: matches.length,
-          generated: pendingOutlines.length,
-          failed: results.length - pendingOutlines.length,
-        };
-      }
-    } else {
-      outlines = { ok: true, matched: 0, generated: 0, failed: 0, note: "no_subject_key" };
-    }
-
-    try {
-      const bodyText = content;
-      const bodyHtml = marked.parse(bodyText) as string;
-      const noteInput = mapPromptContextToNoteInput(
-        context,
-        bodyHtml,
-        bodyText,
-        "claude-sonnet-4-20250514",
-        quotes,
-        themes
-      );
-      const saveResult = await saveNote(noteInput);
-      if (saveResult.ok) {
-        noteId = saveResult.noteId;
-
-        // Save outlines once we have a noteId.
-        if (pendingOutlines.length > 0) {
-          const outlinesResult = await saveOutlines({
-            noteId: saveResult.noteId,
-            outlines: pendingOutlines,
-          });
-          outlinesSave = outlinesResult;
-        }
-      } else {
-        saveError = saveResult.error;
-      }
-    } catch (saveErr) {
-      saveError = saveErr instanceof Error ? saveErr.message : "Save mapping failed";
-      console.error("[sync/generate] save error:", saveErr);
-    }
-
-    return new Response(
-      JSON.stringify({ content, contentType, noteId, saveError, extraction, outlines, outlinesSave }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
-  } catch (error) {
-    console.error("Sync generate error:", error);
-    const message = error instanceof Error ? error.message : "Failed to generate content";
-    return errorResponse(message, 500);
+  } catch (err) {
+    console.error('[audit-log-fail]', err);
   }
 }

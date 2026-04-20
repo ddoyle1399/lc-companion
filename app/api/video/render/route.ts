@@ -12,13 +12,16 @@ import { getCopyrightMode } from "@/src/data/poets.config";
 import { generateVideoScript } from "@/lib/video/script-formatter";
 import { generateVideoImages } from "@/lib/video/image-generator";
 import { getClient } from "@/lib/claude/client";
+import Anthropic from "@anthropic-ai/sdk";
 import {
   buildSystemPrompt,
   buildPoetryNotePrompt,
+  buildCriticInput,
   type PromptContext,
   type PoemMetadata,
   type PoemQuote,
 } from "@/lib/claude/prompts";
+import { runCriticPass, formatFlagsForRetry } from "@/lib/claude/critic";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { buildPoetExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
@@ -120,6 +123,8 @@ async function generatePoetryNote(
     }
   }
 
+  context.studentYear = String(year) as '2026' | '2027';
+
   try {
     const supabase = getServerSupabase();
     const { data: verifiedNote } = await supabase
@@ -141,6 +146,10 @@ async function generatePoetryNote(
         form: m.form as PoemMetadata["form"],
         structure_confidence: m.structure_confidence as PoemMetadata["structure_confidence"],
         quote_text_anchored: m.quote_text_anchored as PoemMetadata["quote_text_anchored"],
+        edition_source: m.edition_source as PoemMetadata["edition_source"],
+        historical_context: m.historical_context as PoemMetadata["historical_context"],
+        named_figures: m.named_figures as PoemMetadata["named_figures"],
+        textual_variants: m.textual_variants as PoemMetadata["textual_variants"],
       };
     }
 
@@ -150,54 +159,93 @@ async function generatePoetryNote(
 
     const { data: siblings } = await supabase
       .from("notes")
-      .select("sub_key, metadata, themes")
+      .select("sub_key, metadata")
       .eq("content_type", "poem_notes")
       .eq("subject_key", poet)
       .eq("status", "verified")
       .neq("sub_key", poem);
 
-    context.availablePairings = (siblings ?? []).map(s => ({
-      sub_key: s.sub_key as string,
-      form: (s.metadata as Record<string, unknown>)?.form as string ?? "unknown",
-      total_lines: (s.metadata as Record<string, unknown>)?.total_lines as number ?? null,
-      themes: Array.isArray(s.themes) ? (s.themes as string[]).slice(0, 3) : [],
-    }));
+    const studentYearStr = String(year);
+    context.availablePairings = (siblings ?? [])
+      .filter((s) => {
+        const years = (s.metadata as Record<string, unknown>)?.selection_years as string[] ?? [];
+        return years.length === 0 || years.includes(studentYearStr);
+      })
+      .map((s) => ({
+        subject_key: poet,
+        sub_key: s.sub_key as string,
+        one_line_summary: (s.metadata as Record<string, unknown>)?.one_line_summary as string | undefined,
+      }));
   } catch (err) {
     console.warn("[video-render] poem metadata lookup failed, continuing without it", err);
   }
 
   const useWebSearch = !context.poemText;
-  const systemPrompt = buildSystemPrompt(context);
-  const userPrompt = buildPoetryNotePrompt(context);
+  const { system: poetrySystem, user: poetryUser } = buildPoetryNotePrompt(context);
+  const systemPrompt = poetrySystem || buildSystemPrompt(context);
   const client = getClient();
 
-  const response = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 16000,
-    system: systemPrompt,
-    messages: [{ role: "user", content: userPrompt }],
-    ...(useWebSearch
-      ? {
-          tools: [
-            {
-              type: "web_search_20250305" as const,
-              name: "web_search" as const,
-              max_uses: 3,
-            },
-          ],
-        }
-      : {}),
-  });
+  const callGenerator = async (userMsg: string): Promise<string> => {
+    const resp = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 16000,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userMsg }],
+      ...(useWebSearch
+        ? {
+            tools: [
+              {
+                type: "web_search_20250305" as const,
+                name: "web_search" as const,
+                max_uses: 3,
+              },
+            ],
+          }
+        : {}),
+    });
+    return resp.content
+      .filter((b): b is Extract<typeof b, { type: "text" }> => b.type === "text")
+      .map((b) => b.text)
+      .join("\n\n");
+  };
 
-  const textBlocks = response.content
-    .filter((b): b is Extract<typeof b, { type: "text" }> => b.type === "text")
-    .map((b) => b.text);
+  let noteText = await callGenerator(poetryUser);
 
-  if (textBlocks.length === 0) {
+  if (!noteText) {
     throw new Error("No text content in poetry note response");
   }
 
-  return textBlocks.join("\n\n");
+  // Critic pass + retry (strict-mode rows only)
+  if (poetrySystem) {
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
+    const criticInput = buildCriticInput(noteText, context);
+    let criticResult = await runCriticPass(anthropic, criticInput);
+
+    if (criticResult.blockFlags.length > 0) {
+      console.log('[video-critic-block-round1]', { poem, blockCount: criticResult.blockFlags.length });
+      const retryUser = [
+        poetryUser,
+        '',
+        'Your previous attempt had the following issues. Rewrite the note to resolve every block flag:',
+        formatFlagsForRetry(criticResult.blockFlags),
+      ].join('\n');
+
+      noteText = await callGenerator(retryUser);
+      const retryCriticInput = buildCriticInput(noteText, context);
+      criticResult = await runCriticPass(anthropic, retryCriticInput);
+
+      if (criticResult.blockFlags.length > 0) {
+        console.log('[video-critic-block-final]', { poem, blockCount: criticResult.blockFlags.length });
+        throw new Error(`Poetry note for "${poem}" failed critic validation after retry. Check critic logs.`);
+      }
+    }
+
+    if (criticResult.warnFlags.length > 0) {
+      console.log('[video-critic-warn]', { poem, warnCount: criticResult.warnFlags.length });
+    }
+  }
+
+  return noteText;
 }
 
 interface RenderRequestBody {
