@@ -137,6 +137,91 @@ export interface PromptContext {
 }
 
 // -----------------------------------------------------------------------------
+// Metadata validation
+// -----------------------------------------------------------------------------
+
+export class MetadataIncompleteError extends Error {
+  readonly kind = 'metadata_incomplete' as const;
+  readonly missing: string[];
+  readonly subject: string;
+  readonly subKey: string;
+
+  constructor(subject: string, subKey: string, missing: string[]) {
+    super(
+      `Poetry metadata incomplete for "${subject}" / "${subKey}". ` +
+        `Missing or invalid fields: ${missing.join(', ')}. ` +
+        `Row is not eligible for generation until metadata is populated.`
+    );
+    this.name = 'MetadataIncompleteError';
+    this.subject = subject;
+    this.subKey = subKey;
+    this.missing = missing;
+  }
+}
+
+export interface MetadataValidationResult {
+  ok: boolean;
+  missing: string[];
+}
+
+/**
+ * Validates that a PromptContext has the metadata blocks the hardened
+ * poetry prompt depends on. Structural check only — not a content check.
+ *
+ * A field is "missing" if:
+ *   - required object is undefined, null, or not an object
+ *   - required non-empty array is undefined, null, or []
+ *   - required non-empty string is undefined, null, or ''
+ *
+ * Empty arrays ARE allowed for named_figures, textual_variants, and
+ * available_pairings (some poems genuinely have none), but the key must
+ * exist with an array value, not be absent.
+ */
+export function validatePoetryMetadata(ctx: PromptContext): MetadataValidationResult {
+  const missing: string[] = [];
+  const md = ctx.metadata as any;
+
+  if (!md || typeof md !== 'object') {
+    return { ok: false, missing: ['metadata (entire block)'] };
+  }
+
+  if (md.quote_schema_version !== 2) missing.push('metadata.quote_schema_version (must be 2)');
+  if (md.structure_confidence !== 'high') missing.push('metadata.structure_confidence (must be "high")');
+
+  if (!Array.isArray(md.stanza_breaks) || md.stanza_breaks.length === 0) {
+    missing.push('metadata.stanza_breaks (non-empty array required)');
+  }
+  if (!Array.isArray(md.section_breaks)) {
+    missing.push('metadata.section_breaks (array required, use [] if no sections)');
+  }
+  if (typeof md.total_lines !== 'number' || md.total_lines <= 0) {
+    missing.push('metadata.total_lines (positive integer required)');
+  }
+
+  if (!md.historical_context || typeof md.historical_context !== 'object') {
+    missing.push('metadata.historical_context');
+  }
+  if (!Array.isArray(md.named_figures)) {
+    missing.push('metadata.named_figures (array required, use [] if none)');
+  }
+  if (!Array.isArray(md.textual_variants)) {
+    missing.push('metadata.textual_variants (array required, use [] if none)');
+  }
+  if (typeof md.technique_glossary !== 'string' || md.technique_glossary.trim().length === 0) {
+    missing.push('metadata.technique_glossary (non-empty string required)');
+  }
+
+  if (!Array.isArray(ctx.availablePairings)) {
+    missing.push('availablePairings (array required, use [] if none)');
+  }
+  if (!Array.isArray(ctx.quotes) || ctx.quotes.length === 0) {
+    missing.push('quotes (non-empty array required)');
+  }
+
+  return { ok: missing.length === 0, missing };
+}
+
+// -----------------------------------------------------------------------------
 // Controlled technique glossary (spec section 4)
 // -----------------------------------------------------------------------------
 
@@ -422,6 +507,10 @@ export function buildPoetryNotePrompt(ctx: PromptContext): {
   system: string;
   user: string;
 } {
+  const validation = validatePoetryMetadata(ctx);
+  if (!validation.ok) {
+    throw new MetadataIncompleteError(ctx.subject ?? '', ctx.subKey ?? '', validation.missing);
+  }
   const system = buildPoetrySystemPrompt(ctx);
   const user = `Write the full study note for "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''} per the contract above.`;
   return { system, user };

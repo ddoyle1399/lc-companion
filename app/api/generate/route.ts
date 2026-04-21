@@ -18,6 +18,7 @@ import {
   buildComprehensionPrompt,
   buildCompositionPrompt,
   PromptContext,
+  MetadataIncompleteError,
 } from "@/lib/claude/prompts";
 import { runCriticPass, formatFlagsForRetry } from "@/lib/claude/critic";
 import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
@@ -114,6 +115,24 @@ function errorResponse(message: string, status = 400) {
     JSON.stringify({ error: message }),
     { status, headers: { "Content-Type": "application/json" } }
   );
+}
+
+function streamFallback(message: string, meta: Record<string, unknown> = {}): Response {
+  const encoder = new TextEncoder();
+  const body = new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ fallback: message, ...meta })}\n\n`));
+      controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+      controller.close();
+    },
+  });
+  return new Response(body, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
+  });
 }
 
 const FALLBACK_MESSAGE = `This note is being reviewed for accuracy and is temporarily unavailable. Please try another poem from your selection, or check back shortly.`;
@@ -262,9 +281,37 @@ export async function POST(request: NextRequest) {
             metadata: context.poemMetadata,
             quotes: context.structuredQuotes?.filter((q): q is PoemQuote => typeof q !== 'string'),
           };
-          const { system: pSystem, user: pUser } = buildPoetryNotePrompt(poetryPromptCtx);
-          poetrySystemOverride = pSystem;
-          userPrompt = pUser;
+          try {
+            const { system: pSystem, user: pUser } = buildPoetryNotePrompt(poetryPromptCtx);
+            poetrySystemOverride = pSystem;
+            userPrompt = pUser;
+          } catch (err) {
+            if (err instanceof MetadataIncompleteError) {
+              try {
+                const supabase = getServerSupabase();
+                await supabase.from('generation_audit' as any).insert({
+                  subject_key: poetryPromptCtx.subject,
+                  sub_key: poetryPromptCtx.subKey,
+                  content_type: 'poem_notes',
+                  status: 'metadata_incomplete',
+                  error_message: err.message,
+                  missing_fields: err.missing,
+                  student_year: poetryPromptCtx.studentYear,
+                } as any);
+              } catch (auditErr) {
+                console.error('[generate] metadata_incomplete audit insert failed:', auditErr);
+              }
+              const fallbackMessage =
+                `# ${poetryPromptCtx.subject} — ${poetryPromptCtx.subKey}\n\n` +
+                `This note is not yet available. The source metadata for this poem is incomplete ` +
+                `and has been flagged for review. Missing: ${err.missing.join(', ')}.\n`;
+              return streamFallback(fallbackMessage, {
+                reason: 'metadata_incomplete',
+                missing: err.missing,
+              });
+            }
+            throw err;
+          }
         }
         break;
       }

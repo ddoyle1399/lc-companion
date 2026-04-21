@@ -15,6 +15,7 @@ import {
   buildPoetryNotePrompt,
   buildCriticInput,
   buildStanzaPlan,
+  MetadataIncompleteError,
 } from '@/lib/claude/prompts';
 import { runCriticPass, formatFlagsForRetry, CriticFlag } from '@/lib/claude/critic';
 
@@ -89,7 +90,36 @@ export async function POST(req: NextRequest) {
     studentYear,
   };
 
-  const { system, user } = buildPoetryNotePrompt(ctx);
+  let system: string;
+  let user: string;
+  try {
+    ({ system, user } = buildPoetryNotePrompt(ctx));
+  } catch (err) {
+    if (err instanceof MetadataIncompleteError) {
+      try {
+        await (supabase as any).from('generation_audit').insert({
+          subject_key: ctx.subject,
+          sub_key: ctx.subKey,
+          content_type: 'poem_notes',
+          status: 'metadata_incomplete',
+          error_message: err.message,
+          missing_fields: err.missing,
+          student_year: ctx.studentYear,
+        });
+      } catch (auditErr) {
+        console.error('[sync] metadata_incomplete audit insert failed:', auditErr);
+      }
+      const fallbackMessage =
+        `# ${ctx.subject} — ${ctx.subKey}\n\n` +
+        `This note is not yet available. The source metadata for this poem is incomplete ` +
+        `and has been flagged for review. Missing: ${err.missing.join(', ')}.\n`;
+      return NextResponse.json(
+        { error: 'metadata_incomplete', message: fallbackMessage, missing: err.missing },
+        { status: 422 }
+      );
+    }
+    throw err;
+  }
   let generated = await callGenerator(anthropic, system, user);
 
   console.log('[poetry-debug]', {
