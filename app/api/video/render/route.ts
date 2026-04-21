@@ -20,7 +20,6 @@ import {
   type PromptContext,
   type PoemMetadata,
   type PoemQuote,
-  MetadataIncompleteError,
 } from "@/lib/claude/prompts";
 import { runCriticPass, formatFlagsForRetry } from "@/lib/claude/critic";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -182,32 +181,7 @@ async function generatePoetryNote(
   }
 
   const useWebSearch = !context.poemText;
-  let poetrySystem: string;
-  let poetryUser: string;
-  try {
-    ({ system: poetrySystem, user: poetryUser } = buildPoetryNotePrompt(context));
-  } catch (err) {
-    if (err instanceof MetadataIncompleteError) {
-      try {
-        const supabase = getServerSupabase();
-        await supabase.from('generation_audit' as any).insert({
-          subject_key: poet,
-          sub_key: poem,
-          content_type: 'poem_notes',
-          status: 'metadata_incomplete',
-          error_message: err.message,
-          missing_fields: err.missing,
-        } as any);
-      } catch (auditErr) {
-        console.error('[video-render] metadata_incomplete audit insert failed:', auditErr);
-      }
-      throw new Error(
-        `Poetry note for "${poem}" cannot be generated: metadata incomplete. ` +
-        `Missing: ${err.missing.join(', ')}.`
-      );
-    }
-    throw err;
-  }
+  const { system: poetrySystem, user: poetryUser } = buildPoetryNotePrompt(context);
   const systemPrompt = poetrySystem || buildSystemPrompt(context);
   const client = getClient();
 
