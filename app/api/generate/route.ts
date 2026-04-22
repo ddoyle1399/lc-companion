@@ -141,8 +141,12 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
   });
 }
 
-const CRITIC_TIMEOUT_MS = 60_000;
-const RETRY_GEN_TIMEOUT_MS = 90_000;
+// Critic + retry are slow on long Heaney notes (full anchored quote bank,
+// historical context, technique glossary). Audit data shows round-1 critic
+// alone routinely runs 40-90s, occasionally pushing past 100s. 150s gives
+// headroom without letting a truly hung socket wedge the stream forever.
+const CRITIC_TIMEOUT_MS = 150_000;
+const RETRY_GEN_TIMEOUT_MS = 150_000;
 
 export async function POST(request: NextRequest) {
   try {
@@ -587,11 +591,23 @@ export async function POST(request: NextRequest) {
                       ].join('\n')
                     : '';
 
+                // Pass warn flags to retry too. We are already paying the cost of
+                // regenerating; might as well clean surface issues (figurative "landscape",
+                // cautioned devices, textual variants not flagged) at the same time.
+                const warnForRetry = criticResult.warnFlags.length > 0
+                  ? [
+                      ``,
+                      `The previous attempt also had the following warn-level issues. Fix these too while you are rewriting:`,
+                      formatFlagsForRetry(criticResult.warnFlags),
+                    ].join('\n')
+                  : '';
+
                 const retryUser = [
                   userPrompt,
                   ``,
                   `Your previous attempt had the following issues. Rewrite the note to resolve every block flag:`,
                   formatFlagsForRetry(criticResult.blockFlags),
+                  warnForRetry,
                   quoteCorrection,
                   structuralEmphasis,
                 ]

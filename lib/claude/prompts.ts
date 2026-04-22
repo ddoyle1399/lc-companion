@@ -173,14 +173,23 @@ Imagery: visual (or "visual imagery"), auditory, tactile, olfactory, gustatory, 
   synaesthesia, religious imagery (when sacred or spiritual images are used), death imagery.
 
 Register / mode:
-- syncretism: blending two religious or cultural frameworks (e.g. Christian register applied to pagan sacrifice).
+- Christian register: using biblical or liturgical diction and imagery in a secular or pagan context.
 - dramatic monologue: single speaker addresses an implied listener.
 
-BANNED labels (do not use):
-- "biblical echoes", too vague. Use "allusion to [specific source]" or "Christian register" or "syncretism".
+BANNED labels (do not use, zero exceptions):
+- "biblical echoes", too vague. Use "allusion to [specific source]" or "Christian register".
+- "syncretism", grad-school vocabulary. Describe the effect in plain language: "Heaney places pagan sacrifice and Christian relic-keeping in the same frame."
 - "powerful", "evocative", "striking", "beautiful", not techniques.
 - "captures", "underscores", "highlights", "evokes" without specifying what, filler verbs.
 - "the poet masterfully" or any sentence starting with this, AI filler.
+- "cataloguing", "cataloguing lines", "listing technique" as named devices. Use the glossary term
+  "asyndeton" (list without conjunctions) only if that is literally what the line does. Otherwise
+  describe the effect in plain language ("the short lines list three items in succession") without
+  labelling it as a named device.
+- Any other descriptive word used as if it were a named technique (for example "signposting",
+  "mirroring", "echoing", "cataloguing"). If the word is not on the glossary above, do not bold
+  it as a Technique and do not frame it as "uses X" or "employs X". Only glossary terms may be
+  used as named devices. Plain description is always acceptable.
 `.trim();
 
 // -----------------------------------------------------------------------------
@@ -333,6 +342,34 @@ CONSISTENCY RULE:
   student's selection year. Never recommend a poem not on that list.
 - Any quote you use must appear verbatim in the anchored_quotes array.
   If a stanza has no anchored quote coverage, describe its function without quoting.
+
+STANZA ANCHORING RULE (CRITICAL, zero tolerance):
+Every anchored_quotes entry has a "stanza_index" field. That field is authoritative.
+A quote with stanza_index=K belongs in the "Stanza K" block of Section 3, and ONLY
+in that block. You may not move a quote into an adjacent stanza even if the
+analysis flows better that way. If stanza_index=1 for "The mild pods of his eye-lids",
+that line is analysed inside Stanza 1, not Stanza 2. If two anchored quotes share the
+same stanza_index, both belong in that one Stanza block. Stanza blocks whose
+stanza_index has no anchored quote coverage use the "Function in the poem" shape.
+
+Before you write each Stanza block, look at the anchored_quotes array and list,
+in your head, which quotes have that stanza_index. Those are the only quotes that
+may appear in that block. If you realise mid-draft that you have placed a quote
+in the wrong stanza, stop and rewrite both stanza blocks before moving on.
+
+DISPUTED READINGS RULE (applies universally):
+If historical_context.disputed_readings contains guidance, that guidance applies
+to every section of the note: Overview, Form and Structure, Stanza-by-Stanza,
+Themes, Tone, Exam Use, and Pairings. Not just the stanza where the quote appears.
+If the Themes section references a stanza covered by disputed_readings guidance,
+the Themes section must follow that guidance too. Never carve out a re-reading
+of a quote in Themes that contradicts the guidance you followed in Stanza analysis.
+
+TEXTUAL VARIANTS RULE:
+If textual_variants contains a line you quote in the note, the Exam Use section
+must include a one-sentence note flagging the variant and stating that either
+form is acceptable. Example: "Some editions read 'Out here in Jutland'; either
+form is acceptable if a student quotes from a different edition."
 `.trim();
 
 const OUTPUT_TEMPLATE = `
