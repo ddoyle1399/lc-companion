@@ -118,6 +118,32 @@ function errorResponse(message: string, status = 400) {
 
 const FALLBACK_MESSAGE = `This note is being reviewed for accuracy and is temporarily unavailable. Please try another poem from your selection, or check back shortly.`;
 
+// Race a promise against a timeout. Returns null on timeout so the caller can
+// decide whether to fall through or escalate. This prevents a hung Anthropic
+// socket from holding the SSE stream open indefinitely.
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T | null> {
+  return new Promise<T | null>((resolve) => {
+    const t = setTimeout(() => {
+      console.error(`[generate] ${label} timed out after ${ms}ms`);
+      resolve(null);
+    }, ms);
+    promise.then(
+      (v) => {
+        clearTimeout(t);
+        resolve(v);
+      },
+      (err) => {
+        clearTimeout(t);
+        console.error(`[generate] ${label} threw:`, err);
+        resolve(null);
+      }
+    );
+  });
+}
+
+const CRITIC_TIMEOUT_MS = 60_000;
+const RETRY_GEN_TIMEOUT_MS = 90_000;
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -242,6 +268,37 @@ export async function POST(request: NextRequest) {
             }));
         } catch (err) {
           console.warn("[poetry-debug] metadata lookup failed, continuing without it", err);
+        }
+
+        // PERMANENT GUARD — refuse to generate unless strict-mode prerequisites are met.
+        // The legacy fallback in buildPoetrySystemPrompt produces unreliable output
+        // (cross-poet pairings, thin stanzas, fabricated historical claims). Never
+        // let it run. If this fires, the fix is upstream: add a verified poem_notes
+        // row with a full anchored quote bank and structural metadata.
+        {
+          const _meta = context.poemMetadata;
+          const _quotes = context.structuredQuotes ?? [];
+          const _reasons: string[] = [];
+          if (!_meta) {
+            _reasons.push('no verified poem_notes row found for this poet/poem');
+          } else {
+            if (_meta.structure_confidence !== 'high') {
+              _reasons.push(`structure_confidence=${String(_meta.structure_confidence ?? 'missing')} (need "high")`);
+            }
+            if (_meta.quote_text_anchored !== true) {
+              _reasons.push(`quote_text_anchored=${String(_meta.quote_text_anchored ?? 'missing')} (need true)`);
+            }
+          }
+          if (_quotes.length === 0) {
+            _reasons.push('no anchored quotes');
+          }
+          if (_reasons.length > 0) {
+            console.error('[poetry-strict-guard] blocked generation', { poet, poem, reasons: _reasons });
+            return errorResponse(
+              `Cannot generate "${poem}" by ${poet}: strict-mode prerequisites missing (${_reasons.join('; ')}). Add a verified poem_notes row with structure_confidence="high", quote_text_anchored=true, and an anchored quote bank before generating.`,
+              422
+            );
+          }
         }
 
         context.studentYear = String(year) as '2026' | '2027';
@@ -438,9 +495,18 @@ export async function POST(request: NextRequest) {
             let criticResult: import('@/lib/claude/critic').CriticResult | null = null;
 
             try {
-              // Round 1 critic — fresh client
+              // Round 1 critic — fresh client, 60s timeout.
               const criticClient1 = makeFreshAnthropicClient();
-              criticResult = await runCriticPass(criticClient1, buildCriticInput(accumulatedText, poetCtx));
+              criticResult = await withTimeout(
+                runCriticPass(criticClient1, buildCriticInput(accumulatedText, poetCtx)),
+                CRITIC_TIMEOUT_MS,
+                'round-1 critic'
+              );
+              if (!criticResult) {
+                // Critic hung. Ship the streamed text unaudited.
+                auditStatus = 'critic_error';
+                throw new Error('critic timed out');
+              }
               initialBlockCount = criticResult.blockFlags.length;
               finalBlockCount = criticResult.blockFlags.length;
               finalWarnCount = criticResult.warnFlags.length;
@@ -534,6 +600,7 @@ export async function POST(request: NextRequest) {
 
                 // Retry generation — streaming keeps TCP active during long generations.
                 // SSE tokens flow continuously so no intermediary can close the idle connection.
+                // 90s timeout prevents a hung socket from blocking the stream close.
                 let retryText = '';
                 try {
                   // 300ms delay: lets the undici connection pool discard any stale keep-alive socket
@@ -545,32 +612,49 @@ export async function POST(request: NextRequest) {
                     system: poetrySystemOverride,
                     messages: [{ role: 'user', content: retryUser }],
                   });
-                  const retryMsg = await retryStream.finalMessage();
-                  const retryBlock = retryMsg.content.find((b: any) => b.type === 'text') as
-                    | { type: 'text'; text: string }
-                    | undefined;
-                  retryText = retryBlock?.text ?? '';
+                  const retryMsg = await withTimeout(
+                    retryStream.finalMessage(),
+                    RETRY_GEN_TIMEOUT_MS,
+                    'retry generation'
+                  );
+                  if (retryMsg) {
+                    const retryBlock = retryMsg.content.find((b: any) => b.type === 'text') as
+                      | { type: 'text'; text: string }
+                      | undefined;
+                    retryText = retryBlock?.text ?? '';
+                  }
                 } catch (retryConnErr) {
                   console.error('[generate] retry generation failed:', retryConnErr);
                 }
 
                 if (retryText) {
-                  // Round 2 critic — fresh client
+                  // Round 2 critic — fresh client, 60s timeout.
                   try {
                     const criticClient2 = makeFreshAnthropicClient();
-                    const retryCriticResult = await runCriticPass(criticClient2, buildCriticInput(retryText, poetCtx));
-                    finalBlockFlags = retryCriticResult.blockFlags;
-                    finalWarnFlags = retryCriticResult.warnFlags;
-                    finalBlockCount = retryCriticResult.blockFlags.length;
-                    finalWarnCount = retryCriticResult.warnFlags.length;
-                    // Sentinel flag means the critic itself failed structurally (tool not invoked),
-                    // not a real content finding. Ship the retry but mark as audit_failed.
-                    const isSentinelFailure = retryCriticResult.blockFlags.some(
-                      (f) => f.issue === 'Critic did not invoke the tool.'
+                    const retryCriticResult = await withTimeout(
+                      runCriticPass(criticClient2, buildCriticInput(retryText, poetCtx)),
+                      CRITIC_TIMEOUT_MS,
+                      'round-2 critic'
                     );
-                    finalText = retryText;
-                    auditStatus = isSentinelFailure ? 'audit_failed' : 'retry_success';
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({ replace: retryText })}\n\n`));
+                    if (!retryCriticResult) {
+                      // Round-2 critic timed out — ship the retry draft but flag the audit failure.
+                      finalText = retryText;
+                      auditStatus = 'audit_failed';
+                      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ replace: retryText })}\n\n`));
+                    } else {
+                      finalBlockFlags = retryCriticResult.blockFlags;
+                      finalWarnFlags = retryCriticResult.warnFlags;
+                      finalBlockCount = retryCriticResult.blockFlags.length;
+                      finalWarnCount = retryCriticResult.warnFlags.length;
+                      // Sentinel flag means the critic itself failed structurally (tool not invoked),
+                      // not a real content finding. Ship the retry but mark as audit_failed.
+                      const isSentinelFailure = retryCriticResult.blockFlags.some(
+                        (f) => f.issue === 'Critic did not invoke the tool.'
+                      );
+                      finalText = retryText;
+                      auditStatus = isSentinelFailure ? 'audit_failed' : 'retry_success';
+                      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ replace: retryText })}\n\n`));
+                    }
                   } catch (critic2Err) {
                     console.error('[generate] round-2 critic failed:', critic2Err);
                     // Round-2 critic threw — ship the retry draft but flag the audit failure.

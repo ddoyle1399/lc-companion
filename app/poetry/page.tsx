@@ -64,8 +64,9 @@ export default function PoetryPage() {
   const {
     output,
     generating,
+    textStreamComplete,
+    stageLabel,
     error,
-    searchStatus,
     generate,
     stop,
     noteId,
@@ -290,13 +291,11 @@ export default function PoetryPage() {
                 <h2 className="font-medium text-navy text-sm">
                   {poet} &ndash; {poem}
                 </h2>
-                {generating && (
-                  <p className="text-xs text-teal mt-0.5">
-                    {searchStatus || "Generating..."}
-                  </p>
+                {generating && stageLabel && (
+                  <p className="text-xs text-teal mt-0.5">{stageLabel}</p>
                 )}
               </div>
-              {output && !generating && (
+              {output && textStreamComplete && (
                 <div className="flex gap-2">
                   <button
                     onClick={handleCopy}
@@ -324,7 +323,8 @@ export default function PoetryPage() {
                   </button>
                   <button
                     onClick={handleGenerateVideo}
-                    className="text-sm px-3 py-1.5 border border-teal text-teal rounded-md hover:bg-teal/5 transition-colors"
+                    disabled={generating}
+                    className="text-sm px-3 py-1.5 border border-teal text-teal rounded-md hover:bg-teal/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Generate Video
                   </button>

@@ -14,8 +14,9 @@
  *  - Textual variants flagged with guidance.
  *
  * Any row missing `metadata.structure_confidence='high'` or
- * `metadata.quote_text_anchored=true` falls back to the legacy prompt path
- * (kept at end of file) and logs a warning.
+ * `metadata.quote_text_anchored=true` is rejected by the strict guard in
+ * app/api/generate/route.ts (422). There is no longer a legacy fallback
+ * prompt. buildPoetrySystemPrompt throws if called without strict metadata.
  */
 
 // -----------------------------------------------------------------------------
@@ -292,6 +293,36 @@ Known patterns to avoid:
 - treating literal description as symbolic without textual warrant
 `.trim();
 
+const STYLE_GUARDRAILS = `
+STYLE GUARDRAILS. These are enforced by a deterministic post-generation check.
+Every violation blocks publication and triggers a retry. Read them carefully.
+
+1. NO EM DASHES OR EN DASHES. Not the character —, not the character –, not ever.
+2. NO SPACED HYPHENS AS EM-DASH SUBSTITUTES. Never write " - " (space, hyphen,
+   space) between phrases as a parenthetical break. If you feel the urge to
+   write "understanding violence as ritual - rather than meaningless brutality -
+   provides", rewrite as "understanding violence as ritual, rather than as
+   meaningless brutality, provides" or as two sentences. Compound words like
+   "peat-brown" are fine (no spaces around the hyphen).
+3. BANNED WORDS (never use): delve, delves, delved, delving, multifaceted,
+   tapestry, tapestries. Replace with specific, concrete language that says
+   what actually happens.
+4. CAUTIONED WORDS (never use figuratively): landscape, nuanced. "Landscape"
+   is fine if the poem is literally about a landscape. It is banned when used
+   as a metaphor ("the landscape of memory", "mythologises the landscape").
+5. DEVICE LABELS MUST COME FROM THE APPROVED GLOSSARY (see TECHNIQUE GLOSSARY
+   section). Banned device labels include syncretism, metonymy, litotes,
+   anaphora, chiasmus, zeugma, synesthesia, epistrophe. Use "repetition"
+   instead of "anaphora". Prefer plain description to a fancy label.
+6. "synecdoche" is cautioned. Only use it if a student would be expected to
+   identify it. Prefer describing the effect (e.g. "the reduction of victims
+   to body parts") over labelling it.
+7. The Pairings section must list ONLY poems from AVAILABLE PAIRINGS above.
+   Never reference poems by other poets. Never reference poems not on the
+   available list. If the list is empty, say "No available pairings for this
+   selection year" and move on.
+`.trim();
+
 const CONSISTENCY_RULE = `
 CONSISTENCY RULE:
 - Any word you quote must be spelled the same way in your commentary. If the poem
@@ -361,7 +392,15 @@ export function buildPoetrySystemPrompt(ctx: PromptContext): string {
   const isStrict = meta?.structure_confidence === 'high' && meta?.quote_text_anchored === true;
 
   if (!isStrict) {
-    return buildLegacyPoetrySystemPrompt(ctx);
+    // Defence in depth. The route-level strict guard should have blocked this
+    // already; if we get here it means the guard was bypassed or a new caller
+    // was added. Fail loud rather than silently producing degraded output.
+    throw new Error(
+      `buildPoetrySystemPrompt called without strict-mode metadata for "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}. ` +
+        `structure_confidence=${String(meta?.structure_confidence ?? 'missing')}, ` +
+        `quote_text_anchored=${String(meta?.quote_text_anchored ?? 'missing')}. ` +
+        `Add a verified poem_notes row with complete metadata before generating.`
+    );
   }
 
   const anchoredQuotesBlock = JSON.stringify(ctx.quotes ?? [], null, 2);
@@ -406,6 +445,8 @@ export function buildPoetrySystemPrompt(ctx: PromptContext): string {
     ``,
     TECHNIQUE_GLOSSARY,
     ``,
+    STYLE_GUARDRAILS,
+    ``,
     OVERREACH_RULE,
     ``,
     CONSISTENCY_RULE,
@@ -428,18 +469,11 @@ export function buildPoetryNotePrompt(ctx: PromptContext): {
 }
 
 // -----------------------------------------------------------------------------
-// Legacy fallback (only used when strict-mode row flags missing)
+// Legacy fallback removed (22 April 2026). The route-level strict guard in
+// app/api/generate/route.ts now rejects requests that lack strict-mode
+// metadata, and buildPoetrySystemPrompt above throws if it is ever called
+// without the required flags. Do not reintroduce a legacy path.
 // -----------------------------------------------------------------------------
-
-function buildLegacyPoetrySystemPrompt(ctx: PromptContext): string {
-  return [
-    `You are an experienced LC English teacher. Write a study note on "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}.`,
-    `WARNING: this poem row is NOT in strict mode. Historical claims and pairings may be unreliable.`,
-    `Use only quotes that look canonical. Do not fabricate stanzas. Six-section template (Overview, Form, Stanza-by-Stanza, Themes, Tone, Exam Use, Pairings).`,
-    ``,
-    `Available quote seeds (may be incomplete): ${JSON.stringify(ctx.quotes ?? [])}`,
-  ].join('\n');
-}
 
 // -----------------------------------------------------------------------------
 // Utility: build the critic-pass input from a generated note + row

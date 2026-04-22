@@ -7,10 +7,24 @@ interface UseStreamGenerateOptions {
   stripPreamble?: boolean;
 }
 
+export type GenerationStage =
+  | "idle"
+  | "streaming"
+  | "auditing"
+  | "rewriting"
+  | "extracting"
+  | "matching"
+  | "saving"
+  | "complete"
+  | "error";
+
 interface UseStreamGenerateReturn {
   output: string;
   rawOutput: string;
   generating: boolean;
+  textStreamComplete: boolean;
+  stage: GenerationStage;
+  stageLabel: string;
   error: string;
   searchStatus: string;
   noteId: string | null;
@@ -39,6 +53,8 @@ export function useStreamGenerate(
 
   const [output, setOutput] = useState("");
   const [generating, setGenerating] = useState(false);
+  const [textStreamComplete, setTextStreamComplete] = useState(false);
+  const [stage, setStage] = useState<GenerationStage>("idle");
   const [error, setError] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
   const [noteId, setNoteId] = useState<string | null>(null);
@@ -60,9 +76,35 @@ export function useStreamGenerate(
   const foundHeadingRef = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
 
+  // Given the current stage, produce a human label for the status line.
+  const stageLabel = (() => {
+    switch (stage) {
+      case "streaming":
+        return searchStatus || "Generating...";
+      case "auditing":
+        return "Auditing quality...";
+      case "rewriting":
+        return "Rewriting to fix flagged issues...";
+      case "extracting":
+        return "Extracting quotes and themes...";
+      case "matching":
+        return "Matching past exam questions...";
+      case "saving":
+        return "Saving...";
+      case "complete":
+        return "";
+      case "error":
+        return error || "Error";
+      default:
+        return "";
+    }
+  })();
+
   const generate = useCallback(
     async (body: Record<string, unknown>) => {
       setGenerating(true);
+      setTextStreamComplete(false);
+      setStage("streaming");
       setOutput("");
       setError("");
       setSearchStatus("");
@@ -111,9 +153,39 @@ export function useStreamGenerate(
                 const parsed = JSON.parse(data);
                 if (parsed.error) {
                   setError(parsed.error);
+                  setStage("error");
                 } else if (parsed.status === "searching") {
                   setSearchStatus("Searching for text...");
+                } else if (parsed.critic) {
+                  // Text stream finished; critic pass produced a verdict.
+                  setTextStreamComplete(true);
+                  if (parsed.critic.status === "block") {
+                    setStage("rewriting");
+                  } else {
+                    setStage("extracting");
+                  }
+                } else if (parsed.audit) {
+                  // Audit event — mostly informational, but confirms post-stream work underway.
+                  setTextStreamComplete(true);
+                } else if (parsed.replace) {
+                  // Retry produced new text. Swap it in.
+                  rawOutputRef.current = parsed.replace;
+                  setOutput(parsed.replace);
+                  setTextStreamComplete(true);
+                  setStage("extracting");
+                } else if (parsed.fallback) {
+                  // Retry failed and content could not be recovered.
+                  rawOutputRef.current = parsed.fallback;
+                  setOutput(parsed.fallback);
+                  setTextStreamComplete(true);
+                  setStage("error");
+                  setError(parsed.fallback);
+                } else if (parsed.extraction) {
+                  setTextStreamComplete(true);
+                  setStage("matching");
                 } else if (parsed.save) {
+                  setTextStreamComplete(true);
+                  setStage("saving");
                   if (parsed.save.ok) {
                     setNoteId(parsed.save.noteId);
                   } else {
@@ -121,6 +193,8 @@ export function useStreamGenerate(
                   }
                 } else if (parsed.outlines) {
                   setOutlinesStatus(parsed.outlines);
+                  setTextStreamComplete(true);
+                  setStage("saving");
                 } else if (parsed.outlinesSave) {
                   setOutlinesSaveStatus(parsed.outlinesSave);
                 } else if (parsed.text) {
@@ -163,6 +237,7 @@ export function useStreamGenerate(
           setOutput(rawOutputRef.current);
         }
         setGenerating(false);
+        setStage((prev) => (prev === "error" ? "error" : "complete"));
         abortRef.current = null;
       }
     },
@@ -181,6 +256,8 @@ export function useStreamGenerate(
     setSaveError(null);
     setOutlinesStatus(null);
     setOutlinesSaveStatus(null);
+    setTextStreamComplete(false);
+    setStage("idle");
     rawOutputRef.current = "";
     foundHeadingRef.current = false;
   }, []);
@@ -189,6 +266,9 @@ export function useStreamGenerate(
     output,
     rawOutput: rawOutputRef.current,
     generating,
+    textStreamComplete,
+    stage,
+    stageLabel,
     error,
     searchStatus,
     noteId,

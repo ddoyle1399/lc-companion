@@ -22,6 +22,200 @@ export interface CriticResult {
   rawResponse: string;
 }
 
+// -----------------------------------------------------------------------------
+// Deterministic (regex-level) style checks.
+//
+// The LLM critic is strong on semantic checks (off-glossary claims, wrong quotes,
+// missing stanzas) but unreliable on surface patterns it was itself trained on
+// (em dashes, banned fillers). These deterministic checks run first and produce
+// block/warn flags that merge with the LLM critic's output so the existing
+// retry path handles them automatically.
+// -----------------------------------------------------------------------------
+
+// Context-independent text extraction: given a snippet, produce a trimmed quote
+// of the smallest surrounding sentence so the retry prompt can point the model
+// at the exact line to fix.
+function surroundingSentence(text: string, matchIndex: number, matchLength: number): string {
+  const start = Math.max(0, text.lastIndexOf('. ', matchIndex) + 1);
+  const endDot = text.indexOf('. ', matchIndex + matchLength);
+  const end = endDot === -1 ? Math.min(text.length, matchIndex + matchLength + 80) : endDot + 1;
+  return text.slice(start, end).trim().slice(0, 240);
+}
+
+// Strip fenced code blocks before running style checks so any deliberate
+// code-like examples don't trigger banned-pattern flags.
+function stripFences(text: string): string {
+  return text.replace(/```[\s\S]*?```/g, '');
+}
+
+// Off-glossary devices that are explicitly excluded by project rules. Using
+// any of these is a block — the student is expected not to know them and the
+// teacher has said they confuse HL-level students.
+const OFF_GLOSSARY_BLOCK = [
+  'syncretism',
+  'metonymy',
+  'litotes',
+  'anaphora',
+  'chiasmus',
+  'zeugma',
+  'synesthesia',
+  'synaesthesia',
+  'epistrophe',
+];
+
+// On the cautioned list — allowed but flagged for review.
+const OFF_GLOSSARY_WARN = ['synecdoche'];
+
+// Banned filler words that make content read as AI-generated. Hard block.
+const BANNED_WORDS_BLOCK = [
+  'delve',
+  'delves',
+  'delved',
+  'delving',
+  'multifaceted',
+  'tapestry',
+  'tapestries',
+];
+
+// Cautioned words — warn only because they have legitimate literal uses.
+const BANNED_WORDS_WARN = ['landscape', 'nuanced'];
+
+export function runDeterministicChecks(text: string): CriticFlag[] {
+  const flags: CriticFlag[] = [];
+  const scanText = stripFences(text);
+
+  // 1. Em dash or en dash character.
+  {
+    const re = /[\u2013\u2014]/g;
+    let m;
+    const seen = new Set<string>();
+    while ((m = re.exec(scanText)) !== null) {
+      const sentence = surroundingSentence(scanText, m.index, 1);
+      if (seen.has(sentence)) continue;
+      seen.add(sentence);
+      flags.push({
+        severity: 'block',
+        section: 'style',
+        line_or_quote: sentence,
+        issue: `Em dash or en dash character used ("${m[0]}"). Project rule: no em dashes, zero exceptions.`,
+        recommended_fix:
+          'Replace with a comma, full stop, colon, or semicolon. Do not use a hyphen surrounded by spaces as a substitute.',
+        is_confirmed_violation: true,
+      });
+    }
+  }
+
+  // 2. Spaced hyphen used as an em dash: "word - word" where the hyphen acts as
+  // a parenthetical break. This catches "meaning - rather than" patterns.
+  // Does not match compound words (peat-brown), numeric ranges inside quotes,
+  // or bullet-style dashes at the start of a line.
+  {
+    const re = /(?:[^\s-])\s-\s(?=\S)/g;
+    let m;
+    const seen = new Set<string>();
+    while ((m = re.exec(scanText)) !== null) {
+      const sentence = surroundingSentence(scanText, m.index, m[0].length);
+      if (seen.has(sentence)) continue;
+      seen.add(sentence);
+      flags.push({
+        severity: 'block',
+        section: 'style',
+        line_or_quote: sentence,
+        issue:
+          'Spaced-hyphen used as a substitute em dash ("word - word"). Project rule: no em dashes, and no hyphen-with-spaces disguises.',
+        recommended_fix:
+          'Rewrite the sentence using a comma, colon, full stop, or semicolon. Do not insert " - " between phrases.',
+        is_confirmed_violation: true,
+      });
+    }
+  }
+
+  // 3. Off-glossary devices — hard block.
+  for (const term of OFF_GLOSSARY_BLOCK) {
+    const re = new RegExp(`\\b${term}\\b`, 'gi');
+    let m;
+    const seen = new Set<string>();
+    while ((m = re.exec(scanText)) !== null) {
+      const sentence = surroundingSentence(scanText, m.index, m[0].length);
+      if (seen.has(sentence)) continue;
+      seen.add(sentence);
+      flags.push({
+        severity: 'block',
+        section: 'devices',
+        line_or_quote: sentence,
+        issue: `Off-glossary literary device "${m[0]}" used. Project rule: only devices from the approved glossary.`,
+        recommended_fix:
+          'Replace with an approved device (metaphor, symbolism, imagery, juxtaposition, etc.) or describe the effect without labelling the device.',
+        is_confirmed_violation: true,
+      });
+    }
+  }
+
+  // 4. Off-glossary devices — warn.
+  for (const term of OFF_GLOSSARY_WARN) {
+    const re = new RegExp(`\\b${term}\\b`, 'gi');
+    let m;
+    const seen = new Set<string>();
+    while ((m = re.exec(scanText)) !== null) {
+      const sentence = surroundingSentence(scanText, m.index, m[0].length);
+      if (seen.has(sentence)) continue;
+      seen.add(sentence);
+      flags.push({
+        severity: 'warn',
+        section: 'devices',
+        line_or_quote: sentence,
+        issue: `Cautioned device "${m[0]}" used. Allowed but only if a student would be expected to identify it here.`,
+        recommended_fix: 'Consider a simpler label such as metaphor or imagery unless this is genuinely the best fit.',
+        is_confirmed_violation: true,
+      });
+    }
+  }
+
+  // 5. Banned filler words — hard block.
+  for (const term of BANNED_WORDS_BLOCK) {
+    const re = new RegExp(`\\b${term}\\b`, 'gi');
+    let m;
+    const seen = new Set<string>();
+    while ((m = re.exec(scanText)) !== null) {
+      const sentence = surroundingSentence(scanText, m.index, m[0].length);
+      if (seen.has(sentence)) continue;
+      seen.add(sentence);
+      flags.push({
+        severity: 'block',
+        section: 'style',
+        line_or_quote: sentence,
+        issue: `Banned filler word "${m[0]}" used. Project rule: never use this word.`,
+        recommended_fix: 'Rewrite using a specific, concrete verb or phrase that says what actually happens.',
+        is_confirmed_violation: true,
+      });
+    }
+  }
+
+  // 6. Banned filler words — warn (figurative uses are banned, but detecting
+  // figurative vs literal use is hard, so warn and let the human review).
+  for (const term of BANNED_WORDS_WARN) {
+    const re = new RegExp(`\\b${term}\\b`, 'gi');
+    let m;
+    const seen = new Set<string>();
+    while ((m = re.exec(scanText)) !== null) {
+      const sentence = surroundingSentence(scanText, m.index, m[0].length);
+      if (seen.has(sentence)) continue;
+      seen.add(sentence);
+      flags.push({
+        severity: 'warn',
+        section: 'style',
+        line_or_quote: sentence,
+        issue: `Cautioned word "${m[0]}" used. Banned in figurative contexts, allowed in literal ones.`,
+        recommended_fix:
+          'If used figuratively (e.g. "the landscape of memory"), rewrite. If literal, leave in place.',
+        is_confirmed_violation: true,
+      });
+    }
+  }
+
+  return flags;
+}
+
 const CRITIC_SYSTEM_PROMPT = `
 You are a senior Leaving Certificate Higher Level English teacher auditing a
 study note written by an AI. Your job is to catch errors that would embarrass
@@ -260,12 +454,19 @@ export async function runCriticPass(
   const rawWarns = Array.isArray(findings.warnFlags) ? findings.warnFlags : [];
 
   // Only keep findings the critic has confirmed.
-  const blockFlags = rawBlocks.filter((f) => f.is_confirmed_violation === true);
-  const warnFlags = rawWarns.filter((f) => f.is_confirmed_violation === true);
+  const llmBlockFlags = rawBlocks.filter((f) => f.is_confirmed_violation === true);
+  const llmWarnFlags = rawWarns.filter((f) => f.is_confirmed_violation === true);
+
+  // Merge deterministic regex checks. These run on the generated note text and
+  // catch surface-level patterns the LLM critic is unreliable at (em dashes,
+  // spaced-hyphen em-dash disguise, banned fillers, off-glossary devices).
+  const detFlags = runDeterministicChecks(input.generatedNote);
+  const detBlocks = detFlags.filter((f) => f.severity === 'block');
+  const detWarns = detFlags.filter((f) => f.severity === 'warn');
 
   return {
-    blockFlags,
-    warnFlags,
+    blockFlags: [...detBlocks, ...llmBlockFlags],
+    warnFlags: [...detWarns, ...llmWarnFlags],
     rawResponse: JSON.stringify(toolUse.input),
   };
 }
