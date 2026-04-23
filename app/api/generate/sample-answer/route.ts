@@ -117,9 +117,26 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // notes.quotes is stored as jsonb — either an array of strings (legacy) or
+  // an array of objects shaped { text, line_start, line_end, stanza_index, tags }.
+  // Unwrap to a flat string[] of the quote text so the generator and validator
+  // (both of which expect string[]) work against either shape.
   const quoteBank: string[] = (notesRows ?? []).flatMap((row) => {
     const q = row.quotes;
-    return Array.isArray(q) && q.every((x) => typeof x === "string") ? q : [];
+    if (!Array.isArray(q)) return [];
+    return q
+      .map((x) => {
+        if (typeof x === "string") return x;
+        if (
+          x &&
+          typeof x === "object" &&
+          typeof (x as { text?: unknown }).text === "string"
+        ) {
+          return (x as { text: string }).text;
+        }
+        return null;
+      })
+      .filter((s): s is string => typeof s === "string" && s.length > 0);
   });
 
   if (quoteBank.length < 10) {
@@ -152,7 +169,12 @@ export async function POST(request: NextRequest) {
   }
 
   // Validate quotes
-  const validatorResult = validateQuotes(generationResult.answer_text, quoteBank);
+  const validatorResult = validateQuotes(
+    generationResult.answer_text,
+    quoteBank,
+    prescribedPoems,
+    questionRow.question_text ?? "",
+  );
 
   if (!validatorResult.passed) {
     return NextResponse.json(

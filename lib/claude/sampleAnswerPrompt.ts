@@ -30,7 +30,14 @@ ABSOLUTE RULES:
 - Use UK English spelling (colour, organised, analyse, centre).
 - Never use em dashes. Use commas, full stops, colons, semicolons.
 - Write in the first person where natural. Do not default to "the reader".
-- Target the word count given. Plus or minus 10 percent is acceptable.`;
+- Target the word count given. Plus or minus 10 percent is acceptable.
+
+QUOTE DENSITY (hard cap):
+- Use no more than 4 quotes per poem. Fewer is often better. A target density of 3 quotes per poem is ideal for a focused H1 answer.
+- Across the full essay, aim for roughly one quotation every 80 to 110 words. Essays that quote more often than this almost always stop analysing and start listing.
+- Every quote must be followed by at least two sentences that develop an argument from it. Explanation ("this means...") is not argument. The sentences after a quote must say something the reader did not know before reading the quote.
+- Do NOT stack multiple short quotes inside one sentence as ornament (e.g. "the 'hammered anvil', the 'fantail of sparks', the 'unicorn' form"). Pick one, earn it, move on.
+- If you find yourself using a quote simply to illustrate a point you have already made, delete it. Quotes must do work, not decorate.`;
 
 const H1_RULES = `
 YOU ARE WRITING AN H1-LEVEL ANSWER.
