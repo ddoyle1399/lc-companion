@@ -15,6 +15,7 @@ export type SampleAnswerPromptInput = {
     examiner_note: string | null;
   };
   quoteBank: string[];
+  selectedPoems: string[];
   indicativeMaterial: string[];
   examinerExpectation: string;
   targetWordCount: number;
@@ -24,6 +25,7 @@ const SHARED_RULES = `You are writing a Leaving Certificate English Higher Level
 
 ABSOLUTE RULES:
 - Every quote you use must be copied verbatim from the QUOTE BANK provided. Do not invent quotes. Do not paraphrase and present as a quote. If you need a quote to support a point and the bank does not have one, adjust the point — do not invent a quote.
+- You must discuss the poems listed under SELECTED POEMS. Do not mention any other poem by this poet by name, even if you know it. The QUOTE BANK only contains quotes from the selected poems — this is by design.
 - Output the essay text only. No preamble, no heading, no markdown code fences, no meta-commentary.
 - Use UK English spelling (colour, organised, analyse, centre).
 - Never use em dashes. Use commas, full stops, colons, semicolons.
@@ -149,6 +151,10 @@ export function buildSampleAnswerUserMessage(
     .map((b, i) => `${i + 1}. ${b}`)
     .join("\n");
 
+  const selectedPoemsBlock = input.selectedPoems
+    .map((p, i) => `${i + 1}. ${p}`)
+    .join("\n");
+
   const focusLine = input.poem ? `\nFOCUS POEM: ${input.poem}` : "";
 
   let structureSection = "";
@@ -175,6 +181,9 @@ export function buildSampleAnswerUserMessage(
 "${input.questionText}"
 
 POET: ${input.poet}${focusLine}
+
+SELECTED POEMS (you must discuss these, and ONLY these):
+${selectedPoemsBlock}
 
 TARGET WORD COUNT: ${input.targetWordCount} words.
 

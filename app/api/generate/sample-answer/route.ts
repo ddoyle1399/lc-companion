@@ -5,6 +5,7 @@ import { saveSampleAnswer } from "@/lib/supabase/saveSampleAnswer";
 import { validateQuotes } from "@/lib/sampleAnswer/quoteValidator";
 import { generateSampleAnswer } from "@/lib/claude/generateSampleAnswer";
 import type { GradeTier } from "@/lib/claude/sampleAnswerPrompt";
+import { getCircularYears, getPoemsForPoet } from "@/data/circulars";
 
 const VALID_TIERS: GradeTier[] = ["H1", "H2", "H3"];
 
@@ -34,6 +35,10 @@ export async function POST(request: NextRequest) {
   const questionId = typeof b.questionId === "string" ? b.questionId : null;
   const gradeTier = typeof b.gradeTier === "string" ? b.gradeTier : null;
   const poetKey = typeof b.poetKey === "string" ? b.poetKey : null;
+  const examCycleYear = typeof b.examCycleYear === "number" ? b.examCycleYear : null;
+  const selectedPoems = Array.isArray(b.selectedPoems)
+    ? b.selectedPoems.filter((x): x is string => typeof x === "string")
+    : null;
 
   if (
     !questionId ||
@@ -43,6 +48,29 @@ export async function POST(request: NextRequest) {
   ) {
     return NextResponse.json(
       { error: "missing_or_invalid_fields", required: ["questionId", "gradeTier (H1|H2|H3)", "poetKey"] },
+      { status: 400 },
+    );
+  }
+
+  if (!examCycleYear || !getCircularYears().includes(examCycleYear)) {
+    return NextResponse.json(
+      { error: "invalid_exam_cycle_year", valid: getCircularYears() },
+      { status: 400 },
+    );
+  }
+
+  if (!selectedPoems || selectedPoems.length < 3 || selectedPoems.length > 6) {
+    return NextResponse.json(
+      { error: "invalid_selected_poems", detail: "Must select between 3 and 6 poems" },
+      { status: 400 },
+    );
+  }
+
+  const prescribedPoems = getPoemsForPoet(examCycleYear, poetKey);
+  const invalidPoems = selectedPoems.filter((p) => !prescribedPoems.includes(p));
+  if (invalidPoems.length > 0) {
+    return NextResponse.json(
+      { error: "selected_poems_not_in_circular", invalid: invalidPoems },
       { status: 400 },
     );
   }
@@ -67,19 +95,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "pclm_not_seeded" }, { status: 400 });
   }
 
-  // Fetch all verified notes for this poet and union their quotes
+  // Fetch verified notes only for the selected poems
   const { data: notesRows, error: notesErr } = await supabase
     .from("notes")
     .select("id, sub_key, quotes")
     .eq("subject_key", poetKey)
     .eq("content_type", "poem_notes")
-    .eq("status", "verified");
+    .eq("status", "verified")
+    .in("sub_key", selectedPoems);
 
-  if (notesErr || !notesRows || notesRows.length === 0) {
-    return NextResponse.json({ error: "no_verified_notes" }, { status: 400 });
+  if (notesErr) {
+    return NextResponse.json({ error: "notes_fetch_failed", detail: notesErr.message }, { status: 500 });
   }
 
-  const quoteBank: string[] = notesRows.flatMap((row) => {
+  const foundPoems = new Set((notesRows ?? []).map((r) => r.sub_key as string));
+  const missingPoems = selectedPoems.filter((p) => !foundPoems.has(p));
+  if (missingPoems.length > 0) {
+    return NextResponse.json(
+      { error: "unverified_poems_selected", missing: missingPoems },
+      { status: 400 },
+    );
+  }
+
+  const quoteBank: string[] = (notesRows ?? []).flatMap((row) => {
     const q = row.quotes;
     return Array.isArray(q) && q.every((x) => typeof x === "string") ? q : [];
   });
@@ -98,6 +136,7 @@ export async function POST(request: NextRequest) {
     questionYear: questionRow.exam_year ?? 0,
     poet: poetKey,
     quoteBank,
+    selectedPoems,
     indicativeMaterial: Array.isArray(pclmData.indicative_material)
       ? pclmData.indicative_material
       : [],
@@ -142,6 +181,7 @@ export async function POST(request: NextRequest) {
     quotesUsed: validatorResult.matched_quotes,
     validatorResult,
     model: generationResult.model,
+    selectedPoems,
   });
 
   if (!saveResult.ok) {

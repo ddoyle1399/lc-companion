@@ -16,6 +16,7 @@ export type SaveSampleAnswerInput = {
   quotesUsed: string[];
   validatorResult: QuoteValidationResult;
   model: string;
+  selectedPoems: string[];
 };
 
 export type SaveSampleAnswerResult =
@@ -43,6 +44,7 @@ export async function saveSampleAnswer(
         quotes_used: input.quotesUsed,
         validator_result: input.validatorResult,
         generation_model: input.model,
+        selected_poems: input.selectedPoems,
         approved: false,
       })
       .select("id")
