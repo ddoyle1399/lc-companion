@@ -157,7 +157,8 @@ Tropes / figures:
 - paradox: a self-contradictory statement that reveals a truth.
 - irony (verbal, situational, or dramatic, state which).
 - euphemism: softer substitute for something harsh ("passed away"). NOT for brutal plain naming.
-- understatement (litotes): deliberately downplays ("tell-tale skin and teeth" understates mass murder).
+- understatement: deliberately downplays ("tell-tale skin and teeth" understates mass murder).
+  Use the bare label "understatement". Do NOT pair it with "(litotes)"; the technical term is banned.
 - hyperbole: deliberate exaggeration.
 - symbolism: object stands for an abstract idea.
 - allusion: reference to another text or historical event (name the source).
@@ -300,6 +301,16 @@ Known patterns to avoid:
 - "sweetness emerging from darkness" from industrial/labour imagery (e.g. turf-cutting scars)
 - "evokes" without specifying what it evokes
 - treating literal description as symbolic without textual warrant
+- naming a specific historical event or era as the "primary" or "most famous" referent
+  of a word or image when historical_context does not anchor that allusion. Example:
+  the word "tumbril" does NOT primarily allude to the French Revolution unless
+  historical_context says so. Generalise instead: "carts used to carry the condemned
+  to execution, a detail that places this killing within a broader history of ritual
+  and political violence." Same for "trenches" → World War I, "ovens" → the Holocaust,
+  etc. If the specific allusion is not in historical_context, drop the specificity.
+- The hedge phrase "most famously" almost always signals an unsupported specific
+  attribution. If you find yourself writing "most famously", stop and check whether
+  historical_context supports the claim. If not, rewrite without it.
 `.trim();
 
 const STYLE_GUARDRAILS = `
