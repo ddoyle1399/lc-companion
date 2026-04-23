@@ -8,12 +8,14 @@ import { exportToPDF } from "@/lib/export/pdf";
 
 import singleTexts2026 from "@/data/circulars/2026-single-texts.json";
 import singleTexts2027 from "@/data/circulars/2027-single-texts.json";
+import singleTexts2028 from "@/data/circulars/2028-single-texts.json";
 
 type Level = "HL" | "OL";
 
 const circularNumbers: Record<number, string> = {
   2026: "0016/2024",
   2027: "0021/2025",
+  2028: "0024/2026",
 };
 
 interface SingleTextEntry {
@@ -25,6 +27,7 @@ interface SingleTextEntry {
 const singleTextData: Record<number, SingleTextEntry[]> = {
   2026: singleTexts2026.single_texts,
   2027: singleTexts2027.single_texts,
+  2028: singleTexts2028.single_texts,
 };
 
 function getTextsForLevel(year: number, level: Level): SingleTextEntry[] {
@@ -140,6 +143,7 @@ export default function SingleTextPage() {
               >
                 <option value={2026}>2026</option>
                 <option value={2027}>2027</option>
+                <option value={2028}>2028</option>
               </select>
               <p className="text-xs text-gray-400 mt-1">
                 Circular {circularNumbers[year]}

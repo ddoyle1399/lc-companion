@@ -22,6 +22,8 @@ import poetryHL2026 from "@/data/circulars/2026-poetry-hl.json";
 import poetryOL2026 from "@/data/circulars/2026-poetry-ol.json";
 import poetryHL2027 from "@/data/circulars/2027-poetry-hl.json";
 import poetryOL2027 from "@/data/circulars/2027-poetry-ol.json";
+import poetryHL2028 from "@/data/circulars/2028-poetry-hl.json";
+import poetryOL2028 from "@/data/circulars/2028-poetry-ol.json";
 
 type Level = "HL" | "OL";
 type UIState = "select" | "generating" | "script" | "rendering" | "done";
@@ -29,16 +31,19 @@ type UIState = "select" | "generating" | "script" | "rendering" | "done";
 const circularNumbers: Record<number, string> = {
   2026: "0016/2024",
   2027: "0021/2025",
+  2028: "0024/2026",
 };
 
 const hlData: Record<number, { poets: Record<string, string[]> }> = {
   2026: poetryHL2026,
   2027: poetryHL2027,
+  2028: poetryHL2028,
 };
 
 const olData: Record<number, { poems: { poet: string; title: string }[] }> = {
   2026: poetryOL2026,
   2027: poetryOL2027,
+  2028: poetryOL2028,
 };
 
 function getPoets(year: number, level: Level): string[] {
@@ -338,6 +343,7 @@ function VideoPage() {
                 >
                   <option value={2026}>2026</option>
                   <option value={2027}>2027</option>
+                  <option value={2028}>2028</option>
                 </select>
                 <p className="text-xs text-gray-400 mt-1">
                   Circular {circularNumbers[year]}

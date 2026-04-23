@@ -1,0 +1,50 @@
+{
+  "year": 2028,
+  "circular": "0024/2026",
+  "comparative_modes_HL": ["Literary Genre", "Theme or Issue", "Cultural Context"],
+  "comparative_modes_OL": ["Hero, Heroine, Villain", "Theme", "Social Setting"],
+  "novels_memoirs": [
+    { "author": "Pat Barker", "title": "Silence of the Girls" },
+    { "author": "Colin Barrett", "title": "Young Skins" },
+    { "author": "Anne Bronte", "title": "The Tenant of Wildfell Hall" },
+    { "author": "Emily Bronte", "title": "Wuthering Heights" },
+    { "author": "Thi Bui", "title": "The Best We Could Do" },
+    { "author": "Emma Donoghue", "title": "Room" },
+    { "author": "George Eliot", "title": "Silas Marner" },
+    { "author": "F. Scott Fitzgerald", "title": "The Great Gatsby" },
+    { "author": "Bonnie Garmus", "title": "Lessons in Chemistry" },
+    { "author": "Khaled Hosseini", "title": "The Kite Runner" },
+    { "author": "Claire Keegan", "title": "Small Things Like These" },
+    { "author": "Mike McCormack", "title": "Notes from a Coma" },
+    { "author": "Maggie O'Farrell", "title": "Hamnet" },
+    { "author": "George Orwell", "title": "1984" },
+    { "author": "Delia Owens", "title": "Where the Crawdads Sing" },
+    { "author": "Claudia Pineiro", "title": "Elena Knows" },
+    { "author": "Donal Ryan", "title": "The Spinning Heart" },
+    { "author": "Bram Stoker", "title": "Dracula" },
+    { "author": "Colson Whitehead", "title": "The Underground Railroad" },
+    { "author": "Jeanette Winterson", "title": "Why Be Happy When You Could Be Normal?" }
+  ],
+  "drama": [
+    { "author": "Marina Carr", "title": "Girl on an Altar" },
+    { "author": "Lorraine Hansberry", "title": "A Raisin in the Sun" },
+    { "author": "Henrik Ibsen", "title": "A Doll's House" },
+    { "author": "John B. Keane", "title": "Sive" },
+    { "author": "Phillip McMahon", "title": "Once Before I Go" },
+    { "author": "Arthur Miller", "title": "All My Sons" },
+    { "author": "William Shakespeare", "title": "Hamlet" },
+    { "author": "William Shakespeare", "title": "Othello" },
+    { "author": "Laura Wade", "title": "Colder Than Here" }
+  ],
+  "film": [
+    { "director": "Wes Anderson", "title": "The Grand Budapest Hotel" },
+    { "director": "Alfonso Cuarón", "title": "Children of Men" },
+    { "director": "Greta Gerwig", "title": "Barbie" },
+    { "director": "Debra Granik", "title": "Winter's Bone" },
+    { "director": "Rian Johnson", "title": "Knives Out" },
+    { "director": "Asif Kapadia", "title": "Diego Maradona" },
+    { "director": "Martin McDonagh", "title": "The Banshees of Inisherin" },
+    { "director": "Carol Reed", "title": "The Third Man" },
+    { "director": "Gabriele Salvatores", "title": "I'm Not Scared" }
+  ]
+}

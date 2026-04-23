@@ -8,6 +8,7 @@ import { exportToPDF } from "@/lib/export/pdf";
 
 import comp2026 from "@/data/circulars/2026-comparative.json";
 import comp2027 from "@/data/circulars/2027-comparative.json";
+import comp2028 from "@/data/circulars/2028-comparative.json";
 
 type Level = "HL" | "OL";
 
@@ -21,11 +22,13 @@ interface TextOption {
 const circularNumbers: Record<number, string> = {
   2026: "0016/2024",
   2027: "0021/2025",
+  2028: "0024/2026",
 };
 
 const compData: Record<number, typeof comp2026> = {
   2026: comp2026,
   2027: comp2027,
+  2028: comp2028 as unknown as typeof comp2026,
 };
 
 function getModes(year: number, level: Level): string[] {
@@ -242,6 +245,7 @@ export default function ComparativePage() {
               >
                 <option value={2026}>2026</option>
                 <option value={2027}>2027</option>
+                <option value={2028}>2028</option>
               </select>
               <p className="text-xs text-gray-400 mt-1">
                 Circular {circularNumbers[year]}

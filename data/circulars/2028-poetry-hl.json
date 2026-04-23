@@ -1,20 +1,20 @@
 {
-  "year": 2026,
-  "circular": "0016/2024",
+  "year": 2028,
+  "circular": "0024/2026",
   "level": "HL",
   "note": "Students must study at least 6 poems per poet. 8 poets prescribed.",
   "poets": {
-    "Elizabeth Bishop": [
-      "The Fish",
-      "The Bight",
-      "At the Fishhouses",
-      "The Prodigal",
-      "Questions of Travel",
-      "The Armadillo",
-      "Sestina",
-      "First Death in Nova Scotia",
-      "Filling Station",
-      "In the Waiting Room"
+    "Emily Dickinson": [
+      "\"Hope\" is the thing with feathers",
+      "There's a certain Slant of light",
+      "I felt a Funeral, in my Brain",
+      "A Bird came down the Walk",
+      "I Heard a fly buzz - when I died",
+      "The Soul has Bandaged moments",
+      "I could bring You Jewels - had I a mind to",
+      "A narrow Fellow in the Grass",
+      "I taste a liquor never brewed",
+      "After great pain, a formal feeling comes"
     ],
     "John Donne": [
       "The Sunne Rising",
@@ -27,16 +27,6 @@
       "Batter my heart",
       "At the round earth's imagined corners",
       "Thou hast made me"
-    ],
-    "T.S. Eliot": [
-      "The Lovesong of J. Alfred Prufrock",
-      "Preludes",
-      "Aunt Helen",
-      "from The Waste Land: II. A Game of Chess",
-      "Journey of the Magi",
-      "from Landscapes: III Usk",
-      "from Landscapes: IV Rannoch, by Glencoe",
-      "from The Four Quartets: East Coker IV"
     ],
     "Seamus Heaney": [
       "The Forge",
@@ -52,6 +42,18 @@
       "Tate's Avenue",
       "The Pitchfork",
       "Lightenings viii (The annals say...)"
+    ],
+    "Gerard Manley Hopkins": [
+      "God's Grandeur",
+      "Spring",
+      "As kingfishers catch fire, dragonflies draw flame",
+      "The Windhover",
+      "Pied Beauty",
+      "Felix Randal",
+      "Inversnaid",
+      "I wake and feel the fell of dark, not day",
+      "No worst there is none. Pitched past pitch of grief",
+      "Thou art indeed just, Lord, if I contend"
     ],
     "Paula Meehan": [
       "Buying Winkles",
@@ -79,19 +81,17 @@
       "On Lacking the Killer Instinct",
       "To Niall Woods and Xenya Ostrovskaia, married in Dublin on 9 September 2009"
     ],
-    "Tracy K. Smith": [
-      "Joy (Elegy 1)",
-      "Dominion over the beasts of the Earth",
-      "The Searchers",
-      "Letter to a Photojournalist Going In",
-      "The Universe is a House Party",
-      "The Museum of Obsolescence",
-      "Don't you wonder, sometimes?",
-      "It's Not",
-      "The Universe as Primal Scream",
-      "The Greatest Personal Privation",
-      "I am 60 odd years of age (from I will tell you the truth about this, I will tell you all about it)",
-      "Ghazal"
+    "Sylvia Plath": [
+      "Black Rook in Rainy Weather",
+      "The Times Are Tidy",
+      "Morning Song",
+      "Finisterre",
+      "Mirror",
+      "Pheasant",
+      "Elm",
+      "Poppies in July",
+      "The Arrival of the Bee Box",
+      "Child"
     ],
     "W.B. Yeats": [
       "The Lake Isle of Innisfree",

@@ -8,6 +8,11 @@ import comparative2027 from "./2027-comparative.json";
 import poetryHL2027 from "./2027-poetry-hl.json";
 import poetryOL2027 from "./2027-poetry-ol.json";
 
+import singleTexts2028 from "./2028-single-texts.json";
+import comparative2028 from "./2028-comparative.json";
+import poetryHL2028 from "./2028-poetry-hl.json";
+import poetryOL2028 from "./2028-poetry-ol.json";
+
 export type Level = "HL" | "OL" | "H/O";
 
 export interface SingleText {
@@ -87,6 +92,26 @@ const circulars: Record<number, CircularData> = {
     poetryOL: {
       note: poetryOL2027.note,
       poems: poetryOL2027.poems,
+    },
+  },
+  2028: {
+    year: 2028,
+    circular: "0024/2026",
+    singleTexts: singleTexts2028.single_texts,
+    comparative: {
+      modesHL: comparative2028.comparative_modes_HL,
+      modesOL: comparative2028.comparative_modes_OL,
+      novelsMemoris: comparative2028.novels_memoirs,
+      drama: comparative2028.drama,
+      film: comparative2028.film,
+    },
+    poetryHL: {
+      note: poetryHL2028.note,
+      poets: poetryHL2028.poets,
+    },
+    poetryOL: {
+      note: poetryOL2028.note,
+      poems: poetryOL2028.poems,
     },
   },
 };
