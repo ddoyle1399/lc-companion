@@ -1,12 +1,14 @@
 import type { OutlineBodyMove } from "./generateOutline";
 
+export type GradeTier = "H1" | "H2" | "H3" | "H4";
+
 export type SampleAnswerPromptInput = {
-  tier: "H1" | "H4";
+  tier: GradeTier;
   questionText: string;
   questionYear: number;
   poet: string;
-  poem: string;
-  outline: {
+  poem?: string;
+  outline?: {
     thesis_line: string;
     body_moves: OutlineBodyMove[];
     closing_move: string;
@@ -26,7 +28,6 @@ ABSOLUTE RULES:
 - Use UK English spelling (colour, organised, analyse, centre).
 - Never use em dashes. Use commas, full stops, colons, semicolons.
 - Write in the first person where natural. Do not default to "the reader".
-- Follow the structural skeleton in the OUTLINE but write in full continuous prose. Do not output the outline labels.
 - Target the word count given. Plus or minus 10 percent is acceptable.`;
 
 const H1_RULES = `
@@ -48,6 +49,50 @@ Anti-patterns — do NOT produce:
 - "Furthermore,", "Moreover,", "In conclusion,"
 - Restating a quote in different words instead of extending the argument.
 - Generic adjectives ("profound", "striking", "powerful") without specifics.`;
+
+const H2_RULES = `
+YOU ARE WRITING AN H2-LEVEL ANSWER.
+
+H2 means strong but not exceptional. The answer engages seriously with the question, shows genuine understanding of the poetry, and uses quotes well — but lacks the sustained argumentative sophistication and voice of an H1.
+
+Behaviours required:
+- Clear thesis that addresses the question, but not as precisely targeted as H1.
+- Solid quote integration — quotes are earned, not dropped in — but analysis occasionally flattens into explanation.
+- Competent paragraph structure with clear topic sentences. Links back to question present but not always tight.
+- Good range across poems. Not dwelling too long on one poem.
+- Fluent expression without the energy or distinctiveness of H1 voice.
+
+Acceptable weaknesses (at least two must appear):
+- One or two instances of near-quote-drop: quote introduced but immediately explained rather than analysed.
+- Occasional generic phrasing ("Kavanagh captures...", "This reflects...") without the specific follow-through.
+- Conclusion that restates the thesis rather than developing it.
+
+Anti-patterns — do NOT produce:
+- Invented or misquoted lines.
+- Retelling plot without analysis.
+- "Furthermore,", "Moreover,", "In conclusion,".`;
+
+const H3_RULES = `
+YOU ARE WRITING AN H3-LEVEL ANSWER. This is a 70-79 percent script. H3 means competent-but-limited, not wrong.
+
+MANDATORY BEHAVIOURS (each must appear at least once):
+
+1. Retell before analyse. In at least ONE body paragraph, spend two or more sentences describing what happens before offering any interpretation.
+
+2. Quote-drop with flat restatement. At least TWO quotes must be followed by a sentence that restates the quote in slightly different words. Pattern: "Kavanagh writes 'X'. This shows that [restatement of X]."
+
+3. Uneven engagement with question. Cover the main thrust clearly but handle a secondary aspect of the question only briefly.
+
+4. At least ONE weak paragraph opening: "Also", "Another point is", "Another poem", "The poet also".
+
+5. Conclusion that restates the introduction or makes a generic closing claim about the poet.
+
+6. Use at least ONE evaluative word: "beautiful", "powerful", "interesting", "really shows".
+
+HARD NO:
+- Invented or wrong quotes.
+- Analysis that is factually incorrect. H3 is limited, not wrong.
+- Sophisticated thesis sustained across paragraphs.`;
 
 const H4_RULES = `
 YOU ARE WRITING AN H4 ANSWER. This is a 30/50 script. H4 means shallow-but-correct, not wrong. You must deliberately produce weaknesses that mark the script as H4 rather than H1.
@@ -82,8 +127,15 @@ HARD NO:
 
 Mechanics stay clean. The M score is still high at H4. UK spelling, correct grammar. The weaknesses appear in P (shallow engagement) and C (weak organisation), not M.`;
 
-export function buildSampleAnswerSystemPrompt(tier: "H1" | "H4"): string {
-  return SHARED_RULES + (tier === "H1" ? H1_RULES : H4_RULES);
+const TIER_RULES: Record<GradeTier, string> = {
+  H1: H1_RULES,
+  H2: H2_RULES,
+  H3: H3_RULES,
+  H4: H4_RULES,
+};
+
+export function buildSampleAnswerSystemPrompt(tier: GradeTier): string {
+  return SHARED_RULES + TIER_RULES[tier];
 }
 
 export function buildSampleAnswerUserMessage(
@@ -97,25 +149,32 @@ export function buildSampleAnswerUserMessage(
     .map((b, i) => `${i + 1}. ${b}`)
     .join("\n");
 
-  const outlineLines = [
-    `Thesis: ${input.outline.thesis_line}`,
-    ...input.outline.body_moves.map(
-      (m, i) =>
-        `Body ${i + 1}: ${m.move}\n  Quote: "${m.quote}"\n  Gloss: ${m.gloss}`,
-    ),
-    `Closing: ${input.outline.closing_move}`,
-    input.outline.examiner_note
-      ? `Examiner note: ${input.outline.examiner_note}`
-      : "",
-  ]
-    .filter(Boolean)
-    .join("\n");
+  const focusLine = input.poem ? `\nFOCUS POEM: ${input.poem}` : "";
+
+  let structureSection = "";
+  if (input.outline) {
+    const outlineLines = [
+      `Thesis: ${input.outline.thesis_line}`,
+      ...input.outline.body_moves.map(
+        (m, i) =>
+          `Body ${i + 1}: ${m.move}\n  Quote: "${m.quote}"\n  Gloss: ${m.gloss}`,
+      ),
+      `Closing: ${input.outline.closing_move}`,
+      input.outline.examiner_note
+        ? `Examiner note: ${input.outline.examiner_note}`
+        : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+    structureSection = `\nSTRUCTURAL OUTLINE TO FOLLOW (write in full prose, do not output the labels):\n${outlineLines}\n`;
+  } else {
+    structureSection = `\nSTRUCTURE: Write a full introduction, at least three developed body paragraphs, and a conclusion. Draw on multiple poems from the quote bank to support your argument.\n`;
+  }
 
   return `EXAM QUESTION (${input.questionYear}, Higher Level, Paper 2):
 "${input.questionText}"
 
-POET: ${input.poet}
-FOCUS POEM: ${input.poem}
+POET: ${input.poet}${focusLine}
 
 TARGET WORD COUNT: ${input.targetWordCount} words.
 
@@ -127,9 +186,6 @@ ${indicativeBlock}
 
 QUOTE BANK (the ONLY permitted source of quotations):
 ${quotesBlock}
-
-STRUCTURAL OUTLINE TO FOLLOW (write in full prose, do not output the labels):
-${outlineLines}
-
+${structureSection}
 Write the essay now.`;
 }

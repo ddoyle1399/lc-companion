@@ -1,11 +1,12 @@
 import { getServerSupabase } from "./server";
 import type { QuoteValidationResult } from "@/lib/sampleAnswer/quoteValidator";
+import type { GradeTier } from "@/lib/claude/sampleAnswerPrompt";
 
 export type SaveSampleAnswerInput = {
-  outlineId: string;
+  outlineId?: string | null;
   questionId: string;
-  noteId: string;
-  tier: "H1" | "H4";
+  noteId?: string | null;
+  tier: GradeTier;
   questionType: "poetry";
   markCap: number;
   markingMode: "discrete";
@@ -29,9 +30,9 @@ export async function saveSampleAnswer(
     const { data, error } = await supabase
       .from("sample_answers")
       .insert({
-        outline_id: input.outlineId,
+        outline_id: input.outlineId ?? null,
         question_id: input.questionId,
-        note_id: input.noteId,
+        note_id: input.noteId ?? null,
         grade_tier: input.tier,
         question_type: input.questionType,
         mark_cap: input.markCap,

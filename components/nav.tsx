@@ -34,6 +34,7 @@ const navGroups: { label?: string; items: NavItem[] }[] = [
       { href: "/worksheet", label: "Worksheets" },
       { href: "/slides", label: "Slides" },
       { href: "/video", label: "Video" },
+      { href: "/generate", label: "Generate" },
     ],
   },
 ];
