@@ -1,6 +1,14 @@
 import { getServerSupabase } from "@/lib/supabase/server";
+import { getCircularYears } from "@/data/circulars";
 import Nav from "@/components/nav";
 import GenerateForm from "./GenerateForm";
+
+function currentExamCycle(): number {
+  const now = new Date();
+  const month = now.getUTCMonth() + 1;
+  const year = now.getUTCFullYear();
+  return month >= 8 ? year + 1 : year;
+}
 
 async function getVerifiedPoets(): Promise<string[]> {
   const supabase = getServerSupabase();
@@ -18,6 +26,11 @@ async function getVerifiedPoets(): Promise<string[]> {
 
 export default async function GeneratePage() {
   const poets = await getVerifiedPoets();
+  const availableYears = getCircularYears();
+  const defaultYear = Math.min(
+    currentExamCycle(),
+    Math.max(...availableYears),
+  );
 
   return (
     <div className="min-h-screen bg-cream">
@@ -29,7 +42,7 @@ export default async function GeneratePage() {
             HL Poetry only. Select a poet, past question, and grade tier, then generate.
           </p>
         </div>
-        <GenerateForm poets={poets} />
+        <GenerateForm poets={poets} availableYears={availableYears} defaultYear={defaultYear} />
       </main>
     </div>
   );
