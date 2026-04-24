@@ -10,6 +10,11 @@ function normalise(s: string): string {
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/[\u201C\u201D]/g, '"')
     .replace(/\u00A0/g, " ")
+    // Strip punctuation that students routinely drop or add when quoting:
+    // commas, semicolons, colons, full stops, dashes, em/en dashes, question
+    // and exclamation marks. Preserve apostrophes (part of words like
+    // "tomorrow's") and slashes (used to join line breaks in poetry quotes).
+    .replace(/[,;:!?.\u2013\u2014\-]+/g, " ")
     .replace(/\s+/g, " ")
     .trim()
     .toLowerCase();
