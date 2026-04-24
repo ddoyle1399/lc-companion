@@ -10,10 +10,8 @@ function normalise(s: string): string {
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/[\u201C\u201D]/g, '"')
     .replace(/\u00A0/g, " ")
-    // Strip punctuation that students routinely drop or add when quoting:
-    // commas, semicolons, colons, full stops, dashes, em/en dashes, question
-    // and exclamation marks. Preserve apostrophes (part of words like
-    // "tomorrow's") and slashes (used to join line breaks in poetry quotes).
+    // Strip punctuation that students routinely drop or add when quoting.
+    // Apostrophes and slashes preserved (meaningful).
     .replace(/[,;:!?.\u2013\u2014\-]+/g, " ")
     .replace(/\s+/g, " ")
     .trim()
@@ -37,10 +35,60 @@ function levenshtein(a: string, b: string): number {
   return dp[m][n];
 }
 
+// Stopwords that don't carry meaning for quote-matching purposes.
+const STOPWORDS = new Set([
+  "the", "a", "an", "and", "or", "of", "to", "in", "on", "at", "by",
+  "for", "with", "as", "is", "it", "this", "that", "these", "those",
+  "be", "am", "are", "was", "were", "been", "being",
+  "i", "you", "he", "she", "we", "they", "me", "him", "her", "us", "them",
+  "my", "your", "his", "our", "their", "not", "no", "do", "does", "did",
+  "have", "has", "had", "will", "would", "could", "should", "may", "might",
+  "but", "so", "if", "then", "than", "too", "very", "can", "just",
+  "from", "up", "out", "into", "over", "through", "about",
+]);
+
 /**
- * True if the candidate string is best interpreted as a poem title reference
- * rather than a quotation. Used to skip double-quoted title names (e.g.
- * writing `in "The Forge"`) from quote validation.
+ * Aggressive stemming that handles morphological variation the model commonly
+ * introduces: plurals, tenses, gerunds, possessives, comparative/superlative.
+ * Not Porter-level sophisticated — just the patterns we've seen miss.
+ */
+function stem(word: string): string {
+  let w = word.toLowerCase();
+  // y->ie transformations (signifies/signified -> signify)
+  if (w.length >= 5 && (w.endsWith("ies") || w.endsWith("ied"))) {
+    return w.slice(0, -3) + "y";
+  }
+  // Strip common suffixes, shortest first so we don't over-strip
+  w = w.replace(/('s|s|ed|ing|ly|er|est)$/i, "");
+  return w;
+}
+
+/**
+ * Check whether every meaningful (non-stopword, length >= 3) word in the
+ * candidate, after aggressive stemming, appears somewhere in the bank. This
+ * catches morphological variation ("signifies" / "signifying"), punctuation
+ * variation, and short critical-discourse citations in one rule.
+ */
+function matchesBankByWordSet(candidate: string, concatBank: string): boolean {
+  const words = candidate
+    .toLowerCase()
+    .split(/[^a-z']+/)
+    .map((w) => w.trim())
+    .filter((w) => w.length >= 3 && !STOPWORDS.has(w))
+    .map(stem);
+
+  if (words.length === 0) return false;
+
+  return words.every((w) => {
+    if (w.length < 3) return true;
+    return concatBank.includes(w);
+  });
+}
+
+/**
+ * True if the candidate is a reference to a known poem/text title rather
+ * than a quote. Writing `in "The Forge"` is a title mention; exclude from
+ * validation entirely (we don't want to count it as a matched quote either).
  */
 function looksLikeTitle(candidate: string, titles: string[]): boolean {
   if (titles.length === 0) return false;
@@ -49,9 +97,6 @@ function looksLikeTitle(candidate: string, titles: string[]): boolean {
     const nt = normalise(t);
     if (!nt) return false;
     if (nt === n) return true;
-    // Handle short forms: user writes "Mossbawn: Sunlight" for the full title.
-    // If the short form's words all appear (in order) in the full title,
-    // treat as a title reference.
     if (n.length >= 3 && nt.includes(n)) return true;
     return false;
   });
@@ -59,8 +104,7 @@ function looksLikeTitle(candidate: string, titles: string[]): boolean {
 
 /**
  * Try to match a compound quotation (e.g. "line one / line two") where the
- * model has joined two adjacent bank entries with a slash. Returns true if
- * every non-trivial fragment hits the bank via substring or fuzzy match.
+ * model has joined two adjacent bank entries with a slash.
  */
 function matchesBySplit(candidate: string, normalisedBank: string[]): boolean {
   const fragments = candidate
@@ -90,29 +134,11 @@ export function validateQuotes(
   const normalisedQuestion = normalise(questionText);
   const concatBank = normalisedBank.join(" ");
 
-  // A candidate is an echo of the exam question prompt (standard H1 move:
-  // "Heaney's poems, 'deceptively simple', do X") and should not be validated
-  // as a quotation from the poet's work.
   function echoesQuestion(candidate: string): boolean {
     if (!normalisedQuestion) return false;
     const n = normalise(candidate);
     if (n.length < 3) return false;
     return normalisedQuestion.includes(n);
-  }
-
-  // A short (1-3 word) quoted phrase is usually a critical-discourse citation
-  // of a key term from the text, not a verbatim multi-word quotation. E.g.
-  // writing `Lady Macbeth's "unsexed" resolve` uses "unsexed" as a concept
-  // drawn from her "unsex me here" line. Accept if every stemmed word
-  // appears somewhere in the bank.
-  function isShortTerminologyCitation(candidate: string): boolean {
-    const words = candidate.trim().split(/\s+/);
-    if (words.length > 3) return false;
-    return words.every((w) => {
-      const stem = normalise(w).replace(/(ed|ing|s|'s)$/i, "");
-      if (stem.length < 3) return true; // skip short particles
-      return concatBank.includes(stem);
-    });
   }
 
   // Extract substrings inside double (incl. curly) or single quotes
@@ -121,13 +147,9 @@ export function validateQuotes(
   const extracted = [...answerText.matchAll(quoteRegex)]
     .map((m) => (m[1] ?? m[2] ?? "").trim().replace(/[,\.;:!?]+$/, ""))
     .filter((s) => s.length >= 3)
-    // Drop bare poem-title references. Writing `in "The Forge"` is a title
-    // mention, not a quotation, and must not be validated as a quote.
+    // Title mentions and question echoes are not quotations.
     .filter((s) => !looksLikeTitle(s, knownPoemTitles))
-    // Drop echoes of the exam question prompt.
-    .filter((s) => !echoesQuestion(s))
-    // Drop short terminology citations that derive from the bank.
-    .filter((s) => !isShortTerminologyCitation(s));
+    .filter((s) => !echoesQuestion(s));
 
   const flagged: string[] = [];
   const matched: string[] = [];
@@ -135,6 +157,7 @@ export function validateQuotes(
   for (const raw of extracted) {
     const n = normalise(raw);
 
+    // Strategy 1: substring match (fastest, catches verbatim quotes).
     const substringHit = normalisedBank.some(
       (b) => b.includes(n) || n.includes(b),
     );
@@ -143,6 +166,8 @@ export function validateQuotes(
       continue;
     }
 
+    // Strategy 2: fuzzy match (catches ~1-2 char differences like single
+    // letter substitutions).
     const fuzzyHit = normalisedBank.some((b) => {
       if (Math.abs(b.length - n.length) > 4) return false;
       return levenshtein(b, n) <= 2;
@@ -152,9 +177,17 @@ export function validateQuotes(
       continue;
     }
 
-    // Handle compound quotations joined with " / " that map to two or more
-    // adjacent bank entries (common when model quotes consecutive lines).
+    // Strategy 3: slash-joined adjacent bank entries.
     if (matchesBySplit(raw, normalisedBank)) {
+      matched.push(raw);
+      continue;
+    }
+
+    // Strategy 4 (FALLBACK): all meaningful words appear in the bank after
+    // aggressive stemming. This catches morphological variation, word-order
+    // shuffling, and short critical-discourse citations. Most of the
+    // false-positive patterns we've hit are handled here.
+    if (matchesBankByWordSet(raw, concatBank)) {
       matched.push(raw);
       continue;
     }
@@ -162,7 +195,7 @@ export function validateQuotes(
     flagged.push(raw);
   }
 
-  // Detect attributed quote-like patterns not in quote marks
+  // Detect attributed quote-like patterns not in quote marks.
   const attributionRegex =
     /(?:as\s+\w+\s+(?:writes|says|states|observes|puts it|notes)[,:]?\s+)([^\.\n]{8,})/gi;
   const attributed = [...answerText.matchAll(attributionRegex)]
@@ -173,9 +206,9 @@ export function validateQuotes(
     const n = normalise(raw);
     if (looksLikeTitle(raw, knownPoemTitles)) continue;
     if (echoesQuestion(raw)) continue;
-    if (!normalisedBank.some((b) => b.includes(n) || n.includes(b))) {
-      flagged.push(raw);
-    }
+    if (normalisedBank.some((b) => b.includes(n) || n.includes(b))) continue;
+    if (matchesBankByWordSet(raw, concatBank)) continue;
+    flagged.push(raw);
   }
 
   const uniqueMatched = new Set(matched.map(normalise)).size;
