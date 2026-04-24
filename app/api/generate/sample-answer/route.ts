@@ -226,6 +226,16 @@ export async function POST(request: NextRequest) {
   });
 }
 
+export async function DELETE(request: NextRequest) {
+  const id = request.nextUrl.searchParams.get("id");
+  if (!id) return NextResponse.json({ error: "missing_id" }, { status: 400 });
+
+  const supabase = getServerSupabase();
+  const { error } = await supabase.from("sample_answers").delete().eq("id", id);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ status: "deleted" });
+}
+
 export async function PATCH(request: NextRequest) {
   let body: unknown;
   try {

@@ -36,11 +36,16 @@ export default async function GeneratePage() {
     <div className="min-h-screen bg-cream">
       <Nav />
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
-          <h1 className="text-2xl font-semibold text-navy">Generate Sample Answer</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            HL Poetry only. Select a poet, past question, and grade tier, then generate.
-          </p>
+        <div className="mb-6 flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold text-navy">Generate Sample Answer</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              HL Poetry only. Select a poet, past question, and grade tier, then generate.
+            </p>
+          </div>
+          <a href="/generate/history" className="text-sm text-teal-700 hover:underline whitespace-nowrap mt-1">
+            View past generations →
+          </a>
         </div>
         <GenerateForm poets={poets} availableYears={availableYears} defaultYear={defaultYear} />
       </main>
