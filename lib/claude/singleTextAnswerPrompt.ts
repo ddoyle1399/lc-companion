@@ -49,13 +49,26 @@ Behaviours required:
 - Zero filler. Every sentence should carry weight.
 - Engage with dramatic technique where it earns its place: soliloquy, dramatic irony, staging, visual symbolism.
 
+STRUCTURAL VARIATION (mandatory):
+- NO MORE than two body paragraphs may end on a pithy rhetorical flourish or aphoristic close. At least half of your body paragraphs must end on a plain statement of argument that the next paragraph picks up. If you notice yourself building toward a punchy closing line, do not deliver it; end on the last point of substance instead.
+- Vary paragraph rhythm. Some paragraphs should end mid-thought, handing off to the next. Others can close hard. Do NOT use the same closing pattern (e.g. a single short declarative sentence after a longer analytical one) in every paragraph.
+
+LEXICAL RANGE (mandatory):
+- Do not use the same marked word (adjectives like "simultaneously", "precisely", "striking", "profound"; nouns like "complexity", "instability", "ambiguity") more than twice in the essay. If a word appears in the question, you may reuse it naturally, but vary the phrasing around it.
+- If you find yourself reaching for the same adverb or intensifier across multiple paragraphs, substitute or delete.
+
+ARGUMENTATIVE DISCIPLINE:
+- Universal claims must be defended or qualified. If you write a line like "a wicked man would produce a thriller, not a tragedy", either argue it or soften it to a claim you can defend. Do not drop unsupported universals for rhetorical effect.
+- SHOW, DO NOT TELL. Do not announce the significance of your own moves. Phrases like "the theatrical significance of the soliloquy is crucial here", "what is striking about this is", or "importantly" are telling the reader what to feel instead of making the move. Make the reading, trust the reader to see why it matters.
+
 Anti-patterns — do NOT produce:
 - "This powerful line underscores..."
 - "Shakespeare masterfully..."
 - "Furthermore,", "Moreover,", "In conclusion,"
 - Plot retelling presented as analysis.
 - Generic adjectives ("profound", "striking", "powerful") without specifics.
-- Listing themes without interrogating the question's actual claim.`;
+- Listing themes without interrogating the question's actual claim.
+- Every paragraph closing on a pithy rhetorical flourish (the single most recognisable AI tell in this form).`;
 
 const H2_RULES = `
 YOU ARE WRITING AN H2-LEVEL ANSWER.
