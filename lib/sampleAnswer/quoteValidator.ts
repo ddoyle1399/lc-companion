@@ -83,6 +83,7 @@ export function validateQuotes(
 ): QuoteValidationResult {
   const normalisedBank = quoteBank.map(normalise);
   const normalisedQuestion = normalise(questionText);
+  const concatBank = normalisedBank.join(" ");
 
   // A candidate is an echo of the exam question prompt (standard H1 move:
   // "Heaney's poems, 'deceptively simple', do X") and should not be validated
@@ -92,6 +93,21 @@ export function validateQuotes(
     const n = normalise(candidate);
     if (n.length < 3) return false;
     return normalisedQuestion.includes(n);
+  }
+
+  // A short (1-3 word) quoted phrase is usually a critical-discourse citation
+  // of a key term from the text, not a verbatim multi-word quotation. E.g.
+  // writing `Lady Macbeth's "unsexed" resolve` uses "unsexed" as a concept
+  // drawn from her "unsex me here" line. Accept if every stemmed word
+  // appears somewhere in the bank.
+  function isShortTerminologyCitation(candidate: string): boolean {
+    const words = candidate.trim().split(/\s+/);
+    if (words.length > 3) return false;
+    return words.every((w) => {
+      const stem = normalise(w).replace(/(ed|ing|s|'s)$/i, "");
+      if (stem.length < 3) return true; // skip short particles
+      return concatBank.includes(stem);
+    });
   }
 
   // Extract substrings inside double (incl. curly) or single quotes
@@ -104,7 +120,9 @@ export function validateQuotes(
     // mention, not a quotation, and must not be validated as a quote.
     .filter((s) => !looksLikeTitle(s, knownPoemTitles))
     // Drop echoes of the exam question prompt.
-    .filter((s) => !echoesQuestion(s));
+    .filter((s) => !echoesQuestion(s))
+    // Drop short terminology citations that derive from the bank.
+    .filter((s) => !isShortTerminologyCitation(s));
 
   const flagged: string[] = [];
   const matched: string[] = [];
