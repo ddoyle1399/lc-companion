@@ -55,13 +55,46 @@ function truncate(s: string, n: number) {
   return s.length <= n ? s : s.slice(0, n) + "…";
 }
 
+type Section = "poetry" | "single_text" | "comparative";
+
+interface SectionAvailability {
+  poetry: boolean;
+  single_text: boolean;
+  comparative: boolean;
+}
+
 interface Props {
   poets: string[];
+  singleTextSubjects: string[];
+  comparativeSubjects: string[];
+  sectionAvailability: SectionAvailability;
   availableYears: number[];
   defaultYear: number;
 }
 
-export default function GenerateForm({ poets, availableYears, defaultYear }: Props) {
+const SECTION_LABELS: Record<Section, string> = {
+  poetry: "Poetry",
+  single_text: "Single Text",
+  comparative: "Comparative",
+};
+
+export default function GenerateForm({
+  poets,
+  singleTextSubjects,
+  comparativeSubjects,
+  sectionAvailability,
+  availableYears,
+  defaultYear,
+}: Props) {
+  // Default to the first available section. Poetry first if available,
+  // otherwise whichever section has banks.
+  const defaultSection: Section = sectionAvailability.poetry
+    ? "poetry"
+    : sectionAvailability.single_text
+      ? "single_text"
+      : "comparative";
+
+  const [section, setSection] = useState<Section>(defaultSection);
   const [examCycleYear, setExamCycleYear] = useState<number>(defaultYear);
   const [poet, setPoet] = useState("");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -239,11 +272,82 @@ export default function GenerateForm({ poets, availableYears, defaultYear }: Pro
   const { label: selLabel, colour: selColour } = selectionStatus();
   const canGenerate = !!poet && !!questionId && !!gradeTier && selectedCount >= 3 && selectedCount <= 6 && !generating;
 
+  // Message shown when a section has no verified banks yet.
+  function unavailableMessage(s: Section): string {
+    if (s === "single_text") {
+      return "No verified Single Text quote banks yet. Seed Macbeth or Othello from a canonical source to unlock this section.";
+    }
+    if (s === "comparative") {
+      return "No verified Comparative quote banks yet. Seed three or more prescribed comparative texts to unlock this section.";
+    }
+    return "No verified Poetry quote banks yet. Verify at least one poet's quote bank to unlock this section.";
+  }
+
   return (
     <div className="space-y-6">
       {/* Form card */}
       <div className="bg-white border border-gray-200 rounded-lg p-5">
         <div className="space-y-4">
+
+          {/* Section selector */}
+          <div>
+            <label className="block text-sm font-medium text-navy mb-2">Section</label>
+            <div className="flex gap-3 flex-wrap">
+              {(Object.keys(SECTION_LABELS) as Section[]).map((s) => {
+                const available = sectionAvailability[s];
+                const isSelected = section === s;
+                return (
+                  <label
+                    key={s}
+                    className={`flex items-center gap-1.5 ${
+                      available ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+                    }`}
+                    title={available ? "" : unavailableMessage(s)}
+                  >
+                    <input
+                      type="radio"
+                      name="section"
+                      value={s}
+                      checked={isSelected}
+                      disabled={!available}
+                      onChange={() => {
+                        setSection(s);
+                        setPoet("");
+                        setQuestionId("");
+                        setQuestions([]);
+                        setPoems([]);
+                        setSelectedPoems(new Set());
+                        setResult(null);
+                      }}
+                      className="accent-teal"
+                    />
+                    <span className="text-sm text-navy">{SECTION_LABELS[s]}</span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Section gate: if the selected section isn't available, show why. */}
+          {!sectionAvailability[section] && (
+            <div className="bg-amber-50 border border-amber-200 rounded p-3">
+              <p className="text-sm text-amber-900">{unavailableMessage(section)}</p>
+            </div>
+          )}
+
+          {/* Non-poetry sections are stubs today. Show a placeholder and stop. */}
+          {section !== "poetry" && sectionAvailability[section] && (
+            <div className="bg-amber-50 border border-amber-200 rounded p-3">
+              <p className="text-sm text-amber-900">
+                {SECTION_LABELS[section]} generator is coming. The section has verified banks but
+                the generator pipeline has not yet been wired. Available subjects:{" "}
+                {(section === "single_text" ? singleTextSubjects : comparativeSubjects).join(", ") || "none"}
+              </p>
+            </div>
+          )}
+
+          {/* Poetry-only form fields follow. */}
+          {section === "poetry" && sectionAvailability.poetry && (<>
 
           {/* Exam cycle year */}
           <div>
@@ -395,6 +499,7 @@ export default function GenerateForm({ poets, availableYears, defaultYear }: Pro
               </p>
             )}
           </div>
+          </>)}
         </div>
       </div>
 
