@@ -111,6 +111,13 @@ export default function GenerateForm({
   const [approving, setApproving] = useState(false);
   const [approved, setApproved] = useState(false);
 
+  // Single Text state
+  const [stTextKey, setStTextKey] = useState("");
+  const [stQuestions, setStQuestions] = useState<Question[]>([]);
+  const [stQuestionId, setStQuestionId] = useState("");
+  const [stLoading, setStLoading] = useState(false);
+  const [stError, setStError] = useState("");
+
   // Poets available for the selected exam cycle year
   const prescribedPoets = getPoetsHL(examCycleYear);
   const filteredPoets = poets.filter((p) => prescribedPoets.includes(p));
@@ -177,6 +184,36 @@ export default function GenerateForm({
     loadPoems(poet, examCycleYear);
   }, [poet, examCycleYear, loadPoems]);
 
+  // Single Text loaders
+  const loadStQuestions = useCallback(async (textKey: string) => {
+    if (!textKey) {
+      setStQuestions([]);
+      setStQuestionId("");
+      return;
+    }
+    setStLoading(true);
+    setStError("");
+    const res = await fetch(
+      `/api/generate/single-text-questions?textKey=${encodeURIComponent(textKey)}`,
+    );
+    const json = await res.json();
+    setStLoading(false);
+    if (!res.ok) {
+      setStError("Failed to load past questions.");
+      return;
+    }
+    if (!json.questions || json.questions.length === 0) {
+      setStError(`No seeded questions for ${textKey} yet.`);
+      return;
+    }
+    setStQuestions(json.questions);
+    setStQuestionId(json.questions[0].id);
+  }, []);
+
+  useEffect(() => {
+    loadStQuestions(stTextKey);
+  }, [stTextKey, loadStQuestions]);
+
   function handleYearChange(year: number) {
     setExamCycleYear(year);
     setPoet("");
@@ -211,24 +248,49 @@ export default function GenerateForm({
   }
 
   async function handleGenerate() {
-    if (!poet || !questionId || !gradeTier || selectedCount < 3 || selectedCount > 6) return;
     setGenerating(true);
     setResult(null);
     setApproved(false);
     setReviewerNotes("");
 
     try {
-      const res = await fetch("/api/generate/sample-answer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          questionId,
-          gradeTier,
-          poetKey: poet,
-          examCycleYear,
-          selectedPoems: Array.from(selectedPoems),
-        }),
-      });
+      let res: Response;
+      if (section === "poetry") {
+        if (!poet || !questionId || selectedCount < 3 || selectedCount > 6) {
+          setGenerating(false);
+          return;
+        }
+        res = await fetch("/api/generate/sample-answer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            questionId,
+            gradeTier,
+            poetKey: poet,
+            examCycleYear,
+            selectedPoems: Array.from(selectedPoems),
+          }),
+        });
+      } else if (section === "single_text") {
+        if (!stTextKey || !stQuestionId) {
+          setGenerating(false);
+          return;
+        }
+        res = await fetch("/api/generate/single-text-answer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            questionId: stQuestionId,
+            gradeTier,
+            textKey: stTextKey,
+          }),
+        });
+      } else {
+        setGenerating(false);
+        setResult({ status: "error", message: "Comparative generator not yet wired." });
+        return;
+      }
+
       const json = await res.json();
 
       if (res.status === 422 && json.status === "validation_failed") {
@@ -237,8 +299,8 @@ export default function GenerateForm({
         const msg =
           json.error === "unverified_poems_selected"
             ? `Some selected poems have no verified bank: ${(json.missing ?? []).join(", ")}`
-            : json.error === "no_verified_notes" || json.error === "quote_bank_too_thin"
-              ? "Quote bank not yet verified for this poet. Upload an anthology scan first."
+            : json.error === "no_verified_notes" || json.error === "no_verified_bank" || json.error === "quote_bank_too_thin"
+              ? "Quote bank not yet verified. Upload source material first."
               : json.error === "pclm_not_seeded"
                 ? "No PCLM target seeded for this question. Seed the marking scheme first."
                 : json.error === "generation_failed"
@@ -335,16 +397,99 @@ export default function GenerateForm({
             </div>
           )}
 
-          {/* Non-poetry sections are stubs today. Show a placeholder and stop. */}
-          {section !== "poetry" && sectionAvailability[section] && (
+          {/* Comparative section remains a stub. */}
+          {section === "comparative" && sectionAvailability.comparative && (
             <div className="bg-amber-50 border border-amber-200 rounded p-3">
               <p className="text-sm text-amber-900">
-                {SECTION_LABELS[section]} generator is coming. The section has verified banks but
+                Comparative generator is coming. The section has verified banks but
                 the generator pipeline has not yet been wired. Available subjects:{" "}
-                {(section === "single_text" ? singleTextSubjects : comparativeSubjects).join(", ") || "none"}
+                {comparativeSubjects.join(", ") || "none"}
               </p>
             </div>
           )}
+
+          {/* Single Text section: real form. */}
+          {section === "single_text" && sectionAvailability.single_text && (<>
+          <div>
+            <label className="block text-sm font-medium text-navy mb-1">Text</label>
+            <select
+              value={stTextKey}
+              onChange={(e) => { setStTextKey(e.target.value); setResult(null); }}
+              className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-navy focus:outline-none focus:border-teal"
+            >
+              <option value="">Select a text…</option>
+              {singleTextSubjects.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          </div>
+
+          {stTextKey && (<>
+            <div>
+              <label className="block text-sm font-medium text-navy mb-1">Past question</label>
+              {stLoading ? (
+                <p className="text-sm text-gray-400">Loading…</p>
+              ) : stError ? (
+                <p className="text-sm text-red-600">{stError}</p>
+              ) : stQuestions.length === 0 ? (
+                <p className="text-sm text-gray-400">No questions seeded for this text.</p>
+              ) : (
+                <select
+                  value={stQuestionId}
+                  onChange={(e) => setStQuestionId(e.target.value)}
+                  className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-navy focus:outline-none focus:border-teal"
+                >
+                  {stQuestions.map((q) => (
+                    <option key={q.id} value={q.id}>
+                      {q.exam_year} — {truncate(q.question_text, 90)}
+                    </option>
+                  ))}
+                </select>
+              )}
+              <p className="text-xs text-gray-400 mt-1">
+                The question drives the answer. The generator reads it and picks quotes from the full {stTextKey} bank accordingly.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-navy mb-2">Grade tier</label>
+              <div className="flex gap-3">
+                {(["H1", "H2", "H3"] as GradeTier[]).map((t) => (
+                  <label key={t} className="flex items-center gap-1.5 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="stGradeTier"
+                      value={t}
+                      checked={gradeTier === t}
+                      onChange={() => setGradeTier(t)}
+                      className="accent-teal"
+                    />
+                    <span className="text-sm text-navy">{t}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-1">
+              <button
+                onClick={handleGenerate}
+                disabled={!stTextKey || !stQuestionId || generating}
+                className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
+                  !stTextKey || !stQuestionId || generating
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-teal text-white hover:bg-teal/90"
+                }`}
+              >
+                {generating ? "Generating…" : "Generate"}
+              </button>
+              {generating && (
+                <p className="text-xs text-gray-400 mt-2">
+                  This takes 15–60 seconds. Claude is writing the answer…
+                </p>
+              )}
+            </div>
+          </>)}
+          </>)}
 
           {/* Poetry-only form fields follow. */}
           {section === "poetry" && sectionAvailability.poetry && (<>

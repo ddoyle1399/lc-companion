@@ -7,7 +7,7 @@ export type SaveSampleAnswerInput = {
   questionId: string;
   noteId?: string | null;
   tier: GradeTier;
-  questionType: "poetry";
+  questionType: "poetry" | "single_text" | "comparative";
   markCap: number;
   markingMode: "discrete";
   pclmTarget: { P: number; C: number; L: number; M: number };
@@ -16,6 +16,8 @@ export type SaveSampleAnswerInput = {
   quotesUsed: string[];
   validatorResult: QuoteValidationResult;
   model: string;
+  // Reused field: for poetry holds selected poem titles, for single_text
+  // holds selected themes, for comparative holds selected text keys.
   selectedPoems: string[];
 };
 
