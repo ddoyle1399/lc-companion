@@ -104,7 +104,7 @@ export default function AnswerDetailClient({ answer }: { answer: SampleAnswerFul
           <p><span className="font-medium">Grade tier:</span> {answer.grade_tier}</p>
           <p>
             <span className="font-medium">Generated:</span>{" "}
-            {formatDate(answer.created_at)} · {answer.generation_model ?? "Claude"} · {answer.word_count} w
+            {formatDate(answer.generated_at)} · {answer.generation_model ?? "Claude"} · {answer.word_count} w
           </p>
           <p>
             <span className="font-medium">Status:</span>{" "}

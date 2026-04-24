@@ -4,7 +4,7 @@ import { getServerSupabase } from "@/lib/supabase/server";
 
 interface HistoryRow {
   id: string;
-  created_at: string;
+  generated_at: string;
   grade_tier: string;
   word_count: number;
   approved: boolean;
@@ -19,7 +19,7 @@ async function getSampleAnswers(): Promise<HistoryRow[]> {
     .from("sample_answers")
     .select(`
       id,
-      created_at,
+      generated_at,
       grade_tier,
       word_count,
       approved,
@@ -29,7 +29,7 @@ async function getSampleAnswers(): Promise<HistoryRow[]> {
         subject_key
       )
     `)
-    .order("created_at", { ascending: false });
+    .order("generated_at", { ascending: false });
 
   if (error || !data) return [];
 
@@ -39,7 +39,7 @@ async function getSampleAnswers(): Promise<HistoryRow[]> {
       : row.past_questions;
     return {
       id: row.id as string,
-      created_at: row.created_at as string,
+      generated_at: row.generated_at as string,
       grade_tier: row.grade_tier as string,
       word_count: row.word_count as number,
       approved: row.approved as boolean,
@@ -102,7 +102,7 @@ export default async function HistoryPage() {
               >
                 <div className="flex-1 min-w-0 pr-4">
                   <div className="text-xs text-gray-400 mb-1">
-                    {formatDate(row.created_at)} · {row.subject_key ?? "Unknown poet"} · {row.word_count} w
+                    {formatDate(row.generated_at)} · {row.subject_key ?? "Unknown poet"} · {row.word_count} w
                   </div>
                   <p className="text-sm text-gray-800 truncate">
                     {row.question_text ? truncate(row.question_text, 80) : "No question text"}

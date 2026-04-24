@@ -16,7 +16,7 @@ async function fetchAnswer(id: string): Promise<SampleAnswerFull | null> {
       pclm_target,
       selected_poems,
       generation_model,
-      created_at,
+      generated_at,
       approved,
       reviewer_notes,
       question_id,
@@ -43,7 +43,7 @@ async function fetchAnswer(id: string): Promise<SampleAnswerFull | null> {
     pclm_target: data.pclm_target as { P: number; C: number; L: number; M: number } | null,
     selected_poems: data.selected_poems as string[] | null,
     generation_model: data.generation_model as string | null,
-    created_at: data.created_at as string,
+    generated_at: data.generated_at as string,
     approved: data.approved as boolean,
     reviewer_notes: data.reviewer_notes as string | null,
     question: {
