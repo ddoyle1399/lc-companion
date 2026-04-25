@@ -110,6 +110,50 @@ export interface PromptContext {
   textTitle?: string;
   comparativeMode?: string;
   comparativeTexts?: ComparativeTextEntry[];
+
+  /**
+   * Verified substrate per text, parallel to comparativeTexts.
+   * Each entry is either a ProfileEntry (from data/profiles/comparative/index.ts)
+   * or null if no profile exists for that text yet.
+   * When non-null, prompts must anchor in the profile and quote only from the
+   * provided quote bank for that text.
+   */
+  comparativeProfiles?: Array<{
+    profile: unknown; // ComparativeTextProfile imported as JSON; typed loosely here to avoid circular import.
+    quotes: unknown;  // QuoteBank.
+  } | null>;
+
+  /**
+   * Verified substrate for the Single Text question (Paper 2 Section I).
+   * The same profile that backs comparative analysis backs single-text analysis,
+   * because the underlying text knowledge (plot, characters, key moments,
+   * quotes) is the same. Looked up via findProfileByTitle(year, textTitle).
+   */
+  singleTextProfile?: {
+    profile: unknown;
+    quotes: unknown;
+  } | null;
+
+  // Comparative note-type system (added April 2026 revamp).
+  // Default is "mode_grid" (the original 5-section note) so existing callers keep working.
+  comparativeNoteType?:
+    | 'mode_grid'                // 3 texts + 1 mode, the original 5-section comparative note
+    | 'text_full_breakdown'      // 1 text, full plot+character+theme+moments breakdown for comparative use
+    | 'text_character'           // 1 text + character name, deep character study with mode-relevance tags
+    | 'text_key_moments'         // 1 text, 5-8 key moments tagged to all four modes
+    | 'text_mode_profile'        // 1 text + 1 mode, how this text serves this specific mode in depth
+    | 'text_relationships'       // 1 text, relationship map between characters
+    | 'text_quote_bank'          // 1 text, themed quote bank organised by character and theme
+    | 'comparison_grid_table'    // 3 texts + 1 mode, the visual grid (texts x mode-axes)
+    | 'comparative_argument'     // 3 texts + mode + argument focus, one detailed cross-text argument
+    | 'sample_paragraph'         // 3 texts + mode + angle, one A-then-B-then-C model paragraph
+    | 'question_plan'            // 3 texts + question + format, structured exam answer plan
+    | 'sample_answer';           // 3 texts + question + format, full H1 sample answer
+  comparativeCharacterName?: string;       // for text_character
+  comparativeArgumentFocus?: string;       // for comparative_argument
+  comparativeQuestionText?: string;        // for question_plan / sample_answer
+  comparativeQuestionFormat?: 'Q1a_30' | 'Q1b_40' | 'Q2_70';
+
   userInstructions?: string;
   examSummary?: string;
   prescribedPoems?: string[];
@@ -802,7 +846,257 @@ The student is studying at ${context.level} Level.${examAlignmentBlock}`;
 }
 
 
+// =============================================================================
+// COMPARATIVE PROMPT DISPATCHER
+//
+// The comparative section produces twelve distinct note types organised in three
+// families. The dispatcher routes on context.comparativeNoteType. Default
+// behaviour is "mode_grid" (the original 5-section comparative note), so any
+// caller that does not set the discriminator gets the legacy behaviour.
+//
+// Single-text family (uses 1 text from comparativeTexts[0]):
+//   text_full_breakdown, text_character, text_key_moments, text_mode_profile,
+//   text_relationships, text_quote_bank
+// Cross-text family (uses 3 texts):
+//   mode_grid, comparison_grid_table, comparative_argument, sample_paragraph
+// Question-driven family (3 texts + question text + format):
+//   question_plan, sample_answer
+// =============================================================================
+
 export function buildComparativePrompt(context: PromptContext): string {
+  const noteType = context.comparativeNoteType || 'mode_grid';
+  const core = (() => {
+    switch (noteType) {
+      case 'mode_grid':
+        return buildComparativeModeGridPrompt(context);
+      case 'text_full_breakdown':
+        return buildComparativeTextFullPrompt(context);
+      case 'text_character':
+        return buildComparativeCharacterPrompt(context);
+      case 'text_key_moments':
+        return buildComparativeKeyMomentsPrompt(context);
+      case 'text_mode_profile':
+        return buildComparativeModeProfilePrompt(context);
+      case 'text_relationships':
+        return buildComparativeRelationshipsPrompt(context);
+      case 'text_quote_bank':
+        return buildComparativeQuoteBankPrompt(context);
+      case 'comparison_grid_table':
+        return buildComparativeGridTablePrompt(context);
+      case 'comparative_argument':
+        return buildComparativeArgumentPrompt(context);
+      case 'sample_paragraph':
+        return buildComparativeSampleParagraphPrompt(context);
+      case 'question_plan':
+        return buildComparativeQuestionPlanPrompt(context);
+      case 'sample_answer':
+        return buildComparativeSampleAnswerPrompt(context);
+      default:
+        return buildComparativeModeGridPrompt(context);
+    }
+  })();
+
+  const substrate = buildSubstrateBlock(context);
+  return substrate ? `${substrate}\n\n${core}` : core;
+}
+
+/**
+ * Render the verified substrate (Profile + QuoteBank) for any text in
+ * comparativeProfiles that has one. Empty string if no profiles are present.
+ *
+ * The block is prepended to every comparative user prompt. It enforces:
+ *   - quote only from the provided quote bank for profiled texts
+ *   - do not contradict the verified key_moments / characters / mode profiles
+ *   - paraphrase if a needed quote is not in the bank
+ *   - for unprofiled texts, fall back to web-search verification with paraphrase
+ */
+function buildSubstrateBlock(context: PromptContext): string {
+  const profiles = context.comparativeProfiles ?? [];
+  const texts = context.comparativeTexts ?? [];
+  return renderSubstrateBlock(
+    texts.map((t) => formatTextEntry(t)),
+    profiles
+  );
+}
+
+/**
+ * Single-text variant. Used by buildSingleTextPrompt. The same profile schema
+ * backs both questions: a Crucible profile serves Paper 2 Section I (Single
+ * Text, 60 marks) and Section II (Comparative, 70 marks) equally.
+ */
+function buildSingleTextSubstrateBlock(context: PromptContext): string {
+  const entry = context.singleTextProfile;
+  if (!entry) return "";
+  const headerLabel = context.textTitle
+    ? `"${context.textTitle}"${context.author ? ` by ${context.author}` : ""}`
+    : "(unspecified)";
+  return renderSubstrateBlock([headerLabel], [entry]);
+}
+
+/**
+ * Shared rendering for substrate. Inputs are parallel arrays of text labels
+ * and profile entries (null where no profile is available). Returns the empty
+ * string if no entries are present.
+ */
+function renderSubstrateBlock(
+  textLabels: string[],
+  entries: Array<{ profile: unknown; quotes: unknown } | null>
+): string {
+  const anyProfile = entries.some((p) => p != null);
+  if (!anyProfile) return "";
+
+  const blocks: string[] = entries.map((entry, i) => {
+    const tag = `Text ${i + 1}`;
+    if (!entry) {
+      const titleStr = textLabels[i] ?? "(unspecified)";
+      return `### ${tag}: ${titleStr}\nNO VERIFIED SUBSTRATE. For this text, verify quotes via web search; paraphrase if you cannot verify; never fabricate quotations.`;
+    }
+    const profile = entry.profile as { title?: string; author?: string };
+    const profileJson = JSON.stringify(entry.profile, null, 2);
+    const quotesJson = JSON.stringify(entry.quotes, null, 2);
+    const header = profile.title
+      ? `${tag}: "${profile.title}"${profile.author ? ` by ${profile.author}` : ""}`
+      : tag;
+    return `### ${header}\nVERIFIED SUBSTRATE PROVIDED. Anchor your analysis here.\n\n<profile>\n${profileJson}\n</profile>\n\n<quote_bank>\n${quotesJson}\n</quote_bank>`;
+  });
+
+  return `<verified_substrate>
+The following is reviewed analytical substrate for one or more of the texts in this task. It has been hand-checked. ANCHOR YOUR ANALYSIS IN THIS SUBSTRATE.
+
+ABSOLUTE RULES WHEN A SUBSTRATE IS PRESENT FOR A TEXT:
+1. Quote ONLY from that text's quote_bank below. Every double-quoted phrase you write for that text must match a quote.text entry verbatim, character-for-character, including punctuation and capitalisation.
+2. Use the verified plotBeats, keyMoments, characters, relationships, culturalContext, generalVisionAndViewpoint, literaryGenre, and themeOrIssue fields as your primary source. Do not invent characters, plot details, or claims that contradict the substrate.
+3. If you need a quote that is not in the quote_bank, do not invent one. Paraphrase the moment in your own words and frame it explicitly as paraphrase ("a moment in which...", "the play has the character...").
+4. Do not output quote IDs, key moment IDs, or any other internal identifier in your response. The IDs are for your reasoning only; the student should never see them.
+5. Do not introduce material from outside the substrate for this text. The substrate is the source of truth.
+
+For texts with NO VERIFIED SUBSTRATE: use web search to verify any quotation; if you cannot verify, paraphrase and label as paraphrase.
+
+${blocks.join("\n\n---\n\n")}
+</verified_substrate>`;
+}
+
+// -----------------------------------------------------------------------------
+// Shared helpers for comparative prompts
+// -----------------------------------------------------------------------------
+
+function getModeAxes(mode: string): string {
+  if (mode === 'Cultural Context') {
+    return `Cultural Context axes (use only those genuinely present in the text):
+1. Social setting and class
+2. Gender roles and the freedom of women
+3. Religion and institutional authority
+4. Family and marriage
+5. Authority, power, and conformity vs rebellion against social norms`;
+  }
+  if (mode === 'General Vision and Viewpoint') {
+    return `General Vision and Viewpoint axes:
+1. The text's one-line vision (optimistic, pessimistic, qualified, ambiguous)
+2. The opening and how it shapes the vision
+3. Key moment or climax and how it shapes the vision
+4. The closing and how it shapes the vision
+5. Characters' responses to crises (resilience, passivity, courage)
+6. Compassion vs cruelty, hope vs despair, paradox of human nature`;
+  }
+  if (mode === 'Literary Genre') {
+    return `Literary Genre axes (use the toolkit appropriate to the text type):
+For novels: narrative voice, structure, imagery, pacing, dialogue, characterisation.
+For drama: soliloquy, stage directions, asides, structure, dialogue, staging.
+For film: cinematography, music, editing, mise-en-scene, dialogue, performance.
+Always include: opening, key moment / climax, closing.`;
+  }
+  if (mode === 'Theme or Issue') {
+    return `Theme or Issue axes:
+1. What the theme or issue is at the centre of the text
+2. How the text introduces the theme
+3. Pivotal moments where the theme is tested or revealed
+4. Contradictory aspects of the theme (paradox, ambiguity)
+5. What position the text ultimately takes on the theme
+6. How the theme connects to character, conflict, and resolution`;
+  }
+  if (mode === 'Social Setting') {
+    return `Social Setting axes (Ordinary Level):
+1. Where and when the text is set
+2. The community and its values
+3. Family life within the setting
+4. Work, money, and social position
+5. How setting shapes characters' choices`;
+  }
+  if (mode === 'Relationships') {
+    return `Relationships axes (Ordinary Level):
+1. Family relationships
+2. Friendships
+3. Romantic relationships
+4. Conflict between characters
+5. How relationships change over the course of the text`;
+  }
+  if (mode === 'Hero, heroine, villain' || mode === 'Hero/Heroine/Villain') {
+    return `Hero, heroine, villain axes (Ordinary Level):
+1. Who the hero or heroine is and what they want
+2. Who opposes them and why
+3. Key choices the hero or heroine makes
+4. Key actions of the villain or antagonist
+5. How the conflict resolves and what it shows about each role`;
+  }
+  // Theme (OL)
+  if (mode === 'Theme') {
+    return `Theme axes (Ordinary Level):
+1. What the theme is and how it is introduced
+2. Key moments where the theme is shown
+3. How different characters relate to the theme
+4. How the theme is resolved (or left open)
+5. What the text says about this theme overall`;
+  }
+  return '';
+}
+
+function getModeFocusBlock(mode: string): string {
+  if (mode === 'Cultural Context') {
+    return `MODE FOCUS: Arguments must relate to social setting and class, family, religion, love and marriage, gender roles, or authority and conformity. Only use axes genuinely relevant to the text. Do not force every axis onto every text. Cultural Context is about the world the characters live in and how it determines their freedoms and choices, not about isolated themes.`;
+  }
+  if (mode === 'General Vision and Viewpoint') {
+    return `MODE FOCUS: Focus on the overall worldview each text presents. Is it optimistic, pessimistic, qualified, or ambiguous? Use the opening, the climax or pivotal moment, and the closing as anchors. The SEC routinely tests the climax directly. Address how characters' responses to crises shape the reader's sense of hope or despair. Do not drift into theme analysis.`;
+  }
+  if (mode === 'Literary Genre') {
+    return `MODE FOCUS: Focus on HOW each text tells its story, not just what happens. Use the toolkit appropriate to each text type: novel (narrative voice, structure, imagery, pacing), drama (soliloquy, stage directions, structure, staging), film (cinematography, music, editing, mise-en-scene). Anchor every claim in a specific moment or scene. The SEC rewards candidates who use the right toolkit for the right genre.`;
+  }
+  if (mode === 'Theme or Issue') {
+    return `MODE FOCUS: Identify the shared theme or issue. Show how each text approaches it differently. Use pivotal moments where the theme is tested. Address contradictory aspects of human nature where relevant (a recurring SEC angle). Do not produce a summary of each text. Compare how the three texts illuminate the theme through different lenses.`;
+  }
+  return '';
+}
+
+function formatTextEntryShort(t: ComparativeTextEntry | undefined): string {
+  if (!t) return 'a text';
+  if (t.director) return `"${t.title}" directed by ${t.director}`;
+  return `"${t.title}" by ${t.author}`;
+}
+
+function formatTextWithType(t: ComparativeTextEntry | undefined): string {
+  if (!t) return 'a text';
+  const typeLabel = t.category || 'text';
+  if (t.director) return `"${t.title}" directed by ${t.director} (${typeLabel})`;
+  return `"${t.title}" by ${t.author} (${typeLabel})`;
+}
+
+function getQuestionFormatBlock(format: string | undefined): string {
+  if (format === 'Q1a_30') {
+    return `FORMAT: Q1(a), 30 marks. Single text answer. Approximately 500-650 words. PCLM split: P=9, C=9, L=9, M=3. The answer must focus on ONE of the three texts only. The other two texts will be addressed in the Q1(b) follow-on. Do not over-introduce the mode; spend your time on the argument and evidence. The SEC marker rewards a clear thesis stated in the first 2 sentences and evidence anchored in 2-3 specific moments.`;
+  }
+  if (format === 'Q1b_40') {
+    return `FORMAT: Q1(b), 40 marks. Comparative answer across two texts. Approximately 700-900 words. PCLM split: P=12, C=12, L=12, M=4. The answer must compare the OTHER two texts (not the one used in Q1(a)). Use sustained comparative writing inside paragraphs, not just at paragraph junctions. Include 3-4 link sentences ("While X... by contrast Y...", "Similarly to X, Y also..."). The SEC marker rewards qualification ("similarities need to be qualified by..."); avoid binary positions where ambiguity is more accurate.`;
+  }
+  if (format === 'Q2_70') {
+    return `FORMAT: Q2, 70 marks, single full essay. Approximately 1300-1600 words (around 5 well-developed pages, NOT 9). PCLM split: P=21, C=21, L=21, M=7. The answer must reference all three texts in a sustained comparative weave. 4-6 substantial body paragraphs, each citing all three texts with explicit comparative link language. Introduction defines the mode in candidate's own words and signals position on the question; brief, question-facing conclusion. The single biggest H1/H2 differentiator is "primacy of Purpose": rhetorical beauty cannot exceed marks for clarity of argument. Going long cannibalises Poetry time, so do not pad.`;
+  }
+  return '';
+}
+
+// -----------------------------------------------------------------------------
+// 1. mode_grid (default, 5-section comparative note across 3 texts)
+// -----------------------------------------------------------------------------
+
+function buildComparativeModeGridPrompt(context: PromptContext): string {
   const userInstr = context.userInstructions
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
@@ -812,29 +1106,15 @@ export function buildComparativePrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  let modeSpecificInstruction = "";
-  if (context.comparativeMode === "Cultural Context") {
-    modeSpecificInstruction = `
-FOR CULTURAL CONTEXT SPECIFICALLY: Arguments must relate to one or more of: social setting and class, family, religion, love and marriage, gender roles. Only use topics genuinely relevant to each text. Do not force all five topics onto texts where they do not apply.`;
-  } else if (
-    context.comparativeMode === "General Vision and Viewpoint"
-  ) {
-    modeSpecificInstruction = `
-FOR GENERAL VISION AND VIEWPOINT SPECIFICALLY: Focus on the overall worldview of each text. Is it optimistic, pessimistic, or somewhere between? Consider how key events, characters, and the ending shape the reader's sense of hope or despair. Address both the characters' vision and the text's overall stance.`;
-  } else if (context.comparativeMode === "Literary Genre") {
-    modeSpecificInstruction = `
-FOR LITERARY GENRE SPECIFICALLY: Focus on HOW each text tells its story, not just what happens. Discuss narrative techniques, structure, use of dialogue, pacing, visual techniques (for film), staging (for drama), and how these choices shape the reader/viewer's experience.`;
-  } else if (context.comparativeMode === "Theme or Issue") {
-    modeSpecificInstruction = `
-FOR THEME OR ISSUE SPECIFICALLY: Focus on how each text explores a shared theme or issue. Identify what the theme is, how each text approaches it differently, and what insights emerge from comparing the three treatments.`;
-  }
+  const modeFocus = getModeFocusBlock(context.comparativeMode || '');
 
   return `Generate a comparative study note for the following three texts studied through the lens of ${context.comparativeMode}.
 
 ${textList}
 
 Year: ${context.year} | Level: ${context.level} | Mode: ${context.comparativeMode}
-${modeSpecificInstruction}
+
+${modeFocus}
 
 STRUCTURE (follow this exactly):
 
@@ -842,7 +1122,7 @@ STRUCTURE (follow this exactly):
 2-3 sentences covering:
 - What this comparative mode actually means
 - What the examiner is looking for when reading an answer in this mode
-- The most common mistake students make (e.g., writing about theme when the question is about vision, or summarising each text instead of comparing)
+- The most common mistake students make (e.g. writing about theme when the question is about vision, or summarising each text instead of comparing)
 
 ## 2. Key Comparative Arguments
 Provide 4-5 arguments. For EACH argument:
@@ -850,34 +1130,651 @@ Provide 4-5 arguments. For EACH argument:
 - 3-5 sentences developing the argument with supporting evidence from ALL THREE texts
 - This must be a genuine comparison, not three separate summaries
 - One clear similarity across the texts
-- One clear contrast across the texts
+- One clear qualification or contrast across the texts
 
 ## 3. Comparison Anchors
 For each argument from Section 2, provide:
 - A pre-built transitional phrase for linking the texts in an exam answer
-- These should be ready-to-use sentence starters like: "While [Text A] presents..., [Text B] offers a contrasting..."
+- Ready-to-use sentence starters such as "While [Text A] presents..., [Text B] offers a qualified..."
 - Include phrases for both similarities and contrasts
 
 ## 4. Key Quotes per Mode
 For each of the three texts, provide 3-4 key quotes that are relevant to this mode.
 - Tag each quote to which argument from Section 2 it supports
-- Use web search to verify quotes. If you cannot verify, paraphrase and flag with [VERIFY]
+- Use web search to verify quotes. If you cannot verify, paraphrase and label as a paraphrase
 
 ### ${texts[0]?.title || "Text 1"}
-[3-4 quotes]
+3-4 quotes here
 
 ### ${texts[1]?.title || "Text 2"}
-[3-4 quotes]
+3-4 quotes here
 
 ### ${texts[2]?.title || "Text 3"}
-[3-4 quotes]
+3-4 quotes here
 
 ## 5. Sample Comparative Paragraph
-Write one full paragraph demonstrating how to weave all three texts together in response to a typical question in this mode.
-- Use the A-then-B-then-C linking structure that examiners reward
-- Include quotes from Section 4
-- Show how to transition between texts smoothly
+Write one full paragraph (180-220 words) demonstrating how to weave all three texts together in response to a typical question in this mode.
+- Use sustained comparative writing within the paragraph, not just at junctions
+- Include short quotes from Section 4
+- Show how to transition between texts using the link sentences from Section 3
 - Address the specific mode, not general themes${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 2. text_full_breakdown (1 text, full breakdown for comparative use)
+// -----------------------------------------------------------------------------
+
+function buildComparativeTextFullPrompt(context: PromptContext): string {
+  const text = context.comparativeTexts?.[0];
+  const textRef = formatTextWithType(text);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  return `Generate a full comparative-study breakdown of ${textRef}. This is the canonical reference note for one of the three texts a student studies for the Comparative Study (Paper 2, Section II). It must be deep enough that a student can deploy this single text in any mode question.
+
+Year: ${context.year} | Level: ${context.level}
+
+This note is read alongside two other texts. The student needs to know this text cold so that under exam pressure they can pull a key moment, a character, or a quote into any of the three comparative modes.
+
+STRUCTURE (follow this exactly):
+
+## 1. Plot in 5-7 Beats
+For each beat: one sentence on what happens, one sentence on why it matters. Cover opening, inciting incident, midpoint shift, climax, resolution, closing image.
+
+## 2. Central Character
+150-200 words. Their role, social position, mindset, internal contradictions, and arc. Include 2-3 verified quotes (web search to confirm) or detailed paraphrase if a quote cannot be verified.
+
+## 3. Supporting Characters
+3-5 supporting characters. For each, 60-100 words covering role, key relationships, and one anchor quote or scene reference.
+
+## 4. Relationship Map
+List the 3-5 most important relationships in the text. For each, one short paragraph (40-60 words) on what the relationship reveals and how it changes.
+
+## 5. Key Moments
+5-8 moments. For each:
+- Title and location (chapter, act-scene, or timestamp)
+- One paragraph on what happens and why it matters
+- Mode tags showing which modes the moment can be used in (CC, GVV, LG, TI), with a one-line note on the angle
+
+## 6. Cultural Context Profile
+For each axis, write 2-3 sentences on whether and how the text engages with it. If the axis is irrelevant, say so plainly.
+${getModeAxes('Cultural Context')}
+
+## 7. General Vision and Viewpoint Profile
+- One-sentence vision statement for the whole text
+- Opening: how it shapes the vision (2-3 sentences)
+- Key moment or climax: how it shapes the vision (2-3 sentences)
+- Closing: how it shapes the vision (2-3 sentences)
+- Where the vision is qualified or paradoxical
+
+## 8. Literary Genre Profile
+Use the toolkit appropriate to the text type. 4-6 elements, each 2-3 sentences with a specific moment as anchor.
+
+## 9. Theme or Issue Profile
+3-5 primary themes the text engages. For each: one sentence on the theme, one on how the text approaches it, one on a pivotal moment that shows it.
+
+## 10. Quote Bank
+12-18 verified quotes organised by theme or character. For each quote: speaker, location, one-line note on what it shows, and which modes it serves.
+
+## 11. Common Examiner Pitfalls Specific to This Text
+3-5 mistakes students typically make when using this text in comparative answers. Be specific to this text, not generic.
+
+QUOTE RULES:
+Use web search to verify quotes. Quote only the text itself, never literary critics or secondary sources. If you cannot verify a quote's exact wording, paraphrase the passage instead and note that it is a paraphrase. A note with accurate paraphrasing is better than an inaccurate direct quote.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 3. text_character (1 text + character name, deep character study)
+// -----------------------------------------------------------------------------
+
+function buildComparativeCharacterPrompt(context: PromptContext): string {
+  const text = context.comparativeTexts?.[0];
+  const textRef = formatTextWithType(text);
+  const character = context.comparativeCharacterName || 'the central character';
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  return `Generate a deep character study of ${character} from ${textRef}, framed for use in the Leaving Certificate Comparative Study.
+
+Year: ${context.year} | Level: ${context.level}
+
+This profile must let a student deploy ${character} flexibly across Cultural Context, General Vision and Viewpoint, Literary Genre, and Theme or Issue questions. A character study for the comparative is not a personality biography. It is a tool for argument.
+
+STRUCTURE (follow this exactly):
+
+## 1. Role in the Text
+80-120 words. What ${character} represents structurally. Are they the protagonist, antagonist, foil, witness, victim, agent of change? What function do they serve in the narrative?
+
+## 2. Social Position and Freedoms
+80-120 words. Where ${character} sits in the social order of the text's world. What freedoms they have, what freedoms are denied them, and how this is shown. The SEC examined this directly in 2024 ("level of freedom enjoyed by a central character is determined by social position and status").
+
+## 3. Mindset and Inner Life
+80-120 words. How the text shows the way ${character} thinks. The 2025 paper examined "mindset of a central character" directly. Include 2-3 anchor quotes or scenes that reveal interiority.
+
+## 4. Internal Contradictions
+80-120 words. Where ${character} is in conflict with themselves. The SEC marker rewards qualified readings, not binary ones. Identify at least one paradox in this character that an H1 candidate could exploit.
+
+## 5. Arc
+100-150 words. How ${character} changes (or refuses to change) from opening to close. Anchor in 3 specific moments.
+
+## 6. Key Relationships
+3-5 relationships ${character} has. For each, 40-60 words on what the relationship reveals.
+
+## 7. Key Quotes
+8-12 quotes from or about ${character}. For each: location, one-line gloss, mode-relevance tags (CC, GVV, LG, TI).
+
+## 8. Mode-Specific Deployment
+How to use ${character} in each comparative mode. 3-4 sentences per mode showing the angle, the supporting moment, and a usable link sentence.
+
+### Cultural Context
+### General Vision and Viewpoint
+### Literary Genre
+### Theme or Issue
+
+## 9. Comparison Hooks
+For each mode, suggest one cross-text comparison angle: "${character} vs a character in another text on..." with the kind of comparison that would unlock a paragraph.
+
+QUOTE RULES:
+Use web search to verify quotes. If unverifiable, paraphrase and note the paraphrase. Quote only the text, never criticism.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 4. text_key_moments (1 text, 5-8 key moments tagged to all four modes)
+// -----------------------------------------------------------------------------
+
+function buildComparativeKeyMomentsPrompt(context: PromptContext): string {
+  const text = context.comparativeTexts?.[0];
+  const textRef = formatTextWithType(text);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  return `Generate a Key Moments analysis for ${textRef}.
+
+Year: ${context.year} | Level: ${context.level}
+
+The SEC marking schemes 2023, 2024, 2025 all state that key moments exist "to allow candidates to ground their responses in specific moments without feeling that they must range over the entire text". Key moments are the spine of every elite comparative answer. A student must be able to deploy a single key moment under multiple modes.
+
+This note must produce 6-8 key moments, each tagged so that the student can pull the right moment for the right question under exam pressure.
+
+STRUCTURE (follow this exactly):
+
+## How to Use This Note
+50-80 words. Explain that the same moment can serve multiple modes, and that pulling a precise moment beats summarising plot. Reference the SEC's "primacy of Purpose" rule briefly.
+
+## The Key Moments
+
+For each moment (6-8 in total), produce a block in this exact shape:
+
+### [Moment Title]
+**Location:** chapter, act-scene, or timestamp
+**What happens:** 2-3 sentences. Plain, no flourish.
+**Why it matters:** 2-3 sentences explaining what the moment shows about character, theme, or vision.
+
+**Mode deployment:**
+- **Cultural Context:** which axis this moment serves (class, gender, religion, family, authority) and a one-sentence usage note
+- **General Vision and Viewpoint:** how this moment shapes the vision and a one-sentence usage note
+- **Literary Genre:** which technique is on display (specific to text type) and a one-sentence usage note
+- **Theme or Issue:** which theme this moment carries and a one-sentence usage note
+
+**Anchor quote or scene detail:** one short verified quote or specific scene description.
+
+**Link sentence template:** one ready-to-use comparative link sentence the student can adapt, such as "In ${text?.title ?? 'this text'}, [moment description], a moment that contrasts sharply with [equivalent moment in another text]..."
+
+---
+
+Repeat for each moment.
+
+## Coverage Check
+50-80 words at the end. Note which modes are well covered by these moments and which are thinner. The teacher can use this to commission additional moments if needed.
+
+QUOTE RULES:
+Use web search to verify quotes. If unverifiable, describe the moment in detailed paraphrase and note that the quote is a paraphrase. Specific moments anchored in scene detail are more important than verbatim quotes.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 5. text_mode_profile (1 text + 1 mode, deep mode-specific profile)
+// -----------------------------------------------------------------------------
+
+function buildComparativeModeProfilePrompt(context: PromptContext): string {
+  const text = context.comparativeTexts?.[0];
+  const textRef = formatTextWithType(text);
+  const mode = context.comparativeMode || 'Cultural Context';
+  const axes = getModeAxes(mode);
+  const focus = getModeFocusBlock(mode);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  return `Generate a Mode-Specific Profile of ${textRef} through the lens of ${mode}.
+
+Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
+
+This is a one-text-one-mode deep profile. A student preparing for a ${mode} question on this text uses this note to know exactly what evidence, what moments, and what angles they can pull.
+
+${focus}
+
+${axes}
+
+STRUCTURE (follow this exactly):
+
+## 1. Mode Definition for This Text
+80-100 words. Explain what ${mode} means and how it specifically applies to this text. Where does this text sit on the mode (e.g. for GVV: optimistic, pessimistic, qualified)? State a one-sentence position the student can defend.
+
+## 2. Axis-by-Axis Profile
+For each axis listed above, produce a section:
+
+### [Axis name]
+**Applies to this text:** Yes / Partially / No
+**Summary:** 60-100 words. How this axis shows up in this text (or why it does not).
+**Anchor moments:** 2-3 specific scenes or moments tied to this axis.
+**Key quote:** one verified quote with location.
+**Argument hook:** one sentence the student could lift directly into an essay.
+
+If an axis does not apply to the text, say so plainly and move on. Do not pad.
+
+## 3. Cross-Text Comparison Hooks
+4-6 hooks for comparing this text on this mode against other prescribed texts on this list. For each hook: a one-sentence comparison angle and a usable link phrase.
+
+## 4. Question-Specific Adaptations
+Take 2-3 verbatim past SEC questions in this mode (you may use web search or your knowledge of recent papers). For each question: a 2-3 sentence answer-shape outline showing how this text would be deployed.
+
+## 5. Pitfalls
+3-5 specific pitfalls when using this text on this mode. The most common mistake students make is treating Cultural Context as Theme; address that explicitly if the mode is Cultural Context.
+
+QUOTE RULES:
+Use web search to verify quotes. Paraphrase and note the paraphrase if not verifiable. Quote only the text itself.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 6. text_relationships (1 text, relationship map)
+// -----------------------------------------------------------------------------
+
+function buildComparativeRelationshipsPrompt(context: PromptContext): string {
+  const text = context.comparativeTexts?.[0];
+  const textRef = formatTextWithType(text);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  return `Generate a Relationships map for ${textRef}.
+
+Year: ${context.year} | Level: ${context.level}
+
+The SEC examined a "believable relationship" directly in 2024 (Literary Genre Q1). Relationships are also examined regularly under Cultural Context (love and marriage, family) and Theme or Issue (any relationship-driven theme). A student needs the major relationships in each text held cold.
+
+STRUCTURE (follow this exactly):
+
+## 1. Relationship Inventory
+A short paragraph naming the 5-8 most important relationships in the text and why each matters. One sentence per relationship.
+
+## 2. Relationship Profiles
+For each relationship (5-8 in total):
+
+### [Character A] and [Character B]
+**Type:** family / romantic / friendship / antagonistic / professional / mentor-mentee
+**Status at the start of the text:** one sentence
+**Status at the end of the text:** one sentence
+**Trajectory:** 80-120 words. How the relationship changes, what tests it, what reveals it.
+**Key moment:** one specific scene anchored with a quote or scene description.
+**Mode-relevance tags:** which comparative modes this relationship can serve (CC, GVV, LG, TI), with a one-sentence angle for each that applies.
+**Comparison hook:** one suggestion for how this relationship can be compared with one in another prescribed text.
+
+## 3. Relationship Patterns Across the Text
+80-120 words. What recurring patterns emerge across the relationships in this text? (e.g. all relationships strained by class, all relationships defined by absence of one party, etc.) This is the kind of broader observation that wins H1 marks.
+
+## 4. Pitfalls
+3-5 specific pitfalls when writing about relationships in this text. e.g. "Do not confuse the central romantic relationship with the central conflict; they are not the same in this text."
+
+QUOTE RULES:
+Use web search to verify quotes. Paraphrase if not verifiable. Quote only the text.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 7. text_quote_bank (1 text, themed quote bank)
+// -----------------------------------------------------------------------------
+
+function buildComparativeQuoteBankPrompt(context: PromptContext): string {
+  const text = context.comparativeTexts?.[0];
+  const textRef = formatTextWithType(text);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  return `Generate a comprehensive Quote Bank for ${textRef}, organised for use in the Leaving Certificate Comparative Study.
+
+Year: ${context.year} | Level: ${context.level}
+
+This is a working reference. The student does not memorise all of these. They scan for the right quote when they hit a question. Therefore every quote must be tagged tightly so it can be retrieved fast.
+
+STRUCTURE (follow this exactly):
+
+## How This Bank Works
+40-60 words. Explain the tagging system: each quote is tagged by speaker (or attribution), theme, character, and mode-relevance. Students should look up by mode, not by reading top to bottom.
+
+## Quotes by Character
+For the central character and 3-5 supporting characters, produce 5-8 quotes each. For each quote use this exact format:
+
+> "[exact quote text]"
+- Speaker / context: who says it, when, where
+- Location: chapter, act-scene, or timestamp
+- Theme tags: 2-3 themes
+- Mode tags: CC / GVV / LG / TI (mark all that apply)
+- One-line gloss: what this quote actually shows
+
+## Quotes by Theme
+Group quotes from the bank above (do not duplicate, just cross-reference) under 4-6 thematic headings. For each theme, list which character-quotes belong to it and a one-sentence note on the theme.
+
+## Top 10 Most Versatile Quotes
+The 10 quotes that can be deployed in the most modes / questions. List them in priority order. These are the quotes a student should know cold even under panic.
+
+QUOTE RULES:
+Use web search to verify quotes. Quote only the text itself, never literary critics or secondary sources. Aim for accuracy over volume. Better to deliver 30 verified quotes than 50 unreliable ones. If a quote cannot be verified, omit it rather than including an unverified one in a quote bank.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 8. comparison_grid_table (3 texts + 1 mode, the visual grid)
+// -----------------------------------------------------------------------------
+
+function buildComparativeGridTablePrompt(context: PromptContext): string {
+  const texts = context.comparativeTexts || [];
+  const mode = context.comparativeMode || 'Cultural Context';
+  const axes = getModeAxes(mode);
+  const focus = getModeFocusBlock(mode);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  const textList = texts
+    .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
+    .join("\n");
+
+  return `Generate a Comparison Grid for the following three texts through the lens of ${mode}.
+
+${textList}
+
+Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
+
+This is the working document teachers and elite students actually use to prepare for the comparative. A grid: rows are mode axes, columns are texts, cells contain the evidence and interpretation. PDST workshop materials and Aoife O'Driscoll teaching guides both confirm this is the dominant pedagogical format.
+
+${focus}
+
+${axes}
+
+STRUCTURE (follow this exactly):
+
+## 1. The Grid
+
+Render as a markdown table with one column per text and one row per axis. Cells must be tight: one short interpretive sentence plus one anchor moment or quote, no more.
+
+| Axis | ${texts[0]?.title || 'Text 1'} | ${texts[1]?.title || 'Text 2'} | ${texts[2]?.title || 'Text 3'} |
+|------|---|---|---|
+| [Axis 1] | ... | ... | ... |
+| [Axis 2] | ... | ... | ... |
+| ... |
+
+If a cell does not apply to a particular text, write "Not applicable: [one-line reason]" rather than padding. Do not force every axis onto every text.
+
+## 2. Quick Read of the Grid
+150-200 words. After the grid, write a short interpretive paragraph naming the 2-3 strongest comparative threads visible in the grid. Where do similarities cluster? Where do qualifications appear? Which axes give the richest cross-text comparison?
+
+## 3. 5-6 Comparative Arguments Drawn from the Grid
+For each argument:
+- A clear heading
+- 2-3 sentences naming which cells of the grid the argument is drawn from
+- One anchor moment or quote per text
+- A ready-to-use link sentence
+
+## 4. Three Strongest Question Angles
+List 3 SEC question angles this grid is well-prepared to answer, with one-line notes on which arguments to lead with for each.
+
+QUOTE RULES:
+Use web search to verify key quotes that appear in the cells. Cell entries should be tight: paraphrased reference is acceptable in a grid cell. Verbatim quotes preferred where verifiable. Mark any unverified quote as a paraphrase.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 9. comparative_argument (3 texts + mode + argument focus, single deep argument)
+// -----------------------------------------------------------------------------
+
+function buildComparativeArgumentPrompt(context: PromptContext): string {
+  const texts = context.comparativeTexts || [];
+  const mode = context.comparativeMode || 'Cultural Context';
+  const focus = context.comparativeArgumentFocus || 'a key comparative angle in this mode';
+  const modeFocus = getModeFocusBlock(mode);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  const textList = texts
+    .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
+    .join("\n");
+
+  return `Generate one detailed Comparative Argument across the following three texts on ${mode}, with the specific argument focus: ${focus}.
+
+${textList}
+
+Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
+Argument focus: ${focus}
+
+${modeFocus}
+
+This note develops a single comparative argument in depth. It is what a student would build into one body paragraph (or, for a 70-mark Q2 essay, two paragraphs) of an exam answer. Total length 600-800 words.
+
+STRUCTURE (follow this exactly):
+
+## 1. The Argument in One Sentence
+A single thesis sentence that names the argument focus and signals position across all three texts. 30 words maximum.
+
+## 2. Why This Argument Lands in This Mode
+60-80 words. Why this angle is genuinely a ${mode} argument and not a theme argument in disguise. Address the most common drift error.
+
+## 3. Argument Across the Three Texts
+Three sub-sections. For each text:
+
+### ${texts[0]?.title || 'Text 1'}
+80-120 words. State this text's position on the argument. Anchor in 1-2 specific moments. Include 1-2 short verified quotes. End with a one-sentence summary of what this text contributes to the argument.
+
+### ${texts[1]?.title || 'Text 2'}
+Same shape as above.
+
+### ${texts[2]?.title || 'Text 3'}
+Same shape as above.
+
+## 4. Comparative Synthesis
+120-180 words. The synthesis is not a summary. It is the analytical move that earns H1 marks. Where do the three texts agree? Where do they qualify each other? Use sustained comparative language ("X demonstrates A, while Y qualifies that position by..., and Z further complicates it through..."). Avoid binary comparisons; the SEC marker rewards qualified readings.
+
+## 5. Three Ready-to-Use Link Sentences
+Three sentences the student can drop directly into an essay paragraph that develops this argument. Each must move between two or three texts.
+
+## 6. Strongest Past SEC Question for This Argument
+Identify (or generate from the SEC pattern) one verbatim or close-paraphrase exam question this argument would answer well, and a one-line note on how to position the answer.
+
+QUOTE RULES:
+Use web search to verify quotes. Paraphrase if not verifiable. Quote only the texts.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 10. sample_paragraph (3 texts + mode + angle, A-then-B-then-C model paragraph)
+// -----------------------------------------------------------------------------
+
+function buildComparativeSampleParagraphPrompt(context: PromptContext): string {
+  const texts = context.comparativeTexts || [];
+  const mode = context.comparativeMode || 'Cultural Context';
+  const focus = context.comparativeArgumentFocus || `a typical question on ${mode}`;
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  const textList = texts
+    .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
+    .join("\n");
+
+  return `Generate one model Comparative Paragraph in the ${mode} mode, on the angle: ${focus}.
+
+${textList}
+
+Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
+Angle: ${focus}
+
+This is one paragraph as it would appear in a 70-mark Q2 essay. The student copies the structure, not the content. Total paragraph length 200-260 words.
+
+STRUCTURE:
+
+## 1. Question Premise
+One sentence stating the question or angle this paragraph answers.
+
+## 2. The Paragraph
+A single paragraph of 200-260 words written in continuous prose. Within the paragraph:
+- Open with a topic sentence that names the comparative point and signals position
+- Move to ${texts[0]?.title || 'Text 1'} with an anchor moment and a short verified quote
+- Move to ${texts[1]?.title || 'Text 2'} using a comparative link sentence ("Similarly...", "By contrast...", "Where ${texts[0]?.title} presents..., ${texts[1]?.title} qualifies that...")
+- Move to ${texts[2]?.title || 'Text 3'} with another comparative link
+- Close with a synthesis sentence that states what the comparison reveals
+
+## 3. Annotation
+After the paragraph, produce a 100-150 word annotation explaining:
+- The opening topic sentence and how it signals position
+- The two comparative link sentences (quote them) and what work they do
+- The synthesis sentence and why it earns marks
+
+## 4. PCLM Notes
+3-4 short bullets identifying which PCLM bands this paragraph targets and how (Purpose: clear thesis; Coherence: link sentences; Language: precise verbs; Mechanics: clean punctuation).
+
+QUOTE RULES:
+Use web search to verify the quotes used in the paragraph. If a quote cannot be verified, paraphrase the line in the paragraph and note the paraphrase in the annotation.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 11. question_plan (3 texts + question + format, structured answer plan)
+// -----------------------------------------------------------------------------
+
+function buildComparativeQuestionPlanPrompt(context: PromptContext): string {
+  const texts = context.comparativeTexts || [];
+  const question = context.comparativeQuestionText || '';
+  const format = context.comparativeQuestionFormat || 'Q2_70';
+  const formatBlock = getQuestionFormatBlock(format);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  const textList = texts
+    .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
+    .join("\n");
+
+  return `Generate a structured Answer Plan for the following SEC Comparative Study question.
+
+QUESTION:
+${question}
+
+TEXTS:
+${textList}
+
+Year: ${context.year} | Level: ${context.level}
+
+${formatBlock}
+
+This is a plan, not a sample answer. The student uses this plan to write their own answer in the exam. The plan must be specific enough that the student can almost lift the structure directly.
+
+STRUCTURE (follow this exactly):
+
+## 1. Question Decoder
+80-120 words. Break down the question.
+- What mode is being tested (CC, GVV, LG, TI)?
+- What sub-angle is being tested (e.g. for CC: power, gender, religion, family, authority)?
+- What question shape is it (compare, to what extent, discuss, agree)?
+- What specific structural element if any (climax, opening, key moment, relationship, technique)?
+- The trap: what would a weaker student misread the question as?
+
+## 2. Thesis
+A single thesis sentence (30 words max) that addresses the specific sub-angle and signals position across all three texts. The "primacy of Purpose" rule means this thesis is the single most important sentence in the entire answer.
+
+## 3. Introduction
+80-120 words. The actual sentences (or close paraphrase) that should open the answer. Define the mode in the candidate's own words, signal position, and name all three texts.
+
+## 4. Body Paragraph Plan
+Produce 4-6 body paragraphs (4 for Q1a/Q1b, 4-6 for Q2). For each paragraph:
+
+### Paragraph N: [Topic / Argument]
+- **Topic sentence:** the actual opening sentence
+- **${texts[0]?.title || 'Text 1'}:** which key moment, which quote (verified), one-line interpretation
+- **${texts[1]?.title || 'Text 2'}:** which key moment, which quote (verified), one-line interpretation
+- **${texts[2]?.title || 'Text 3'}:** which key moment, which quote (verified), one-line interpretation
+- **Comparative link sentence:** one specific link sentence to use within this paragraph
+- **Closing sentence:** how the paragraph ties back to the question
+
+## 5. Conclusion
+60-100 words. The actual closing paragraph. Question-facing. Restates position, gestures to what the comparison has revealed, does not introduce new material.
+
+## 6. Word Count Discipline
+Recap the target word count for the format and a one-line warning about pacing (the SEC has flagged comparative going long as the single biggest reason students run out of time for Poetry).
+
+## 7. PCLM Targeting
+4 short bullets explaining how this plan, executed cleanly, targets each PCLM band.
+
+QUOTE RULES:
+Use web search to verify all quotes specified in the plan. Mark any unverified quote as a paraphrase. Better to specify a paraphrase the student can hit reliably than a quote they will misremember in the exam.${userInstr}`;
+}
+
+// -----------------------------------------------------------------------------
+// 12. sample_answer (3 texts + question + format, full H1-tier answer)
+// -----------------------------------------------------------------------------
+
+function buildComparativeSampleAnswerPrompt(context: PromptContext): string {
+  const texts = context.comparativeTexts || [];
+  const question = context.comparativeQuestionText || '';
+  const format = context.comparativeQuestionFormat || 'Q2_70';
+  const formatBlock = getQuestionFormatBlock(format);
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  const textList = texts
+    .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
+    .join("\n");
+
+  return `Generate a full Sample Answer at H1 tier (90+ marks band) for the following SEC Comparative Study question.
+
+QUESTION:
+${question}
+
+TEXTS:
+${textList}
+
+Year: ${context.year} | Level: ${context.level}
+
+${formatBlock}
+
+This must read as if written by a strong student under exam conditions, not by an AI or a teacher. H1 markers from the SEC marking schemes 2023-2025: critical literacy, qualified comparisons (not binary), sustained comparative weave inside paragraphs, precise vocabulary, two or three key moments per text rather than plot summary, defended structural choice. The "primacy of Purpose" cap means rhetorical beauty cannot exceed marks for clarity of argument.
+
+STRUCTURE (follow this exactly):
+
+## Sample Answer
+
+Write the full answer as continuous prose. Use paragraph breaks but do not use headings or bullet points within the answer itself. Hit the target word count for the format.
+
+The answer must:
+- Open with a thesis that directly addresses the question's specific sub-angle
+- Use sustained comparative writing inside paragraphs ("Similarly...", "By contrast...", "While X presents..., Y qualifies that...", "Where X is...", "Z complicates this further by...")
+- Anchor every claim in a specific moment, scene, or short verified quote
+- Use 2-3 key moments per text rather than plot summary
+- Qualify comparisons (not "X and Y both show..."; instead "X and Y both show A, though Y qualifies the picture by...")
+- Close with a brief, question-facing conclusion that does not introduce new material
+
+## Annotation
+
+After the answer, produce a 200-300 word annotation explaining:
+- Where the thesis is and how it signals position
+- Three specific sentences that demonstrate H1-level comparative weave (quote them)
+- Where the answer qualifies its comparison rather than oversimplifying
+- One sentence on what stops this from being an H2 answer
+
+## PCLM Self-Assessment
+Estimate the band hit on each of P, C, L, M and explain in one sentence each.
+
+QUOTE RULES:
+Use web search to verify every quote in the sample answer. If a quote cannot be verified, replace it with a precise paraphrase rather than a fabricated quote. Mark paraphrases in the answer with brief contextual framing ("a moment in which..."). Quote only the texts themselves, never literary critics.${userInstr}`;
 }
 
 export function buildWorksheetPrompt(context: PromptContext): string {
@@ -1174,7 +2071,10 @@ export function buildSingleTextPrompt(context: PromptContext): string {
         ? "play"
         : "novel";
 
-  return `Generate a comprehensive single text study note for "${context.textTitle}" by ${context.author} (${textTypeLabel}).
+  const substrate = buildSingleTextSubstrateBlock(context);
+  const substratePrefix = substrate ? `${substrate}\n\n` : "";
+
+  return `${substratePrefix}Generate a comprehensive single text study note for "${context.textTitle}" by ${context.author} (${textTypeLabel}).
 
 This is a Paper 2, Section I text worth 60 marks at ${context.level} level for the ${context.year} examination.
 

@@ -22,6 +22,7 @@ import {
 import { runCriticPass, formatFlagsForRetry } from "@/lib/claude/critic";
 import { buildPoetExamSummary, buildComparativeExamSummary } from "@/data/exam-patterns";
 import { getPoemsForPoet, getOLPoemsForPoet } from "@/data/circulars";
+import { findProfileByTitle } from "@/data/profiles/comparative";
 import { getPoemText } from "@/lib/poems/store";
 import { saveNote } from "@/lib/supabase/saveNote";
 import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
@@ -331,16 +332,111 @@ export async function POST(request: NextRequest) {
       }
 
       case "comparative": {
-        const { comparativeMode, comparativeTexts } = body;
-        if (!comparativeMode || !comparativeTexts || comparativeTexts.length !== 3) {
-          return errorResponse("Comparative notes require a mode and exactly 3 texts");
+        const {
+          comparativeMode,
+          comparativeTexts,
+          comparativeNoteType,
+          comparativeCharacterName,
+          comparativeArgumentFocus,
+          comparativeQuestionText,
+          comparativeQuestionFormat,
+        } = body;
+
+        const noteType = comparativeNoteType || "mode_grid";
+
+        // Note types are organised in three families with different input requirements.
+        // Single-text family: 1 text. Cross-text family: 3 texts. Question family: 3 texts + question.
+        const singleTextNoteTypes = new Set([
+          "text_full_breakdown",
+          "text_character",
+          "text_key_moments",
+          "text_mode_profile",
+          "text_relationships",
+          "text_quote_bank",
+        ]);
+        const crossTextNoteTypes = new Set([
+          "mode_grid",
+          "comparison_grid_table",
+          "comparative_argument",
+          "sample_paragraph",
+        ]);
+        const questionNoteTypes = new Set([
+          "question_plan",
+          "sample_answer",
+        ]);
+
+        if (singleTextNoteTypes.has(noteType)) {
+          if (!comparativeTexts || comparativeTexts.length !== 1) {
+            return errorResponse(
+              `Comparative ${noteType} requires exactly 1 text (got ${comparativeTexts?.length ?? 0})`
+            );
+          }
+          if (noteType === "text_character" && !comparativeCharacterName) {
+            return errorResponse("text_character requires a comparativeCharacterName");
+          }
+          if (noteType === "text_mode_profile" && !comparativeMode) {
+            return errorResponse("text_mode_profile requires a comparativeMode");
+          }
+        } else if (crossTextNoteTypes.has(noteType)) {
+          if (!comparativeMode || !comparativeTexts || comparativeTexts.length !== 3) {
+            return errorResponse(
+              `Comparative ${noteType} requires a mode and exactly 3 texts`
+            );
+          }
+          if (
+            (noteType === "comparative_argument" || noteType === "sample_paragraph") &&
+            !comparativeArgumentFocus
+          ) {
+            return errorResponse(
+              `Comparative ${noteType} requires a comparativeArgumentFocus`
+            );
+          }
+        } else if (questionNoteTypes.has(noteType)) {
+          if (!comparativeTexts || comparativeTexts.length !== 3) {
+            return errorResponse(
+              `Comparative ${noteType} requires exactly 3 texts`
+            );
+          }
+          if (!comparativeQuestionText) {
+            return errorResponse(
+              `Comparative ${noteType} requires comparativeQuestionText`
+            );
+          }
+          if (!comparativeQuestionFormat) {
+            return errorResponse(
+              `Comparative ${noteType} requires comparativeQuestionFormat (Q1a_30 / Q1b_40 / Q2_70)`
+            );
+          }
+        } else {
+          return errorResponse(`Unknown comparativeNoteType: ${noteType}`);
         }
+
         context.comparativeMode = comparativeMode;
         context.comparativeTexts = comparativeTexts;
-        context.comparativeExamPattern = buildComparativeExamSummary(comparativeMode);
+        context.comparativeNoteType = noteType;
+        context.comparativeCharacterName = comparativeCharacterName;
+        context.comparativeArgumentFocus = comparativeArgumentFocus;
+        context.comparativeQuestionText = comparativeQuestionText;
+        context.comparativeQuestionFormat = comparativeQuestionFormat;
+        if (comparativeMode) {
+          context.comparativeExamPattern = buildComparativeExamSummary(comparativeMode);
+        }
 
-        useWebSearch = true;
-        webSearchMaxUses = 5;
+        // Look up verified profiles for each text. Parallel array to comparativeTexts;
+        // null entries mean "no profile yet, fall back to web search for that text".
+        const texts = (comparativeTexts as Array<{ title: string }>) ?? [];
+        context.comparativeProfiles = texts.map((t) =>
+          findProfileByTitle(year, t.title)
+        );
+        const profileCount = context.comparativeProfiles.filter(
+          (p) => p != null
+        ).length;
+        const allProfiled = profileCount === texts.length && texts.length > 0;
+
+        // If every text has a profile, web search is unnecessary. Otherwise still
+        // allow web search so the model can verify quotes for unprofiled texts.
+        useWebSearch = !allProfiled;
+        webSearchMaxUses = allProfiled ? 0 : 5;
         userPrompt = buildComparativePrompt(context);
         break;
       }
@@ -385,8 +481,16 @@ export async function POST(request: NextRequest) {
         context.textTitle = textTitle;
         context.textType = textType;
 
-        useWebSearch = true;
-        webSearchMaxUses = 5;
+        // Reuse the comparative profile for single-text notes. Same text
+        // knowledge powers both Paper 2 questions; no point regenerating.
+        const profile = findProfileByTitle(year, textTitle);
+        context.singleTextProfile = profile;
+
+        // If a profile is present, web search is unnecessary. Prompt rules
+        // require the model to anchor in the substrate and quote only from
+        // the bank.
+        useWebSearch = !profile;
+        webSearchMaxUses = profile ? 0 : 5;
         userPrompt = buildSingleTextPrompt(context);
         break;
       }

@@ -39,6 +39,13 @@ yarn-error.log*
 /data/videos/*
 !/data/videos/.gitkeep
 
+# raw source texts for comparative profiles (copyrighted; never commit)
+/sources/
+/data/profiles/comparative/**/source.*
+/data/profiles/comparative/**/*.txt
+/data/profiles/comparative/**/*.pdf
+/data/profiles/comparative/**/*.epub
+
 # remotion
 /.remotion-bundle/
 

@@ -1,0 +1,356 @@
+{
+  "textId": "the-crucible",
+  "schemaVersion": 1,
+  "quotes": [
+    {
+      "id": "q-abigail-pretense",
+      "text": "I never knew what pretense Salem was, I never knew the lying lessons I was taught by all these Christian women and their covenanted men!",
+      "speaker": "Abigail Williams",
+      "location": "Act 1",
+      "context": "Abigail to Proctor in the Parris bedroom, after he tells her their affair is finished.",
+      "themeTags": ["hypocrisy", "religion", "knowledge", "vengeance"],
+      "modeTags": ["CC", "GVV", "TI"],
+      "characterTags": ["Abigail Williams", "John Proctor"]
+    },
+    {
+      "id": "q-abigail-pointy-reckoning",
+      "text": "I will come to you in the black of some terrible night and I will bring a pointy reckoning that will shudder you.",
+      "speaker": "Abigail Williams",
+      "location": "Act 1",
+      "context": "Abigail threatening Mary Warren and Betty into silence.",
+      "themeTags": ["fear", "vengeance", "power", "violence"],
+      "modeTags": ["CC", "TI", "LG"],
+      "characterTags": ["Abigail Williams", "Mary Warren", "Betty Parris"]
+    },
+    {
+      "id": "q-abigail-saw-indians",
+      "text": "I saw Indians smash my dear parents' heads on the pillow next to mine.",
+      "speaker": "Abigail Williams",
+      "location": "Act 1",
+      "context": "Abigail to the girls, claiming the moral authority of trauma to enforce silence.",
+      "themeTags": ["violence", "trauma", "power"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Abigail Williams"]
+    },
+    {
+      "id": "q-abigail-open-myself",
+      "text": "I want to open myself! I want the light of God, I want the sweet love of Jesus!",
+      "speaker": "Abigail Williams",
+      "location": "Act 1",
+      "context": "Abigail's first false confession, immediately followed by accusations against named townspeople.",
+      "themeTags": ["religion", "performance", "hysteria"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Abigail Williams"]
+    },
+    {
+      "id": "q-mrs-putnam-seven-babies",
+      "text": "I have laid seven babies unbaptized in the earth.",
+      "speaker": "Mrs. Ann Putnam",
+      "location": "Act 1",
+      "context": "Mrs. Putnam justifying having sent her daughter Ruth to Tituba to conjure the spirits of her dead sisters.",
+      "themeTags": ["grief", "religion", "family", "loss"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Mrs. Ann Putnam"]
+    },
+    {
+      "id": "q-putnam-nine-sons",
+      "text": "I am one of nine sons; the Putnam seed have peopled this province.",
+      "speaker": "Thomas Putnam",
+      "location": "Act 1",
+      "context": "Putnam asserting his family's social position over Rebecca Nurse's restraint.",
+      "themeTags": ["class", "family", "patriarchy", "land"],
+      "modeTags": ["CC"],
+      "characterTags": ["Thomas Putnam"]
+    },
+    {
+      "id": "q-parris-faction",
+      "text": "There is a faction that is sworn to drive me from my pulpit.",
+      "speaker": "Reverend Parris",
+      "location": "Act 1",
+      "context": "Parris to Abigail, exposing his preoccupation with his own standing rather than his daughter.",
+      "themeTags": ["authority", "self-interest", "religion"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Reverend Parris"]
+    },
+    {
+      "id": "q-proctor-abby-done-with",
+      "text": "Abby, that's done with.",
+      "speaker": "John Proctor",
+      "location": "Act 1",
+      "context": "Proctor refusing Abigail's first attempt to revive their affair in the Parris bedroom.",
+      "themeTags": ["integrity", "marriage", "guilt"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["John Proctor", "Abigail Williams"]
+    },
+    {
+      "id": "q-proctor-aye-but-we-did-not",
+      "text": "Aye, but we did not.",
+      "speaker": "John Proctor",
+      "location": "Act 1",
+      "context": "Proctor denying the affair to Abigail in a brief exchange where she asserts \"Aye, but we did.\"",
+      "themeTags": ["integrity", "denial", "guilt"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["John Proctor", "Abigail Williams"]
+    },
+    {
+      "id": "q-elizabeth-magistrate-in-heart",
+      "text": "I do not judge you. The magistrate sits in your heart that judges you. I never thought you but a good man, John, only somewhat bewildered.",
+      "speaker": "Elizabeth Proctor",
+      "location": "Act 2",
+      "context": "Elizabeth to John in the common room of the Proctor house, when he accuses her of unending judgement.",
+      "themeTags": ["conscience", "marriage", "judgement", "integrity"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Elizabeth Proctor", "John Proctor"]
+    },
+    {
+      "id": "q-proctor-justice-freeze-beer",
+      "text": "Your justice would freeze beer!",
+      "speaker": "John Proctor",
+      "location": "Act 2",
+      "context": "Proctor to Elizabeth, lashing out at the relentlessness of her unspoken judgement.",
+      "themeTags": ["marriage", "judgement", "anger"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["John Proctor", "Elizabeth Proctor"]
+    },
+    {
+      "id": "q-elizabeth-adultery",
+      "text": "Adultery, John.",
+      "speaker": "Elizabeth Proctor",
+      "location": "Act 2",
+      "context": "Elizabeth quietly supplying the commandment Proctor cannot recall while Hale tests them.",
+      "themeTags": ["guilt", "religion", "marriage"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Elizabeth Proctor", "John Proctor"]
+    },
+    {
+      "id": "q-hale-theology-fortress",
+      "text": "Theology, sir, is a fortress; no crack in a fortress may be accounted small.",
+      "speaker": "Reverend Hale",
+      "location": "Act 2",
+      "context": "Hale interrogating Proctor's lapsed church attendance.",
+      "themeTags": ["religion", "authority", "absolutism"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Reverend Hale"]
+    },
+    {
+      "id": "q-proctor-vengeance-walking",
+      "text": "Vengeance is walking Salem... common vengeance writes the law!",
+      "speaker": "John Proctor",
+      "location": "Act 2",
+      "context": "Proctor at his door, refusing to surrender Elizabeth's warrant after Cheever arrives.",
+      "themeTags": ["vengeance", "law", "justice", "hysteria"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["John Proctor"]
+    },
+    {
+      "id": "q-proctor-naked-now",
+      "text": "We are only what we always were, but naked now.",
+      "speaker": "John Proctor",
+      "location": "Act 2",
+      "context": "Proctor, at the curtain of Act 2, wrenching Mary Warren toward the truth as the reckoning closes in.",
+      "themeTags": ["truth", "exposure", "integrity", "fate"],
+      "modeTags": ["GVV", "LG", "TI"],
+      "characterTags": ["John Proctor", "Mary Warren"]
+    },
+    {
+      "id": "q-danforth-with-court-or-against",
+      "text": "A person is either with this court or he must be counted against it, there be no road between.",
+      "speaker": "Deputy Governor Danforth",
+      "location": "Act 3",
+      "context": "Danforth warning Francis Nurse against his attempt to defend his wife.",
+      "themeTags": ["authority", "absolutism", "law"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Deputy Governor Danforth"]
+    },
+    {
+      "id": "q-danforth-invisible-crime",
+      "text": "Witchcraft is ipso facto, on its face and by its nature, an invisible crime, is it not? Therefore, who may possibly be witness to it? The witch and the victim. None other.",
+      "speaker": "Deputy Governor Danforth",
+      "location": "Act 3",
+      "context": "Danforth defending the court's reliance on the children as the only possible witnesses.",
+      "themeTags": ["law", "evidence", "absolutism", "religion"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Deputy Governor Danforth"]
+    },
+    {
+      "id": "q-proctor-known-her",
+      "text": "I have known her, sir. I have known her.",
+      "speaker": "John Proctor",
+      "location": "Act 3",
+      "context": "Proctor confessing the affair with Abigail in open court to discredit her.",
+      "themeTags": ["confession", "shame", "integrity", "marriage"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["John Proctor", "Abigail Williams"]
+    },
+    {
+      "id": "q-proctor-whores-vengeance",
+      "text": "It is a whore's vengeance, and you must see it.",
+      "speaker": "John Proctor",
+      "location": "Act 3",
+      "context": "Proctor naming Abigail's motive after his confession.",
+      "themeTags": ["vengeance", "gender", "shame"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["John Proctor", "Abigail Williams"]
+    },
+    {
+      "id": "q-elizabeth-no-sir",
+      "text": "No, sir.",
+      "speaker": "Elizabeth Proctor",
+      "location": "Act 3",
+      "context": "Elizabeth's lie to Danforth, denying she knows John as a lecher, in a bid to save his name.",
+      "themeTags": ["love", "marriage", "truth", "sacrifice", "irony"],
+      "modeTags": ["GVV", "LG", "TI"],
+      "characterTags": ["Elizabeth Proctor", "John Proctor"]
+    },
+    {
+      "id": "q-proctor-god-is-dead",
+      "text": "I say, I say, God is dead!",
+      "speaker": "John Proctor",
+      "location": "Act 3",
+      "context": "Proctor's outburst as Mary turns on him and the court closes in.",
+      "themeTags": ["religion", "despair", "rage"],
+      "modeTags": ["GVV", "LG", "TI"],
+      "characterTags": ["John Proctor"]
+    },
+    {
+      "id": "q-hale-quit-court",
+      "text": "I denounce these proceedings, I quit this court!",
+      "speaker": "Reverend Hale",
+      "location": "Act 3",
+      "context": "Hale walking out at the curtain of Act 3, his arc from confident witch-hunter to dissenter complete.",
+      "themeTags": ["authority", "conscience", "dissent"],
+      "modeTags": ["CC", "GVV", "TI"],
+      "characterTags": ["Reverend Hale"]
+    },
+    {
+      "id": "q-hale-blood-on-my-head",
+      "text": "There is blood on my head! Can you not see the blood on my head!",
+      "speaker": "Reverend Hale",
+      "location": "Act 4",
+      "context": "Hale, returned to Salem, confessing his guilt to Danforth.",
+      "themeTags": ["guilt", "conscience", "religion"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Reverend Hale"]
+    },
+    {
+      "id": "q-hale-life-most-precious",
+      "text": "Life, woman, life is God's most precious gift; no principle, however glorious, may justify the taking of it.",
+      "speaker": "Reverend Hale",
+      "location": "Act 4",
+      "context": "Hale begging Elizabeth to persuade Proctor to confess and live.",
+      "themeTags": ["life", "religion", "principle", "compromise"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Reverend Hale", "Elizabeth Proctor"]
+    },
+    {
+      "id": "q-giles-more-weight",
+      "text": "More weight.",
+      "speaker": "Giles Corey (reported by Elizabeth)",
+      "location": "Act 4",
+      "context": "Elizabeth recounting how Giles, refusing to plead, was pressed to death and gave the executioners only those two words.",
+      "themeTags": ["integrity", "endurance", "death"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Giles Corey"]
+    },
+    {
+      "id": "q-elizabeth-cold-wife-lechery",
+      "text": "It needs a cold wife to prompt lechery.",
+      "speaker": "Elizabeth Proctor",
+      "location": "Act 4",
+      "context": "Elizabeth taking her share of responsibility for the failure of their marriage in the jail cell.",
+      "themeTags": ["marriage", "guilt", "love", "self-knowledge"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Elizabeth Proctor", "John Proctor"]
+    },
+    {
+      "id": "q-elizabeth-cold-house-i-kept",
+      "text": "Suspicion kissed you when I did; I never knew how I should say my love. It were a cold house I kept!",
+      "speaker": "Elizabeth Proctor",
+      "location": "Act 4",
+      "context": "Elizabeth's confession to John before he chooses whether to sign.",
+      "themeTags": ["marriage", "love", "guilt", "self-knowledge"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Elizabeth Proctor", "John Proctor"]
+    },
+    {
+      "id": "q-proctor-cannot-mount-gibbet",
+      "text": "I cannot mount the gibbet like a saint. It is a fraud. I am not that man.",
+      "speaker": "John Proctor",
+      "location": "Act 4",
+      "context": "Proctor explaining to Elizabeth why he is leaning toward confession.",
+      "themeTags": ["integrity", "honesty", "self-knowledge"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["John Proctor", "Elizabeth Proctor"]
+    },
+    {
+      "id": "q-proctor-because-it-is-my-name",
+      "text": "Because it is my name! Because I cannot have another in my life!",
+      "speaker": "John Proctor",
+      "location": "Act 4",
+      "context": "Proctor refusing to let Danforth post his confession on the church door.",
+      "themeTags": ["name", "integrity", "identity", "honour"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["John Proctor", "Deputy Governor Danforth"]
+    },
+    {
+      "id": "q-proctor-leave-me-my-name",
+      "text": "How may I live without my name? I have given you my soul; leave me my name!",
+      "speaker": "John Proctor",
+      "location": "Act 4",
+      "context": "Proctor's final plea before tearing the confession.",
+      "themeTags": ["name", "integrity", "identity", "honour"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["John Proctor", "Deputy Governor Danforth"]
+    },
+    {
+      "id": "q-proctor-shred-of-goodness",
+      "text": "I do think I see some shred of goodness in John Proctor. Not enough to weave a banner with, but white enough to keep it from such dogs.",
+      "speaker": "John Proctor",
+      "location": "Act 4",
+      "context": "Proctor after tearing the confession, recovering a moral position he had thought lost.",
+      "themeTags": ["integrity", "redemption", "self-knowledge"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["John Proctor"]
+    },
+    {
+      "id": "q-elizabeth-his-goodness",
+      "text": "He have his goodness now. God forbid I take it from him!",
+      "speaker": "Elizabeth Proctor",
+      "location": "Act 4",
+      "context": "Elizabeth's final words as Proctor is led out, refusing Hale's plea that she beg him to recant.",
+      "themeTags": ["love", "integrity", "sacrifice", "redemption"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Elizabeth Proctor", "John Proctor"]
+    },
+    {
+      "id": "q-mary-i-am-eighteen",
+      "text": "I'll not be ordered to bed no more, Mr. Proctor! I am eighteen and a woman, however single!",
+      "speaker": "Mary Warren",
+      "location": "Act 2",
+      "context": "Mary Warren, returned from court with new public authority, asserting herself in the Proctor house.",
+      "themeTags": ["gender", "authority", "youth", "power"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Mary Warren", "John Proctor"]
+    },
+    {
+      "id": "q-mary-mr-proctor-devils-man",
+      "text": "You're the Devil's man!",
+      "speaker": "Mary Warren",
+      "location": "Act 3",
+      "context": "Mary Warren breaking under Abigail's yellow-bird performance and turning on Proctor in court.",
+      "themeTags": ["betrayal", "fear", "hysteria", "power"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Mary Warren", "John Proctor", "Abigail Williams"]
+    },
+    {
+      "id": "q-proctor-fall-like-ocean",
+      "text": "I will fall like an ocean on that court!",
+      "speaker": "John Proctor",
+      "location": "Act 2",
+      "context": "Proctor to the arrested Elizabeth, promising to bring down the court that has taken her.",
+      "themeTags": ["resistance", "marriage", "hubris"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["John Proctor", "Elizabeth Proctor"]
+    }
+  ]
+}

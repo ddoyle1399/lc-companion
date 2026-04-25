@@ -1,0 +1,544 @@
+{
+  "textId": "the-crucible",
+  "title": "The Crucible",
+  "author": "Arthur Miller",
+  "type": "drama",
+  "yearsPrescribed": [2026],
+  "copyrightStatus": "rights_managed",
+  "attributionLine": "The Crucible by Arthur Miller (1953). Used here for educational analysis under fair dealing.",
+
+  "plotBeats": [
+    {
+      "index": 1,
+      "title": "Salem opens in fear",
+      "location": "Act 1",
+      "summary": "Reverend Parris kneels by his daughter Betty, who is unresponsive after he discovered her, his niece Abigail, and other girls dancing in the forest with his slave Tituba. Rumours of witchcraft are already spreading through the village.",
+      "significance": "The play's engine is set in motion by a private moral failure (the dancing, the affair) becoming public, in a community whose institutions have no language for either."
+    },
+    {
+      "index": 2,
+      "title": "The first false confession",
+      "location": "Act 1",
+      "summary": "Tituba, threatened with hanging, names two townswomen as witches. Abigail joins her, then Betty. The Act closes with the girls naming names in ecstatic chant.",
+      "significance": "The mechanism of the witch-hunt is established: confession plus accusation buys safety, refusal earns death. Truth is now economically irrational."
+    },
+    {
+      "index": 3,
+      "title": "The Proctor home eight days later",
+      "location": "Act 2",
+      "summary": "Proctor and Elizabeth's marriage is shown under strain. Mary Warren returns from court newly powerful. Hale arrives to test their faith. Cheever finds a poppet in the house with a needle in its belly. Elizabeth is arrested.",
+      "significance": "The institutional disorder of Salem has reached the household. The private guilt of the affair is about to be weaponised by the public hunt."
+    },
+    {
+      "index": 4,
+      "title": "Proctor's confession in court",
+      "location": "Act 3",
+      "summary": "Proctor brings Mary to recant. Mary fails. To discredit Abigail, Proctor publicly confesses adultery. Elizabeth, asked to corroborate, lies to protect his name. Mary turns on Proctor under Abigail's yellow-bird performance. Proctor cries that God is dead and is arrested. Hale quits the court.",
+      "significance": "The moral climax of the play. Every protagonist sacrifices something they cannot recover. The court is shown to be unanswerable to truth."
+    },
+    {
+      "index": 5,
+      "title": "The jail and the choice",
+      "location": "Act 4",
+      "summary": "Hale, broken, begs the condemned to confess and live. Proctor and Elizabeth meet for the first time in months. Each takes responsibility for the other. Proctor decides to confess to live.",
+      "significance": "The play asks whether honest survival is possible when the price of life is a public lie."
+    },
+    {
+      "index": 6,
+      "title": "The torn confession",
+      "location": "Act 4",
+      "summary": "When Danforth insists the signed confession be posted on the church door, Proctor refuses, tears the paper, and chooses the gallows.",
+      "significance": "Proctor's name, the thing he had compromised through adultery, becomes the only thing he will not sell. Personal redemption is achieved at the moment institutional collapse seems total."
+    },
+    {
+      "index": 7,
+      "title": "The drumroll closing",
+      "location": "Act 4",
+      "summary": "Proctor is led out. Elizabeth refuses Hale's plea to call him back. The drum signals his execution.",
+      "significance": "The play ends without rescue. The vision is qualified: institutions destroy good people, but the individual conscience can still refuse to be co-opted."
+    }
+  ],
+
+  "keyMoments": [
+    {
+      "id": "km-abigail-threatens-girls",
+      "title": "Abigail threatens the girls into silence",
+      "location": "Act 1",
+      "whatHappens": "After Mary Warren urges the girls to confess to dancing, Abigail seizes control. She invokes the murder of her parents and threatens 'a pointy reckoning' on anyone who breaks ranks.",
+      "whyItMatters": "Establishes Abigail as the play's true engine of violence. Her authority is built on fear, trauma claim, and the willingness to escalate. This is the moment the witch-hunt becomes possible.",
+      "modeDeployment": {
+        "CC": "Shows how a low-status orphan can wield extraordinary coercive power inside the rigid Puritan order, anticipating the inversion of authority the trials enable.",
+        "GVV": "Sets the bleak vision early: the most dangerous figures are not external enemies but a teenager with grievance and reach.",
+        "LG": "A piece of stage menace that prefigures her court performances; Miller stages her as a director of others' fear.",
+        "TI": "Vengeance disguised as virtue. The theme is announced before any 'witch' is named."
+      },
+      "anchorQuoteIds": ["q-abigail-pointy-reckoning", "q-abigail-saw-indians"],
+      "linkSentenceTemplate": "In The Crucible, Abigail establishes her grip on the other girls through threat and traumatic appeal, which contrasts with the way [Text B] shows authority being claimed in [parallel scene]."
+    },
+    {
+      "id": "km-tituba-confesses",
+      "title": "Tituba's coerced confession",
+      "location": "Act 1",
+      "whatHappens": "Tituba, threatened with hanging by Parris and Putnam, confesses to working with the Devil and names Sarah Good and Goody Osburn. Hale, with rising exaltation, frames her as God's instrument.",
+      "whyItMatters": "The mechanism of the trials is born here. Confess and accuse, you live. Refuse, you hang. The system is now self-feeding, and Hale, the supposed expert in spiritual diagnosis, is its enabler.",
+      "modeDeployment": {
+        "CC": "The slave class has only two possible scripts under Puritan theocracy: silent labour or theatrical submission.",
+        "GVV": "The vision turns visibly bleak: the institutions designed to find truth are now actively producing falsehood.",
+        "LG": "Hale's exaltation, Tituba's sobbing, the cumulative naming, all build to the curtain. Miller stages it as ritual.",
+        "TI": "Truth becomes economically irrational. The theme of survival vs. honesty enters the play here."
+      },
+      "anchorQuoteIds": ["q-abigail-open-myself"],
+      "linkSentenceTemplate": "Where The Crucible exposes the production of false confession as a mechanism of institutional self-justification, [Text B] presents a comparable moment in which..."
+    },
+    {
+      "id": "km-elizabeth-arrest",
+      "title": "Elizabeth arrested with the poppet",
+      "location": "Act 2",
+      "whatHappens": "Cheever finds Mary Warren's poppet in the Proctor common room and a needle inside it. Abigail has stabbed herself in court and accused Elizabeth's spirit. Elizabeth is taken in chains.",
+      "whyItMatters": "The household has been breached. Proctor's adultery has been weaponised through Abigail's vengeance, and the law has nothing to say to it because the law itself is the weapon.",
+      "modeDeployment": {
+        "CC": "The home, the basic Puritan unit, is no longer private; the court walks through the door.",
+        "GVV": "The vision darkens decisively at this curtain. The play ends Act 2 with Proctor declaring everyone is what they always were, but naked.",
+        "LG": "The poppet is a stage object that turns on a single physical detail (the needle), classic dramatic compression.",
+        "TI": "Vengeance disguised as virtue is now lethal. A girl's stabbed belly is enough to chain a wife."
+      },
+      "anchorQuoteIds": ["q-proctor-vengeance-walking", "q-proctor-naked-now", "q-proctor-fall-like-ocean"],
+      "linkSentenceTemplate": "The arrest of Elizabeth Proctor shows Miller compressing institutional violence into a single domestic object, similar in effect to..."
+    },
+    {
+      "id": "km-elizabeth-lies-in-court",
+      "title": "Elizabeth lies to save John's name",
+      "location": "Act 3",
+      "whatHappens": "After Proctor confesses to lechery in court, Elizabeth is brought in and asked whether John has ever committed lechery. She says no, attempting to protect his reputation. Her lie destroys his defence.",
+      "whyItMatters": "The single most ironic moment of the play. The one woman in Salem incapable of lying lies. The truth the court cannot accept is that this lie is an act of love, not deception.",
+      "modeDeployment": {
+        "CC": "A wife's testimony is filtered through the public ownership of her husband's reputation. She lies in a register the cultural context has trained her into.",
+        "GVV": "The bleakest moment in the vision. Honesty cannot help; love cannot help; the trial machinery digests both.",
+        "LG": "Miller stages it with backs turned, instructions to look only at Danforth, two characters forbidden from looking at each other. Theatrical irony at its sharpest.",
+        "TI": "Truth, lies, and survival. A lie offered out of love is read as guilt by an institution that admits no qualification."
+      },
+      "anchorQuoteIds": ["q-elizabeth-no-sir", "q-proctor-known-her", "q-proctor-whores-vengeance"],
+      "linkSentenceTemplate": "The court scene in The Crucible turns on a lie told for love, an irony comparable to [moment in Text B]."
+    },
+    {
+      "id": "km-hale-quits-court",
+      "title": "Hale quits the court",
+      "location": "Act 3",
+      "whatHappens": "After Mary turns on Proctor and Proctor cries that God is dead, Hale denounces the proceedings and walks out, slamming the door behind him.",
+      "whyItMatters": "Hale is the most completely transformed character in the play. The expert outsider who arrived loaded with books has reached the conclusion that the books themselves are weapons. His exit on a slammed door is one of the play's most quotable curtains.",
+      "modeDeployment": {
+        "CC": "Authority that admits no qualification fractures the very institution it sought to defend.",
+        "GVV": "A flicker of hope in an otherwise darkening vision. Conscience can still walk out.",
+        "LG": "Curtain choice: the door slam ends Act 3 as a sound effect doing the work of an entire monologue.",
+        "TI": "Authority and the limits of obedience. The moment a believer decides his faith no longer authorises the actions taken in its name."
+      },
+      "anchorQuoteIds": ["q-hale-quit-court", "q-proctor-god-is-dead"],
+      "linkSentenceTemplate": "Hale's repudiation of the court in The Crucible mirrors [equivalent character's] turn against authority in [Text B]."
+    },
+    {
+      "id": "km-giles-pressed",
+      "title": "Giles Corey is pressed to death",
+      "location": "Act 4 (reported)",
+      "whatHappens": "Elizabeth tells John that Giles refused to plead aye or nay to his indictment. The court pressed him with stones until he died. He gave them only two words: 'More weight.'",
+      "whyItMatters": "Giles dies preserving his sons' inheritance from confiscation, and as a piece of theatre, the report is sharper than the act would be on stage. Two words turn comic Giles into a tragic exemplar of resistance.",
+      "modeDeployment": {
+        "CC": "Land law and inheritance, the mundane material spine of the cultural context, is what Giles's silence protects.",
+        "GVV": "Resistance is not free, and yet it is possible. The vision is not entirely crushed.",
+        "LG": "Reported action rather than staged. Miller chooses the more devastating form.",
+        "TI": "Integrity at the limit. The theme of name and refusal that culminates in Proctor is rehearsed by Giles."
+      },
+      "anchorQuoteIds": ["q-giles-more-weight"],
+      "linkSentenceTemplate": "Giles Corey's silent endurance under pressing rehearses, in a single reported sentence, the moral position [Text B] takes pages to develop."
+    },
+    {
+      "id": "km-elizabeth-cold-house",
+      "title": "Elizabeth's confession in the cell",
+      "location": "Act 4",
+      "whatHappens": "In the jail before John's decision, Elizabeth admits that her own coldness shaped his fall, that suspicion kissed him when she did, that she never knew how to say her love.",
+      "whyItMatters": "Miller refuses the simple reading that John is the sinner and Elizabeth the wronged saint. The marriage is shown as a shared, mutual failure, which is what allows John to forgive himself enough to die well.",
+      "modeDeployment": {
+        "CC": "Marriage as shared social condition rather than contract of fault.",
+        "GVV": "The vision admits a redemptive register at the very end. Honesty between two people, even in a cell, is still possible.",
+        "LG": "Quiet two-hander dialogue, almost no staging. The contrast with the courtroom theatricality is the point.",
+        "TI": "Marriage, love, and self-knowledge. Two people facing themselves before the noose."
+      },
+      "anchorQuoteIds": ["q-elizabeth-cold-wife-lechery", "q-elizabeth-cold-house-i-kept", "q-proctor-cannot-mount-gibbet"],
+      "linkSentenceTemplate": "The jail-cell confession in The Crucible reframes the central marriage as a shared moral failure, where [Text B] would attribute fault to..."
+    },
+    {
+      "id": "km-proctor-tears-confession",
+      "title": "Proctor tears the confession",
+      "location": "Act 4 (climax)",
+      "whatHappens": "Proctor signs the confession, then refuses to surrender it for the church door. He tears the paper and chooses the gallows.",
+      "whyItMatters": "The play's climax in every mode. The man who began as a sinner against his own moral code dies refusing to sell the only thing he has left, his name. The institution destroys the man and is exposed by his refusal.",
+      "modeDeployment": {
+        "CC": "Reputation in this society is property. Proctor's refusal to let the court own his name is a refusal of the cultural logic that brought him here.",
+        "GVV": "The vision finds its ground at last. Institutions can crush, but they cannot finally take the conscience that refuses them.",
+        "LG": "The torn paper is the play's most decisive stage object. Action, not speech, completes the arc.",
+        "TI": "Name, integrity, identity. The play's central theme reaches its most concentrated expression."
+      },
+      "anchorQuoteIds": ["q-proctor-because-it-is-my-name", "q-proctor-leave-me-my-name", "q-proctor-shred-of-goodness"],
+      "linkSentenceTemplate": "The torn confession in The Crucible offers a moment of irreducible refusal that compares with [Text B]'s use of [equivalent climactic action]."
+    }
+  ],
+
+  "characters": [
+    {
+      "id": "char-john-proctor",
+      "name": "John Proctor",
+      "role": "Protagonist. A farmer in his middle thirties whose private moral failure (the affair with Abigail) becomes the lever the witch-hunt uses against his household.",
+      "socialPosition": "Independent farmer, owns land, respected but not powerful. Has the social latitude to mock Parris but not the standing to escape Putnam's reach.",
+      "mindset": "Distrusts authority, suspects his own goodness, regards himself privately as a fraud. The distance between his public reputation and his private guilt drives every choice he makes.",
+      "contradictions": "He wants to be honest and is built for it, but he cannot publicly own the one act for which honesty would cost him most. He despises hypocrisy in others while harbouring it in himself.",
+      "arc": "From sinner concealing his sin (Act 1) to husband under domestic strain (Act 2) to public confessor in court (Act 3) to a man choosing death over a public lie (Act 4). The arc is a recovery of the moral ground he lost in Abigail's bed.",
+      "keyRelationshipIds": ["rel-proctor-elizabeth", "rel-proctor-abigail"],
+      "keyQuoteIds": [
+        "q-proctor-abby-done-with",
+        "q-proctor-aye-but-we-did-not",
+        "q-proctor-justice-freeze-beer",
+        "q-proctor-vengeance-walking",
+        "q-proctor-naked-now",
+        "q-proctor-fall-like-ocean",
+        "q-proctor-known-her",
+        "q-proctor-whores-vengeance",
+        "q-proctor-god-is-dead",
+        "q-proctor-cannot-mount-gibbet",
+        "q-proctor-because-it-is-my-name",
+        "q-proctor-leave-me-my-name",
+        "q-proctor-shred-of-goodness"
+      ]
+    },
+    {
+      "id": "char-elizabeth-proctor",
+      "name": "Elizabeth Proctor",
+      "role": "Co-protagonist. John's wife, the quiet moral anchor whose lone falsehood, told for love, destroys his defence in court.",
+      "socialPosition": "Goodwife, head of household. Subordinate publicly to her husband, but the play repeatedly shows her with the firmer moral footing.",
+      "mindset": "Restrained, watchful, slow to forgive but slower to condemn. Acknowledges in the final act that her coldness shaped his fall.",
+      "contradictions": "She is the woman who 'cannot lie', and yet her one lie is the hinge on which Act 3 turns. She is judge and yet capable of seeing the magistrate sitting in his own heart.",
+      "arc": "From withdrawn wife at the start of Act 2 to courtroom witness in Act 3 to the stillness of Act 4, where she is the one who refuses to take Proctor's chosen death from him.",
+      "keyRelationshipIds": ["rel-proctor-elizabeth"],
+      "keyQuoteIds": [
+        "q-elizabeth-magistrate-in-heart",
+        "q-elizabeth-adultery",
+        "q-elizabeth-no-sir",
+        "q-elizabeth-cold-wife-lechery",
+        "q-elizabeth-cold-house-i-kept",
+        "q-elizabeth-his-goodness"
+      ]
+    },
+    {
+      "id": "char-abigail-williams",
+      "name": "Abigail Williams",
+      "role": "Antagonist. Parris's seventeen-year-old niece. Drives the witch-hunt out of vengeance against Elizabeth and unrequited desire for John.",
+      "socialPosition": "Orphan, female, unmarried, dependent on her uncle. Lowest possible social position in Salem, until the trials invert the order and grant her absolute moral authority.",
+      "mindset": "Strategic, controlled, capable of feigning religious ecstasy and physical injury at will. The play presents her as fully aware of what she is doing.",
+      "contradictions": "She speaks the play's most lucid lines about Salem's hypocrisy ('I never knew what pretense Salem was') while running the most spectacular act of pretense in the village.",
+      "arc": "From manipulating the girls in Act 1 to performing the yellow-bird vision in Act 3 to vanishing entirely in Act 4. Miller refuses her either redemption or punishment within the play's frame.",
+      "keyRelationshipIds": ["rel-proctor-abigail", "rel-abigail-elizabeth"],
+      "keyQuoteIds": [
+        "q-abigail-pretense",
+        "q-abigail-pointy-reckoning",
+        "q-abigail-saw-indians",
+        "q-abigail-open-myself"
+      ]
+    },
+    {
+      "id": "char-reverend-hale",
+      "name": "Reverend John Hale",
+      "role": "The outside expert, summoned to diagnose witchcraft. Undergoes the most complete moral arc of any character in the play.",
+      "socialPosition": "Educated minister from Beverly, the figure of confident learning. By Act 4 he has reduced himself to a man begging the condemned to lie so they may live.",
+      "mindset": "Begins with the certainty of the well-read. Ends with the certainty of the broken.",
+      "contradictions": "The man who insisted theology was a fortress with no permissible cracks finishes the play telling Elizabeth that no principle, however glorious, may justify the taking of a life.",
+      "arc": "Confident witch-hunter (Act 1), unsettled visitor to the Proctor home (Act 2), public dissenter who quits the court (Act 3), penitent who returns to Salem to undo what he can (Act 4).",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": [
+        "q-hale-theology-fortress",
+        "q-hale-quit-court",
+        "q-hale-blood-on-my-head",
+        "q-hale-life-most-precious"
+      ]
+    },
+    {
+      "id": "char-danforth",
+      "name": "Deputy Governor Danforth",
+      "role": "Antagonist. The judge. The institutional voice of theocratic certainty.",
+      "socialPosition": "Highest legal authority in the province. Speaks as the state, the church, and the court with no distinction between them.",
+      "mindset": "Cannot conceive of being mistaken because the system that authorises him is the same system whose mistakes would have to be admitted. Self-correction is structurally unavailable to him.",
+      "contradictions": "Presents himself as the embodiment of justice while presiding over a court that explicitly relies on the unverifiable testimony of children.",
+      "arc": "Effectively static. The play's point about Danforth is that he does not change; institutions of his sort do not.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": [
+        "q-danforth-with-court-or-against",
+        "q-danforth-invisible-crime"
+      ]
+    },
+    {
+      "id": "char-parris",
+      "name": "Reverend Samuel Parris",
+      "role": "The local minister. Self-interested, fearful, more concerned with his salary, his firewood, and the deed to his house than with his daughter or his parish.",
+      "socialPosition": "Salem's nominal spiritual authority. In practice, a man who has alienated the better half of his congregation.",
+      "mindset": "Anxious, transactional, always calculating who is in the faction against him.",
+      "contradictions": "The minister who should be the play's spiritual centre is its most morally hollow figure. He prays only when the prayer might serve him.",
+      "arc": "From household crisis manager (Act 1) to public ally of the court (Act 3) to terrified man finding a dagger at his door (Act 4). Voted from office after the play ends, per Miller's epilogue.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-parris-faction"]
+    },
+    {
+      "id": "char-mary-warren",
+      "name": "Mary Warren",
+      "role": "The Proctors' servant, eighteen, swept up in the court's authority and then broken by it.",
+      "socialPosition": "Servant in the Proctor household. Briefly an 'official of the court' once the trials begin, the only public role her gender and class would otherwise deny her.",
+      "mindset": "Naive, easily impressed, hungry for the standing the court briefly confers. Capable of recanting, incapable of holding the recantation.",
+      "contradictions": "Wants to do right and folds at the first counter-pressure. Both victim and instrument.",
+      "arc": "From subservient servant (Act 1, Act 2 opening) to self-important official (Act 2 mid-Act) to recanting witness (Act 3 opening) to broken accuser (Act 3 close), turning on Proctor under Abigail's stage-directed performance.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-mary-i-am-eighteen", "q-mary-mr-proctor-devils-man"]
+    },
+    {
+      "id": "char-thomas-putnam",
+      "name": "Thomas Putnam",
+      "role": "Wealthy, vindictive landowner. Drives accusations against neighbours whose land he covets.",
+      "socialPosition": "Among the richest men in the village. Believes himself socially under-rewarded.",
+      "mindset": "Aggrieved, calculating, content to weaponise other people's tragedies for material gain.",
+      "contradictions": "The man whose family has 'peopled this province' is also the man most actively unmaking it.",
+      "arc": "Static. Every public crisis is an opportunity for him.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-putnam-nine-sons"]
+    },
+    {
+      "id": "char-mrs-putnam",
+      "name": "Mrs. Ann Putnam",
+      "role": "Putnam's wife. A grief-driven figure who sent her own daughter to Tituba to conjure the spirits of her seven dead babies.",
+      "socialPosition": "Mistress of the Putnam household. Her authority is private, her grievance public.",
+      "mindset": "Haunted, suspicious, ready to read murder into bereavement. Her grief is real; the use she makes of it is not.",
+      "contradictions": "A bereaved mother whose loss makes her receptive to any explanation, including ones that demand other women hang.",
+      "arc": "Largely static. Acts as a catalyst rather than a developing figure.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-mrs-putnam-seven-babies"]
+    },
+    {
+      "id": "char-giles-corey",
+      "name": "Giles Corey",
+      "role": "Eighty-three-year-old farmer. Begins as comic relief and ends as the play's quiet exemplar of refusal.",
+      "socialPosition": "Land-owning farmer, much-litigated, generally regarded as a nuisance.",
+      "mindset": "Cantankerous, plain-spoken, slow to come into the church but quick to defend his rights.",
+      "contradictions": "The character introduced as the village's biggest pain in the side dies the play's most unambiguously honourable death.",
+      "arc": "Comic enquirer (Act 1) to angry victim (Act 2) to courtroom contemnor (Act 3) to silent martyr (Act 4, reported). The 'more weight' line is one of the most quoted in modern theatre.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-giles-more-weight"]
+    },
+    {
+      "id": "char-rebecca-nurse",
+      "name": "Rebecca Nurse",
+      "role": "The play's most respected figure. Seventy-two, mother of eleven, twenty-six times a grandmother. Hanged for witchcraft.",
+      "socialPosition": "Matriarch of a large landholding family. Her standing is moral rather than economic.",
+      "mindset": "Steady, gentle, plain. Refuses to confess to a lie.",
+      "contradictions": "None internal. Her function in the play is precisely to be the figure whose presence rebukes the entire proceedings without her having to argue.",
+      "arc": "Static. Her stillness is the point.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": []
+    }
+  ],
+
+  "relationships": [
+    {
+      "id": "rel-proctor-elizabeth",
+      "characterAId": "char-john-proctor",
+      "characterBId": "char-elizabeth-proctor",
+      "type": "romantic",
+      "startStatus": "Strained marriage seven months after the affair. Civil but distant. Proctor walking on eggshells, Elizabeth withholding warmth she does not know how to give.",
+      "endStatus": "Honest. Each takes responsibility for the other's failure. Elizabeth refuses to take from him the death he has chosen.",
+      "trajectory": "The play's other arc is the Proctors' marriage. Act 2 shows them stuck in the aftermath of his unconfessed adultery, with Elizabeth unable to extend the forgiveness he has not asked for. Act 3 weaponises his sin against the household. Act 4, in the cell, finally permits the conversation they could not have for seven months. Elizabeth's admission that she 'kept a cold house' allows John to forgive himself enough to die without bargaining his name away. The closing line, 'He have his goodness now', is delivered by a woman who has just learned what it costs to give that goodness to him.",
+      "keyMomentIds": ["km-elizabeth-arrest", "km-elizabeth-lies-in-court", "km-elizabeth-cold-house", "km-proctor-tears-confession"],
+      "modeRelevance": ["CC", "GVV", "TI"]
+    },
+    {
+      "id": "rel-proctor-abigail",
+      "characterAId": "char-john-proctor",
+      "characterBId": "char-abigail-williams",
+      "type": "antagonistic",
+      "startStatus": "Abigail believes the affair can be revived. Proctor has decided privately to end it but has not enforced the decision publicly.",
+      "endStatus": "Proctor publicly named her a whore in court. Abigail vanished, possibly to Boston. The relationship ends without confrontation; Miller withholds resolution.",
+      "trajectory": "What begins as an extramarital affair becomes the play's central engine of public destruction. Abigail's refusal to accept the end of the relationship motors every accusation she makes. The relationship is the test case for the play's argument that private guilt becomes public weapon when an institution stands ready to receive it.",
+      "keyMomentIds": ["km-abigail-threatens-girls", "km-elizabeth-arrest", "km-elizabeth-lies-in-court"],
+      "modeRelevance": ["CC", "GVV", "TI"]
+    },
+    {
+      "id": "rel-abigail-elizabeth",
+      "characterAId": "char-abigail-williams",
+      "characterBId": "char-elizabeth-proctor",
+      "type": "antagonistic",
+      "startStatus": "Elizabeth dismissed Abigail from her household after discovering the affair. They have not spoken since.",
+      "endStatus": "Abigail engineers Elizabeth's arrest. Elizabeth lies in court to save Abigail's victim, John. They never share a stage.",
+      "trajectory": "The play stages the rivalry between the two women without putting them in the same scene. Their conflict is mediated entirely through John, the courts, and the village's appetite for accusation. The structure is itself a comment on how women's conflict was permitted to be conducted in this cultural context.",
+      "keyMomentIds": ["km-elizabeth-arrest", "km-elizabeth-lies-in-court"],
+      "modeRelevance": ["CC", "TI"]
+    },
+    {
+      "id": "rel-hale-danforth",
+      "characterAId": "char-reverend-hale",
+      "characterBId": "char-danforth",
+      "type": "antagonistic",
+      "startStatus": "Two figures of authority on the same institutional side. Hale defers to Danforth in Act 3 opening.",
+      "endStatus": "Hale denounces the proceedings and walks out. Returns in Act 4 not to argue with Danforth but to undo the damage by persuading the condemned to lie.",
+      "trajectory": "The Hale-Danforth relationship is the institutional fracture line of the play. Hale begins as the court's expert, becomes its dissenter, and ends as its negotiator working against its purpose. Danforth does not change. The relationship dramatises what authority looks like when one of its servants discovers conscience.",
+      "keyMomentIds": ["km-hale-quits-court"],
+      "modeRelevance": ["CC", "GVV", "TI"]
+    },
+    {
+      "id": "rel-mary-abigail",
+      "characterAId": "char-mary-warren",
+      "characterBId": "char-abigail-williams",
+      "type": "antagonistic",
+      "startStatus": "Co-conspirators in the dancing in the forest. Mary follows Abigail's lead from the play's first act.",
+      "endStatus": "Mary attempts to denounce Abigail in court. Abigail's yellow-bird performance breaks Mary, who turns on Proctor instead.",
+      "trajectory": "Mary's brief assertion of independence in Act 3 is the play's clearest demonstration of the cost of resistance. Abigail's response, a piece of staged group hysteria, shows the witch-hunt operating as a closed system: the only safe place to stand is back inside the accusation.",
+      "keyMomentIds": ["km-elizabeth-lies-in-court"],
+      "modeRelevance": ["LG", "TI", "GVV"]
+    }
+  ],
+
+  "culturalContext": {
+    "socialClass": {
+      "applies": "yes",
+      "summary": "Salem in 1692 is a community where social position is precarious and policed. Putnam's wealth and grievance drive accusations against neighbours whose land he covets. Proctor's middling farmer status gives him room to mock Parris but no protection from the Putnams. The trials become a vehicle for class-based dispossession: confessing witches forfeit property, and the wealthy stand ready to acquire it.",
+      "anchorMomentIds": ["km-elizabeth-arrest"],
+      "anchorQuoteIds": ["q-putnam-nine-sons"],
+      "argumentHook": "The Crucible shows how a theocratic society's class anxieties find legal expression once the courts admit invisible crimes."
+    },
+    "gender": {
+      "applies": "yes",
+      "summary": "The cultural context is rigidly patriarchal. Adult men own property, vote in society, and speak in church. Adolescent girls and slaves have effectively no public voice. The witch-hunt inverts the order temporarily: Abigail's cry can chain a goodwife. The inversion is not a liberation but a brief mechanism by which young women can wield public authority before it is used to destroy them too. Elizabeth's testimony in court is filtered entirely through her ownership of John's reputation; she lies in the only register the cultural context has trained her into.",
+      "anchorMomentIds": ["km-abigail-threatens-girls", "km-elizabeth-lies-in-court"],
+      "anchorQuoteIds": ["q-abigail-pretense", "q-mary-i-am-eighteen", "q-elizabeth-no-sir"],
+      "argumentHook": "Gender determines who may speak in the cultural context of The Crucible, and the witch-hunt is the only mechanism through which the powerless temporarily gain that right."
+    },
+    "religion": {
+      "applies": "yes",
+      "summary": "The community is a theocracy. Civil and religious authority are one. Hale's books, Danforth's bench, and Parris's pulpit are organs of a single body. There is no private space the church does not enter (Hale tests the Proctors on commandments at their kitchen table) and no public charge the court will not hear. Religion does not soften the cultural context; it constitutes it. The single most damaging line a character can hear, Hale's 'theology, sir, is a fortress', is the claim on which the trials rest.",
+      "anchorMomentIds": ["km-tituba-confesses", "km-hale-quits-court"],
+      "anchorQuoteIds": ["q-hale-theology-fortress", "q-danforth-with-court-or-against"],
+      "argumentHook": "When religion holds judicial power, sin and crime become indistinguishable, and conscience becomes a capital offence."
+    },
+    "familyAndMarriage": {
+      "applies": "yes",
+      "summary": "Marriage is a public contract whose private content the cultural context cannot examine. The Proctor marriage is the play's central case. John's adultery cannot be confessed without destroying the household; Elizabeth's lie cannot be told without destroying the defence. Beyond the Proctors, the Putnams' marriage is shown as a unit of accumulated grievance, while the Coreys' provides the play's most unexpected portrait of solidarity. Family in this cultural context is a unit of public reputation as much as private love.",
+      "anchorMomentIds": ["km-elizabeth-arrest", "km-elizabeth-cold-house"],
+      "anchorQuoteIds": ["q-elizabeth-cold-wife-lechery", "q-elizabeth-cold-house-i-kept", "q-elizabeth-magistrate-in-heart"],
+      "argumentHook": "Marriages in this cultural context are inseparable from public reputation, so a private fault becomes a public weapon."
+    },
+    "authorityAndPower": {
+      "applies": "yes",
+      "summary": "Authority in The Crucible is absolute by design. Danforth's court does not entertain qualifications; Parris's pulpit does not entertain dissent. Hale's arc is the play's experiment in what happens when authority's own servant discovers conscience. The cultural context is one in which the only legitimate response to the court's pressure is to be more enthusiastically aligned with it. Proctor's refusal at the end is a refusal of that grammar.",
+      "anchorMomentIds": ["km-hale-quits-court", "km-proctor-tears-confession"],
+      "anchorQuoteIds": ["q-danforth-with-court-or-against", "q-danforth-invisible-crime", "q-proctor-vengeance-walking"],
+      "argumentHook": "Authority that admits no qualification corrupts itself, and the cultural context shapes its citizens to read that corruption as virtue."
+    }
+  },
+
+  "generalVisionAndViewpoint": {
+    "oneLineVision": "The Crucible offers a qualified, ultimately tragic vision: a community can destroy its best people through institutional certainty, but individual integrity can still survive the destruction by refusing to bow.",
+    "openingShapesVision": "The vision is set early. A private moral failure, the dancing and the affair, is amplified by an institutional structure that has no language for either. The play's view of human nature is bleak from the first scene: the most dangerous figure on stage is a teenager with a grievance, and her uncle's first instinct on finding his daughter unresponsive is to calculate the damage to his ministry. The opening is not bleak about people; it is bleak about what institutions do with people.",
+    "climaxShapesVision": "Elizabeth's lie is the bleakest moment in the vision. The one woman in Salem incapable of falsehood lies, out of love, and her lie is the thing that condemns her husband. The play's view of the world reaches its lowest ground here: honesty cannot help, love cannot help, and the trial machinery digests both.",
+    "closingShapesVision": "The closing recovers a register of qualified hope. Proctor cannot save Salem and cannot save himself, but he refuses to be co-opted. Elizabeth refuses to take that refusal from him. 'He have his goodness now' is a line that does not redeem the institutions or the village or the deaths, but it does redeem the marriage and the man.",
+    "ambiguity": "The vision is bleak about institutions, communities, and crowd psychology. It is hopeful about the individual conscience under extreme pressure. The play's most quoted lines are the ones that hold both registers in tension at once. The SEC has examined the climax and the closing directly in recent papers (2025 GVV Q1(a) on whether the climax is over-influential, 2024 GVV on the influence of compassion). Both questions are well-served by The Crucible because the play's vision is neither uniformly optimistic nor uniformly pessimistic; it is qualified.",
+    "anchorMomentIds": ["km-tituba-confesses", "km-elizabeth-lies-in-court", "km-hale-quits-court", "km-proctor-tears-confession"]
+  },
+
+  "literaryGenre": {
+    "toolkit": "drama",
+    "elements": [
+      {
+        "name": "Authorial commentary blocks",
+        "description": "Miller breaks dramatic convention by inserting essayistic narrator passages between dialogue, particularly in Act 1 (the long passages on Salem's history, on Putnam, on Rebecca, on Hale, on the Devil). These are unstaged, unspeakable in performance, and represent Miller asserting authorial control over how the audience reads the period. Students should know this is unusual; it is a signature Crucible feature.",
+        "anchorMomentIds": ["km-tituba-confesses"],
+        "keyExample": "The 'word about Thomas Putnam' inserted in Act 1 between Putnam's first lines and his deeper involvement in the witch-hunt frames every Putnam line that follows."
+      },
+      {
+        "name": "Curtain choices",
+        "description": "Each Act ends on a deliberate sound-and-image curtain. Act 1: the ecstatic chant of accusations rising into a curtain fall. Act 2: Proctor wrenching Mary toward truth, 'we are only what we always were, but naked now'. Act 3: Hale's slammed door. Act 4: the drumroll of execution, Elizabeth gripping the bars. Each curtain is chosen for maximum dramatic compression.",
+        "anchorMomentIds": ["km-tituba-confesses", "km-hale-quits-court", "km-proctor-tears-confession"],
+        "keyExample": "Act 3 closes on Hale's 'I denounce these proceedings, I quit this court' and the door slamming. The slam is the punctuation."
+      },
+      {
+        "name": "Reported action",
+        "description": "Some of the play's most powerful events happen offstage and are reported. Giles's pressing is the clearest case: rendered as Elizabeth's quiet account in Act 4, where two reported words ('More weight') are sharper than any staging could be. Miller chooses reported over enacted at moments where the audience's imagination is more reliable than what could be physically shown.",
+        "anchorMomentIds": ["km-giles-pressed"],
+        "keyExample": "Elizabeth's three-line account of Giles's death, ending on the quoted 'More weight', is one of the play's most affecting passages and contains no on-stage action."
+      },
+      {
+        "name": "Period dialogue and idiom",
+        "description": "Miller crafts a Puritan idiom that signals seventeenth-century New England without descending into pastiche. Verbs are inverted ('Be you foolish, Mary Warren?'), 'aye' replaces 'yes', archaic forms ('y'know', 'goody', 'I bid you') do the period work. The dialogue is heightened but speakable, and individual characters have distinct registers (Danforth's formal, Giles's blunt, Abigail's calculated).",
+        "anchorMomentIds": [],
+        "keyExample": "Compare Danforth's 'A person is either with this court or he must be counted against it, there be no road between' with Giles's 'A fart on Thomas Putnam, that is what I say to that' to see two characters from the same period rendered in incompatible registers."
+      },
+      {
+        "name": "Stage object as turning point",
+        "description": "Miller compresses key turns onto single stage objects. The poppet with the needle ends Act 2; Proctor signing then tearing the confession turns the climax of Act 4. Miller chooses physical objects that can carry dramatic weight without requiring the audience to follow argument.",
+        "anchorMomentIds": ["km-elizabeth-arrest", "km-proctor-tears-confession"],
+        "keyExample": "The poppet is introduced in Act 2 as a casual gift from Mary to Elizabeth and ends the act as the legal pretext for Elizabeth's arrest."
+      },
+      {
+        "name": "Confined staging",
+        "description": "Each Act takes place in a more constrained space than the last. Act 1: Parris's bedroom. Act 2: the Proctors' common room. Act 3: the vestry behind the courtroom. Act 4: a jail cell. The contraction is structural; the play's institutional pressure is staged spatially.",
+        "anchorMomentIds": [],
+        "keyExample": "By Act 4, Proctor is chained to a wall. The progression from a private bedroom to a prison cell mirrors the progression from rumour to execution."
+      },
+      {
+        "name": "Group choreography under pressure",
+        "description": "The Act 3 yellow-bird scene is the play's most extreme set piece: Abigail leads the girls in synchronised hysterical mimicry, repeating Mary's lines, screaming as one, breaking Mary's resolve through sheer staged force. It is a piece of dramatic writing that requires precise direction and is unforgettable in performance.",
+        "anchorMomentIds": ["km-elizabeth-lies-in-court"],
+        "keyExample": "The girls' chorus echoing Mary's 'I'm here, I'm here' transforms one girl's nervous breakdown into a group political weapon."
+      }
+    ]
+  },
+
+  "themeOrIssue": {
+    "primaryThemes": [
+      {
+        "name": "Integrity and the cost of one's name",
+        "summary": "The play's central theme. Proctor begins compromised by an affair he has not confessed and ends choosing death rather than letting Danforth post his confession on the church door. The arc is a recovery of the moral ground he lost. Giles rehearses the same theme in miniature with his 'more weight'. Rebecca embodies it without ever needing to enact it.",
+        "pivotalMomentIds": ["km-proctor-tears-confession", "km-giles-pressed", "km-elizabeth-cold-house"],
+        "contradictoryAspect": "Proctor saves his name by signing nothing, Elizabeth saves John's name by lying. The play holds these two acts in the same moral frame and refuses to decide between them. Both are acts of love; one is a public refusal, the other a private falsehood; both are right."
+      },
+      {
+        "name": "Hysteria and institutional self-justification",
+        "summary": "The witch-hunt is sustained because the institution that runs it cannot admit error without dissolving its own authority. Danforth's logic that witchcraft is an invisible crime, witnessed only by witch and victim, makes the children's testimony unanswerable by design. The play's view is that hysteria is not the crowd losing its head; it is the institution choosing not to find it.",
+        "pivotalMomentIds": ["km-tituba-confesses", "km-elizabeth-lies-in-court"],
+        "contradictoryAspect": "The most reasonable man in the village (Hale) is the one who arrives with the books that make the trials possible. Reason and hysteria are not opposites in The Crucible; reason supplies hysteria with its categories."
+      },
+      {
+        "name": "Vengeance disguised as virtue",
+        "summary": "Abigail's accusations, Putnam's land grabs, Mrs. Putnam's grief-driven score-settling: each is a private grievance dressed in public morality. Proctor names this directly in Act 2 ('vengeance is walking Salem, common vengeance writes the law'). The theme runs from the first act, where Abigail threatens the girls, to the last, where Parris finds a dagger at his door.",
+        "pivotalMomentIds": ["km-abigail-threatens-girls", "km-elizabeth-arrest"],
+        "contradictoryAspect": "The institution that exists to punish vengeance is the institution making vengeance possible. The court's claim to virtue is precisely what makes it useful as a weapon."
+      },
+      {
+        "name": "Authority and the limits of obedience",
+        "summary": "Hale arrives as authority's specialist. He leaves as authority's most damaging dissenter. Danforth never moves. The play stages the question of when a believer is obliged to disobey, and answers it through an arc rather than a speech.",
+        "pivotalMomentIds": ["km-hale-quits-court"],
+        "contradictoryAspect": "Hale's dissent does not save anyone. He returns in Act 4 to ask the condemned to lie. The play refuses to let his conscience be a redemption arc; it is a survival arc that costs everyone else their lives anyway."
+      },
+      {
+        "name": "Truth, lies, and survival",
+        "summary": "Almost every character lies, and the play sorts them by what their lies are for. Abigail lies for power. Tituba lies for life. Elizabeth lies for love. Proctor lies first to conceal sin, then to confess it, then refuses to lie to save himself. The play's view is that the question is not whether you lie but what your lie costs other people.",
+        "pivotalMomentIds": ["km-tituba-confesses", "km-elizabeth-lies-in-court", "km-proctor-tears-confession"],
+        "contradictoryAspect": "Honesty cannot save Proctor; only a lie can. He chooses honesty anyway. The play does not pretend this choice is rational; it presents it as a recognition of what survival without a name would actually be."
+      }
+    ]
+  },
+
+  "examinerPitfalls": [
+    "Treating The Crucible's 1692 setting as the play's subject. The cultural context to argue is Puritan theocracy as Miller dramatises it, not American history in the abstract.",
+    "Reducing the play to a McCarthy allegory. Miller wrote it during the HUAC hearings, but exam answers that lead with the allegory tend to lose the play's textual evidence. The allegory is a frame, not the argument.",
+    "Confusing Abigail's private vengeance with the play's social vision. Abigail is the engine, not the system. The system is the court that admits her testimony.",
+    "Misreading Elizabeth's lie. It is not weakness or hesitation; it is an act of love misfiring inside an institution that cannot read love as evidence. Treat it as one of the play's structural ironies, not a character flaw.",
+    "Naming themes without anchoring them in moments. The play's themes are well-marked, so a strong answer must reach for specific scenes (the poppet, the yellow bird, the torn confession) rather than restating the abstractions.",
+    "Treating Hale as a minor figure. Hale's arc is the play's most complete character development and is examiner gold for both Literary Genre (technique question on character development) and Cultural Context (authority dissenting from itself).",
+    "Forgetting Giles. 'More weight' is one of the most quotable lines in modern drama; ignoring it is a missed mark."
+  ],
+
+  "status": "draft",
+  "schemaVersion": 1,
+  "lastReviewedAt": null
+}
