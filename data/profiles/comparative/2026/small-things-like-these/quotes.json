@@ -1,0 +1,326 @@
+{
+  "textId": "small-things-like-these",
+  "schemaVersion": 1,
+  "quotes": [
+    {
+      "id": "q-furlong-real-santa",
+      "text": "Sure he's not the real Santa at all, it's just a man in a costume.",
+      "speaker": "Bill Furlong",
+      "location": "Scene 44 (screenplay)",
+      "context": "Furlong crouching down to comfort his youngest daughter Loretta who is afraid to sit on Santa's knee. Source: 2024 screenplay adaptation by Enda Walsh; verify against Keegan's novel before classroom citation.",
+      "themeTags": ["fatherhood", "tenderness", "family"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Bill Furlong", "Loretta"]
+    },
+    {
+      "id": "q-furlong-might-be-trying",
+      "text": "He might be trying, we don't know.",
+      "speaker": "Bill Furlong",
+      "location": "Scene 33 (screenplay)",
+      "context": "Furlong's quiet defence of Mick Sinnott (a local drinker whose son Furlong has just given a coin) against Eileen's dismissal. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["compassion", "judgement", "class"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Bill Furlong", "Eileen Furlong"]
+    },
+    {
+      "id": "q-furlong-have-you-never-questioned",
+      "text": "Have you never questioned it?",
+      "speaker": "Bill Furlong",
+      "location": "Scene 82 (screenplay)",
+      "context": "Furlong to Eileen after his first encounter with the girl in the convent's Hall. The pivot of the play's central marital argument. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["conscience", "complicity", "marriage"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Bill Furlong", "Eileen Furlong"]
+    },
+    {
+      "id": "q-furlong-but-what-if-one-of-ours",
+      "text": "But what if it was one of ours?",
+      "speaker": "Bill Furlong",
+      "location": "Scene 82 (screenplay)",
+      "context": "Furlong's response to Eileen's argument that the laundry girls are not their concern. The line that names the parallel. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["fatherhood", "empathy", "parallel"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Bill Furlong", "Eileen Furlong"]
+    },
+    {
+      "id": "q-furlong-where-would-mother-have-gone",
+      "text": "Where would my mother have gone if it wasn't for her help? Where would I be without what she did for me?",
+      "speaker": "Bill Furlong",
+      "location": "Scene 82 (screenplay)",
+      "context": "Furlong invoking Mrs. Wilson's care for his unmarried mother as the decisive counter to Eileen's argument that the girls are not their problem. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["inheritance", "kindness", "parallel", "gratitude"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Bill Furlong", "Sarah Furlong", "Mrs. Wilson"]
+    },
+    {
+      "id": "q-furlong-mothers-name-no-harm",
+      "text": "I have my mother's name and no harm came from that.",
+      "speaker": "Bill Furlong",
+      "location": "Scene 107 (screenplay)",
+      "context": "Furlong's reply to Sr. Mary's pointed remark that he has no son to carry on his name. His fullest verbal defence of his illegitimate origin. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["inheritance", "name", "illegitimacy", "self-respect"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Bill Furlong", "Sr. Mary"]
+    },
+    {
+      "id": "q-furlong-come-on-sarah",
+      "text": "Come on, Sarah.",
+      "speaker": "Bill Furlong",
+      "location": "Scene 162 (screenplay)",
+      "context": "Furlong returning to the coal shed at night, finding Sarah Redmond locked in, calling her by name. The moment of decision. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["rescue", "decision", "kindness"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Bill Furlong", "Sarah Redmond"]
+    },
+    {
+      "id": "q-furlong-not-long-now-almost-home",
+      "text": "It's not long now. We're almost home.",
+      "speaker": "Bill Furlong",
+      "location": "Scene 165 (screenplay)",
+      "context": "Furlong walking Sarah Redmond up Chapel Lane to his own house. The film's final spoken line. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["home", "rescue", "hope"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Bill Furlong", "Sarah Redmond"]
+    },
+    {
+      "id": "q-eileen-if-you-want-to-get-on",
+      "text": "If you want to get on in life, there are things you have to ignore.",
+      "speaker": "Eileen Furlong",
+      "location": "Scene 82 (screenplay)",
+      "context": "Eileen's central thesis statement to Bill in their bedroom. The line on which the marital argument turns. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["complicity", "marriage", "class", "silence"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Eileen Furlong", "Bill Furlong"]
+    },
+    {
+      "id": "q-eileen-they-are-not-ours",
+      "text": "This is what I'm saying to ya, they are not ours.",
+      "speaker": "Eileen Furlong",
+      "location": "Scene 82 (screenplay)",
+      "context": "Eileen sharpening her position when Bill suggests one of the laundry girls could have been one of their daughters. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["complicity", "boundary", "fear"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Eileen Furlong", "Bill Furlong"]
+    },
+    {
+      "id": "q-eileen-far-from-hardship",
+      "text": "It's far from hardship that you were reared, Bill.",
+      "speaker": "Eileen Furlong",
+      "location": "Scene 82 (screenplay)",
+      "context": "Eileen's accidental cruelty in the bedroom argument; she apologises within seconds but the line lands. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["class", "marriage", "cruelty", "regret"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Eileen Furlong", "Bill Furlong"]
+    },
+    {
+      "id": "q-eileen-soft-hearted",
+      "text": "You've always been soft hearted.",
+      "speaker": "Eileen Furlong",
+      "location": "Scene 82 (screenplay)",
+      "context": "Eileen describing the trait that worries her about her husband's exposure to the convent's situation. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["character", "marriage", "compassion"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Eileen Furlong", "Bill Furlong"]
+    },
+    {
+      "id": "q-eileen-warm-and-fed-trade",
+      "text": "Aren't they kept warm and fed and learning a trade? If it wasn't for the nuns they'd have nowhere to go.",
+      "speaker": "Eileen Furlong",
+      "location": "Scene 82 (screenplay)",
+      "context": "Eileen rehearsing the standard community defence of the laundries. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["complicity", "religion", "community"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Eileen Furlong"]
+    },
+    {
+      "id": "q-eileen-his-dad-will-only-drink",
+      "text": "Sure his dad will only drink it.",
+      "speaker": "Eileen Furlong",
+      "location": "Scene 33 (screenplay)",
+      "context": "Eileen's response to Furlong giving the Sinnott boy fifty pence. The casual middle-class moralism of the rural town. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["class", "judgement", "alcohol"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Eileen Furlong"]
+    },
+    {
+      "id": "q-sr-mary-walking-in-and-out",
+      "text": "We can't have people walking in and out whenever they want.",
+      "speaker": "Sr. Mary",
+      "location": "Scene 71 (screenplay)",
+      "context": "Sr. Carmel's line, echoed by Sr. Mary's institutional voice across the film. The convent's principle of opacity stated plainly. Source: 2024 screenplay; verify against novel; note speaker may differ.",
+      "themeTags": ["authority", "secrecy", "religion"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Sr. Carmel"]
+    },
+    {
+      "id": "q-sr-mary-disappointing-no-boy",
+      "text": "It must be a little disappointing all the same? To not have a boy to carry on your name.",
+      "speaker": "Sr. Mary",
+      "location": "Scene 107 (screenplay)",
+      "context": "Sr. Mary's pointed and unprompted remark while serving Furlong tea after the discovery of Sarah Redmond in the coal shed. Reads as a calculated taunt. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["authority", "intimidation", "name", "gender"],
+      "modeTags": ["CC", "TI", "LG"],
+      "characterTags": ["Sr. Mary", "Bill Furlong"]
+    },
+    {
+      "id": "q-sr-mary-not-in-any-trouble",
+      "text": "Don't be thinking that you're in any trouble. Tell us how you came to be locked in that shed?",
+      "speaker": "Sr. Mary",
+      "location": "Scene 107 (screenplay)",
+      "context": "Sr. Mary interrogating Sarah Redmond in front of Furlong, with Sr. Frances coaching the answer from the end of the table. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["authority", "coercion", "performance"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Sr. Mary", "Sarah Redmond"]
+    },
+    {
+      "id": "q-sarah-redmond-take-me-to-the-river",
+      "text": "Will you take me to the river? Or get me to the other side of the gate.",
+      "speaker": "Sarah Redmond",
+      "location": "Scene 70 (screenplay)",
+      "context": "The girl in the Hall on her hands and knees polishing the floor; she gets up and grabs Furlong's arm to plead. The moment that begins to dismantle Furlong's denial. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["rescue", "desperation", "captivity"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Sarah Redmond", "Bill Furlong"]
+    },
+    {
+      "id": "q-sarah-redmond-take-me-home",
+      "text": "Don't leave me here! Take me home and I'll work for you, Sir, I swear it.",
+      "speaker": "Sarah Redmond",
+      "location": "Scene 70 (screenplay)",
+      "context": "Sarah's escalation of her plea before she suddenly drops back to the floor and resumes polishing as Sr. Carmel approaches. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["desperation", "labour", "captivity"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Sarah Redmond", "Bill Furlong"]
+    },
+    {
+      "id": "q-sarah-redmond-day-or-night",
+      "text": "Is it the day or night, Mister?",
+      "speaker": "Sarah Redmond",
+      "location": "Scene 103B (screenplay)",
+      "context": "Sarah's first words to Furlong on the morning he finds her in the coal shed. The mark of how long she has been locked there. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["captivity", "disorientation", "cruelty"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Sarah Redmond", "Bill Furlong"]
+    },
+    {
+      "id": "q-sarah-redmond-baby-here",
+      "text": "I'll have my baby here. Not for three months they said.",
+      "speaker": "Sarah Redmond",
+      "location": "Scene 103B (screenplay)",
+      "context": "Sarah explaining her situation to Furlong in the coal shed. The pregnancy that the institution has been concealing. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["pregnancy", "captivity", "religion"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Sarah Redmond"]
+    },
+    {
+      "id": "q-sarah-redmond-good-home",
+      "text": "Sister Mary said it will go to a good home.",
+      "speaker": "Sarah Redmond",
+      "location": "Scene 103B (screenplay)",
+      "context": "Sarah's flat, indoctrinated reporting of the convent's plan for her child. The line carries the institutional script intact. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["adoption", "authority", "indoctrination"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Sarah Redmond", "Sr. Mary"]
+    },
+    {
+      "id": "q-sarah-redmond-daddy-didnt-want-me-home",
+      "text": "Daddy didn't want me home.",
+      "speaker": "Sarah Redmond",
+      "location": "Scene 103B (screenplay)",
+      "context": "Sarah explaining how she ended up at the Good Shepherd. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["family", "rejection", "patriarchy"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Sarah Redmond"]
+    },
+    {
+      "id": "q-mrs-kehoe-break-the-boy",
+      "text": "Ya have to break the boy to make the man.",
+      "speaker": "Mrs. Kehoe",
+      "location": "Scene 10 (screenplay)",
+      "context": "Mrs. Kehoe's offhand line to Furlong after embarrassing his employee PJ at the food counter. The community's working philosophy in a single sentence. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["community", "cruelty", "masculinity"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Mrs. Kehoe"]
+    },
+    {
+      "id": "q-mrs-kehoe-bad-dog-good-dog",
+      "text": "Keep the bad dog with ya and the good dog won't bite, isn't that it?",
+      "speaker": "Mrs. Kehoe",
+      "location": "Scene 138 (screenplay)",
+      "context": "Mrs. Kehoe's coded warning to Furlong on Christmas Eve in the storage room of her pub, telling him to leave the convent alone. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["complicity", "warning", "community"],
+      "modeTags": ["CC", "TI", "LG"],
+      "characterTags": ["Mrs. Kehoe", "Bill Furlong"]
+    },
+    {
+      "id": "q-mrs-kehoe-finger-in-every-pie",
+      "text": "Them nuns have a finger in every pie, Bill.",
+      "speaker": "Mrs. Kehoe",
+      "location": "Scene 138 (screenplay)",
+      "context": "Mrs. Kehoe spelling out the convent's institutional reach in the small town. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["authority", "religion", "complicity"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Mrs. Kehoe"]
+    },
+    {
+      "id": "q-mrs-kehoe-deny-younger-ones-education",
+      "text": "You make a nuisance of yourself you'll be denying your younger ones an education.",
+      "speaker": "Mrs. Kehoe",
+      "location": "Scene 138 (screenplay)",
+      "context": "Mrs. Kehoe naming the precise mechanism of community discipline: the convent's secondary school is the only one in town, so crossing the nuns punishes Furlong's daughters. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["education", "complicity", "cost", "family"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Mrs. Kehoe", "Bill Furlong"]
+    },
+    {
+      "id": "q-furlong-only-as-much-power",
+      "text": "They've only as much power as we give them, I thought.",
+      "speaker": "Bill Furlong",
+      "location": "Scene 138 (screenplay)",
+      "context": "Furlong's reply to Mrs. Kehoe's warning about the nuns. The first time he names the principle that will lead him to act. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["complicity", "power", "conscience"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Bill Furlong", "Mrs. Kehoe"]
+    },
+    {
+      "id": "q-mrs-wilson-dont-be-listening",
+      "text": "Don't be listening to them, they're only brats.",
+      "speaker": "Mrs. Wilson",
+      "location": "Scene 15 (screenplay)",
+      "context": "Mrs. Wilson to young Bill about the schoolchildren who spit on his coat. The kindness that, by Furlong's own argument, made him possible. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["kindness", "class", "childhood", "shame"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Mrs. Wilson", "young Bill"]
+    },
+    {
+      "id": "q-ned-time-is-terrible",
+      "text": "Time is terrible.",
+      "speaker": "Ned",
+      "location": "Scene 134 (screenplay)",
+      "context": "Ned to Furlong in Mrs. Wilson's kitchen, talking about how long since she died. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["memory", "loss", "time"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Ned", "Bill Furlong"]
+    },
+    {
+      "id": "q-ned-no-need-digging",
+      "text": "No need digging up old stories, Bill.",
+      "speaker": "Ned",
+      "location": "Scene 134 (screenplay)",
+      "context": "Ned ending Furlong's questions about who his father might be. The line that closes the door Furlong had been trying to push open. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["secrets", "paternity", "silence"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Ned", "Bill Furlong"]
+    },
+    {
+      "id": "q-ned-treated-you-like-her-own",
+      "text": "And she was a fair woman, treated you like her own, Bill.",
+      "speaker": "Ned",
+      "location": "Scene 134 (screenplay)",
+      "context": "Ned's testimony about Mrs. Wilson's care of Furlong as a child. Sets up the moral parallel Furlong will use against Eileen. Source: 2024 screenplay; verify against novel.",
+      "themeTags": ["kindness", "care", "class", "inheritance"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Ned", "Mrs. Wilson", "Bill Furlong"]
+    }
+  ]
+}

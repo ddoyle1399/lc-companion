@@ -1,0 +1,436 @@
+{
+  "textId": "hamnet",
+  "schemaVersion": 1,
+  "quotes": [
+    {
+      "id": "q-opening-boy-stairs",
+      "text": "A boy is coming down a flight of stairs.",
+      "speaker": "narrator",
+      "location": "Opening sentence, Part I",
+      "context": "The novel's opening line. Hamnet, eleven, descending alone in the empty house in search of an adult after Judith has fallen ill.",
+      "themeTags": ["opening", "isolation", "narrative-voice"],
+      "modeTags": ["LG", "GVV"],
+      "characterTags": ["Hamnet"]
+    },
+    {
+      "id": "q-no-one-here",
+      "text": "There is no one here.",
+      "speaker": "narrator",
+      "location": "Part I, opening chapter",
+      "context": "Hamnet's first realisation, descending into the downstairs room of the apartment to find it empty.",
+      "themeTags": ["isolation", "absence", "household"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Hamnet"]
+    },
+    {
+      "id": "q-where-is-everyone",
+      "text": "Where is everyone? How can both houses be empty?",
+      "speaker": "Hamnet (free indirect)",
+      "location": "Part I, opening chapter",
+      "context": "Hamnet running through the back yard between the apartment and the larger Henley Street house, finding nobody. The novel's opening question and one of its central ones.",
+      "themeTags": ["isolation", "household", "absence"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Hamnet"]
+    },
+    {
+      "id": "q-absent-mother-epicentre",
+      "text": "Every life has its kernel, its hub, its epicentre, from which everything flows out, to which everything returns. This moment is the absent mother's: the boy, the empty house, the deserted yard, the unheard cry.",
+      "speaker": "narrator",
+      "location": "Part I, opening sequence",
+      "context": "The novel's most explicit statement of its structural decision: Agnes's absence on the day Hamnet falls ill is the centre around which everything else is arranged.",
+      "themeTags": ["motherhood", "absence", "fate", "structure"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Agnes", "Hamnet"]
+    },
+    {
+      "id": "q-lie-at-her-core",
+      "text": "It will lie at her very core, for the rest of her life.",
+      "speaker": "narrator",
+      "location": "Part I, opening sequence",
+      "context": "The narrator's prolepsis: Agnes's absence on this day will be the unhealed wound at the centre of her later life.",
+      "themeTags": ["motherhood", "grief", "guilt", "fate"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Agnes"]
+    },
+    {
+      "id": "q-hamnet-hamlet-interchangeable",
+      "text": "Hamnet and Hamlet are in fact the same name, entirely interchangeable in Stratford records in the late sixteenth and early seventeenth centuries.",
+      "speaker": "epigraph (Steven Greenblatt)",
+      "location": "Front-matter epigraph",
+      "context": "The Greenblatt epigraph that frames the novel and is activated by the closing scene at the playhouse.",
+      "themeTags": ["intertextuality", "art", "memorial", "language"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Hamnet"]
+    },
+    {
+      "id": "q-husband-never-named",
+      "text": "the Latin tutor",
+      "speaker": "narrator (epithet)",
+      "location": "Throughout the novel",
+      "context": "Structural epithet, not a quotation. The husband-father is named only by epithet across the whole novel (the Latin tutor, the husband, the father, the playwright). He is never called William or Shakespeare.",
+      "themeTags": ["narrative-voice", "marriage", "centring"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["the husband"]
+    },
+    {
+      "id": "q-john-glover",
+      "text": "the glove-maker",
+      "speaker": "narrator (epithet)",
+      "location": "Throughout, the Henley Street household",
+      "context": "Structural epithet. John, the husband's father, is named throughout by his trade. A debt-ridden former bailiff, formerly civic, fallen from standing.",
+      "themeTags": ["family", "trade", "household"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["John (the glover)", "the husband"]
+    },
+    {
+      "id": "q-girl-edge-forest",
+      "text": "There used to be a story in these parts about a girl who lived at the edge of a forest.",
+      "speaker": "narrator",
+      "location": "Part I, the chapter on Agnes's mythology",
+      "context": "Opening of the chapter that gives the village folklore version of Agnes's childhood, before doubling back to give Agnes's own version.",
+      "themeTags": ["narrative-voice", "myth", "wildness", "gender"],
+      "modeTags": ["LG", "CC", "TI"],
+      "characterTags": ["Agnes"]
+    },
+    {
+      "id": "q-name-was-agnes",
+      "text": "People said the girl's name was Agnes.",
+      "speaker": "narrator",
+      "location": "Part I, the village folklore chapter",
+      "context": "The closing line of the village's mythologised account of Agnes. The novel insists on giving her her father's chosen name (Agnes, not Anne).",
+      "themeTags": ["language", "name", "gender", "myth"],
+      "modeTags": ["LG", "CC"],
+      "characterTags": ["Agnes"]
+    },
+    {
+      "id": "q-myth-childhood",
+      "text": "This is the story, the myth of Agnes's childhood. She herself might tell a different story.",
+      "speaker": "narrator",
+      "location": "Part I, the chapter on Agnes",
+      "context": "The novel's pivot from the village's folklore to Agnes's own perspective. A structural marker of who is permitted to tell her story.",
+      "themeTags": ["narrative-voice", "myth", "centring", "gender"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Agnes"]
+    },
+    {
+      "id": "q-agnes-not-my-mother",
+      "text": "You are not my mother.",
+      "speaker": "Agnes",
+      "location": "Part I, Agnes's childhood at Hewlands",
+      "context": "Agnes refusing Joan, the stepmother who has displaced her dead mother. The line that defines their relationship from Agnes's earliest years.",
+      "themeTags": ["family", "stepmother", "loss", "defiance"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Agnes", "Joan"]
+    },
+    {
+      "id": "q-tutor-anne-agnes",
+      "text": "That is not my name.",
+      "speaker": "Agnes",
+      "location": "Part I, the apple store at Hewlands",
+      "context": "Agnes correcting the Latin tutor, who had thought she said her name was Anne. She tells him it is Agnes. The novel's first naming, the moment the marriage's central terms are set.",
+      "themeTags": ["name", "language", "marriage", "perception"],
+      "modeTags": ["LG", "TI", "CC"],
+      "characterTags": ["Agnes", "the husband"]
+    },
+    {
+      "id": "q-house-is-an-A",
+      "text": "The house is an A.",
+      "speaker": "Agnes",
+      "location": "Part I, the wedding-night chapter",
+      "context": "Agnes, on her wedding night in the new apartment, telling her husband that she cannot sleep upstairs because the house is shaped like the letter A, with the floor 'floating in mid-air, like the cross stroke of the A'. Her father once taught her that letter, the initial of her name, in the dirt.",
+      "themeTags": ["perception", "language", "marriage", "father"],
+      "modeTags": ["LG", "CC", "TI"],
+      "characterTags": ["Agnes"]
+    },
+    {
+      "id": "q-loves-her-sees-world",
+      "text": "That you see the world as no one else does.",
+      "speaker": "the husband",
+      "location": "Part I, the wedding-night chapter",
+      "context": "The husband's reply when Agnes asks why he loves her. The line that names what the marriage is built on: her unique perception, her gift.",
+      "themeTags": ["marriage", "perception", "love", "second-sight"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["the husband", "Agnes"]
+    },
+    {
+      "id": "q-bartholomew-take-good-care",
+      "text": "Take good care of her, Latin boy, very good care, and no harm will come to you.",
+      "speaker": "Bartholomew",
+      "location": "Part I, the church porch on the wedding day",
+      "context": "Bartholomew, Agnes's brother, whispering to the bridegroom at the church door. The line he repeats, as a structural anchor, when the husband fails to know where Agnes is.",
+      "themeTags": ["marriage", "family", "protection", "warning"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Bartholomew", "the husband"]
+    },
+    {
+      "id": "q-bartholomew-man-needs-work",
+      "text": "A man needs work. Proper work.",
+      "speaker": "Bartholomew",
+      "location": "Part I, the chapter on the husband's melancholy",
+      "context": "Bartholomew, fencing posts in a Hewlands field, telling Agnes what her husband needs. The line that initiates the plan to send him to London.",
+      "themeTags": ["marriage", "work", "ambition"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Bartholomew", "the husband"]
+    },
+    {
+      "id": "q-bartholomew-all-head",
+      "text": "He is all head, that one. All head, with not much sense. He needs work to steady him, to give him purpose.",
+      "speaker": "Bartholomew",
+      "location": "Part I, the chapter on the husband's melancholy",
+      "context": "Bartholomew's plain-spoken reading of his brother-in-law: a man whose mind is too active to be left at his father's errand-running.",
+      "themeTags": ["marriage", "work", "interiority"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Bartholomew", "the husband"]
+    },
+    {
+      "id": "q-john-arrangement",
+      "text": "I'm in no doubt we can . . . come to an arrangement.",
+      "speaker": "John (the glover)",
+      "location": "Part I, the day Agnes arrives pregnant at Henley Street",
+      "context": "John's response when his eldest son admits he has put a child in Agnes's belly. The wheedling business-deal voice his son recognises with horror.",
+      "themeTags": ["family", "marriage", "money", "patriarchy"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["John (the glover)", "Agnes", "the husband"]
+    },
+    {
+      "id": "q-flea-chapter-opening",
+      "text": "For the pestilence to reach Warwickshire, England, in the summer of 1596, two events need to occur in the lives of two separate people, and then these people need to meet.",
+      "speaker": "narrator",
+      "location": "Opening of the flea chapter, Part I",
+      "context": "The opening sentence of the famous flea chapter. The novel's largest structural set-piece, tracing plague's route from Alexandria via Murano to Stratford.",
+      "themeTags": ["plague", "fate", "structure", "world"],
+      "modeTags": ["LG", "GVV", "TI", "CC"],
+      "characterTags": ["narrator"]
+    },
+    {
+      "id": "q-twin-swap-hoodwink",
+      "text": "It occurs to Hamnet, as he crouches there, next to her, that it might be possible to hoodwink Death, to pull off the trick he and Judith have been playing on people since they were young: to exchange places and clothes, leading people to believe that each was the other.",
+      "speaker": "narrator (free indirect through Hamnet)",
+      "location": "Part I, the chapter where Hamnet finds Judith dying",
+      "context": "Hamnet, beside the dying Judith on the pallet, conceives the swap. The novel's central tragic mechanism rendered as the working of an eleven-year-old's logic.",
+      "themeTags": ["twins", "death", "sacrifice", "love", "swap"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Hamnet", "Judith"]
+    },
+    {
+      "id": "q-cannot-both-live",
+      "text": "They cannot both live: he sees this and she sees this. There is not enough life, enough air, enough blood for both of them. Perhaps there never was.",
+      "speaker": "narrator (free indirect)",
+      "location": "Part I, the swap moment",
+      "context": "The narrator's bleakest formulation of the twins' fate. The line that decrees the novel's central exchange.",
+      "themeTags": ["twins", "death", "sacrifice", "fate"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Hamnet", "Judith"]
+    },
+    {
+      "id": "q-hamnet-you-will-stay",
+      "text": "You will stay, is what he whispers, and I will go.",
+      "speaker": "Hamnet (whispered, narrated)",
+      "location": "Part I, the swap moment",
+      "context": "Hamnet's silent address to his twin, breathing his life into her. The novel's act of love.",
+      "themeTags": ["twins", "sacrifice", "love", "swap"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Hamnet", "Judith"]
+    },
+    {
+      "id": "q-judith-dont-cry",
+      "text": "Don't cry.",
+      "speaker": "Judith",
+      "location": "Part I, before Hamnet's death",
+      "context": "Judith's first words to Hamnet after the swap, when she wakes to find him at her side. The dying child consoling the living.",
+      "themeTags": ["twins", "love", "death"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Judith", "Hamnet"]
+    },
+    {
+      "id": "q-judith-you-shall-be-well",
+      "text": "You shall be well.",
+      "speaker": "Judith",
+      "location": "Part I, before Hamnet's death",
+      "context": "Judith reassuring Hamnet from her recovered place. The role-reversal made explicit: the saved twin granting the dying twin her recovery.",
+      "themeTags": ["twins", "love", "death", "swap"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Judith", "Hamnet"]
+    },
+    {
+      "id": "q-judith-they-need-you",
+      "text": "Nay, you shall stay. They need you.",
+      "speaker": "Judith",
+      "location": "Part I, before Hamnet's death",
+      "context": "Judith trying to refuse the swap, reaching back. The line that the novel does not let prevail.",
+      "themeTags": ["twins", "sacrifice", "family", "love"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Judith", "Hamnet"]
+    },
+    {
+      "id": "q-snow-falling",
+      "text": "Snow is falling, softly, irrevocably, on and on.",
+      "speaker": "narrator (free indirect through Hamnet)",
+      "location": "Part I, Hamnet's death",
+      "context": "Hamnet's interior at the moment of dying, rendered as a snowy landscape. The novel's most tender image of death.",
+      "themeTags": ["death", "interiority", "rest"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Hamnet"]
+    },
+    {
+      "id": "q-last-breath",
+      "text": "He draws it in, he lets it out. Then there is silence, stillness. Nothing more.",
+      "speaker": "narrator",
+      "location": "Part I, the closing line of Part I",
+      "context": "The final sentence of Part I and of Hamnet's life. The novel's most concentrated rendering of the moment of death.",
+      "themeTags": ["death", "grief", "stillness", "structure"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Hamnet"]
+    },
+    {
+      "id": "q-eliza-letter",
+      "text": "I am sorrie to tel you that Judith, your daughter, is verie sick. We belief she has not manie hours left to her. Pleaƒe come bak to us, if you can. And make hast.",
+      "speaker": "Eliza",
+      "location": "Part I, Eliza's letter to her brother in London",
+      "context": "Eliza's letter summoning the husband home. The misnaming of which twin is dying is the novel's structural irony at its most painful.",
+      "themeTags": ["family", "grief", "absence", "swap"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Eliza", "the husband", "Judith", "Hamnet"]
+    },
+    {
+      "id": "q-am-i-too-late",
+      "text": "Am I too late?",
+      "speaker": "the husband",
+      "location": "Part I, the husband's return from London",
+      "context": "The husband's first words on entering the house in Stratford after riding from Kent. He believes Judith is dying, and is briefly relieved to see her standing, before he sees the laid-out body.",
+      "themeTags": ["absence", "grief", "marriage", "father"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["the husband", "Agnes", "Hamnet"]
+    },
+    {
+      "id": "q-werent-here",
+      "text": "You weren't here.",
+      "speaker": "Agnes",
+      "location": "Part II, the night of the funeral",
+      "context": "Agnes's whispered indictment of her husband, in bed beside him after Hamnet's burial. The marriage's central wound named in three words.",
+      "themeTags": ["marriage", "grief", "absence", "blame"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Agnes", "the husband"]
+    },
+    {
+      "id": "q-pawmarks-other-women",
+      "text": "all over his body, all over his skin, his hair, his face, his hands, as if an animal has run over him, again and again, leaving tiny pawmarks. He is, Agnes realises, covered in the touches of other women.",
+      "speaker": "narrator (free indirect through Agnes)",
+      "location": "Part II, the dinner after his year-long absence",
+      "context": "Agnes's reading of her husband's body when he comes home after a year in London. Her gift of perception used against the marriage itself.",
+      "themeTags": ["marriage", "absence", "infidelity", "second-sight"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Agnes", "the husband"]
+    },
+    {
+      "id": "q-hooked-fish",
+      "text": "You are caught by that place, like a hooked fish.",
+      "speaker": "Agnes",
+      "location": "Part II, the day the husband leaves again for London",
+      "context": "Agnes's accusation as her husband leaves Stratford after the funeral. The line that names the pull of London on him.",
+      "themeTags": ["marriage", "absence", "ambition", "art"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Agnes", "the husband"]
+    },
+    {
+      "id": "q-place-in-head-landscape",
+      "text": "the place in your head. I saw it once, a long time ago, a whole country in there, a landscape.",
+      "speaker": "Agnes",
+      "location": "Part II, the day the husband leaves again",
+      "context": "Agnes naming the imaginative interior she perceived in her husband on the day they first met. The interior that has become, since Hamnet's death, more real to him than home.",
+      "themeTags": ["marriage", "art", "interiority", "second-sight"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Agnes", "the husband"]
+    },
+    {
+      "id": "q-not-even-death-of-child",
+      "text": "Nothing can keep you from it. Not even the death of your own child.",
+      "speaker": "Agnes",
+      "location": "Part II, the day the husband leaves again",
+      "context": "The completion of Agnes's accusation. The line that ends the marriage, in effect, even though the marriage continues.",
+      "themeTags": ["marriage", "absence", "grief", "art"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Agnes", "the husband"]
+    },
+    {
+      "id": "q-twin-no-longer-word",
+      "text": "If you were a wife, and your husband dies, then you are a widow. And if its parents die, a child becomes an orphan. But what is the word for what I am?",
+      "speaker": "Judith",
+      "location": "Part II, in the cottage years later",
+      "context": "Judith asking her mother for a word for a twin whose twin has died. The novel's argument about the inadequacy of language for grief, given to the surviving twin.",
+      "themeTags": ["grief", "language", "twins", "survival"],
+      "modeTags": ["TI", "LG", "GVV"],
+      "characterTags": ["Judith", "Agnes", "Hamnet"]
+    },
+    {
+      "id": "q-maybe-there-isnt-one",
+      "text": "Maybe there isn't one.",
+      "speaker": "Judith",
+      "location": "Part II, in the cottage years later",
+      "context": "Judith's own answer to her own question. Agnes responds, 'Maybe not.' The novel's grammar of grief: there is no word for it.",
+      "themeTags": ["grief", "language", "twins"],
+      "modeTags": ["TI", "LG", "GVV"],
+      "characterTags": ["Judith", "Agnes"]
+    },
+    {
+      "id": "q-it-is-him-it-is-not",
+      "text": "It is him. It is not him. It is him. It is not him. The thought swings like a hammer through her.",
+      "speaker": "narrator (free indirect through Agnes)",
+      "location": "Part II, the closing scene at the playhouse",
+      "context": "Agnes watching the boy player in Hamlet, registering him as her son and not her son at once. The closing recognition.",
+      "themeTags": ["art", "memorial", "grief", "twins"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Agnes", "Hamnet", "the husband"]
+    },
+    {
+      "id": "q-two-people-alive-dead",
+      "text": "Hamlet, here, on this stage, is two people, the young man, alive, and the father, dead. He is both alive and dead.",
+      "speaker": "narrator (free indirect through Agnes)",
+      "location": "Part II, the closing scene at the playhouse",
+      "context": "Agnes's reading of the play. The novel's argument about what Hamlet is for.",
+      "themeTags": ["art", "memorial", "intertextuality", "grief"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Agnes", "Hamnet", "the husband"]
+    },
+    {
+      "id": "q-resurrecting-the-boy",
+      "text": "He has taken his son's death and made it his own; he has put himself in death's clutches, resurrecting the boy in his place.",
+      "speaker": "narrator (free indirect through Agnes)",
+      "location": "Part II, the closing scene at the playhouse",
+      "context": "Agnes's recognition of what her husband has done with the play: a structural exchange in which the father takes the role of the dead so that the dead son can live as the prince.",
+      "themeTags": ["art", "memorial", "sacrifice", "father"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["the husband", "Hamnet", "Agnes"]
+    },
+    {
+      "id": "q-brought-him-back-to-life",
+      "text": "Her husband has brought him back to life, in the only way he can.",
+      "speaker": "narrator (free indirect through Agnes)",
+      "location": "Part II, the closing scene at the playhouse",
+      "context": "The novel's final formulation of the play as memorial. Hamlet is the father's resurrection of the dead son.",
+      "themeTags": ["art", "memorial", "grief", "father"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["the husband", "Hamnet", "Agnes"]
+    },
+    {
+      "id": "q-ghost-o-horrible",
+      "text": "O horrible! O horrible! Most horrible!",
+      "speaker": "the ghost (the husband, in costume)",
+      "location": "Part II, the closing scene at the playhouse",
+      "context": "The ghost's line in Hamlet, recalling the agony of his death. The husband, playing the ghost, speaks his own grief through Shakespeare's text.",
+      "themeTags": ["art", "grief", "death", "father"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["the husband", "Hamnet"]
+    },
+    {
+      "id": "q-final-remember-me",
+      "text": "Remember me.",
+      "speaker": "the ghost (the husband, in costume)",
+      "location": "Closing pages, the Globe",
+      "context": "The ghost's line in Hamlet, lifted into the closing of O'Farrell's novel. The husband, in the role of the dead father, addresses the audience and his dead son, looking straight at Agnes.",
+      "themeTags": ["memorial", "art", "grief"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["the husband", "Hamnet", "Agnes"]
+    }
+  ]
+}

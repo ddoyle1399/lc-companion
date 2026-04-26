@@ -1,0 +1,507 @@
+{
+  "textId": "sive",
+  "title": "Sive",
+  "author": "John B. Keane",
+  "type": "drama",
+  "yearsPrescribed": [2026],
+  "copyrightStatus": "rights_managed",
+  "attributionLine": "Sive by John B. Keane (1959). Used here for educational analysis under fair dealing.",
+
+  "plotBeats": [
+    {
+      "index": 1,
+      "title": "Glavin household introduced",
+      "location": "Act 1, Scene 1",
+      "summary": "Mena Glavin, the woman of the house, fights with her mother-in-law Nanna over a hidden pipe and old grievances. Sive returns from the convent school. Mena's hostility to Sive is established immediately.",
+      "significance": "Sets the play's emotional weather. The Glavin household is a small, poor farm where the women have been pushed into open warfare by economic frustration and barrenness."
+    },
+    {
+      "index": 2,
+      "title": "Thomasheen's proposal",
+      "location": "Act 1, Scene 1",
+      "summary": "The matchmaker Thomasheen Sean Rua arrives. He proposes a match between Sive (eighteen) and Sean Dota (an old farmer with the grass of twenty cows). The price is two hundred sovereigns, of which one hundred would go to him. Mena calculates and tilts towards yes.",
+      "significance": "The play's economic logic is laid out openly. A young woman is a piece of property to be sold; an old farmer's lust is the buyer's incentive; a matchmaker is the broker. Mena's greed is met by her resentment of Sive and Nanna."
+    },
+    {
+      "index": 3,
+      "title": "Mike refuses, Liam appears",
+      "location": "Act 1, Scene 1",
+      "summary": "Mike Glavin, Sive's uncle, returns from the village with cash from selling bonhams. Mena tells him about the proposed match. Mike refuses violently. Liam Scuab, Sive's young sweetheart, calls at the house and Mike drives him out.",
+      "significance": "The two opposing forces are shown side by side. Mike's first response is moral resistance; the appearance of Liam, by triggering Mike's fear that Sive will follow her mother into shame, supplies the lever Mena will use to break that resistance."
+    },
+    {
+      "index": 4,
+      "title": "Sean Dota's assault",
+      "location": "Act 1, Scene 2",
+      "summary": "Sean Dota visits with Thomasheen. He recites doggerel for Sive in a high, sing-song voice. Sive is sent to a neighbour's cottage for the loan of a rail; Sean walks her down the bohareen and attempts to assault her. She escapes into the neighbour's kitchen.",
+      "significance": "Sean Dota's threat is made physical, not abstract. The play refuses to treat the proposed marriage as a misjudged but defensible choice; Sean is shown to be a predator before any decision is taken about whether Sive will be given to him."
+    },
+    {
+      "index": 5,
+      "title": "The bastard speech",
+      "location": "Act 1, Scene 3",
+      "summary": "Mena reveals to Sive directly that the match is going ahead. When Sive refuses, Mena tells her she is illegitimate, names her a bastard, and announces that there will be no more school. Sive will sleep in Mena's room from now on.",
+      "significance": "The coercion machinery is now operating openly. Mena uses the cultural context's stigma against illegitimacy as her chief weapon. The household becomes a domestic prison."
+    },
+    {
+      "index": 6,
+      "title": "The burned letter",
+      "location": "Act 2, Scene 2",
+      "summary": "Pats Bocock delivers a letter from Liam to Nanna with an escape plan: Sive should slip away that night and meet Liam at his home to be married. Nanna persuades Mike to deliver the letter to Sive. Thomasheen, suspicious, snatches the letter, has Mike read it aloud, and burns it.",
+      "significance": "The play's structural hinge. The rescue plan is destroyed without Sive ever knowing it existed. Mike's complicity (he allows the letter to be opened) is the moment his conscience finally fails. Thomasheen burning the letter is the irrevocable act that produces the tragedy."
+    },
+    {
+      "index": 7,
+      "title": "Sive's flight and drowning",
+      "location": "Act 2, Scene 2",
+      "summary": "Sive climbs out of the bedroom window and runs across the bog. Pats Bocock has glimpsed her flight earlier but did not raise the alarm. Liam, finding her, cannot save her in time. He carries her drowned body in and lays it on the kitchen table.",
+      "significance": "The off-stage death and its on-stage report. The kitchen, where the entire transaction was conducted, becomes the place where its consequence is presented to the household. Liam's accusation 'You killed her' fixes responsibility."
+    },
+    {
+      "index": 8,
+      "title": "Carthalawn's lament",
+      "location": "Act 2, Scene 2",
+      "summary": "Pats and Carthalawn, who have been functioning as the play's chorus throughout, sing the closing lament over Sive's body. The first verse uses the verb 'drowned'; the second revises it to 'murdered'. Nanna emerges silently and weeps over the body.",
+      "significance": "The chorus delivers the play's verdict. This is not an accident; it is a killing. The community's moral judgement, displaced from the silent Glavins onto the wandering tinkers, names the act for what it is."
+    }
+  ],
+
+  "keyMoments": [
+    {
+      "id": "km-mena-out-working-with-farmer",
+      "title": "Mena scolds Sive for schoolgoing",
+      "location": "Act 1, Scene 1",
+      "whatHappens": "Sive returns from the convent school and mentions her cookery class. Mena explodes that Sive ought to be earning with a farmer rather than getting her head filled with high notions, and warns that Sive 'will come to no good either, like the one that went before you'. Sive only later realises this refers to her mother.",
+      "whyItMatters": "Establishes within minutes of Sive's first appearance the cultural logic the play will dramatise: education for a girl in this community is dangerous because it raises her above her economic function, and her mother's fate (death after illegitimate birth) is a permanent shaming reference.",
+      "modeDeployment": {
+        "CC": "Education and class collide. The convent school is a luxury Mena resents. The girl's economic role is to earn or marry, not to study.",
+        "GVV": "The vision is set early. Cruelty is the household's default register; affection between women is impossible because they are competing for the same scarce position.",
+        "LG": "Keane stages domestic cruelty in casual mid-action. Mena enters with a bucket and is filling it as she insults Sive; the violence is part of the housework.",
+        "TI": "Inherited shame as a tool of control. The mother's death is named in the second sentence Mena says to Sive."
+      },
+      "anchorQuoteIds": ["q-mena-out-working-with-farmer", "q-mena-bastard"],
+      "linkSentenceTemplate": "Sive opens with a casual cruelty that establishes its cultural register from the first encounter, where [Text B] delays its equivalent revelation until..."
+    },
+    {
+      "id": "km-thomasheen-200-sovereigns",
+      "title": "The matchmaker's proposal",
+      "location": "Act 1, Scene 1",
+      "whatHappens": "Thomasheen Sean Rua, alone with Mena, proposes that Sean Dota will pay two hundred sovereigns to marry Sive. He frames the proposal as Mena's chance to be rid of both the orphan girl and the old mother-in-law, with cash on top. Mena calculates and softens.",
+      "whyItMatters": "The play's economic engine made fully explicit. Sive is a piece of property to be sold; Mena is the seller; Thomasheen is the broker; Sean Dota is the buyer. Mena's resentment of both Sive and Nanna is the lever Thomasheen uses to clinch the sale.",
+      "modeDeployment": {
+        "CC": "The exact mechanism by which a rural Irish economy of the period commodifies women. Cash paid into the seller's hand for a marriageable girl.",
+        "GVV": "The vision sharpens. There is no benign reading of the rural community on offer. Greed wears the dress of practicality.",
+        "LG": "Two-handed staging. The set piece is Mena and Thomasheen conducting the transaction across the kitchen, with cuts to Mena's calculation visible to the audience.",
+        "TI": "Greed and the commodification of women. The play's central theme stated plainly within the first scene."
+      },
+      "anchorQuoteIds": ["q-thomasheen-sean-dota-is-the-man", "q-thomasheen-200-sovereigns-heel-fist", "q-thomasheen-heat-before-death", "q-mena-rid-of-her-and-200"],
+      "linkSentenceTemplate": "The matchmaking transaction in Sive is conducted with a frankness that contrasts with the way [Text B] disguises its equivalent commercial logic..."
+    },
+    {
+      "id": "km-mike-refuses",
+      "title": "Mike's first refusal",
+      "location": "Act 1, Scene 1",
+      "whatHappens": "Mike returns home with the day's earnings. Mena puts the proposal to him. Mike refuses absolutely, in the play's most lyrical line of resistance ('It would be like tossing the white flower of the canavaun on to the manure heap'). Mena raises Liam Scuab's name. Mike's resolve begins to crack.",
+      "whyItMatters": "Establishes that Mike has the moral instinct to refuse but not the moral stamina to maintain refusal under pressure. The mention of Liam, by reactivating Mike's fear that Sive will repeat her mother's fate, is what flips him.",
+      "modeDeployment": {
+        "CC": "The patriarch's moral authority is real but conditional. Mike is the head of the household but his consent can be engineered.",
+        "GVV": "The vision admits a flicker of resistance and immediately watches it falter. The play's pessimism is calibrated.",
+        "LG": "Verse-quality dialogue inside a kitchen-realist play. Keane lets Mike speak in lyric register at the moment of his greatest moral clarity.",
+        "TI": "Conscience under economic pressure. The flower-and-manure image names the price of the transaction in Mike's own moral vocabulary."
+      },
+      "anchorQuoteIds": ["q-mike-never-sun-moon-stars", "q-mike-white-flower-canavaun", "q-mike-quick-everything"],
+      "linkSentenceTemplate": "Mike Glavin's brief moral clarity, expressed in a single lyric image before he capitulates, parallels [equivalent character in Text B]'s lapse..."
+    },
+    {
+      "id": "km-sean-dota-assault",
+      "title": "Sean Dota assaults Sive on the road",
+      "location": "Act 1, Scene 2",
+      "whatHappens": "Sive is sent on an errand to a neighbour. Sean Dota volunteers to walk her down the bohareen for company. At a place called the cumar he attempts to assault her. She runs into the neighbour's kitchen. He does not follow but laughs as if it were a joke.",
+      "whyItMatters": "The play refuses ambiguity about Sean Dota. He is not a sad old man whose offer is misjudged but defensible; he is a predator. The audience knows this before any decision about the match is finalised, which forecloses any reading of the marriage as merely unwise rather than monstrous.",
+      "modeDeployment": {
+        "CC": "Old men's lust is culturally licensed in this community. Nanna's response (it is the nature of the man) is not indignant but resigned.",
+        "GVV": "The bleak vision finds its supporting evidence offstage. The road, the dark, the laughing old man.",
+        "LG": "Reported, not staged. Sive's account to Nanna delivers more horror than enacted assault would.",
+        "TI": "Consent and coercion. The match is shown to involve physical danger before any other consideration."
+      },
+      "anchorQuoteIds": ["q-sive-frightened-life"],
+      "linkSentenceTemplate": "Sive's reported assault places the predator outside the kitchen and inside the cultural context, much as [Text B]'s..."
+    },
+    {
+      "id": "km-mena-bastard-speech",
+      "title": "Mena names Sive a bastard",
+      "location": "Act 1, Scene 3",
+      "whatHappens": "Mena, alone with Sive, drops the affectionate manner she briefly tried and tells her plainly that she is illegitimate, that she will have no name until she takes a husband, that she is a bye-child, a bastard. School is over. Sive will sleep in Mena's room.",
+      "whyItMatters": "The cultural context's stigma against illegitimacy becomes the principal weapon of coercion. Mena is not inventing a threat; she is invoking a real social condemnation. The speech also confirms that Sive cannot escape laterally into another family or community because the stigma travels with her.",
+      "modeDeployment": {
+        "CC": "Religion and gender combine into a single mechanism. An illegitimate woman is socially nameless until she is married; the church's grammar of legitimacy is the lock.",
+        "GVV": "The vision admits no escape route. Even the supposedly affectionate aunt is the agent of the coercion.",
+        "LG": "Set-piece monologue inside a domestic two-hander. Keane gives Mena the play's longest single speech at this turn.",
+        "TI": "Inherited shame as a tool of control. The play's central thematic claim stated by the antagonist in plain terms."
+      },
+      "anchorQuoteIds": ["q-mena-bastard", "q-mena-no-name-till-husband"],
+      "linkSentenceTemplate": "The 'bastard' speech in Sive uses the cultural context's grammar of illegitimacy as a coercive weapon, an angle [Text B] approaches through..."
+    },
+    {
+      "id": "km-burned-letter",
+      "title": "Thomasheen burns Liam's letter",
+      "location": "Act 2, Scene 2",
+      "whatHappens": "Pats Bocock has delivered a letter from Liam containing an escape plan. Nanna persuades Mike to deliver it to Sive. Thomasheen, returning, suspects something, snatches the letter, has Mike read it aloud, and burns it in the fire while Mike protests weakly.",
+      "whyItMatters": "The play's structural hinge. Without this moment, Sive escapes and lives. With it, she does not. Mike's complicity (he reads the letter rather than insisting on delivering it sealed) is the precise point at which his conscience irrevocably fails.",
+      "modeDeployment": {
+        "CC": "The community polices its own. Thomasheen acts as enforcer not because anyone has asked him to but because his commission depends on the marriage going through.",
+        "GVV": "The bleak vision reaches its decisive turn. A specific small action, by a specific small man, kills the rescue.",
+        "LG": "Stage object as turning point. The letter, named, read aloud, and burned in the audience's sight.",
+        "TI": "Conscience under economic pressure. Mike could have refused. He does not."
+      },
+      "anchorQuoteIds": ["q-mike-give-me-the-letter", "q-thomasheen-leave-it-burn"],
+      "linkSentenceTemplate": "The burning of the letter in Sive collapses the rescue plot in a single stage action, a structural compression comparable to [Text B]'s..."
+    },
+    {
+      "id": "km-liam-carries-sive",
+      "title": "Liam carries Sive's body in",
+      "location": "Act 2, Scene 2",
+      "whatHappens": "Sive is discovered missing from her bed. Liam appears at the door, soaked, carrying Sive's drowned body. He lays her on the kitchen table. He turns on Mena directly and accuses her of murder.",
+      "whyItMatters": "The off-stage drowning is presented to the household as a single visual fact. The kitchen, where the transaction was conducted, becomes the place where its consequence is presented. Liam's accusation makes the moral charge explicit before the curtain.",
+      "modeDeployment": {
+        "CC": "The accuser is the disqualified suitor. The cultural context that ruled him out as a husband cannot rule him out as a witness.",
+        "GVV": "The vision is at its bleakest. There is no rescue, no recovery, no mitigation.",
+        "LG": "Single staged image, almost wordless on entry. Keane uses theatrical compression where speech would be inadequate.",
+        "TI": "The verdict on the transaction. Liam's accusation is the play's first explicit naming of the killing."
+      },
+      "anchorQuoteIds": ["q-liam-you-killed-her"],
+      "linkSentenceTemplate": "The image of Liam carrying Sive's body into the kitchen delivers the play's verdict in a single visual moment, where [Text B]'s equivalent climactic image..."
+    },
+    {
+      "id": "km-carthalawn-lament",
+      "title": "Carthalawn's closing lament",
+      "location": "Act 2, Scene 2",
+      "whatHappens": "Pats and Carthalawn re-enter and stand over the body. Carthalawn sings a lament. The first verse names the death as a drowning; the second revises it to murder. They march out slowly, the song fading. Nanna emerges silently and weeps over the body.",
+      "whyItMatters": "The chorus delivers the play's verdict. The Glavins have nothing to say; the matchmaker and the suitor have fled; the moral judgement is pronounced by the wandering tinkers. The revision from 'drowned' to 'murdered' is the play's final moral movement.",
+      "modeDeployment": {
+        "CC": "The community's moral voice is outside the community's economic centre. Travellers, not householders, deliver the verdict.",
+        "GVV": "The closing register is unrelieved. Unlike many tragedies, Sive does not redeem its protagonist's death with any individual moral recovery.",
+        "LG": "The chorus convention deployed in a kitchen-realist play. Keane's most distinctive theatrical innovation.",
+        "TI": "Naming the killing. The lament's revised verb is the play's final thematic movement."
+      },
+      "anchorQuoteIds": ["q-carthalawn-final-lament-opening", "q-carthalawn-they-murdered-sive"],
+      "linkSentenceTemplate": "The chorus's revised verb, drowned to murdered, names the play's central act of violence and contrasts with [Text B]'s closing register..."
+    }
+  ],
+
+  "characters": [
+    {
+      "id": "char-sive",
+      "name": "Sive",
+      "role": "Protagonist. The eighteen-year-old illegitimate granddaughter of Nanna, niece of Mike, ward of the Glavin household. The object the household decides to sell.",
+      "socialPosition": "Lowest possible in this cultural context. Female, young, unmarried, illegitimate, dependent on the Glavins for shelter. Currently in convent education thanks to Mike's grudging fulfilment of a deathbed promise.",
+      "mindset": "Bright, curious, attached to her grandmother, romantic about Liam. Until the bastard speech she does not understand the precise nature of her social position.",
+      "contradictions": "She is the play's most innocent figure and also the only character with no agency. The play does not let her grow into a tragic hero who chooses; she is killed by what is done to her, not by what she does.",
+      "arc": "Schoolgirl in Act 1 Scene 1; threatened in Act 1 Scene 2; openly coerced in Act 1 Scene 3; isolated and confined in Act 2 Scene 1; offered escape and unknowingly denied it in Act 2 Scene 2; dead before the curtain.",
+      "keyRelationshipIds": ["rel-sive-mena", "rel-sive-liam", "rel-sive-nanna"],
+      "keyQuoteIds": ["q-sive-frightened-life", "q-sive-could-never-live-with-old-man", "q-sive-imagine-going-to-dance", "q-sive-tubes-of-bicycle"]
+    },
+    {
+      "id": "char-mena",
+      "name": "Mena Glavin",
+      "role": "Antagonist. Mike's wife, in her early forties, hard-featured, childless, the day-to-day power inside the household.",
+      "socialPosition": "Daughter-in-law in a small farm she did not grow up in. She brought a fortune (dowry) and resents both that the fortune was needed and that having brought it has not given her unchallenged authority.",
+      "mindset": "Aggrieved, calculating, vain about her past and bitter about her present. She believes that arranging this marriage is justice owed to her by a household that has insufficiently rewarded her.",
+      "contradictions": "Mena calls herself a wronged wife and acts as a pimp. She justifies the match in the language of practicality and motherly concern while pocketing dowry money meant for clothes.",
+      "arc": "From kitchen tyranny in Act 1 Scene 1 to active broker in Act 1 Scene 1; coercer of Sive in Act 1 Scene 3; manager of Liam's exclusion in Act 2 Scene 1; complicit in the burned letter in Act 2 Scene 2; denounced over Sive's body at the curtain.",
+      "keyRelationshipIds": ["rel-mike-mena", "rel-sive-mena", "rel-mena-nanna"],
+      "keyQuoteIds": ["q-mena-fortune", "q-mena-out-working-with-farmer", "q-mena-bastard", "q-mena-no-name-till-husband", "q-mena-rid-of-her-and-200", "q-mena-i-will-open-you", "q-mena-walk-the-road"]
+    },
+    {
+      "id": "char-mike",
+      "name": "Mike Glavin",
+      "role": "The man of the house. Sive's uncle. The character whose conscience the play dismantles in real time.",
+      "socialPosition": "Small farmer in a remote mountainy part of southern Ireland. Recently moving from poverty to bare comfort thanks to rising prices for turf and pigs. Head of the household by patriarchal default rather than by force of personality.",
+      "mindset": "Decent by instinct, weak by temperament. He has the moral language to refuse but does not have the moral resources to hold the refusal once Mena and Thomasheen pressure him.",
+      "contradictions": "The man whose first response is the play's most lyrical refusal becomes the man who allows Liam's letter to be opened and read by his enemy. His failures are committed in the language of decency.",
+      "arc": "Refusal in Act 1 Scene 1; ambivalent compliance through Act 1 Scenes 2 and 3; rationalisation to his mother in the Act 1 closing exchange; complicit in the burned letter in Act 2 Scene 2; babbling instructions about the priest at the curtain.",
+      "keyRelationshipIds": ["rel-mike-mena", "rel-mike-nanna"],
+      "keyQuoteIds": ["q-mike-never-sun-moon-stars", "q-mike-white-flower-canavaun", "q-mike-quick-everything", "q-mike-give-me-the-letter", "q-mike-hardly-call-it-a-village"]
+    },
+    {
+      "id": "char-nanna",
+      "name": "Nanna Glavin",
+      "role": "Mike's mother, Sive's grandmother. The household's moral memory. The character who tries to stop the transaction and does not have the standing.",
+      "socialPosition": "Widowed grandmother of an illegitimate child in her son's house. Her authority is sentimental rather than legal. She knows what the County Home means for old women without sons.",
+      "mindset": "Defiant in private, weakened in public. She smokes a pipe surreptitiously and conducts a long guerrilla war against Mena while knowing she has no real power.",
+      "contradictions": "She is the play's clearest moral voice and also the figure who has to plead with her own son to deliver a letter she should have been able to deliver herself.",
+      "arc": "Comic warfare with Mena in Act 1 Scene 1; quiet alarm at the developing match in Act 1 Scenes 2 and 3; conduit for Liam's letter in Act 2 Scene 2; silent grief over Sive's body at the curtain.",
+      "keyRelationshipIds": ["rel-mike-nanna", "rel-mena-nanna", "rel-sive-nanna"],
+      "keyQuoteIds": ["q-nanna-hatchery-of-sin", "q-nanna-women-pay-for-happiness", "q-mena-cluckin-hen"]
+    },
+    {
+      "id": "char-thomasheen",
+      "name": "Thomasheen Sean Rua",
+      "role": "Antagonist. The matchmaker. Broker of the transaction.",
+      "socialPosition": "Itinerant rural agent who lives by commission on matches. Single, poor, with a wish for a widow on the other side of the village that he can buy into for a hundred pounds. The hundred pounds he stands to make from Sive's match is therefore his own marriage prospect.",
+      "mindset": "Strategic, persuasive, unsentimental. He sees the household clearly and knows exactly which lever to pull on which member.",
+      "contradictions": "He provides the play's clearest cynical commentary on rural marriage while being its most committed agent. His own thwarted love story is one of the few moments the play softens his portrait.",
+      "arc": "Static. Thomasheen does not develop; he executes. He arrives, proposes, returns, monitors, intercepts the letter, and disappears at the moment of disaster.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-thomasheen-200-sovereigns-heel-fist", "q-thomasheen-heat-before-death", "q-thomasheen-core-of-apple", "q-thomasheen-no-life-with-them", "q-thomasheen-sean-dota-is-the-man", "q-thomasheen-200-pounds-tied-knot", "q-thomasheen-leave-it-burn"]
+    },
+    {
+      "id": "char-sean-dota",
+      "name": "Sean Dota",
+      "role": "Antagonist. The buyer. An old farmer with the grass of twenty cows.",
+      "socialPosition": "Wealthiest individual in the play's economic frame. Holds money, land, and the social standing that flows from both.",
+      "mindset": "Apologetic in manner, predatory in action. His public register is shy half-laughter; his private register, evidenced by the assault on the road, is brutal.",
+      "contradictions": "The polite recital of doggerel in the kitchen and the grab on the dark road are the same man. The play refuses to let his shy manner sanitise his appetite.",
+      "arc": "Static. Sean Dota does not develop. He is presented, displays his appetites, attempts violence, returns for the wedding eve, and flees with Thomasheen when Sive is found missing.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": []
+    },
+    {
+      "id": "char-liam",
+      "name": "Liam Scuab",
+      "role": "Sive's young suitor. The disqualified rescuer. A carpenter, around nineteen, the cousin of the man who fathered Sive.",
+      "socialPosition": "Young tradesman, disqualified by Mike both because he is young (no farm of his own yet) and because his cousin's history makes him a moral risk in Mike's eyes.",
+      "mindset": "Sincere, plainspoken, capable of articulating the play's case in moral and religious terms. Keane gives him several extended pleas that the household refuses to hear.",
+      "contradictions": "He is the most morally articulate character and also the most powerless. He can name the wrong but cannot prevent it. His arrival with Sive's body is the play's image of love arriving exactly too late.",
+      "arc": "Forbidden visitor in Act 1 Scene 1; ejected in Act 1 Scene 1; pleader in Act 2 Scene 1; letter-writer in Act 2 Scene 2; rescuer too late at the curtain.",
+      "keyRelationshipIds": ["rel-sive-liam"],
+      "keyQuoteIds": ["q-liam-marry-nobody-but-you", "q-liam-you-killed-her"]
+    },
+    {
+      "id": "char-pats",
+      "name": "Pats Bocock",
+      "role": "Travelling tinker, father of Carthalawn. Functions as half of the play's chorus.",
+      "socialPosition": "Outside the settled community. Itinerant, poor by the householders' standards but adequately housed in a caravan.",
+      "mindset": "Watchful, ceremonious, possessed of a code of his own that the householders treat as foreign. Refuses to flatter Thomasheen; remembers older obligations of hospitality.",
+      "contradictions": "Materially the lowest figure in the play, morally the most consistent. The character with the least standing has the clearest sight.",
+      "arc": "Visitor and singer in Act 1 Scene 3; conduit for Liam's letter in Act 2 Scene 2; chorus for the closing lament. Static in mode but consistent in role.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-pats-only-what-i-see", "q-pats-no-luck-refusing"]
+    },
+    {
+      "id": "char-carthalawn",
+      "name": "Carthalawn",
+      "role": "Pats Bocock's son. The chorus's voice. He sings the praise-songs, the curse-songs, and the closing lament.",
+      "socialPosition": "Travelling tinker, dependent on his father. The character whose songs deliver the play's moral commentary.",
+      "mindset": "Almost wordless outside the songs. Inside the songs, the play's clearest moral commentator.",
+      "contradictions": "He is described as a half-fool by Thomasheen and is the figure whose verses prove most prophetic. The character with the least social standing has the most accurate moral language.",
+      "arc": "Singer of praise in Act 1 Scene 3; singer of curse against Thomasheen in the same scene; singer of curse against Sean Dota in Act 2 Scene 2; singer of the closing lament. Static in arc, central in function.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-carthalawn-mike-glavin-praise-fragment", "q-carthalawn-final-lament-opening", "q-carthalawn-they-murdered-sive"]
+    }
+  ],
+
+  "relationships": [
+    {
+      "id": "rel-sive-mena",
+      "characterAId": "char-sive",
+      "characterBId": "char-mena",
+      "type": "antagonistic",
+      "startStatus": "Hostile from Sive's first entrance. Mena resents the orphan as a financial burden and a reminder of female sexuality outside marriage.",
+      "endStatus": "Mena denounced over Sive's body. Their last shared moment of speech is the bastard speech.",
+      "trajectory": "The play's central destructive relationship. Mena's hostility is constant in Act 1 Scene 1; sharpens to overt cruelty in Act 1 Scene 3 with the bastard speech; becomes coercive confinement in Act 2 Scene 1; ends with Liam's accusation that Mena killed Sive. The relationship dramatises how a household's economic logic can convert maternal-style authority into violence.",
+      "keyMomentIds": ["km-mena-out-working-with-farmer", "km-mena-bastard-speech"],
+      "modeRelevance": ["CC", "GVV", "TI"]
+    },
+    {
+      "id": "rel-mike-mena",
+      "characterAId": "char-mike",
+      "characterBId": "char-mena",
+      "type": "romantic",
+      "startStatus": "Settled marriage strained by childlessness, by the presence of Mike's mother, and by Mena's bitterness at the household's poverty.",
+      "endStatus": "Both complicit in Sive's death. Mike unable to look at Mena directly in the closing exchanges; Mena denounced by Liam in Mike's presence.",
+      "trajectory": "Mike resists Mena in Act 1 Scene 1 ('Never!') and capitulates by the end of the same scene. Mena drives the proposal; Mike is its second-in-command. Their marriage is effectively rebuilt around the transaction. By the end of Act 2, Mike is babbling about the priest while Mena retreats; the marriage that the cash was meant to consolidate has become the alibi for a killing.",
+      "keyMomentIds": ["km-mike-refuses", "km-burned-letter"],
+      "modeRelevance": ["CC", "GVV", "TI"]
+    },
+    {
+      "id": "rel-mena-nanna",
+      "characterAId": "char-mena",
+      "characterBId": "char-nanna",
+      "type": "antagonistic",
+      "startStatus": "Open warfare from the play's opening. Mena resents Nanna as the previous mistress of the house; Nanna resents Mena as the woman who replaced her in her son's affections.",
+      "endStatus": "Nanna outliving Mena's plan but powerless to undo what it has cost.",
+      "trajectory": "The Mena-Nanna war is the play's running comic-tragic motif. It supplies many of the early exchanges and is the lens through which the household's economic and emotional bankruptcy is shown. Mena threatens Nanna with a knife in Act 1 Scene 3 and later with the County Home; Nanna replies with curses and the recurring 'hatchery of sin' verdict.",
+      "keyMomentIds": ["km-mena-out-working-with-farmer"],
+      "modeRelevance": ["CC", "TI", "GVV"]
+    },
+    {
+      "id": "rel-sive-liam",
+      "characterAId": "char-sive",
+      "characterBId": "char-liam",
+      "type": "romantic",
+      "startStatus": "Quiet, recent. They have met privately, exchanged words, planned to meet again. Their relationship is the only register of unforced affection in the play.",
+      "endStatus": "Liam carrying Sive's drowned body into the kitchen.",
+      "trajectory": "Liam's first appearance shows the relationship as the play's only counterweight to Mena's transactional logic. His exclusion from the household is engineered swiftly by Mike. His Act 2 Scene 1 plea is rejected. His letter, the rescue plan, is intercepted and burned. He arrives at the closing scene only to confirm that the rescue has failed. The relationship is presented as the road not taken, the route the household refuses to permit.",
+      "keyMomentIds": ["km-burned-letter", "km-liam-carries-sive"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    },
+    {
+      "id": "rel-mike-nanna",
+      "characterAId": "char-mike",
+      "characterBId": "char-nanna",
+      "type": "family",
+      "startStatus": "Dutiful affection inflected with weariness. Mike accommodates his mother in his house and increasingly tunes her out.",
+      "endStatus": "Nanna pleading with Mike on her knees in spirit; Mike yielding to deliver the letter but allowing it to be opened.",
+      "trajectory": "The mother-son bond is the play's last resort and proves insufficient. Nanna's appeals are the most morally pointed in the play (she names the wrong directly and repeatedly), but Mike's marriage and the cash incentive are stronger pulls. Mike's agreement to deliver the letter is a recovery; his reading of it aloud is the relapse that destroys it.",
+      "keyMomentIds": ["km-burned-letter"],
+      "modeRelevance": ["TI", "GVV"]
+    },
+    {
+      "id": "rel-sive-nanna",
+      "characterAId": "char-sive",
+      "characterBId": "char-nanna",
+      "type": "family",
+      "startStatus": "Affectionate, conspiratorial, the only warmth available to either of them in the household.",
+      "endStatus": "Nanna emerging silently to weep over Sive's body at the curtain.",
+      "trajectory": "Sive and Nanna are the household's two outsiders, bonded by Mena's hostility and by their joint exclusion from its decisions. Nanna tries to act on Sive's behalf (the conduit for the letter) but cannot operate against Mena and Thomasheen without Mike's compliance, which she only partly gets. The closing image of Nanna weeping in the half-light is the play's quietest moment of grief.",
+      "keyMomentIds": ["km-mena-out-working-with-farmer", "km-burned-letter", "km-carthalawn-lament"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    }
+  ],
+
+  "culturalContext": {
+    "socialClass": {
+      "applies": "yes",
+      "summary": "Sive is set in a small, poor farming household in a remote part of southern Ireland in the recent past. The economy is rising slightly, with turf and pig prices favourable to small farmers, but the gap between the Glavins and a man with the grass of twenty cows is enormous. Sean Dota's wealth is the proposal's only credible inducement. Class in this cultural context is not abstract; it is cows, land, and cash on the day of the wedding.",
+      "anchorMomentIds": ["km-thomasheen-200-sovereigns"],
+      "anchorQuoteIds": ["q-mena-fortune", "q-thomasheen-200-sovereigns-heel-fist", "q-thomasheen-200-pounds-tied-knot"],
+      "argumentHook": "Class in Sive is measured in cows and sovereigns, and the cultural context's economic gap between a small farmer and a wealthy old farmer is the engine of the marriage transaction."
+    },
+    "gender": {
+      "applies": "yes",
+      "summary": "The cultural context treats women as agents of fortune-trading. A young woman's value is her marriageability; a married woman's value is her fertility; an old woman's value, in Mena's bitter version, is nothing. The play stages the full chain. Sive is offered for sale; Mena is bitter at not having delivered children; Nanna survives only because Mike has not put her on the road. Mary's mother is named in the household by her absence and her shame. There is no register of female agency that does not pass through marriage.",
+      "anchorMomentIds": ["km-mena-out-working-with-farmer", "km-mena-bastard-speech", "km-thomasheen-200-sovereigns"],
+      "anchorQuoteIds": ["q-mena-cluckin-hen", "q-mena-no-name-till-husband", "q-nanna-women-pay-for-happiness"],
+      "argumentHook": "Women in the cultural context of Sive have economic existence only through marriage, and the play stages the full chain from sale to barrenness to the County Home."
+    },
+    "religion": {
+      "applies": "yes",
+      "summary": "Catholic morality saturates the cultural context but is most visible in its punitive register. Illegitimacy is the play's most powerful coercive lever; Mena's 'a bastard!' is an instrument the church has put in her hands. Religious phrases ('Saints preserve us', 'God between us and all harm', 'God help us') are stitched into ordinary speech. The convent provides Sive's education but cannot protect her. The church's role in the play is as the supplier of the moral grammar by which the household enforces obedience.",
+      "anchorMomentIds": ["km-mena-bastard-speech"],
+      "anchorQuoteIds": ["q-mena-bastard", "q-mena-no-name-till-husband", "q-nanna-hatchery-of-sin"],
+      "argumentHook": "Religion in Sive functions as the supplier of the cultural context's coercive vocabulary, with illegitimacy as the chief lever by which the household forces obedience."
+    },
+    "familyAndMarriage": {
+      "applies": "yes",
+      "summary": "Marriage in Sive is an economic transaction conducted through a broker. The matchmaker is a recognised cultural role, his commission is a recognised cost, and the dowry-or-payment is a recognised line in the household budget. The play's family structures are arranged around marriage's economic function. Mena's marriage to Mike was bought; Sive's intended marriage to Sean Dota is bought differently (the buyer pays the seller). The play's treatment of marriage is not a misjudged occurrence inside an otherwise functioning system; the system is the misjudgement.",
+      "anchorMomentIds": ["km-thomasheen-200-sovereigns", "km-burned-letter"],
+      "anchorQuoteIds": ["q-mena-fortune", "q-thomasheen-sean-dota-is-the-man", "q-thomasheen-200-pounds-tied-knot"],
+      "argumentHook": "Marriage in this cultural context is a brokered transaction with explicit pricing, and Sive dramatises the full mechanism rather than a single failure within it."
+    },
+    "authorityAndPower": {
+      "applies": "yes",
+      "summary": "Authority in Sive is dispersed and unaccountable. The patriarch (Mike) holds nominal authority but is overridden by his wife. The matchmaker (Thomasheen) holds practical authority because he controls the transaction. The community's verdict, communicated through gossip and through the tinkers, sits over everyone. There is no formal authority in the play that intervenes; the priest is offstage, the police absent. The play's most authoritative voice is Carthalawn's song, which has no enforcement power.",
+      "anchorMomentIds": ["km-thomasheen-200-sovereigns", "km-burned-letter", "km-carthalawn-lament"],
+      "anchorQuoteIds": ["q-thomasheen-core-of-apple", "q-mena-i-will-open-you", "q-pats-no-luck-refusing"],
+      "argumentHook": "Authority in Sive is dispersed across kitchen, broker, and community, with no enforcing institution able to overturn a private transaction; the only voice with full moral clarity is the chorus, which has no power."
+    }
+  },
+
+  "generalVisionAndViewpoint": {
+    "oneLineVision": "Sive offers an unrelievedly bleak vision: a rural Irish economy that treats women as fortune-trades combines with religious shaming and weak conscience to destroy an innocent young woman, with no redemptive register at the close.",
+    "openingShapesVision": "The vision is set in the first scene's domestic warfare. Two women trapped in a cramped kitchen, one hiding her pipe, the other hiding her bitterness, neither capable of affection. Sive's entrance into this kitchen establishes that there is no protective space for her in the household; the cruelty is the household's normal weather.",
+    "climaxShapesVision": "The bleakness reaches its decisive turn at the burning of Liam's letter. Up to that moment the play has held open the possibility of escape; the letter is the route. Mike's complicity in opening it, and Thomasheen's burning of it, close that route. Everything from that moment to the curtain is the working out of an already-completed killing.",
+    "closingShapesVision": "The closing offers no recovery. Liam carries the body in. Mena retreats. Mike babbles about the priest. Pats and Carthalawn deliver the lament. Nanna emerges silently to weep. There is no individual redemption (as Proctor refuses Danforth in The Crucible), no community recovery, no register of hope. The chorus's verb shifts from 'drowned' to 'murdered' and the curtain falls.",
+    "ambiguity": "The vision is bleak but qualified by where the moral voice sits. The play's clearest moral commentary comes from outside the settled community, in Carthalawn's songs and Pats's chorus role. The ambiguity is not in the verdict on the killing (the play is unambiguous) but in whether moral language can be heard at all by those it addresses. Mike hears it and acts anyway; Mena hears it and rejects it; Thomasheen hears it and burns it.",
+    "anchorMomentIds": ["km-mena-out-working-with-farmer", "km-thomasheen-200-sovereigns", "km-burned-letter", "km-carthalawn-lament"]
+  },
+
+  "literaryGenre": {
+    "toolkit": "drama",
+    "elements": [
+      {
+        "name": "The tinker chorus",
+        "description": "Pats Bocock and Carthalawn function as a chorus drawn from outside the settled community. They enter, sing, deliver moral commentary, and exit. They are not commentators on the action so much as a different theatrical convention bolted onto a kitchen-realist play. Keane's most distinctive theatrical innovation in Sive.",
+        "anchorMomentIds": ["km-carthalawn-lament"],
+        "keyExample": "Their first entry in Act 1 Scene 3 (praise-song for Mike, then curse-song against Thomasheen) and their final return in Act 2 Scene 2 (curse-song against Sean Dota, then closing lament over Sive's body)."
+      },
+      {
+        "name": "Carthalawn's sung commentary",
+        "description": "The songs are not decoration. They carry the play's moral verdict, naming who is praised and who is cursed. The closing lament's revision from 'drowned' to 'murdered' is the play's final moral movement and the line that fixes responsibility. Keane uses song to do work that prose dialogue would render moralistic if a Glavin spoke it.",
+        "anchorMomentIds": ["km-carthalawn-lament"],
+        "keyExample": "The closing lament, in which the second verse changes the verb from 'drowned' to 'murdered'."
+      },
+      {
+        "name": "Hiberno-English idiom and Munster register",
+        "description": "Keane writes in a stylised version of southwest Irish speech (turn 'tis, suppeen, leanav, bohareen, gomeril, oinseach, amadawn, eejit, faldals). The idiom is not picturesque background; it is the play's working tongue and one of the means by which it locates the action specifically in a rural community of the period.",
+        "anchorMomentIds": [],
+        "keyExample": "Compare Thomasheen's matchmaking patter ('Think of the 200 sovereigns dancing in the heel of your fist') with Mike's lyric refusal ('It would be like tossing the white flower of the canavaun on to the manure heap') for two registers of the same idiom doing different work."
+      },
+      {
+        "name": "Confined kitchen staging",
+        "description": "Almost the entire play takes place in the Glavin kitchen. The few moments offstage (Sean Dota's assault, Sive's drowning) are reported. The compression is structural: the domestic space is where the transaction is conducted and where its consequence is delivered.",
+        "anchorMomentIds": ["km-liam-carries-sive"],
+        "keyExample": "Liam carrying Sive's body into the kitchen at the climax. The same room that hosted the matchmaking proposal becomes the morgue."
+      },
+      {
+        "name": "Reported violence",
+        "description": "Both major acts of physical violence (Sean Dota's assault, Sive's drowning) happen offstage and are reported by other characters. Keane chooses report over enactment for events whose force comes from imagination rather than spectacle.",
+        "anchorMomentIds": ["km-sean-dota-assault", "km-liam-carries-sive"],
+        "keyExample": "Sive's terrified return to the kitchen with Sean Dota's laugh in her ears delivers more horror than the assault staged would, and protects Sive's dignity at the moment she most needs it."
+      },
+      {
+        "name": "Stage objects as turning points",
+        "description": "Two physical objects carry the play's structural turns. The poppet-with-needle equivalent in Sive is the letter, which is named, read aloud, and burned in the audience's sight in Act 2 Scene 2. The other is the body itself, laid on the kitchen table in the closing scene. Both are theatrical compressions that do work no monologue could.",
+        "anchorMomentIds": ["km-burned-letter", "km-liam-carries-sive"],
+        "keyExample": "Pats's stick sweeping the table clean before Liam lays Sive on it. The kitchen table that hosted the bread, the negotiations, the porter, becomes the bier."
+      },
+      {
+        "name": "Comic-tragic register switching",
+        "description": "Keane braids comic and tragic registers throughout. The Mena-Nanna warfare in Act 1 Scene 1 is genuinely funny; Sean Dota's poetic recital is grotesque comedy; Carthalawn's curse-songs land as both insult comedy and moral verdict. The mix sharpens rather than dilutes the tragedy because it shows the cruelty as ordinary household conduct rather than dramatic exception.",
+        "anchorMomentIds": [],
+        "keyExample": "Sean Dota's high-voiced recital in Act 1 Scene 2 is comic in delivery and predatory in function. The audience laughs at the same scene in which the assault is being prepared."
+      }
+    ]
+  },
+
+  "themeOrIssue": {
+    "primaryThemes": [
+      {
+        "name": "The commodification of women",
+        "summary": "The play's central theme. A young woman's marriage is brokered for cash. The mechanism is not described in the abstract; it is demonstrated step by step. Two hundred sovereigns, hundred to the broker, the rest to the household. The transaction is conducted in the language of practicality and motherly concern. Sive does not consent; consent is not part of the system.",
+        "pivotalMomentIds": ["km-thomasheen-200-sovereigns", "km-mena-bastard-speech", "km-burned-letter"],
+        "contradictoryAspect": "Mena, herself a woman who was sold (she brought her fortune to Mike's house), is the most active agent of the new sale. The play refuses the easy reading that women under patriarchy are uniformly victims; some, like Mena, are also enforcers of the same system that hurt them."
+      },
+      {
+        "name": "Conscience under economic pressure",
+        "summary": "Mike Glavin's arc is the play's case study. He has the moral vocabulary to refuse the match outright in Act 1 Scene 1 and the lyric register to articulate the wrong precisely. By Act 2 Scene 2 he is allowing his enemy to read aloud and burn his niece's only escape route. The theme is not whether Mike is good but how quickly economic pressure dismantles a good man's resistance when his wife and his community side against him.",
+        "pivotalMomentIds": ["km-mike-refuses", "km-burned-letter"],
+        "contradictoryAspect": "Mike's failure is committed in the language of decency. He persuades himself that quick is everything and that a young husband would be no better. He never reaches a moment of self-awareness about what he has done; the play denies him both heroism and explicit recognition of his collapse."
+      },
+      {
+        "name": "Inherited shame and illegitimacy",
+        "summary": "Sive's mother's fate is the household's permanent reference point. Mena uses it as warning, as accusation, as coercion. The play presents illegitimacy not as a Victorian remnant but as a live coercive force in 1950s rural Ireland. The cultural context's grammar of legitimacy is the lock that holds Sive in place.",
+        "pivotalMomentIds": ["km-mena-out-working-with-farmer", "km-mena-bastard-speech"],
+        "contradictoryAspect": "The character who suffers most from illegitimacy did not produce it. Sive is shamed for her mother's transgression; her father, Mike's resentment notwithstanding, is dead and beyond reach. The shame travels matrilineally because that is where the cultural context places it."
+      },
+      {
+        "name": "The chorus and the verdict",
+        "summary": "The play's clearest moral commentary comes from outside the settled community. Carthalawn and Pats, travelling tinkers without standing inside the household economy, deliver the praises and curses and the closing lament. The theme is structural: a community that cannot generate its own moral voice imports one from its margins.",
+        "pivotalMomentIds": ["km-carthalawn-lament"],
+        "contradictoryAspect": "The chorus has full moral clarity and no enforcement power. Carthalawn names Sean Dota's predation, Thomasheen's greed, and Sive's killing; nothing in the play follows from these namings except that the audience hears them. The theme admits that moral language can be entirely accurate and entirely ineffectual."
+      },
+      {
+        "name": "Coercion and consent",
+        "summary": "Sive does not consent to the match and is told from Act 1 Scene 3 onwards that her consent is irrelevant. The play interrogates what consent means inside an economic system that has trained the household to discount it. Mena describes the wedding clothes shopping in tones of motherly concern; Sive sits silently, her shoes off, rubbing her soles. Coercion in the play does not require explicit threats most of the time; it requires the exhaustion of every alternative.",
+        "pivotalMomentIds": ["km-sean-dota-assault", "km-mena-bastard-speech", "km-burned-letter"],
+        "contradictoryAspect": "Sive's flight is the play's only act of consent she ever performs, and it kills her. Consent in this cultural context, when finally exercised, has nowhere to go but death. The play is not making the simple claim that women should refuse forced marriage; it is making the harder claim that refusal in this system has no safe destination."
+      }
+    ]
+  },
+
+  "examinerPitfalls": [
+    "Treating Sive as a kitchen-comedy with a sad ending. The play is a full tragedy from Act 1 Scene 1 onwards; the comedy of the Mena-Nanna warfare is calibrated cruelty, not relief.",
+    "Reading the tinkers as comic relief. Pats and Carthalawn are the chorus. Their songs deliver the play's moral verdicts; treating them as picturesque local colour misses the play's most distinctive theatrical innovation.",
+    "Calling the central issue 'matchmaking'. The play is about the economy of women under specific cultural conditions; matchmaking is the mechanism, not the subject.",
+    "Underrating Mike's complicity. Mike is not just weak; he allows Liam's letter to be opened and read by his enemy. He is the Glavin household's principal moral failure, dressed in the language of decency.",
+    "Over-romanticising Liam. Liam is articulate and sincere but he is also a young man without standing in this cultural context. His arrival with Sive's body is the play's image of love arriving exactly too late, not of love prevailing.",
+    "Forgetting the bastard speech. Mena's deployment of illegitimacy is the play's clearest example of how religion and gender combine into a single coercive instrument. Cultural Context answers that ignore the speech are leaving the strongest evidence on the table.",
+    "Treating Sean Dota as a misjudgement rather than a predator. The bohareen assault rules out any reading of the proposed marriage as merely unwise. The play forecloses sympathetic readings of Sean before the question of the match is settled.",
+    "Reading the closing lament as decoration. The chorus's revision from 'drowned' to 'murdered' is the play's final thematic movement. A Theme or Issue answer that does not register that revision is missing the play's last sentence."
+  ],
+
+  "status": "draft",
+  "schemaVersion": 1,
+  "lastReviewedAt": null
+}

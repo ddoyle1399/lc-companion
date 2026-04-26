@@ -1,0 +1,346 @@
+{
+  "textId": "purple-hibiscus",
+  "schemaVersion": 1,
+  "quotes": [
+    {
+      "id": "q-kambili-things-fall-apart",
+      "text": "Things started to fall apart at home when my brother, Jaja, did not go to communion and Papa flung his heavy missal across the room and broke the figurines on the étagère.",
+      "speaker": "Kambili Achike (narrator)",
+      "location": "Opening line, Part One: Breaking Gods",
+      "context": "The novel's opening sentence and the framing device for the entire narrative. The intertextual nod to Achebe's 'Things Fall Apart' is deliberate.",
+      "themeTags": ["family", "religion", "rebellion", "intertextuality"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Kambili Achike", "Jaja", "Eugene Achike"]
+    },
+    {
+      "id": "q-jaja-then-i-will-die",
+      "text": "Then I will die, Papa.",
+      "speaker": "Jaja",
+      "location": "Part One: Breaking Gods",
+      "context": "Jaja's defiance to Papa's threat that not receiving communion is death. The first crack in the household's silence.",
+      "themeTags": ["rebellion", "defiance", "religion"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Jaja", "Eugene Achike"]
+    },
+    {
+      "id": "q-kambili-burned-papas-love",
+      "text": "When the tea burned my tongue, it burned Papa's love into me.",
+      "speaker": "Kambili Achike (narrator)",
+      "location": "Part One: Breaking Gods",
+      "context": "Kambili reflecting on the 'love sip' ritual: Papa offering scalding tea as a token of love. The line that captures the household's moral confusion in a single sentence.",
+      "themeTags": ["abuse", "love", "family", "religion"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Kambili Achike", "Eugene Achike"]
+    },
+    {
+      "id": "q-jaja-no-words-in-my-mouth",
+      "text": "Mba, there are no words in my mouth.",
+      "speaker": "Jaja",
+      "location": "Part One: Breaking Gods",
+      "context": "Jaja's reply when Papa asks why he is not speaking after refusing communion. The Igbo 'mba' (no) carries the refusal; the silence is itself the speech.",
+      "themeTags": ["silence", "rebellion", "language"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Jaja", "Eugene Achike"]
+    },
+    {
+      "id": "q-kambili-purple-hibiscus-freedom",
+      "text": "Jaja's defiance seemed to me now like Aunty Ifeoma's experimental purple hibiscus: rare, fragrant with the undertones of freedom, a different kind of freedom from the one the crowds waving green leaves chanted at Government Square after the coup. A freedom to be, to do.",
+      "speaker": "Kambili Achike (narrator)",
+      "location": "Part One: Breaking Gods",
+      "context": "The novel's title metaphor articulated. Distinguishes private freedom (to be, to do) from the public political freedom chanted by post-coup crowds.",
+      "themeTags": ["freedom", "symbolism", "rebellion", "title"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Jaja", "Aunty Ifeoma", "Kambili Achike"]
+    },
+    {
+      "id": "q-kambili-spoke-with-spirits",
+      "text": "I let my mind rake through the past, through the years when Jaja and Mama and I spoke more with our spirits than with our lips.",
+      "speaker": "Kambili Achike (narrator)",
+      "location": "Part One: Breaking Gods",
+      "context": "Kambili naming the household's silence and the language her family developed to communicate within it.",
+      "themeTags": ["silence", "family", "language"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Kambili Achike", "Jaja", "Beatrice Achike"]
+    },
+    {
+      "id": "q-papa-walk-into-sin",
+      "text": "Why do you walk into sin? Why do you like sin?",
+      "speaker": "Eugene Achike (Papa)",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Papa whipping his family with his belt for breaking the Eucharistic fast. Asks the question with the bewildered tone of a man who believes the punishment is care.",
+      "themeTags": ["religion", "abuse", "self-justification"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Eugene Achike"]
+    },
+    {
+      "id": "q-papa-pour-water-on-feet",
+      "text": "That is what you do to yourself when you walk into sin. You burn your feet.",
+      "speaker": "Eugene Achike (Papa)",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Papa pouring boiling water onto Kambili's feet for sleeping in the same house as her 'heathen' grandfather. The line that frames the abuse as Kambili's own act.",
+      "themeTags": ["abuse", "religion", "self-justification"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Eugene Achike", "Kambili Achike"]
+    },
+    {
+      "id": "q-papa-everything-i-do-for-you",
+      "text": "Everything I do for you, I do for your own good.",
+      "speaker": "Eugene Achike (Papa)",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Papa to Kambili the night after the boiling-water punishment. The single sentence that contains the abuser's logic.",
+      "themeTags": ["abuse", "love", "self-justification"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Eugene Achike", "Kambili Achike"]
+    },
+    {
+      "id": "q-papa-nnukwu-tufia-equal",
+      "text": "Tufia! Do you not see? That is why Eugene can disregard me, because he thinks we are equal.",
+      "speaker": "Papa-Nnukwu",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Papa-Nnukwu mocking the Catholic claim that Father and Son are equal, and naming what he sees as the consequence: his son disregards him.",
+      "themeTags": ["religion", "colonialism", "family"],
+      "modeTags": ["CC", "TI", "LG"],
+      "characterTags": ["Papa-Nnukwu", "Eugene Achike"]
+    },
+    {
+      "id": "q-papa-nnukwu-killed-no-one",
+      "text": "Chineke! I have killed no one, I have taken no one's land, I have not committed adultery.",
+      "speaker": "Papa-Nnukwu",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Papa-Nnukwu's morning itu-nzu (declaration of innocence) that Kambili secretly watches. The novel's structural pairing of traditional Igbo prayer with Catholic rosary.",
+      "themeTags": ["religion", "tradition", "colonialism"],
+      "modeTags": ["CC", "TI", "LG"],
+      "characterTags": ["Papa-Nnukwu", "Kambili Achike"]
+    },
+    {
+      "id": "q-aunty-ifeoma-traditionalist",
+      "text": "Your Papa-Nnukwu is not a pagan, Kambili, he is a traditionalist.",
+      "speaker": "Aunty Ifeoma",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Aunty Ifeoma to Kambili and Jaja before the trip to see the mmuo. The reframing that begins Kambili's rethinking of her religious certainty.",
+      "themeTags": ["religion", "tradition", "colonialism", "language"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Aunty Ifeoma", "Papa-Nnukwu", "Kambili Achike"]
+    },
+    {
+      "id": "q-aunty-ifeoma-defiance-marijuana",
+      "text": "Defiance is like marijuana. It is not a bad thing when it is used right.",
+      "speaker": "Aunty Ifeoma",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Aunty Ifeoma teaching her children about Jaja of Opobo, the defiant king Jaja was named after. The line is also clearly addressed to Jaja.",
+      "themeTags": ["rebellion", "history", "freedom"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Aunty Ifeoma", "Jaja"]
+    },
+    {
+      "id": "q-aunty-ifeoma-life-begins-marriage-ends",
+      "text": "Nwunye m, sometimes life begins when marriage ends.",
+      "speaker": "Aunty Ifeoma",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Aunty Ifeoma to Mama (calling her 'my wife' in the Igbo idiom of sister-in-law solidarity), challenging Mama's view that a woman without a husband is nothing.",
+      "themeTags": ["gender", "marriage", "freedom", "sisterhood"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Aunty Ifeoma", "Beatrice Achike"]
+    },
+    {
+      "id": "q-mama-where-would-i-go",
+      "text": "Where would I go if I leave Eugene's house? Tell me, where would I go?",
+      "speaker": "Beatrice Achike (Mama)",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Mama to Aunty Ifeoma in Nsukka after losing the second pregnancy. Names the economic and social condition that holds her in the marriage.",
+      "themeTags": ["gender", "marriage", "economy", "complicity"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Beatrice Achike", "Aunty Ifeoma"]
+    },
+    {
+      "id": "q-mama-eugene-not-been-well",
+      "text": "Eugene has not been well. He has been having migraines and fever. He is carrying more than any man should carry.",
+      "speaker": "Beatrice Achike (Mama)",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Mama defending Papa's behaviour to Aunty Ifeoma, hours after he has beaten her so badly she miscarried. The line that demonstrates the depth of her conditioning.",
+      "themeTags": ["abuse", "marriage", "complicity", "denial"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Beatrice Achike", "Eugene Achike"]
+    },
+    {
+      "id": "q-mama-i-started-putting-poison",
+      "text": "I started putting the poison in his tea before I came to Nsukka.",
+      "speaker": "Beatrice Achike (Mama)",
+      "location": "Part Four: A Different Silence",
+      "context": "Mama's quiet confession to Kambili and Jaja after Papa's death. The novel's final structural reversal: the tea Papa used to burn his love into Kambili was the tea Mama used to kill him.",
+      "themeTags": ["violence", "marriage", "vengeance", "tea"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Beatrice Achike", "Eugene Achike"]
+    },
+    {
+      "id": "q-papa-i-committed-sin-against-body",
+      "text": "I committed a sin against my own body once.",
+      "speaker": "Eugene Achike (Papa)",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Papa explaining to Kambili, after pouring boiling water on her feet, that the priest who raised him at the parish house had once boiled his hands. The line that reveals the inheritance of Papa's violence.",
+      "themeTags": ["abuse", "religion", "inheritance", "colonialism"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Eugene Achike"]
+    },
+    {
+      "id": "q-aunty-ifeoma-cannot-let-it-happen",
+      "text": "When a house is on fire, you run out before the roof collapses on your head.",
+      "speaker": "Aunty Ifeoma",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Aunty Ifeoma in the hospital, telling Mama that Kambili and Jaja must come to Nsukka. The proverb that Mama refuses to act on.",
+      "themeTags": ["family", "courage", "domestic violence"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Aunty Ifeoma", "Beatrice Achike"]
+    },
+    {
+      "id": "q-father-amadi-show-me-love-jesus",
+      "text": "Try and catch me, show me you love Jesus.",
+      "speaker": "Father Amadi",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Father Amadi at the stadium, turning faith into play with the boys he coaches and with Kambili. The first time Kambili runs and laughs in the novel.",
+      "themeTags": ["religion", "joy", "alternative faith"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Father Amadi", "Kambili Achike"]
+    },
+    {
+      "id": "q-father-amadi-believe-something-never-question",
+      "text": "I need to believe in something that I never question.",
+      "speaker": "Father Amadi",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Father Amadi explaining to Kambili why he believes in the boys he coaches. The novel's clearest articulation of faith as relational rather than doctrinal.",
+      "themeTags": ["religion", "faith", "doubt"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Father Amadi", "Kambili Achike"]
+    },
+    {
+      "id": "q-kambili-good-legs-for-running",
+      "text": "You have good legs for running.",
+      "speaker": "Father Amadi",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Father Amadi to Kambili at the stadium. The first compliment a man has ever paid her body for purposes other than control.",
+      "themeTags": ["body", "love", "awakening"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Father Amadi", "Kambili Achike"]
+    },
+    {
+      "id": "q-kambili-scaled-the-rod-terrified",
+      "text": "We did not scale the rod because we believed we could, we scaled it because we were terrified that we couldn't.",
+      "speaker": "Kambili Achike (narrator)",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Kambili contrasting Aunty Ifeoma's parenting (raising the bar in confidence) with Papa's (raising the bar through fear).",
+      "themeTags": ["family", "abuse", "achievement"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Kambili Achike", "Eugene Achike", "Aunty Ifeoma"]
+    },
+    {
+      "id": "q-amaka-uncle-eugene-not-bad-man",
+      "text": "Uncle Eugene is not a bad man, really. People have problems, people make mistakes.",
+      "speaker": "Amaka",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Amaka, late at night with Kambili, complicating the family's view of Papa after he has paid for Papa-Nnukwu's funeral. The novel refuses easy moral verdicts on him.",
+      "themeTags": ["family", "complicity", "moral complexity"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Amaka", "Eugene Achike"]
+    },
+    {
+      "id": "q-aunty-chiaku-educated-leave",
+      "text": "The educated ones leave, the ones with the potential to right the wrongs. They leave the weak behind. The tyrants continue to reign because the weak cannot resist.",
+      "speaker": "Aunty Chiaku",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Aunty Ifeoma's friend, on the verandah at night, naming the moral cost of academic emigration from a country under military rule.",
+      "themeTags": ["politics", "emigration", "national life"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Aunty Chiaku", "Aunty Ifeoma"]
+    },
+    {
+      "id": "q-papa-nnukwu-prayer-eugene",
+      "text": "Chineke! Bless my son, Eugene. Let the sun not set on his prosperity. Lift the curse they have put on him.",
+      "speaker": "Papa-Nnukwu",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "From Papa-Nnukwu's morning itu-nzu prayer that Kambili secretly observes. The 'heathen' father praying for the son who refuses to be near him.",
+      "themeTags": ["family", "religion", "tradition", "love"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Papa-Nnukwu", "Eugene Achike"]
+    },
+    {
+      "id": "q-aunty-ifeoma-curse-sand",
+      "text": "I will sell my dead husband's grave, Eugene, before I give our father a Catholic funeral.",
+      "speaker": "Aunty Ifeoma",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Aunty Ifeoma confronting Papa over Papa-Nnukwu's funeral. The strongest statement of her refusal to accept his religious authority.",
+      "themeTags": ["religion", "family", "tradition", "rebellion"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Aunty Ifeoma", "Eugene Achike", "Papa-Nnukwu"]
+    },
+    {
+      "id": "q-amaka-takes-it-well",
+      "text": "He takes it well.",
+      "speaker": "Kambili Achike",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Kambili to Jaja, of Papa-Nnukwu's quiet acceptance of being neglected by his son.",
+      "themeTags": ["dignity", "family", "ageing"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Kambili Achike", "Papa-Nnukwu"]
+    },
+    {
+      "id": "q-jaja-hides-it-well",
+      "text": "He hides it well.",
+      "speaker": "Jaja",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Jaja's reply, refusing the consoling reading. One of the small exchanges in which Jaja's growing clarity is registered.",
+      "themeTags": ["dignity", "family", "rebellion"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Jaja", "Papa-Nnukwu"]
+    },
+    {
+      "id": "q-amaka-takes-papa-nnukwu",
+      "text": "I had not finished painting him. He said we would finish it today.",
+      "speaker": "Amaka",
+      "location": "Part Three: The Pieces of Gods",
+      "context": "Amaka grieving the morning Papa-Nnukwu dies. The painting she had been making, which Papa later destroys, is the novel's central object.",
+      "themeTags": ["death", "art", "memory"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Amaka", "Papa-Nnukwu"]
+    },
+    {
+      "id": "q-kambili-final-clouds",
+      "text": "Above, clouds like dyed cotton wool hang low, so low I feel I can reach out and squeeze the moisture from them. The new rains will come down soon.",
+      "speaker": "Kambili Achike (narrator)",
+      "location": "Closing lines, Part Four: A Different Silence",
+      "context": "The final sentences of the novel. After Mama and Kambili leave the prison knowing Jaja will be released, Kambili imagines planting purple hibiscus and ixora at home.",
+      "themeTags": ["hope", "renewal", "future"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Kambili Achike"]
+    },
+    {
+      "id": "q-aunty-ifeoma-rules-disrespectful-children",
+      "text": "I do not raise disrespectful children in this house.",
+      "speaker": "Aunty Ifeoma",
+      "location": "Part Two: Speaking With Our Spirits",
+      "context": "Aunty Ifeoma after Obiora's rude rejoinder to her friend on the verandah. She slaps and lectures, but does not break.",
+      "themeTags": ["parenting", "family", "alternative authority"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Aunty Ifeoma", "Obiora"]
+    },
+    {
+      "id": "q-father-amadi-where-the-lord-sends",
+      "text": "He never responds with a yes or a no when I ask if he is happy. His answer is that he will go where the Lord sends him.",
+      "speaker": "Kambili Achike (narrator, of Father Amadi)",
+      "location": "Part Four: A Different Silence",
+      "context": "Kambili in the closing section, describing the priesthood Father Amadi has chosen and the love she has continued to feel for him.",
+      "themeTags": ["religion", "love", "vocation"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Father Amadi", "Kambili Achike"]
+    },
+    {
+      "id": "q-jaja-i-should-have-taken-care",
+      "text": "I should have taken care of Mama.",
+      "speaker": "Jaja",
+      "location": "Part Four: A Different Silence",
+      "context": "Jaja to Kambili after Papa's death, while taking the blame for the poisoning. Names the failure of conscience that he intends his prison sentence to atone for.",
+      "themeTags": ["family", "sacrifice", "guilt"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Jaja", "Beatrice Achike"]
+    }
+  ]
+}

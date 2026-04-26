@@ -23,23 +23,49 @@ function escapeHtml(s: string): string {
     .replace(/>/g, "&gt;");
 }
 
-// Student-facing exports: no app branding, no model attribution, no internal
-// PCLM language, no generation timestamp. Just the grade label, the exam
-// context, the question, the answer, and optionally the poems discussed.
+function pclmTotal(pclm: SampleAnswerFull["pclm_target"]): number | null {
+  if (!pclm) return null;
+  return pclm.P + pclm.C + pclm.L + pclm.M;
+}
+
+function pclmBreakdown(pclm: SampleAnswerFull["pclm_target"]): string | null {
+  if (!pclm) return null;
+  return `P ${pclm.P} · C ${pclm.C} · L ${pclm.L} · M ${pclm.M}`;
+}
+
+function gradeHeadline(grade_tier: string, pclm: SampleAnswerFull["pclm_target"]): string {
+  const total = pclmTotal(pclm);
+  return total !== null
+    ? `${grade_tier} Sample Answer · ${total}/100`
+    : `${grade_tier} Sample Answer`;
+}
+
+// Split into clean paragraphs. Each paragraph becomes its own array entry
+// so the joiner only has to emit `\n` between entries — no `\n\n` embedded
+// inside any single string. This survives every clipboard handler I've
+// tested (Slack, Notion, Google Docs, plain text editors, Word).
+function splitParagraphs(answer_text: string): string[] {
+  return answer_text
+    .split(/\n\n+/)
+    .map((p) => p.replace(/\n/g, " ").replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+}
 
 export function toPlainText(row: SampleAnswerFull): string {
-  const { question, grade_tier, selected_poems, answer_text } = row;
+  const { question, grade_tier, pclm_target, selected_poems, answer_text } = row;
   const year = question.exam_year ?? "Unknown year";
+  const breakdown = pclmBreakdown(pclm_target);
   const poems =
     selected_poems && selected_poems.length > 0
       ? selected_poems.join(", ")
       : null;
-  const paragraphs = answer_text.split(/\n\n+/).join("\n\n");
+  const paragraphs = splitParagraphs(answer_text);
 
   const lines: (string | null)[] = [
-    `${grade_tier} Sample Answer`,
+    gradeHeadline(grade_tier, pclm_target),
     `Leaving Certificate English · Higher Level Paper 2`,
     `${year} · ${question.subject_key}`,
+    breakdown ? `PCLM: ${breakdown}` : null,
     "",
     "Question",
     "",
@@ -47,7 +73,8 @@ export function toPlainText(row: SampleAnswerFull): string {
     "",
     "Answer",
     "",
-    paragraphs,
+    // Each paragraph + blank line between, as separate entries
+    ...paragraphs.flatMap((p, i) => (i < paragraphs.length - 1 ? [p, ""] : [p])),
     poems ? "" : null,
     poems ? `Poems discussed: ${poems}` : null,
   ];
@@ -55,24 +82,28 @@ export function toPlainText(row: SampleAnswerFull): string {
 }
 
 export function toHtml(row: SampleAnswerFull): string {
-  const { question, grade_tier, selected_poems, answer_text } = row;
+  const { question, grade_tier, pclm_target, selected_poems, answer_text } = row;
   const year = question.exam_year ?? "Unknown year";
+  const breakdown = pclmBreakdown(pclm_target);
   const poems =
     selected_poems && selected_poems.length > 0
       ? selected_poems.join(", ")
       : null;
-  const paragraphsHtml = answer_text
-    .split(/\n\n+/)
-    .map((p) => `  <p>${escapeHtml(p.trim())}</p>`)
+  const paragraphsHtml = splitParagraphs(answer_text)
+    .map((p) => `  <p>${escapeHtml(p)}</p>`)
     .join("\n");
 
   return `<article>
   <header style="border-bottom:2px solid #0f172a;padding-bottom:12px;margin-bottom:20px">
-    <h1 style="margin:0 0 4px 0;font-size:22px">${escapeHtml(grade_tier)} Sample Answer</h1>
+    <h1 style="margin:0 0 4px 0;font-size:22px">${escapeHtml(gradeHeadline(grade_tier, pclm_target))}</h1>
     <p style="margin:0;color:#475569;font-size:13px">
       Leaving Certificate English · Higher Level Paper 2<br>
       ${escapeHtml(String(year))} · ${escapeHtml(question.subject_key)}
-    </p>
+    </p>${
+      breakdown
+        ? `\n    <p style="margin:6px 0 0 0;color:#475569;font-size:13px"><strong>PCLM:</strong> ${escapeHtml(breakdown)}</p>`
+        : ""
+    }
   </header>
   <section style="margin-bottom:24px;padding:16px;background:#f8fafc;border-left:4px solid #0f766e">
     <h2 style="margin:0 0 8px 0;font-size:14px;text-transform:uppercase;letter-spacing:0.05em;color:#0f766e">Question</h2>

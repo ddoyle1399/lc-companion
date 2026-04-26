@@ -21,6 +21,16 @@ import type {
 
 import theCrucibleProfile from "./2026/the-crucible/profile.json";
 import theCrucibleQuotes from "./2026/the-crucible/quotes.json";
+import siveProfile from "./2026/sive/profile.json";
+import siveQuotes from "./2026/sive/quotes.json";
+import smallThingsProfile from "./2026/small-things-like-these/profile.json";
+import smallThingsQuotes from "./2026/small-things-like-these/quotes.json";
+import purpleHibiscusProfile from "./2026/purple-hibiscus/profile.json";
+import purpleHibiscusQuotes from "./2026/purple-hibiscus/quotes.json";
+import hamnetProfile from "./2026/hamnet/profile.json";
+import hamnetQuotes from "./2026/hamnet/quotes.json";
+import lessonsInChemistryProfile from "./2026/lessons-in-chemistry/profile.json";
+import lessonsInChemistryQuotes from "./2026/lessons-in-chemistry/quotes.json";
 
 // ---- Manifest --------------------------------------------------------------
 
@@ -34,6 +44,26 @@ export const PROFILES: Record<number, Record<string, ProfileEntry>> = {
     "the-crucible": {
       profile: theCrucibleProfile as ComparativeTextProfile,
       quotes: theCrucibleQuotes as QuoteBank,
+    },
+    "sive": {
+      profile: siveProfile as ComparativeTextProfile,
+      quotes: siveQuotes as QuoteBank,
+    },
+    "small-things-like-these": {
+      profile: smallThingsProfile as ComparativeTextProfile,
+      quotes: smallThingsQuotes as QuoteBank,
+    },
+    "purple-hibiscus": {
+      profile: purpleHibiscusProfile as ComparativeTextProfile,
+      quotes: purpleHibiscusQuotes as QuoteBank,
+    },
+    "hamnet": {
+      profile: hamnetProfile as ComparativeTextProfile,
+      quotes: hamnetQuotes as QuoteBank,
+    },
+    "lessons-in-chemistry": {
+      profile: lessonsInChemistryProfile as ComparativeTextProfile,
+      quotes: lessonsInChemistryQuotes as QuoteBank,
     },
   },
   2027: {},

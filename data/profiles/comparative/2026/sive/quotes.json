@@ -1,0 +1,336 @@
+{
+  "textId": "sive",
+  "schemaVersion": 1,
+  "quotes": [
+    {
+      "id": "q-mena-fortune",
+      "text": "I had my fortune; 'twasn't for the want of a roof over my head that I came here.",
+      "speaker": "Mena Glavin",
+      "location": "Act 1, Scene 1",
+      "context": "Mena to Nanna, defending her place in the household and the dowry she brought.",
+      "themeTags": ["marriage", "money", "class", "transaction"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Mena Glavin", "Nanna Glavin"]
+    },
+    {
+      "id": "q-mena-cluckin-hen",
+      "text": "A cluckin' hen won't hatch!",
+      "speaker": "Mena Glavin",
+      "location": "Act 1, Scene 1",
+      "context": "Nanna's parting shot at Mena's childlessness, expressing the social value placed on women's fertility in this community.",
+      "themeTags": ["gender", "fertility", "marriage", "shame"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Nanna Glavin", "Mena Glavin"]
+    },
+    {
+      "id": "q-mena-out-working-with-farmer",
+      "text": "Saints preserve us! Out working with a farmer you should be, my girl, instead of getting your head filled with high notions.",
+      "speaker": "Mena Glavin",
+      "location": "Act 1, Scene 1",
+      "context": "Mena lashing out at Sive for attending the convent school instead of earning.",
+      "themeTags": ["education", "class", "gender", "envy"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Mena Glavin", "Sive"]
+    },
+    {
+      "id": "q-mena-bastard",
+      "text": "You are a bye-child, a common bye-child, a bastard!",
+      "speaker": "Mena Glavin",
+      "location": "Act 1, Scene 3",
+      "context": "Mena cornering Sive, weaponising her illegitimacy to break her resistance to the match.",
+      "themeTags": ["illegitimacy", "shame", "religion", "coercion"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Mena Glavin", "Sive"]
+    },
+    {
+      "id": "q-mena-no-name-till-husband",
+      "text": "You will have no name till you take a husband.",
+      "speaker": "Mena Glavin",
+      "location": "Act 1, Scene 3",
+      "context": "Mena to Sive, insisting that an illegitimate woman has no social existence except through marriage.",
+      "themeTags": ["gender", "name", "marriage", "religion"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Mena Glavin", "Sive"]
+    },
+    {
+      "id": "q-mena-i-will-open-you",
+      "text": "I will open you! I will open you if you vex me more.",
+      "speaker": "Mena Glavin",
+      "location": "Act 1, Scene 3",
+      "context": "Mena threatening Nanna with a knife. The moment domestic tyranny tips into physical violence.",
+      "themeTags": ["violence", "power", "family"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Mena Glavin", "Nanna Glavin"]
+    },
+    {
+      "id": "q-mena-rid-of-her-and-200",
+      "text": "And I would be rid of her. And 200 pounds into the bargain.",
+      "speaker": "Mena Glavin",
+      "location": "Act 1, Scene 1",
+      "context": "Mena, calculating, the moment greed and resentment fuse into the decision to sell Sive.",
+      "themeTags": ["greed", "money", "transaction", "vengeance"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Mena Glavin"]
+    },
+    {
+      "id": "q-thomasheen-200-sovereigns-heel-fist",
+      "text": "Think of the 200 sovereigns dancing in the heel of your fist.",
+      "speaker": "Thomasheen Sean Rua",
+      "location": "Act 1, Scene 1",
+      "context": "Thomasheen pressing Mena to consider the cash, the matchmaker as tempter.",
+      "themeTags": ["money", "temptation", "transaction"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Thomasheen Sean Rua", "Mena Glavin"]
+    },
+    {
+      "id": "q-thomasheen-heat-before-death",
+      "text": "Tis the heat before death that plays upon them.",
+      "speaker": "Thomasheen Sean Rua",
+      "location": "Act 1, Scene 1",
+      "context": "Thomasheen explaining old men's appetite for young women, defending the proposed match.",
+      "themeTags": ["gender", "age", "lust", "transaction"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Thomasheen Sean Rua"]
+    },
+    {
+      "id": "q-thomasheen-core-of-apple",
+      "text": "You must go to the core of the apple to come by the seed.",
+      "speaker": "Thomasheen Sean Rua",
+      "location": "Act 1, Scene 1",
+      "context": "Thomasheen to himself, satisfied that he has read Mena correctly. The matchmaker's working philosophy.",
+      "themeTags": ["manipulation", "greed", "knowledge"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Thomasheen Sean Rua"]
+    },
+    {
+      "id": "q-thomasheen-no-life-with-them",
+      "text": "Ah, you have no life, God help us, with the worry of them.",
+      "speaker": "Thomasheen Sean Rua",
+      "location": "Act 1, Scene 1",
+      "context": "Thomasheen flattering Mena about the burden of Sive and Nanna, building the sale.",
+      "themeTags": ["family", "manipulation", "complaint"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Thomasheen Sean Rua", "Mena Glavin"]
+    },
+    {
+      "id": "q-mike-never-sun-moon-stars",
+      "text": "Never! ... if the sun, moon and stars rained down out of the heavens and split the ground under my feet ... never!",
+      "speaker": "Mike Glavin",
+      "location": "Act 1, Scene 1",
+      "context": "Mike's first reaction to the proposed match. He will not hold this position.",
+      "themeTags": ["resistance", "family", "moral conflict"],
+      "modeTags": ["GVV", "TI"],
+      "characterTags": ["Mike Glavin"]
+    },
+    {
+      "id": "q-mike-white-flower-canavaun",
+      "text": "It would be like tossing the white flower of the canavaun on to the manure heap.",
+      "speaker": "Mike Glavin",
+      "location": "Act 1, Scene 1",
+      "context": "Mike refusing the match, in the play's most lyrical line about Sive's purity.",
+      "themeTags": ["innocence", "corruption", "sacrifice"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Mike Glavin", "Sive"]
+    },
+    {
+      "id": "q-mike-quick-everything",
+      "text": "Quick is everything. Quick is marriage and quick is love and quick is youth.",
+      "speaker": "Mike Glavin",
+      "location": "Act 1, Scene 3",
+      "context": "Mike rationalising the match to Nanna, his rhetoric collapsing as he persuades himself.",
+      "themeTags": ["self-deception", "marriage", "fatalism"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Mike Glavin", "Nanna Glavin"]
+    },
+    {
+      "id": "q-nanna-hatchery-of-sin",
+      "text": "There is a hatchery of sin in this house.",
+      "speaker": "Nanna Glavin",
+      "location": "Act 1, Scene 3",
+      "context": "Nanna's repeated condemnation of the household's moral state. The line returns at the curtain.",
+      "themeTags": ["sin", "religion", "moral judgement"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Nanna Glavin"]
+    },
+    {
+      "id": "q-nanna-women-pay-for-happiness",
+      "text": "How is it all men will find words to save themselves? Women must pay for all happiness.",
+      "speaker": "Nanna Glavin",
+      "location": "Act 1, Scene 3",
+      "context": "Nanna to Mike, the play's clearest articulation of its position on gender.",
+      "themeTags": ["gender", "marriage", "suffering"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Nanna Glavin", "Mike Glavin"]
+    },
+    {
+      "id": "q-sive-frightened-life",
+      "text": "He frightened the life out of me. I never expected it!",
+      "speaker": "Sive",
+      "location": "Act 1, Scene 2",
+      "context": "Sive to Nanna after Sean Dota's attempt to assault her on the road. The first explicit sign of the danger she is in.",
+      "themeTags": ["fear", "violence", "gender"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Sive", "Sean Dota"]
+    },
+    {
+      "id": "q-sive-could-never-live-with-old-man",
+      "text": "I could never live with that old man.",
+      "speaker": "Sive",
+      "location": "Act 1, Scene 3",
+      "context": "Sive to Mena, refusing the match outright before Mena's coercion overwhelms her.",
+      "themeTags": ["resistance", "marriage", "consent"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Sive", "Mena Glavin"]
+    },
+    {
+      "id": "q-sive-imagine-going-to-dance",
+      "text": "Imagine going to a dance with him, or going up the chapel with him!",
+      "speaker": "Sive",
+      "location": "Act 1, Scene 3",
+      "context": "Sive trying to convey to Mena how impossible the match feels in the simple terms of public life.",
+      "themeTags": ["youth", "shame", "marriage"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Sive"]
+    },
+    {
+      "id": "q-sive-tubes-of-bicycle",
+      "text": "The tubes of the bicycle are full of holes.",
+      "speaker": "Sive",
+      "location": "Act 1, Scene 3",
+      "context": "Sive's last attempt at ordinary teenage conversation before Mena overwhelms her with the marriage plan.",
+      "themeTags": ["youth", "ordinariness", "loss"],
+      "modeTags": ["LG", "GVV"],
+      "characterTags": ["Sive"]
+    },
+    {
+      "id": "q-liam-marry-nobody-but-you",
+      "text": "I would marry nobody but you, Sive, I love you. How would I marry anybody but you!",
+      "speaker": "Liam Scuab",
+      "location": "Act 1, Scene 1",
+      "context": "Liam's first declaration to Sive. Plainspoken, unmediated by any of the play's transactional framing.",
+      "themeTags": ["love", "sincerity", "youth"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Liam Scuab", "Sive"]
+    },
+    {
+      "id": "q-liam-you-killed-her",
+      "text": "You killed her! ... you ... you ... you killed her! You horrible filthy bitch!",
+      "speaker": "Liam Scuab",
+      "location": "Act 2, Scene 2",
+      "context": "Liam, having carried Sive's drowned body in, denouncing Mena directly at the climax.",
+      "themeTags": ["accusation", "death", "vengeance"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Liam Scuab", "Mena Glavin", "Sive"]
+    },
+    {
+      "id": "q-mike-hardly-call-it-a-village",
+      "text": "What is it about Sive?",
+      "speaker": "Mike Glavin",
+      "location": "Act 1, Scene 1",
+      "context": "Mike's first puzzled response when Mena begins to introduce the proposal. The moment before he understands what is being asked of him.",
+      "themeTags": ["family", "complicity"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Mike Glavin", "Mena Glavin"]
+    },
+    {
+      "id": "q-pats-only-what-i-see",
+      "text": "Tis only what I see in my travels.",
+      "speaker": "Pats Bocock",
+      "location": "Act 2, Scene 2",
+      "context": "Pats's refrain. Positions the tinker-poet as outside the community, reporting on it. The chorus's epistemic stance.",
+      "themeTags": ["chorus", "outsider", "witness"],
+      "modeTags": ["LG", "CC"],
+      "characterTags": ["Pats Bocock"]
+    },
+    {
+      "id": "q-pats-no-luck-refusing",
+      "text": "There is no luck in refusing a man of the road!",
+      "speaker": "Pats Bocock",
+      "location": "Act 1, Scene 3",
+      "context": "Pats invoking traveller code when Thomasheen refuses to give alms. Casts the curse-song that follows as cosmic justice rather than spite.",
+      "themeTags": ["chorus", "justice", "tradition"],
+      "modeTags": ["LG", "CC"],
+      "characterTags": ["Pats Bocock", "Thomasheen Sean Rua"]
+    },
+    {
+      "id": "q-carthalawn-mike-glavin-praise-fragment",
+      "text": "Oh! Mike Glavin you're the man, you was always in the van",
+      "speaker": "Carthalawn (singing)",
+      "location": "Act 1, Scene 3",
+      "context": "Opening line of Carthalawn's praise-song for the man of the house, the ritual greeting on entering. The chorus's first appearance, sung formally, sets up the contrast with the curse-songs that follow.",
+      "themeTags": ["chorus", "ritual", "tradition"],
+      "modeTags": ["LG", "CC"],
+      "characterTags": ["Carthalawn", "Mike Glavin"]
+    },
+    {
+      "id": "q-carthalawn-final-lament-opening",
+      "text": "Oh, come all good men and true, A sad tale I'll tell to you, All of a maiden fair, who died this day",
+      "speaker": "Carthalawn (singing)",
+      "location": "Act 2, Scene 2",
+      "context": "Opening lines of the play's closing lament. The chorus delivers the final verdict: Sive was murdered, not lost.",
+      "themeTags": ["chorus", "death", "lament", "judgement"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Carthalawn", "Sive"]
+    },
+    {
+      "id": "q-carthalawn-they-murdered-sive",
+      "text": "Oh, they murdered lovely Sive, She would not be a bride",
+      "speaker": "Carthalawn (singing)",
+      "location": "Act 2, Scene 2",
+      "context": "Carthalawn's revised closing line in the lament's final verse, where the soft 'drowned' of the first verse is replaced by 'murdered'. The chorus's moral verdict.",
+      "themeTags": ["accusation", "death", "moral verdict", "consent"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Carthalawn", "Sive"]
+    },
+    {
+      "id": "q-thomasheen-sean-dota-is-the-man",
+      "text": "Sean Dota is the man.",
+      "speaker": "Thomasheen Sean Rua",
+      "location": "Act 1, Scene 1",
+      "context": "Thomasheen naming the suitor for the first time. The moment Sive's fate is shaped.",
+      "themeTags": ["transaction", "matchmaking"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Thomasheen Sean Rua", "Sean Dota"]
+    },
+    {
+      "id": "q-mena-walk-the-road",
+      "text": "Will she walk the road? ... Far from it.",
+      "speaker": "Mena Glavin",
+      "location": "Act 1, Scene 3",
+      "context": "Mena gloating that Nanna will not actually leave despite her threats. The County Home as the unspoken alternative for old women without sons.",
+      "themeTags": ["age", "poverty", "power"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Mena Glavin", "Nanna Glavin"]
+    },
+    {
+      "id": "q-thomasheen-200-pounds-tied-knot",
+      "text": "If there is a wedding, 'twill be on the morning of the wedding, on the word of a man.",
+      "speaker": "Thomasheen Sean Rua",
+      "location": "Act 1, Scene 3",
+      "context": "Thomasheen confirming when the money will change hands. The transaction made fully explicit.",
+      "themeTags": ["transaction", "money", "marriage"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Thomasheen Sean Rua", "Mena Glavin"]
+    },
+    {
+      "id": "q-mike-give-me-the-letter",
+      "text": "Give me the letter!",
+      "speaker": "Mike Glavin",
+      "location": "Act 2, Scene 2",
+      "context": "Mike, having argued with Nanna, agrees to deliver Liam's letter to Sive. The brief moment in which Mike's conscience could have saved her.",
+      "themeTags": ["conscience", "complicity", "missed chance"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Mike Glavin", "Nanna Glavin"]
+    },
+    {
+      "id": "q-thomasheen-leave-it-burn",
+      "text": "Leave it burn!",
+      "speaker": "Thomasheen Sean Rua",
+      "location": "Act 2, Scene 2",
+      "context": "Thomasheen burning Liam's letter in front of Mike. The play's structural hinge: the rescue plan destroyed without Sive ever knowing it existed.",
+      "themeTags": ["betrayal", "complicity", "tragedy"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Thomasheen Sean Rua", "Mike Glavin", "Liam Scuab"]
+    }
+  ]
+}

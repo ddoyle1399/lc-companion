@@ -1,0 +1,506 @@
+{
+  "textId": "small-things-like-these",
+  "title": "Small Things Like These",
+  "author": "Claire Keegan",
+  "type": "novel",
+  "yearsPrescribed": [2026],
+  "copyrightStatus": "rights_managed",
+  "attributionLine": "Small Things Like These by Claire Keegan (2021). The substrate in this profile was assembled with reference to the 2024 film screenplay by Enda Walsh, based on Keegan's novel; quotes carry a screenplay attribution and should be verified against Keegan's novel before classroom citation. Plot, characters, key moments, cultural context, vision and themes are common to both texts.",
+
+  "plotBeats": [
+    {
+      "index": 1,
+      "title": "The coal yard, the family, the ordinary good life",
+      "location": "Opening chapters of the novel",
+      "summary": "New Ross, County Wexford, December 1984. Bill Furlong runs a coal and timber merchant's. He has worked his way up from precarious beginnings (the illegitimate son of a domestic servant) to a settled life with his wife Eileen and five daughters. The opening establishes a man whose existence is held in place by routine and self-discipline.",
+      "significance": "Furlong's social position is the moral lever the rest of the novel works. He is close enough to the bottom of his town's hierarchy to remember the bottom and far enough up that he has things to lose."
+    },
+    {
+      "index": 2,
+      "title": "Small encounters along the road",
+      "location": "Mid early chapters",
+      "summary": "On his deliveries Furlong notices things others don't: a boy gathering firewood without a coat, a barefoot child drinking milk left out for a cat, the small private cruelties of the town's economy. He gives the firewood boy fifty pence and Eileen later judges him for it.",
+      "significance": "The novel establishes Furlong's noticing as the trait that will distinguish him at the climax. The same trait Eileen names as 'soft hearted' is the one Mrs. Wilson once exercised toward his own mother."
+    },
+    {
+      "index": 3,
+      "title": "The first delivery to the Good Shepherd",
+      "location": "Roughly the novel's centre",
+      "summary": "Furlong delivers coal to the convent at the back of the secondary school his daughters will attend. He sees a mother dragging her teenage daughter to the convent door against the girl's will, the door slamming behind them. Inside on a later delivery he sees girls on their hands and knees polishing the floor; one rises and grabs his arm and asks him to take her to the river.",
+      "significance": "The convent is named, the institutional reality is shown in two compressed images, and Furlong is implicated as a witness."
+    },
+    {
+      "index": 4,
+      "title": "Childhood memory and the hot water bottle",
+      "location": "Threaded through the middle of the novel",
+      "summary": "A flashback to Furlong's eighth Christmas at Mrs. Wilson's. He had asked Santa for a jigsaw and received a hot water bottle. He hides his disappointment in the cow shed, plunging his arms into iced water until Ned finds him and brings him gently in.",
+      "significance": "The novel's interior architecture. The boy who learnt early how to hide his hurt in cold water is the same man who plunges his hands into a basin of carbolic and water at the end of every working day."
+    },
+    {
+      "index": 5,
+      "title": "The bedroom argument",
+      "location": "Roughly two-thirds in",
+      "summary": "After his first encounter with the girl in the convent's Hall, Furlong tells Eileen what he saw and what he was asked. Eileen dismisses it: aren't they fed, aren't they warm, isn't this how the world works, you have to ignore things to get on. Furlong invokes Mrs. Wilson and his own mother. Eileen apologises for one cruel line and then closes the conversation.",
+      "significance": "The novel's central moral exchange. Eileen's argument is not made in bad faith and that is precisely the point. The cultural context speaks through her."
+    },
+    {
+      "index": 6,
+      "title": "Sarah Redmond in the coal shed",
+      "location": "The week before Christmas",
+      "summary": "On a frozen dawn Furlong opens the coal shed door at the convent and finds the same teenage girl he had seen brought in by her mother, now locked in barefoot and shivering, hair roughly cut. She is pregnant. He brings her to the convent door. Sr. Mary frames it as a Hide-and-Seek game gone wrong, gives Furlong tea and a Christmas card with twenty pounds for Eileen, and reminds him that his three younger daughters have yet to be admitted to the school.",
+      "significance": "The institution is shown to be both perpetrator and PR operation. The bribe and the threat are delivered in the same room. Furlong leaves with both."
+    },
+    {
+      "index": 7,
+      "title": "The Christmas Eve epiphany",
+      "location": "Late in the novel",
+      "summary": "Christmas Eve in town. Mrs. Kehoe in the back room of her pub warns Furlong off, naming the cost (his daughters' education). At the barber's, watching his own reflection, Furlong arrives at the quiet certainty that Ned is his father. At Hanrahan's Shoes, picking up Eileen's Christmas present, he is condescended to and feels his town's quiet hierarchies in a single transaction.",
+      "significance": "Three small humiliations and one private revelation, threaded together, deliver Furlong to his decision. The novel does not stage a moral debate. It stages a man becoming legible to himself."
+    },
+    {
+      "index": 8,
+      "title": "Walking Sarah home",
+      "location": "Closing chapter",
+      "summary": "Furlong returns to the convent at night, finds Sarah Redmond locked in the coal shed again, gives her his coat, and walks her through the lit Christmas streets back to his own house. Norma calls his name; he does not turn. They reach his door. They go inside. The film and the novel end on the image of him quietly washing his hands while she stands in the hallway and the family's life continues on the other side of a partly open door.",
+      "significance": "The novel ends without dramatising the consequence. The act is the climax; the cost is reserved for the reader's imagination. The closing image of the hand-washing closes the loop with the eight-year-old boy in the cow shed."
+    }
+  ],
+
+  "keyMoments": [
+    {
+      "id": "km-firewood-boy",
+      "title": "The firewood boy on the road",
+      "location": "Furlong's morning deliveries",
+      "whatHappens": "Furlong stops his truck for a small boy gathering sticks in a sack on a country road, miles from home, no coat. He recognises him as Mick Sinnott's son. He offers a lift, is refused, gives the boy two fifty pence pieces, asks him to wish his family a happy Christmas. The boy runs off down the road.",
+      "whyItMatters": "The novel's first and gentlest demonstration of Furlong's attention. Eileen at home will name the gesture as soft and Mick Sinnott's drinking as the reason it is wasted. The scene establishes what Furlong is and what his wife thinks of it, in three pages.",
+      "modeDeployment": {
+        "CC": "The class structure of the rural town in miniature. The Sinnotts are below the Furlongs; the Furlongs are below Mrs. Wilson; Mrs. Wilson was below the people who once visited her from England.",
+        "GVV": "The vision admits warmth as well as cold. The novel is bleak about institutions and gentle about people; this scene is the gentleness.",
+        "LG": "Spare close third-person prose. The point of view is Furlong's; the boy is not narrated but observed.",
+        "TI": "Compassion and judgement. The first pairing of the novel's central ethical tension."
+      },
+      "anchorQuoteIds": ["q-furlong-might-be-trying", "q-eileen-his-dad-will-only-drink"],
+      "linkSentenceTemplate": "The firewood-boy scene establishes Furlong's habit of attention with a quietness that contrasts with [Text B]'s more dramatic introduction of its protagonist's moral instinct..."
+    },
+    {
+      "id": "km-girl-dragged-to-convent",
+      "title": "A mother drags her daughter to the door",
+      "location": "Furlong's second delivery to the Good Shepherd",
+      "whatHappens": "Furlong is unloading bags of coal in the convent shed when a car pulls up. A woman drags her teenage daughter by the scruff toward the door. The girl is fighting. Two nuns open the door without being rung for, take the girl by the arms, and pull her inside. The door slams. The husband sits in the car waiting.",
+      "whyItMatters": "Compresses the institutional reality into ten seconds of action. The family delivers the daughter; the institution receives her. There is no consent and no public outrage. Furlong, an outsider in the courtyard, sees it and does nothing this time.",
+      "modeDeployment": {
+        "CC": "Family + church + community + economy operating as one mechanism. The cultural context made visible in a single staged transaction.",
+        "GVV": "The vision sharpens here. The novel does not have to argue its case about the laundries; it stages it.",
+        "LG": "Witnessed action through a partly opened door. Keegan's restraint is structural; the reader sees what Furlong sees and no more.",
+        "TI": "Coercion and complicity. The husband in the car is the novel's image of the male role in the Church-State arrangement."
+      },
+      "anchorQuoteIds": [],
+      "linkSentenceTemplate": "The arrival scene at the Good Shepherd presents the cultural context's machinery in compressed dramatic form, where [Text B] develops its equivalent over multiple acts..."
+    },
+    {
+      "id": "km-girl-in-the-hall",
+      "title": "The girl in the Hall asks to be taken to the river",
+      "location": "Inside the convent on a later delivery",
+      "whatHappens": "Furlong, looking for Sr. Carmel, walks the corridor and reaches a Hall where five barefoot teenage girls are polishing the floor on their hands and knees. One stands, comes to him quickly, takes his arm, and asks him to take her to the river or to the other side of the gate. She drops back to her knees as Sr. Carmel approaches.",
+      "whyItMatters": "The first direct request. Furlong's reply is 'It's not up to me'. The novel makes him refuse before it lets him act, and the entire moral interior of the rest of the novel is the interval between this refusal and the eventual rescue.",
+      "modeDeployment": {
+        "CC": "The institution rendered viscerally. The girls are barefoot and on their knees, in their own clothes (no uniform) doing unpaid labour. The cultural context that produces this is also the one that lets Furlong walk out.",
+        "GVV": "The bleak strand of the vision. The novel's hope is hard-won precisely because it has shown this.",
+        "LG": "Tableau staging. The girl rises out of a posed group, makes one request, and returns to the posture she came from. Keegan composes the scene like a painting.",
+        "TI": "Conscience is named in the moment of its first failure. Furlong refuses; the novel records the refusal exactly."
+      },
+      "anchorQuoteIds": ["q-sarah-redmond-take-me-to-the-river", "q-sarah-redmond-take-me-home"],
+      "linkSentenceTemplate": "The Hall scene in Small Things Like These is the moment Furlong first hears and refuses, and that refusal sets up the rescue at the climax in a way [Text B]'s structure also exploits when..."
+    },
+    {
+      "id": "km-bedroom-argument",
+      "title": "The bedroom argument with Eileen",
+      "location": "After the Hall scene, in the Furlongs' bedroom",
+      "whatHappens": "Furlong tells Eileen what he saw and what was asked of him. Eileen lays out the community's argument: the girls are warm, fed, learning a trade; if you want to get on you have to ignore things; this is not their problem. Furlong asks what if it were one of their daughters; Eileen says they are not theirs. He invokes Mrs. Wilson; she replies that Mrs. Wilson was a wealthy Protestant landowner who could afford to act as she pleased.",
+      "whyItMatters": "The novel's central moral exchange. Both arguments are clear; both have weight. Eileen is not wrong about the cost; Furlong is not wrong about the parallel. The novel refuses to let either character be the simple villain or hero of the marriage.",
+      "modeDeployment": {
+        "CC": "Marriage staged as the conduit of cultural complicity. Eileen articulates the community position; Furlong articulates his own.",
+        "GVV": "The vision admits Eileen's case in full. This is what makes the novel's eventual hopefulness costly rather than cheap.",
+        "LG": "Two-handed bedroom dialogue, Keegan's mode for charged exchange. Restraint of speech is the technique.",
+        "TI": "Conscience and complicity, named in marriage rather than in confession. The novel's secularised moral grammar."
+      },
+      "anchorQuoteIds": ["q-eileen-if-you-want-to-get-on", "q-eileen-they-are-not-ours", "q-eileen-far-from-hardship", "q-furlong-but-what-if-one-of-ours", "q-furlong-where-would-mother-have-gone", "q-furlong-have-you-never-questioned"],
+      "linkSentenceTemplate": "The Furlongs' bedroom argument compresses the cultural context into a marital exchange in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-coal-shed-discovery",
+      "title": "Sarah Redmond locked in the coal shed",
+      "location": "Frozen dawn, Furlong's morning delivery before Christmas",
+      "whatHappens": "Opening the bolt on the convent's coal shed at dawn, Furlong sees a movement, switches on his torch, and finds Sarah Redmond on the ground, barefoot, hair roughly cut, shivering, marked from where she has been struck. She has been there since the previous day and asks if it is day or night. She is pregnant.",
+      "whyItMatters": "The novel's pivot. The girl Furlong saw dragged in is the girl he now finds locked out. The institution he tried to leave alone has put her in his shed. The line between his work and the convent's work is gone.",
+      "modeDeployment": {
+        "CC": "The institutional violence is no longer screened. The coal shed is part of Furlong's working life; the convent has put the violence in his work.",
+        "GVV": "The vision finds its decisive turn. From this moment Furlong cannot return to his earlier 'It's not up to me' position without lying to himself.",
+        "LG": "Stage object as turning point. The bolt, the door, the torch, the body in the dark. Keegan's prose is at its most pictorial here.",
+        "TI": "Conscience cornered. The plot device is also the moral device."
+      },
+      "anchorQuoteIds": ["q-sarah-redmond-day-or-night", "q-sarah-redmond-baby-here", "q-sarah-redmond-good-home", "q-sarah-redmond-daddy-didnt-want-me-home"],
+      "linkSentenceTemplate": "The coal shed discovery in Small Things Like These transfers the institutional violence into the protagonist's working life, parallel in effect to [Text B]'s..."
+    },
+    {
+      "id": "km-tea-with-sr-mary",
+      "title": "Tea with Sr. Mary",
+      "location": "Sr. Mary's office, immediately after the discovery",
+      "whatHappens": "Sr. Mary takes Furlong through the laundry corridor, past girls folding sheets at huge cast-iron washing machines, to her office. Sr. Frances brings the girl back, scrubbed; the girl repeats a prepared story about a Hide-and-Seek game. Sr. Mary makes a pointed remark that Furlong has no son to carry on his name. She gives him an envelope with twenty pounds for Eileen and a Christmas card. She names his three younger daughters who have yet to be admitted to her school.",
+      "whyItMatters": "The institution's strongest scene. Bribe, threat, and theatre delivered together by the same woman over the same teapot. The girl is forced to recite the cover story in front of her would-be rescuer. Furlong leaves with the envelope and a clear understanding of what speaking would cost his daughters.",
+      "modeDeployment": {
+        "CC": "Religion, education, money, and patriarchy braided in one scene. The cultural context's full apparatus on a single afternoon.",
+        "GVV": "The bleakest moment in the novel's depiction of institutional power. The vision must hold both this and the closing rescue without resolving them.",
+        "LG": "Set-piece dialogue with deliberate stage directions (the girl's seat next to Furlong, Sr. Anne sent out, the scripted answers). Keegan stages the office like theatre.",
+        "TI": "Conscience and complicity at their highest pressure. The cost of speaking is named."
+      },
+      "anchorQuoteIds": ["q-sr-mary-disappointing-no-boy", "q-sr-mary-not-in-any-trouble", "q-furlong-mothers-name-no-harm"],
+      "linkSentenceTemplate": "The tea with Sr. Mary delivers institutional pressure with bureaucratic politeness, a register that compares interestingly with [Text B]'s..."
+    },
+    {
+      "id": "km-mrs-kehoe-warning",
+      "title": "Mrs. Kehoe's warning in the back room",
+      "location": "Christmas Eve, the storage room of Mrs. Kehoe's pub",
+      "whatHappens": "Mrs. Kehoe takes Furlong aside on Christmas Eve, accepts his payment for his men's lunches, and warns him plainly. Keep the bad dog with you and the good dog won't bite. The nuns have a finger in every pie. The school is on the other side of the convent's wall. Make a nuisance of yourself and you will be denying your younger daughters an education.",
+      "whyItMatters": "The community's voice, in a friendly register, completing what Eileen began. The warning is delivered without malice, as friend to friend, which is exactly what makes it effective. The community can see what Furlong is considering and is telling him not to.",
+      "modeDeployment": {
+        "CC": "The complicity is not a Church secret; it is community knowledge, openly transmitted as practical advice. The cultural context's clearest single articulation.",
+        "GVV": "The vision admits that the obstacle to action is not malice but ordinary self-protection, which makes it harder to romance away.",
+        "LG": "Two-handed dialogue in a back room. Keegan's preferred mode for moral exchange.",
+        "TI": "Complicity as community wisdom. The theme stated by a sympathetic character."
+      },
+      "anchorQuoteIds": ["q-mrs-kehoe-bad-dog-good-dog", "q-mrs-kehoe-finger-in-every-pie", "q-mrs-kehoe-deny-younger-ones-education", "q-furlong-only-as-much-power"],
+      "linkSentenceTemplate": "Mrs. Kehoe's warning delivers the community's complicity in the friendly register of practical advice, an angle [Text B] approaches through..."
+    },
+    {
+      "id": "km-walking-sarah-home",
+      "title": "Walking Sarah Redmond home through the town",
+      "location": "Christmas Eve night, from the convent through New Ross to Furlong's door",
+      "whatHappens": "Furlong returns to the convent after dark, opens the coal shed, and walks Sarah Redmond out, his coat around her, through the lit Christmas streets, past the crib, past Norma calling his name from outside a pub, up Chapel Lane, to his own front door. They step inside as the family's voices continue from the kitchen. The closing image is Furlong washing his hands in the bathroom while Sarah waits in the hallway.",
+      "whyItMatters": "The climax and resolution in a single sustained walk. The novel does not stage Eileen's reaction, the parish's response, the cost. It ends on the act, knowing the cost is real and unmeasured. The hand-washing closes the loop with the eight-year-old boy in the cow shed.",
+      "modeDeployment": {
+        "CC": "The act crosses the cultural context's boundary between his street and the convent's street. The town watches.",
+        "GVV": "The hopeful register of the vision is earned at this point. It is qualified hope, not unmixed hope; the novel ends before the bill arrives.",
+        "LG": "Closing image as structural rhyme. The carbolic-soap hand-washing of the early chapters returns to close the novel.",
+        "TI": "Conscience and the cost of right action. Both are present in the closing image without either being narrated."
+      },
+      "anchorQuoteIds": ["q-furlong-come-on-sarah", "q-furlong-not-long-now-almost-home"],
+      "linkSentenceTemplate": "The closing walk in Small Things Like These delivers the moral climax as sustained quiet action rather than declaration, where [Text B]'s climax..."
+    }
+  ],
+
+  "characters": [
+    {
+      "id": "char-bill-furlong",
+      "name": "Bill Furlong",
+      "role": "Protagonist. A coal and timber merchant in his early forties, husband of Eileen, father of five daughters, the illegitimate son of a domestic servant raised by her Protestant employer. The character whose moral interior the novel inhabits.",
+      "socialPosition": "Self-made small-business owner in a town with few. Materially secure, socially exposed. Close enough to the bottom of the local hierarchy to remember it; far enough up to have things the convent can take from him.",
+      "mindset": "Quiet, attentive, increasingly unsettled. He notices what others do not. He has trained himself to control hurt by physical means (the carbolic-soap hand-washing) and the novel's interior plot is his learning to recognise that the training has held something off he can no longer hold off.",
+      "contradictions": "He thinks of himself as ordinary and is the only person in the novel who acts. He has trained himself for restraint and ends the novel performing the most exposing act of his life. He invokes Mrs. Wilson's care of his mother as the precedent for action and only at the climax recognises that Ned, who taught him to hide his hurt in cold water, is probably his father.",
+      "arc": "Restraint, attention, refusal, second refusal, discovery, return, rescue. Eight chapters of held breath and a final exhale.",
+      "keyRelationshipIds": ["rel-bill-eileen", "rel-bill-sarah-mother", "rel-bill-mrs-wilson", "rel-bill-ned", "rel-bill-sarah-redmond"],
+      "keyQuoteIds": ["q-furlong-real-santa", "q-furlong-might-be-trying", "q-furlong-have-you-never-questioned", "q-furlong-but-what-if-one-of-ours", "q-furlong-where-would-mother-have-gone", "q-furlong-mothers-name-no-harm", "q-furlong-only-as-much-power", "q-furlong-come-on-sarah", "q-furlong-not-long-now-almost-home"]
+    },
+    {
+      "id": "char-eileen-furlong",
+      "name": "Eileen Furlong",
+      "role": "Furlong's wife. Mother of their five daughters. Manager of the household's small economic margin. The character who articulates, in the bedroom argument, the community's position with full force.",
+      "socialPosition": "Wife of a self-made merchant in a small town. Her attention is on the household's solvency, the daughters' education, and the family's standing. Pragmatic, not malicious.",
+      "mindset": "Watchful, capable, protective of what they have. Her loyalty is to her daughters' future before any other claim. She is not unfeeling; she is calibrated.",
+      "contradictions": "She delivers the novel's most quoted line of complicity ('If you want to get on in life, there are things you have to ignore') and apologises within seconds for one accidental cruelty in the same conversation. She is at once the conscience the novel argues against and a woman the novel refuses to caricature.",
+      "arc": "Largely held. Eileen does not change; she is the constant against which Furlong's change is registered. The closing image leaves her offstage, with her future reaction unstated.",
+      "keyRelationshipIds": ["rel-bill-eileen"],
+      "keyQuoteIds": ["q-eileen-if-you-want-to-get-on", "q-eileen-they-are-not-ours", "q-eileen-far-from-hardship", "q-eileen-soft-hearted", "q-eileen-warm-and-fed-trade", "q-eileen-his-dad-will-only-drink"]
+    },
+    {
+      "id": "char-sarah-redmond",
+      "name": "Sarah Redmond",
+      "role": "The pregnant teenage girl Furlong sees brought to the convent and later finds locked in the coal shed. The figure whose name the novel withholds for half its length and gives to Furlong in the kitchen at the end.",
+      "socialPosition": "From Ardboe. Rejected by her father. Currently held at the Good Shepherd with no public legal accounting. Pregnant, due in three months according to what she has been told.",
+      "mindset": "Disoriented, frightened, indoctrinated. She has been told her child will go to a good home and reports the line as if she believes it. She speaks little. Her name, when given, is the same as Furlong's mother's.",
+      "contradictions": "She delivers the rescue plea (in the Hall) and the institutional script (in Sr. Mary's office) within twenty pages of each other. The novel does not let the reader pretend she is unbroken; she is partly broken and asks for help anyway.",
+      "arc": "Glimpsed (dragged in), seen (the Hall), found (the shed), interrogated (Sr. Mary's office), retrieved (the closing walk). The arc is delivered through what is done to her until the closing.",
+      "keyRelationshipIds": ["rel-bill-sarah-redmond"],
+      "keyQuoteIds": ["q-sarah-redmond-take-me-to-the-river", "q-sarah-redmond-take-me-home", "q-sarah-redmond-day-or-night", "q-sarah-redmond-baby-here", "q-sarah-redmond-good-home", "q-sarah-redmond-daddy-didnt-want-me-home"]
+    },
+    {
+      "id": "char-sarah-furlong",
+      "name": "Sarah Furlong (Bill's mother)",
+      "role": "Furlong's mother. A young domestic servant who became pregnant outside marriage, was kept in employment by Mrs. Wilson, raised her son in the big house, and died young when she collapsed in the yard.",
+      "socialPosition": "Pregnant unmarried domestic servant in 1950s/60s rural Ireland. The exact social position the laundries were designed to absorb. She did not enter one because Mrs. Wilson did not require her to.",
+      "mindset": "Largely absent. Furlong remembers her mostly through the small things she did and through the absence after she died. The novel resists giving her a fully filled-in interior; she is the parallel rather than the character.",
+      "contradictions": "The novel's most important silence. Her name is not spoken aloud often, but the novel's whole argument is built on her: the protagonist is alive and prosperous because someone refused the cultural context's normal solution to her situation.",
+      "arc": "Pre-novel. Her arc is presented as memory and as the parallel that gives Furlong his moral grammar.",
+      "keyRelationshipIds": ["rel-bill-sarah-mother", "rel-sarah-mrs-wilson", "rel-sarah-ned"],
+      "keyQuoteIds": []
+    },
+    {
+      "id": "char-mrs-wilson",
+      "name": "Mrs. Wilson",
+      "role": "The Protestant landowner who employed Furlong's mother and, when she became pregnant, kept her on rather than turning her out. The character whose offstage decency makes Furlong's existence possible.",
+      "socialPosition": "Wealthy, widowed, Protestant, landowning. As Eileen later notes pointedly, Mrs. Wilson was 'one of the few women who could do as she pleased', a phrasing the novel does not retract.",
+      "mindset": "Patient, undramatic, attentive in small things (reading aloud with the boy, encouraging him toward Dickens, telling him not to listen to bullies). Her kindness is presented as habitual rather than spectacular.",
+      "contradictions": "The novel resists making her either a pure heroine or a problematic one. Her class privilege is what allows her kindness; her kindness is what saves Furlong's mother and Furlong himself. Both readings are true.",
+      "arc": "Steady through the flashbacks. She dies offstage, ten years before the novel's present. Her function is not to develop but to sit at the moral root of Furlong's life.",
+      "keyRelationshipIds": ["rel-bill-mrs-wilson", "rel-sarah-mrs-wilson"],
+      "keyQuoteIds": ["q-mrs-wilson-dont-be-listening"]
+    },
+    {
+      "id": "char-ned",
+      "name": "Ned",
+      "role": "The man who works the farm at Mrs. Wilson's. The character who mentors the young Furlong and, in the novel's late revelation, is most likely his biological father.",
+      "socialPosition": "Hired farm labourer for most of his working life. Has lived at Mrs. Wilson's farm for fifty-plus years; remained after her death; close to the family that has bought the land.",
+      "mindset": "Plain, quiet, capable of small kindnesses. Like Furlong, attentive to others' hurt without being able to articulate his own.",
+      "contradictions": "The closing-act revelation reframes the entire flashback architecture. The man who could not comfort Sarah Furlong on screen, who turned away awkwardly, was likely Bill's father all along. The novel does not pronounce on this; it lets Furlong arrive at it in the barber's mirror.",
+      "arc": "Mentor in flashback, friend in middle age, recognised (silently, by Furlong) at the climax. Static in his own register; the arc happens in Furlong's perception of him.",
+      "keyRelationshipIds": ["rel-bill-ned", "rel-sarah-ned"],
+      "keyQuoteIds": ["q-ned-time-is-terrible", "q-ned-no-need-digging", "q-ned-treated-you-like-her-own"]
+    },
+    {
+      "id": "char-sr-mary",
+      "name": "Sr. Mary",
+      "role": "Mother Superior of the Good Shepherd Convent. The institutional voice. The character who runs the office in which Furlong is bribed and threatened in the same scene.",
+      "socialPosition": "Highest local authority of the convent and laundry. Connected to the local councillor, the parish priest, the school. The institution itself, in human form.",
+      "mindset": "Composed, polite, calculating. She does not raise her voice, lose her temper, or break her register. The threats are delivered in the same tone as the offers of fruitcake.",
+      "contradictions": "The novel does not give her a private register. She is the institution speaking; her interiority is not presented because it is not the point. The book's restraint here is part of its political argument.",
+      "arc": "Static. She does not develop; she manages.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-sr-mary-disappointing-no-boy", "q-sr-mary-not-in-any-trouble"]
+    },
+    {
+      "id": "char-mrs-kehoe",
+      "name": "Mrs. Kehoe",
+      "role": "Owner of the pub Furlong frequents. The character who delivers the community's warning to him on Christmas Eve, friend to friend, in the back room of her premises.",
+      "socialPosition": "Self-made publican in the same town. Same generation and class as Furlong, with comparable economic exposure to the convent's reach.",
+      "mindset": "Practical, capable, fond of Furlong, candid. Her warning is not malicious; it is delivered as advice from someone who likes him.",
+      "contradictions": "She names the institution's reach precisely while operating inside it. The novel uses her to show that complicity in this town is not ignorance but informed compromise. She knows exactly what she is asking him to do.",
+      "arc": "Largely static. She is a steady community voice across the novel; the warning scene is her one extended moment.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-mrs-kehoe-break-the-boy", "q-mrs-kehoe-bad-dog-good-dog", "q-mrs-kehoe-finger-in-every-pie", "q-mrs-kehoe-deny-younger-ones-education"]
+    },
+    {
+      "id": "char-sr-carmel",
+      "name": "Sr. Carmel",
+      "role": "The nun who manages the convent's outward face. Choir director at the school next door. The figure who finds Furlong inside the building and removes him.",
+      "socialPosition": "Junior to Sr. Mary in convent hierarchy, senior to the working nuns. Her authority is operational rather than strategic.",
+      "mindset": "Sharp, watchful, hostile to incursion. Her register is colder than Sr. Mary's; she does the institution's enforcement at ground level.",
+      "contradictions": "The choir director is also the corridor enforcer. The novel uses the same character to deliver Christmas music in public and to police the building in private; the two roles are not in tension within the institution's logic.",
+      "arc": "Static. Her function is to be the institution's face when Furlong tries to look inside it.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-sr-mary-walking-in-and-out"]
+    }
+  ],
+
+  "relationships": [
+    {
+      "id": "rel-bill-eileen",
+      "characterAId": "char-bill-furlong",
+      "characterBId": "char-eileen-furlong",
+      "type": "romantic",
+      "startStatus": "Settled marriage, working partnership, mutual respect, real affection. Eileen leans on Furlong's shoulder while their daughters work on a school map; he calls her his.",
+      "endStatus": "Unresolved at the curtain. Furlong walks Sarah Redmond into the house without consulting Eileen. The novel ends before her reaction.",
+      "trajectory": "The novel's central marriage is presented as functional, real, and largely loving. The bedroom argument tests it. Eileen's apology for the line about Furlong's upbringing is offered and accepted; the disagreement is not. From the morning after the argument to the closing walk, husband and wife are quietly out of step. The closing image (Furlong in the bathroom, Sarah in the hall, the family's voices through the partly opened kitchen door) places the marriage on the threshold of a confrontation the novel deliberately does not stage.",
+      "keyMomentIds": ["km-bedroom-argument", "km-walking-sarah-home"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    },
+    {
+      "id": "rel-bill-sarah-redmond",
+      "characterAId": "char-bill-furlong",
+      "characterBId": "char-sarah-redmond",
+      "type": "antagonistic",
+      "startStatus": "Strangers. Furlong sees her dragged into the convent by her mother and exits the courtyard without acting.",
+      "endStatus": "Furlong walks her into his own house. He does not yet know how he will explain it; he does it anyway.",
+      "trajectory": "The relationship is delivered in five short scenes. Furlong sees her arrival; refuses her plea in the Hall; finds her in the coal shed; sits next to her at Sr. Mary's interrogation while she repeats the prepared lie; and returns at night to take her out. The arc is Furlong's, not hers. The relationship asks what kind of relationship is established when the only thing one party can offer is rescue.",
+      "keyMomentIds": ["km-girl-dragged-to-convent", "km-girl-in-the-hall", "km-coal-shed-discovery", "km-tea-with-sr-mary", "km-walking-sarah-home"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    },
+    {
+      "id": "rel-bill-sarah-mother",
+      "characterAId": "char-bill-furlong",
+      "characterBId": "char-sarah-furlong",
+      "type": "family",
+      "startStatus": "Childhood with a mother who died young. The relationship is mostly memory.",
+      "endStatus": "Furlong visiting her grave on Christmas morning; the headstone reads 'Sarah Furlong, God Bless This Girl'.",
+      "trajectory": "The relationship is the novel's hidden architecture. Furlong's memories of his mother are sparse and protective; the novel does not produce a sentimental backstory. What it does produce is parallel: his mother and Sarah Redmond share a name, a situation, and a cultural context. The relationship between Furlong and his dead mother is the relationship the novel uses to make him capable of acting.",
+      "keyMomentIds": ["km-walking-sarah-home"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    },
+    {
+      "id": "rel-bill-mrs-wilson",
+      "characterAId": "char-bill-furlong",
+      "characterBId": "char-mrs-wilson",
+      "type": "mentor_mentee",
+      "startStatus": "Mistress and child of her servant. After his mother dies, she takes him in, gives him a room, encourages his reading, and treats him, as Ned puts it, like her own.",
+      "endStatus": "Mrs. Wilson dead ten years before the novel's present. Furlong's gratitude carries him through the bedroom argument with Eileen.",
+      "trajectory": "The relationship is delivered through flashback and through Furlong's invocations of it. It is also the relationship Eileen objects to most directly in the bedroom argument: Mrs. Wilson, Eileen says, was wealthy enough to do as she pleased. The relationship is the model Furlong wants to imitate and the privilege Eileen says he cannot afford to.",
+      "keyMomentIds": ["km-bedroom-argument"],
+      "modeRelevance": ["CC", "TI", "GVV"]
+    },
+    {
+      "id": "rel-bill-ned",
+      "characterAId": "char-bill-furlong",
+      "characterBId": "char-ned",
+      "type": "family",
+      "startStatus": "Apparently mentor and child. Ned plays football with the boy, makes him hot milk, walks the cows in with him.",
+      "endStatus": "Recognised, silently, in a barber's mirror as probable father. The novel does not stage a confession.",
+      "trajectory": "The relationship is delivered as a friendship that the novel slowly rearranges into a paternity. The barber's mirror epiphany is built from accumulated detail (Ned's awkwardness with Sarah, the kiss the boy sees through the window, Ned's evasion when Furlong asks him about his father in the summer kitchen). Once Furlong realises it, the relationship is also the model for his own conduct: the man who quietly protected what he cannot publicly claim becomes the precedent for the man who quietly rescues what he is told is not his to rescue.",
+      "keyMomentIds": ["km-bedroom-argument", "km-mrs-kehoe-warning", "km-walking-sarah-home"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    },
+    {
+      "id": "rel-sarah-mrs-wilson",
+      "characterAId": "char-sarah-furlong",
+      "characterBId": "char-mrs-wilson",
+      "type": "professional",
+      "startStatus": "Servant and mistress. The conventional relationship of class.",
+      "endStatus": "Sarah dies in Mrs. Wilson's yard. Mrs. Wilson is the first to reach her body.",
+      "trajectory": "The relationship the novel keeps coming back to as its hidden moral precedent. A wealthy Protestant landowner and her pregnant Catholic servant girl, in a country and a period in which the standard outcome would have been the laundry. The relationship is delivered almost entirely through Ned's testimony in the summer kitchen and through Furlong's invocations.",
+      "keyMomentIds": ["km-bedroom-argument"],
+      "modeRelevance": ["CC", "TI", "GVV"]
+    }
+  ],
+
+  "culturalContext": {
+    "socialClass": {
+      "applies": "yes",
+      "summary": "Small Things Like These is set in New Ross in 1984, a town of small businesses, working farms, and visible poverty (boarded-up shops, the recession on the news). Furlong's coal yard is profitable but exposed. The convent is the largest institutional employer and landlord in his immediate orbit. The novel measures class precisely: the firewood boy two levels below Furlong, Furlong two levels below Mrs. Wilson, Mrs. Wilson herself a Protestant landowner whose social position is what allowed her to keep his mother on. The cultural context's class structure is not abstract; it is the set of margins on which actions like Mrs. Wilson's and Furlong's are economically possible.",
+      "anchorMomentIds": ["km-firewood-boy", "km-bedroom-argument", "km-mrs-kehoe-warning"],
+      "anchorQuoteIds": ["q-eileen-far-from-hardship", "q-eileen-his-dad-will-only-drink", "q-furlong-where-would-mother-have-gone"],
+      "argumentHook": "Class in Small Things Like These is the precise margin between being able to act and being unable to, and the novel measures it scene by scene."
+    },
+    "gender": {
+      "applies": "yes",
+      "summary": "The novel's gender argument runs along two parallel lines a generation apart. Furlong's mother, an unmarried pregnant young woman in a rural community, was the exact target of the laundry system. She was spared by her employer's atypical decision. Sarah Redmond, an unmarried pregnant young woman in the same community a generation later, has not been spared. The Magdalene Laundry of the Good Shepherd is operated, principally, by women on women, while the men of the town drive the cars, sit waiting outside, and do not look in.",
+      "anchorMomentIds": ["km-girl-dragged-to-convent", "km-girl-in-the-hall", "km-coal-shed-discovery"],
+      "anchorQuoteIds": ["q-sarah-redmond-baby-here", "q-sarah-redmond-good-home", "q-sarah-redmond-daddy-didnt-want-me-home", "q-sr-mary-disappointing-no-boy"],
+      "argumentHook": "Gender in Small Things Like These is dramatised through two unmarried pregnant women a generation apart, one spared by class accident, the other not."
+    },
+    "religion": {
+      "applies": "yes",
+      "summary": "The novel's setting (Ireland in 1984) places the Catholic Church at the centre of the cultural context's authority structure. The Good Shepherd Convent, the parish priest's house, the chapel choir at St. Margaret's, the Mass scenes all share the same overhead. The novel does not preach; it shows the institution's reach in operational detail (the school next door, the laundry contracts with the hotels, the friendship between the Mother Superior and the local councillor). The Church-State arrangement of the period is the cultural context's spine and the novel renders it with restraint rather than denunciation.",
+      "anchorMomentIds": ["km-tea-with-sr-mary", "km-mrs-kehoe-warning"],
+      "anchorQuoteIds": ["q-sr-mary-not-in-any-trouble", "q-mrs-kehoe-finger-in-every-pie", "q-eileen-warm-and-fed-trade"],
+      "argumentHook": "Religion in this cultural context is the operational spine of the town's authority, woven into education, charity, employment and family in a way the novel renders by detail rather than denunciation."
+    },
+    "familyAndMarriage": {
+      "applies": "yes",
+      "summary": "The novel works marriage and family at three registers. The Furlongs' marriage is the central one: a real, working partnership tested by the bedroom argument. Sarah Redmond's family supplies her to the convent; her father refuses to take her back. Furlong's own family was unconventional; his mother was unmarried, his father unknown, his upbringing performed by a Protestant landowner and a farm labourer who probably was his father. The novel's family argument is that the cultural context's official family-and-marriage structure is the very mechanism by which young women become available to the laundries.",
+      "anchorMomentIds": ["km-bedroom-argument", "km-coal-shed-discovery"],
+      "anchorQuoteIds": ["q-eileen-they-are-not-ours", "q-furlong-but-what-if-one-of-ours", "q-sarah-redmond-daddy-didnt-want-me-home"],
+      "argumentHook": "Family and marriage in this cultural context are the system that supplies young women to institutions like the Good Shepherd, and the novel works that mechanism through three families simultaneously."
+    },
+    "authorityAndPower": {
+      "applies": "yes",
+      "summary": "Authority in the novel is concentrated in the convent and dispersed through the community. Sr. Mary holds direct authority; Mrs. Kehoe holds derivative authority as the friend who delivers the warning; Eileen holds household authority as the wife who articulates the cost of action. There is no formal authority in the novel that intervenes against the convent: the parish priest stands on the same stage as the local councillor at the Christmas-tree lighting; the gardai are mentioned only as the people the convent might call. Furlong's act is presented as private because the cultural context offers no public mechanism for it.",
+      "anchorMomentIds": ["km-tea-with-sr-mary", "km-mrs-kehoe-warning", "km-walking-sarah-home"],
+      "anchorQuoteIds": ["q-mrs-kehoe-bad-dog-good-dog", "q-furlong-only-as-much-power", "q-sr-mary-walking-in-and-out"],
+      "argumentHook": "Authority in this cultural context is uncontestable through formal institutions and contested only by individual action, and the novel measures the weight of the contest through the price of one act of refusal."
+    }
+  },
+
+  "generalVisionAndViewpoint": {
+    "oneLineVision": "Small Things Like These offers a cautiously hopeful vision: the Church-State complicity of 1980s Ireland is rendered without softening, but the novel finds, in one ordinary man's small act, a residual moral capacity that the system has not extinguished.",
+    "openingShapesVision": "The vision is set up by attentiveness rather than alarm. Furlong's deliveries, his daughters' map of Ireland's rivers, the firewood boy on the road, the cup of milk left for the cat. The opening insists that the world is full of small visible things and that paying attention to them is itself a moral position before any larger action becomes thinkable.",
+    "climaxShapesVision": "The bedroom argument with Eileen is the vision's bleakest moment. Both arguments are clear; both have weight; the novel refuses the consolation of a villain in the marriage. From this scene the vision could resolve in either direction and the novel sustains the suspension for fifty pages before tipping it.",
+    "closingShapesVision": "The closing recovers a register of qualified hope. Furlong walks Sarah Redmond up the hill, knowing what it will cost him, not yet knowing how it will play out. The novel ends on the hand-washing, an image rhyming with his eight-year-old self plunging his arms into iced water. Hope is delivered as the conscious replacement of one private rite by another.",
+    "ambiguity": "The vision is qualified throughout. Eileen is not wrong about the cost; Mrs. Kehoe is not wrong about the convent's reach; Sr. Mary's threats are real and carry their full weight. The novel does not pretend Furlong's act will rescue Sarah from her circumstances or from the institutional response. What it claims is narrower: that one ordinary man can, in a specific moment, refuse the cultural context's instruction. The hopefulness is local, costly, and uncertain in its consequences.",
+    "anchorMomentIds": ["km-firewood-boy", "km-bedroom-argument", "km-tea-with-sr-mary", "km-walking-sarah-home"]
+  },
+
+  "literaryGenre": {
+    "toolkit": "novel",
+    "elements": [
+      {
+        "name": "Spare close third-person prose",
+        "description": "Keegan's prose stays close to Furlong's perception while remaining outside his thought. The reader sees what he sees, learns what he learns, and is permitted to draw conclusions Furlong has not yet voiced. The technique is the engine of the novel's restraint: significant moments arrive without being signposted as significant.",
+        "anchorMomentIds": ["km-firewood-boy", "km-coal-shed-discovery"],
+        "keyExample": "The firewood-boy scene gives the reader the boy's appearance and the coins exchanged; the moral weight is carried by the description, not by any narrator's commentary."
+      },
+      {
+        "name": "Symbolic objects: coal, water, hands, soap",
+        "description": "The novel's central symbol set is Furlong's own working life. Coal blackens his hands; he washes them with carbolic soap and a nailbrush every evening; the closing image returns to that ritual. The symbol is not decorative; it is the structural rhyme between the eight-year-old who plunged his arms into iced water to hide his hurt and the man who stands in the bathroom on Christmas Eve.",
+        "anchorMomentIds": ["km-walking-sarah-home"],
+        "keyExample": "The closing image of Furlong washing his hands while Sarah waits in the hallway closes a loop that began in chapter one."
+      },
+      {
+        "name": "Memory as narrative substrate",
+        "description": "Flashbacks to Furlong's childhood at Mrs. Wilson's are woven through the present-day deliveries. The structure is not framed as an analeptic break; the past arrives whenever the present touches it. This is how the novel performs Furlong's interior life without narrating it directly: his memory does the work his thought refuses.",
+        "anchorMomentIds": ["km-firewood-boy", "km-bedroom-argument", "km-mrs-kehoe-warning"],
+        "keyExample": "The barber's mirror scene on Christmas Eve, in which Furlong arrives at the recognition that Ned is probably his father, is composed entirely of layered memory."
+      },
+      {
+        "name": "Restrained dialogue",
+        "description": "Significant exchanges are short and clean. Eileen does not deliver a speech; she says one or two lines that contain the community's full position. Sr. Mary does not threaten in plain language; she names Furlong's daughters and serves cake. Keegan trusts the reader with the implication.",
+        "anchorMomentIds": ["km-bedroom-argument", "km-tea-with-sr-mary", "km-mrs-kehoe-warning"],
+        "keyExample": "Sr. Mary's 'It must be a little disappointing all the same?' is a complete threat in nine words."
+      },
+      {
+        "name": "Setting as moral pressure",
+        "description": "New Ross at Christmas 1984 is rendered with specific local detail (the bridge, Quay Street, Chapel Lane, the river). The setting is not local colour; it is the cultural context made concrete. The town is small enough that the convent and the school share a wall and Furlong's daughters are visibly inside that geography.",
+        "anchorMomentIds": ["km-mrs-kehoe-warning", "km-walking-sarah-home"],
+        "keyExample": "The closing walk through lit Christmas streets up Chapel Lane to Furlong's door takes the moral act through the town's specific geography in real time."
+      },
+      {
+        "name": "Withheld endings",
+        "description": "The novel ends on the act, not on the consequence. Eileen is not seen reacting; the parish is not heard responding; the convent's retaliation is implied but not staged. Keegan refuses the consolation of resolution. The reader is held inside the threshold the novel has produced.",
+        "anchorMomentIds": ["km-walking-sarah-home"],
+        "keyExample": "The final image is Sarah waiting in the hallway and Furlong washing his hands. The kitchen door is partly open. The novel ends there."
+      },
+      {
+        "name": "The novella's compression",
+        "description": "Small Things Like These is short by design. The compression is not a length choice; it is part of the moral argument. The novel's work happens inside small moments and small spaces because the vision it carries is that small things matter and that systems are built of them.",
+        "anchorMomentIds": [],
+        "keyExample": "The total span of the present-day plot is the working week before Christmas. Inside that span, the entire moral arc is developed."
+      }
+    ]
+  },
+
+  "themeOrIssue": {
+    "primaryThemes": [
+      {
+        "name": "Conscience and complicity",
+        "summary": "The novel's central theme. Furlong sees, refuses, sees again, refuses again, sees a third time, and acts. Eileen, Mrs. Kehoe, the husband in the car outside the convent, and the parish priest at the Christmas-tree lighting are all studies in the various modes of looking past. The theme is not whether the laundries are wrong (the novel takes that as given); the theme is the slow private work by which one ordinary man stops looking past.",
+        "pivotalMomentIds": ["km-girl-in-the-hall", "km-bedroom-argument", "km-tea-with-sr-mary", "km-walking-sarah-home"],
+        "contradictoryAspect": "Conscience in the novel is not opposed to ordinary good lives. Eileen is a good wife and mother and her argument has weight. Mrs. Kehoe is a friend and her warning is sincere. The novel insists that complicity wears the dress of practical decency and that recognising it requires effort that the merely-decent rarely supply."
+      },
+      {
+        "name": "Inheritance and parallel lives",
+        "summary": "Furlong's mother and Sarah Redmond share a name (in the screenplay; the novel uses 'Sarah' for both as well), a situation, and a cultural context. The novel's plot is the moment Furlong recognises the parallel and acts on the recognition. The theme extends to Ned: the man who almost certainly fathered Furlong and never claimed him is the man whose example of unspoken care Furlong silently inherits.",
+        "pivotalMomentIds": ["km-bedroom-argument", "km-coal-shed-discovery", "km-walking-sarah-home"],
+        "contradictoryAspect": "The parallel is also a comfort and a danger. Furlong wants to act because his mother was helped; he is also exposed to the suggestion (which Eileen makes) that his case was an accident of class privilege not available to most. The novel holds both readings."
+      },
+      {
+        "name": "Small acts and the title",
+        "summary": "The title is a working philosophy. The novel insists that what matters morally is the texture of small recurring choices: the coin to the firewood boy, the kindness of Mrs. Kehoe's friendly warning, the cup of tea Sr. Mary uses as a stage for her threats, the carbolic soap in the bathroom. The climactic act of rescue is a large action, but the novel argues it was made possible by a thousand small ones (Mrs. Wilson's care, Ned's silent presence, Furlong's own habits of attention).",
+        "pivotalMomentIds": ["km-firewood-boy", "km-walking-sarah-home"],
+        "contradictoryAspect": "The theme also names its own opposite. Small acts of complicity (looking past, ignoring, telling the children not to mind) build the system the novel critiques. Small things matter both ways. The novel does not pretend the smallness is decorative."
+      },
+      {
+        "name": "Class, religion, and the institutional Church-State",
+        "summary": "The Magdalene Laundry of the Good Shepherd is the novel's instance, not its subject. The subject is the working arrangement in 1980s Ireland by which family, church, school, business, and community combined to produce and maintain such institutions. The novel renders the arrangement through ordinary detail (the wall between the school and the laundry, the contracts with hotels, the cosy office of the Mother Superior, the parish priest beside the local councillor on the Christmas stage).",
+        "pivotalMomentIds": ["km-girl-dragged-to-convent", "km-tea-with-sr-mary", "km-mrs-kehoe-warning"],
+        "contradictoryAspect": "The institution's victims and beneficiaries share the same town, the same Mass, the same school. There is no clean outside from which the novel could critique safely. Mrs. Kehoe, who delivers the warning, is also a friend; Eileen, who articulates complicity, is also a loving wife."
+      },
+      {
+        "name": "The cost of doing right",
+        "summary": "Whatever the novel's hope, it is delivered at known cost. Furlong's rescue of Sarah Redmond will be community knowledge by midday on Christmas. The convent's reach extends to his daughters' future schooling. Eileen's reaction is unstaged but it is unlikely to be untroubled. The novel does not pretend conscience is cheap; it argues that the cost is what makes the act mean what it means.",
+        "pivotalMomentIds": ["km-mrs-kehoe-warning", "km-walking-sarah-home"],
+        "contradictoryAspect": "The cost is also the system's principal mechanism. People do not act because acting is expensive. The novel does not romanticise this; Mrs. Kehoe is right that the daughters could pay. Whether Furlong's act will protect Sarah Redmond from the institution's response is also not clear. The novel ends inside the uncertainty."
+      }
+    ]
+  },
+
+  "examinerPitfalls": [
+    "Reducing the novel to 'a book about the Magdalene Laundries'. The laundries are the setting of the moral argument, not its subject. The subject is conscience and complicity in a specific Irish cultural context.",
+    "Treating Eileen as the antagonist. She is not. She is the voice of the community's pragmatic argument, delivered with sincerity, and the novel respects that argument. Reducing her to villainy misses the moral weight of the bedroom scene.",
+    "Underrating Furlong's complicity arc. Furlong refuses Sarah Redmond once in the Hall ('It's not up to me'), refuses Eileen's question once at home, and accepts the envelope and threats from Sr. Mary in silence. He arrives at the rescue through his own failures, not in spite of them.",
+    "Treating the Ned-as-father plot as confirmed fact. The novel delivers it as Furlong's recognition in the barber's mirror, not as authorial confirmation. Strong answers register the recognition's weight without claiming it as proven.",
+    "Romanticising the closing image. Furlong has put his family at risk and the novel does not pretend otherwise. Mrs. Kehoe's warning is real. The closing rhyme with the eight-year-old in the cow shed is hopeful and exposed at once.",
+    "Forgetting the parallel between Furlong's mother and Sarah Redmond. The novel's structure is built on this parallel; Cultural Context and Theme or Issue answers that ignore it leave the strongest evidence on the table.",
+    "Confusing the novel with the 2024 film. The film by Tim Mielants and Enda Walsh is faithful, but quote-precision in an exam answer requires the novel's text. Students should cite Keegan's prose, not Walsh's screenplay."
+  ],
+
+  "status": "draft",
+  "schemaVersion": 1,
+  "lastReviewedAt": null
+}

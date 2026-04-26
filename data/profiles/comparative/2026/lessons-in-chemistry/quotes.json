@@ -1,0 +1,386 @@
+{
+  "textId": "lessons-in-chemistry",
+  "schemaVersion": 1,
+  "quotes": [
+    {
+      "id": "q-life-was-over",
+      "text": "the thirty-year-old mother of Madeline Zott rose before dawn every morning and felt certain of just one thing: her life was over.",
+      "speaker": "narrator",
+      "location": "Chapter 1: November 1961",
+      "context": "The novel's opening, framing Elizabeth's daily life as a kind of perpetual aftermath. The narrator's wry register sets the comic-tragic tone of the whole book.",
+      "themeTags": ["grief", "narrative-voice", "motherhood", "framing"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Elizabeth Zott"]
+    },
+    {
+      "id": "q-fuel-for-learning",
+      "text": "Fuel for learning",
+      "speaker": "Elizabeth Zott (lunch box note)",
+      "location": "Chapter 1: November 1961",
+      "context": "The first of Elizabeth's daily lunch box notes to Madeline. Establishes the mother-daughter relationship and Elizabeth's pedagogical seriousness about her child.",
+      "themeTags": ["motherhood", "education", "small-acts"],
+      "modeTags": ["TI", "CC", "LG"],
+      "characterTags": ["Elizabeth Zott", "Madeline Zott"]
+    },
+    {
+      "id": "q-play-sports",
+      "text": "Play sports at recess but do not automatically let the boys win",
+      "speaker": "Elizabeth Zott (lunch box note)",
+      "location": "Chapter 1: November 1961",
+      "context": "Another of the opening lunch box notes. The mother's ethics distilled to a single instruction: do not perform feminine deference.",
+      "themeTags": ["gender", "self-determination", "mother-daughter"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Elizabeth Zott", "Madeline Zott"]
+    },
+    {
+      "id": "q-most-people-awful",
+      "text": "It is not your imagination. Most people are awful.",
+      "speaker": "Elizabeth Zott (lunch box note)",
+      "location": "Chapter 1: November 1961",
+      "context": "The third opening lunch box note, placed on top. The line that names the novel's social diagnosis as far as Elizabeth is concerned.",
+      "themeTags": ["social-critique", "mother-daughter", "honesty"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Elizabeth Zott", "Madeline Zott"]
+    },
+    {
+      "id": "q-children-set-table",
+      "text": "Children, set the table. Your mother needs a moment to herself.",
+      "speaker": "Elizabeth Zott",
+      "location": "Throughout, the closing line of every Supper at Six broadcast",
+      "context": "The signature sign-off Elizabeth uses at the end of every show. The line that, repeated nightly, becomes an explicit recognition of women's invisible labour.",
+      "themeTags": ["gender", "labour", "motherhood", "self-respect"],
+      "modeTags": ["TI", "CC", "LG"],
+      "characterTags": ["Elizabeth Zott"]
+    },
+    {
+      "id": "q-im-elizabeth-zott",
+      "text": "Hello, my name is Elizabeth Zott, and this is Supper at Six.",
+      "speaker": "Elizabeth Zott",
+      "location": "Throughout, the opening line of every Supper at Six broadcast",
+      "context": "The signature opening line. A formal self-naming that, in its insistence on her own name, contains the marriage-and-name battle she fought with Calvin.",
+      "themeTags": ["name", "self-determination", "performance"],
+      "modeTags": ["TI", "CC", "LG"],
+      "characterTags": ["Elizabeth Zott"]
+    },
+    {
+      "id": "q-cooking-is-chemistry",
+      "text": "Cooking is chemistry, Mr. Pine. They're not mutually exclusive.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 23: KCTV Studios",
+      "context": "Elizabeth's first phone call with Walter Pine about Supper at Six. The line that defines the show's argument and the novel's conceit.",
+      "themeTags": ["science", "domestic-labour", "education"],
+      "modeTags": ["LG", "TI", "CC"],
+      "characterTags": ["Elizabeth Zott", "Walter Pine"]
+    },
+    {
+      "id": "q-chemistry-is-change",
+      "text": "Cooking is chemistry. And chemistry is life. Your ability to change everything, including yourself, starts here.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 25: The Average Jane",
+      "context": "Elizabeth's pilot-episode rallying line, delivered to a studio audience after she has stripped the set bare of its sentimental knickknacks. The novel's most concentrated statement of its central argument.",
+      "themeTags": ["science", "self-determination", "change", "education"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Elizabeth Zott"]
+    },
+    {
+      "id": "q-courage-is-root",
+      "text": "Courage is the root of change, and change is what we're chemically designed to do.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 41: Recommit, the final broadcast",
+      "context": "Elizabeth's farewell speech as she resigns from Supper at Six. The line that summarises the show's project and the novel's argument.",
+      "themeTags": ["courage", "change", "self-determination"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Elizabeth Zott"]
+    },
+    {
+      "id": "q-design-future",
+      "text": "Do not allow your talents to lie dormant, ladies. Design your own future. When you go home today, ask yourself what you will change. And then get started.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 41: Recommit, the final broadcast",
+      "context": "The closing exhortation of Elizabeth's resignation speech. The novel's clearest articulation of its vision of female agency.",
+      "themeTags": ["self-determination", "agency", "courage", "change"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Elizabeth Zott"]
+    },
+    {
+      "id": "q-class-dismissed",
+      "text": "This concludes your introduction to chemistry. Class dismissed.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 41: Recommit, the final broadcast",
+      "context": "The final words of Elizabeth's last broadcast. The novel's signature closure: the show that pretended to be cooking is finally named for what it always was.",
+      "themeTags": ["education", "performance", "closure"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Elizabeth Zott"]
+    },
+    {
+      "id": "q-not-just-housewife",
+      "text": "There isn't a woman in the world who is just a housewife.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 29: Bonding",
+      "context": "Elizabeth's reply to Mrs. Fillis, a woman who has just described herself as 'just a housewife'. The line that triggers the novel's most public conversion: the housewife who admits she once dreamed of being a heart surgeon.",
+      "themeTags": ["gender", "labour", "agency"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Elizabeth Zott", "Mrs. Fillis"]
+    },
+    {
+      "id": "q-im-a-chemist",
+      "text": "I'm a chemist. Not a woman chemist. A chemist. A damn good one!",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 21: E.Z., the bathroom confrontation with Frask",
+      "context": "Elizabeth shouting through a bathroom stall at Frask. The line that names the gendered prefix she refuses to accept and that becomes the novel's running disagreement with her culture.",
+      "themeTags": ["gender", "professional-identity", "name"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Elizabeth Zott", "Frask"]
+    },
+    {
+      "id": "q-i-am-a-scientist",
+      "text": "I don't want to be a scientist. I am a scientist!",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 3: Hastings Research Institute",
+      "context": "Elizabeth's reply to a colleague who asks why she wants to be a scientist. The line that defines her relationship to her profession from the outset.",
+      "themeTags": ["professional-identity", "gender", "agency"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Elizabeth Zott"]
+    },
+    {
+      "id": "q-elizabeth-change-world",
+      "text": "Elizabeth Zott, you're going to change the world",
+      "speaker": "Calvin Evans (heard in his own head)",
+      "location": "Chapter 7: Six-Thirty",
+      "context": "Calvin's premonition as he watches Elizabeth walk home from the deli, a stray dog following her. The novel's first explicit prophecy of Elizabeth's later television career.",
+      "themeTags": ["love", "premonition", "agency"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Calvin Evans", "Elizabeth Zott", "Six-Thirty"]
+    },
+    {
+      "id": "q-its-six-thirty",
+      "text": "It's six thirty",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 7: Six-Thirty",
+      "context": "Elizabeth's reply when Calvin asks her the dog's name. He has just taken to following her home. The clock-time naming becomes the family's idiom: the creature is named for the moment they became kin.",
+      "themeTags": ["family", "naming", "love"],
+      "modeTags": ["TI", "LG"],
+      "characterTags": ["Elizabeth Zott", "Six-Thirty", "Calvin Evans"]
+    },
+    {
+      "id": "q-half-population-wasted",
+      "text": "The problem, Calvin, is that half the population is being wasted.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 3: Hastings Research Institute, the cafeteria",
+      "context": "Elizabeth's lecture to a baffled Calvin on why women cannot get the education they need. The line that names the novel's central social argument.",
+      "themeTags": ["gender", "education", "waste"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Elizabeth Zott", "Calvin Evans"]
+    },
+    {
+      "id": "q-want-to-be-eliz-zott",
+      "text": "I want to be Elizabeth Zott. It's important to me.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 6: The Hastings Cafeteria",
+      "context": "Elizabeth's reply when Calvin proposes marriage. The line that defines the novel's most consequential refusal: the surname battle that produces the novel's title-line refrain.",
+      "themeTags": ["name", "marriage", "self-determination"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Elizabeth Zott", "Calvin Evans"]
+    },
+    {
+      "id": "q-cultural-not-biological",
+      "text": "Men and women are both human beings. And as humans, we're by-products of our upbringings, victims of our lackluster educational systems, and choosers of our behaviors. In short, the reduction of women to something less than men, and the elevation of men to something more than women, is not biological: it's cultural.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 28: Saints",
+      "context": "Elizabeth's argument with Harriet about whether men and women are fundamentally different. The novel's most extended statement of its constructivist thesis.",
+      "themeTags": ["gender", "culture", "education"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Elizabeth Zott", "Harriet Sloane"]
+    },
+    {
+      "id": "q-pencils-regret",
+      "text": "Pencils. I regret not having more of them.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 3: Hastings Research Institute, after the Meyers attack",
+      "context": "Elizabeth's reply to the police officer who has asked her if she has 'any statement of regret' after she has stabbed her professor with a number-two pencil during his rape of her. The line names what the novel will not allow her to be made ashamed of.",
+      "themeTags": ["sexual-assault", "defiance", "self-defence"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Elizabeth Zott", "Dr. Meyers"]
+    },
+    {
+      "id": "q-violated-by-advisor",
+      "text": "Because I was sexually violated by my thesis advisor, then kicked out of the doctoral program.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 21: E.Z., the bathroom confrontation",
+      "context": "Elizabeth's first disclosure of the assault, shouted through a bathroom stall at Frask. The line that produces the novel's first solidarity, when Frask answers, 'Same.'",
+      "themeTags": ["sexual-assault", "education", "solidarity"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Elizabeth Zott", "Frask"]
+    },
+    {
+      "id": "q-frask-same",
+      "text": "Same.",
+      "speaker": "Frask",
+      "location": "Chapter 21: E.Z.",
+      "context": "Frask's one-word reply to Elizabeth's disclosure of sexual assault. The line that turns enemies into allies and that names the novel's understanding of what most women in this profession share.",
+      "themeTags": ["sexual-assault", "solidarity", "gender"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Frask", "Elizabeth Zott"]
+    },
+    {
+      "id": "q-take-moment-for-yourself",
+      "text": "Take a moment for yourself. Every day.",
+      "speaker": "Harriet Sloane",
+      "location": "Chapter 17: Harriet Sloane",
+      "context": "Harriet's parting advice to Elizabeth on the day they first meet, after Madeline's birth. The line that becomes the philosophical engine of Supper at Six and of Elizabeth's eventual departure from it.",
+      "themeTags": ["self-respect", "agency", "friendship"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Harriet Sloane", "Elizabeth Zott"]
+    },
+    {
+      "id": "q-recommit",
+      "text": "Then recommit.",
+      "speaker": "Harriet Sloane",
+      "location": "Chapter 17: Harriet Sloane",
+      "context": "The two-word completion of Harriet's parting advice. The verb that names what Elizabeth eventually does at the end of the novel.",
+      "themeTags": ["self-respect", "agency", "purpose"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Harriet Sloane", "Elizabeth Zott"]
+    },
+    {
+      "id": "q-hate-father-caps",
+      "text": "I HATE MY FATHER. I HOPE HE'S DEAD.",
+      "speaker": "Calvin Evans (in correspondence)",
+      "location": "Chapter 5: Family Values, recalled later",
+      "context": "Calvin's all-capitals reply to Wakely's question about his father, in their pen-pal correspondence. The line that ends their friendship and that names the grudge that will define his life.",
+      "themeTags": ["family", "grudge", "father"],
+      "modeTags": ["LG", "TI", "CC"],
+      "characterTags": ["Calvin Evans", "Wakely"]
+    },
+    {
+      "id": "q-soup-poison",
+      "text": "It's full of chemicals. Feed enough of it to your loved ones and they'll eventually die off, saving you tons of time since you won't have to feed them anymore.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 30: 99 Percent",
+      "context": "Elizabeth's broadcast reply to Walter's request that she promote a canned-soup sponsor. The line that produces the poison-mushroom episode and that triggers Lebensmal's heart attack the same evening.",
+      "themeTags": ["satire", "domestic-labour", "rebellion"],
+      "modeTags": ["LG", "TI", "CC"],
+      "characterTags": ["Elizabeth Zott", "Walter Pine"]
+    },
+    {
+      "id": "q-not-an-entertainer",
+      "text": "I'm not an entertainer. I'm a chemist.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 24: The Afternoon Depression Zone",
+      "context": "Elizabeth's reply to Walter when he tells her her job on TV is to entertain. The line that defines her permanent disagreement with the medium that nevertheless makes her famous.",
+      "themeTags": ["professional-identity", "performance", "media"],
+      "modeTags": ["TI", "LG", "CC"],
+      "characterTags": ["Elizabeth Zott", "Walter Pine"]
+    },
+    {
+      "id": "q-not-meant-tree",
+      "text": "Families aren't meant to fit on trees.",
+      "speaker": "Reverend Wakely",
+      "location": "Chapter 28: Saints, the library scene",
+      "context": "Wakely's reply to Madeline as she struggles with her school family-tree assignment. The line that names the novel's argument about chosen kinship.",
+      "themeTags": ["family", "kinship", "education"],
+      "modeTags": ["TI", "LG", "CC"],
+      "characterTags": ["Reverend Wakely", "Madeline Zott"]
+    },
+    {
+      "id": "q-faith-not-religion",
+      "text": "Faith isn't based on religion. Right?",
+      "speaker": "Madeline Zott",
+      "location": "Chapter 34: All Saints",
+      "context": "Madeline's correction to Wakely after he expresses surprise that she has used the word 'faith'. The line that names the novel's separation of belief and institution.",
+      "themeTags": ["faith", "religion", "secularism"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Madeline Zott", "Reverend Wakely"]
+    },
+    {
+      "id": "q-status-quo",
+      "text": "That's what we need more of, people who refuse to accept the status quo, who aren't afraid to take on the unacceptable.",
+      "speaker": "Reverend Wakely",
+      "location": "Chapter 40: Normal",
+      "context": "Wakely's reading of Elizabeth's character on the back step. The line that names the novel's vision of what a chemist's mind is for.",
+      "themeTags": ["change", "courage", "agency"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Reverend Wakely", "Elizabeth Zott"]
+    },
+    {
+      "id": "q-want-back-in",
+      "text": "It's not that you want out. It's that you want back in.",
+      "speaker": "Reverend Wakely",
+      "location": "Chapter 40: Normal",
+      "context": "Wakely's diagnosis of Elizabeth's grief on the back step, after she has admitted she sometimes wants out. The line that names what the novel's closing chapters will give her: a return to research.",
+      "themeTags": ["grief", "purpose", "return"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Reverend Wakely", "Elizabeth Zott"]
+    },
+    {
+      "id": "q-cunt",
+      "text": "She's a cunt.",
+      "speaker": "Dr. Donatti",
+      "location": "Chapter 3: Hastings Research Institute",
+      "context": "Donatti's word for Elizabeth, overheard by her in the lounge. The line that names the institutional contempt the novel will keep returning her to and that she will eventually inherit positional power over.",
+      "themeTags": ["misogyny", "workplace", "institutional-violence"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Dr. Donatti", "Elizabeth Zott"]
+    },
+    {
+      "id": "q-not-smart-enough",
+      "text": "Sorry, Donatti. You're just not smart enough.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 42: Personnel",
+      "context": "Elizabeth's reply, handing Donatti a pen, when she has been offered the directorship of Chemistry and asked whether to keep him on. The line that closes the novel's longest grudge.",
+      "themeTags": ["reversal", "workplace", "justice"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Elizabeth Zott", "Dr. Donatti"]
+    },
+    {
+      "id": "q-not-every-woman",
+      "text": "Not every woman wants to be a mother. More to the point, not every woman should be.",
+      "speaker": "Dr. Mason",
+      "location": "Chapter 15: Unsolicited Advice",
+      "context": "Dr. Mason's reply to Elizabeth at her first prenatal visit when she confesses she had not planned to be a mother. The line that names the novel's most honest statement about motherhood and that the novel's culture rarely permits a doctor to say aloud.",
+      "themeTags": ["motherhood", "choice", "honesty"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Dr. Mason", "Elizabeth Zott"]
+    },
+    {
+      "id": "q-im-calvin-mother",
+      "text": "I'm Calvin Evans's biological mother. And with your permission, Miss Zott, I'd very much like to meet my granddaughter.",
+      "speaker": "Avery Parker",
+      "location": "Chapter 43: Stillborn",
+      "context": "Avery's revelation in Calvin's old laboratory, after she has told Elizabeth the story of the unwed mothers home and the bishop's lie. The novel's reversal: the grudge-father turns out to be a grudge-mother who never gave him up.",
+      "themeTags": ["family", "reunion", "motherhood"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Avery Parker", "Elizabeth Zott", "Madeline Zott"]
+    },
+    {
+      "id": "q-the-acorn",
+      "text": "You're the acorn.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 44: The Acorn",
+      "context": "Elizabeth's reply to Avery Parker, naming her as the fairy-godmother acorn that Madeline put on her family tree. The line that closes the novel's family tree argument: family is what the child draws, not what the institution permits.",
+      "themeTags": ["family", "kinship", "reunion"],
+      "modeTags": ["TI", "LG", "GVV"],
+      "characterTags": ["Elizabeth Zott", "Avery Parker", "Madeline Zott"]
+    },
+    {
+      "id": "q-whole-family",
+      "text": "Let's say supper at six, then. The home lab. Everyone, you, Wilson, Mad, Six-Thirty, me, Harriet, Walter. You'll need to meet Wakely and Mason at some point, too. The whole family.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 44: The Acorn",
+      "context": "Elizabeth's invitation to Avery as she leaves Hastings. The line that closes the novel's family argument by naming a family that contains, deliberately, every kind of bond except the legal-biological one society prefers.",
+      "themeTags": ["family", "chosen-kinship", "community"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Elizabeth Zott", "Avery Parker"]
+    },
+    {
+      "id": "q-abiogenesis-get-started",
+      "text": "Abiogenesis. Let's get started.",
+      "speaker": "Elizabeth Zott",
+      "location": "Chapter 45: Supper at Six, the closing line",
+      "context": "The novel's final line. Elizabeth, having returned to research, opens a fresh notebook beside Six-Thirty. The novel ends where Calvin had hoped to begin.",
+      "themeTags": ["return", "science", "purpose", "closure"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Elizabeth Zott", "Six-Thirty"]
+    }
+  ]
+}

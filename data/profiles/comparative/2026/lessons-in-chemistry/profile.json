@@ -1,0 +1,781 @@
+{
+  "textId": "lessons-in-chemistry",
+  "title": "Lessons in Chemistry",
+  "author": "Bonnie Garmus",
+  "type": "novel",
+  "yearsPrescribed": [
+    2026
+  ],
+  "copyrightStatus": "rights_managed",
+  "attributionLine": "Lessons in Chemistry by Bonnie Garmus (2022). Used here for educational analysis under fair dealing; quotations are short verified excerpts taken verbatim from the 2022 Doubleday Canada edition.",
+  "plotBeats": [
+    {
+      "index": 1,
+      "title": "Frame opening, 1961",
+      "location": "Chapter 1: November 1961, Commons, California",
+      "summary": "Elizabeth Zott, thirty, single mother of five-year-old Madeline, rises before dawn to pack her daughter's lunch box, slipping in handwritten notes ('Fuel for learning'; 'Most people are awful'). She drives to a television studio where she hosts a daily cookery show called Supper at Six. The narrator declares that her life is over, despite the show's national success.",
+      "significance": "The frame: a woman whose public life is at its zenith and whose private life is in mourning. The novel doubles back from this opening to explain how Elizabeth got here and why she experiences fame as a kind of grief."
+    },
+    {
+      "index": 2,
+      "title": "Calvin and Elizabeth at Hastings, 1952",
+      "location": "Chapters 3 to 4, Hastings Research Institute, Commons, California",
+      "summary": "Elizabeth, a master's-level chemist working in a crowded shared lab, walks into the private laboratory of Calvin Evans, a young Nobel-shortlisted chemist, and takes a box of beakers without permission. After a series of awkward encounters, including a theatre lobby in which Calvin vomits on her, they meet in the parking lot one Friday evening and kiss.",
+      "significance": "The novel's love story begins as a series of professional and physical collisions. Calvin is the first man in Elizabeth's life who treats her work as seriously as his own. The kiss in the parking lot is the novel's only conventionally romantic gesture; everything else is intellectual."
+    },
+    {
+      "index": 3,
+      "title": "Cohabitation, marriage refused, the dog arrives",
+      "location": "Chapters 5 to 7",
+      "summary": "Elizabeth and Calvin live together. Elizabeth refuses Calvin's marriage proposal in the Hastings cafeteria, citing the loss of her name and her work. They acquire a dog, Six-Thirty, named for the moment he becomes part of the family. Elizabeth begins to row with Calvin in a men's eight at Mason's invitation.",
+      "significance": "The novel's argument about marriage and identity is set: Elizabeth's refusal is not about Calvin but about the cultural machine that would make her Mrs Calvin Evans. The dog completes the family that the novel will permit her."
+    },
+    {
+      "index": 4,
+      "title": "Calvin's death and aftermath",
+      "location": "Chapters 10 to 12",
+      "summary": "Elizabeth, worried about traffic, buys Six-Thirty a leash. On a routine morning run, Calvin slips on motor oil outside a poorly maintained police station; a backfiring patrol car runs him over. He dies at the scene. Elizabeth, pregnant though she does not yet know it, is fired from Hastings for being unmarried and pregnant.",
+      "significance": "The novel's central catastrophe. Calvin's death is rendered as the consequence of municipal budget cuts and ordinary mechanical failure, refusing the consolation of meaning. Elizabeth's firing immediately follows: the institution that had merely tolerated her now expels her."
+    },
+    {
+      "index": 5,
+      "title": "Single motherhood, Harriet Sloane, the home lab",
+      "location": "Chapters 14 to 22",
+      "summary": "Elizabeth gives birth to Madeline ('Mad'), nearly without a name because of the labour-room confusion, and is helped through the early months by Harriet Sloane, the across-the-street neighbour she has barely spoken to. She demolishes her kitchen and builds a working laboratory in its place. She does freelance research for ex-colleagues for cash, including Boryweitz. She and Frask, both fired from Hastings, discover in a bathroom stall that they share a story of sexual assault by a thesis advisor.",
+      "significance": "The novel's longest stretch and its most domestic. Single motherhood, contemptuously dismissed in the public discourse of 1956, is rendered as relentless labour, scientific in its method, communal in its survival, and dependent on women like Harriet whom the culture also dismisses."
+    },
+    {
+      "index": 6,
+      "title": "Supper at Six begins",
+      "location": "Chapters 23 to 25",
+      "summary": "Walter Pine, a TV producer whose daughter has been eating Madeline's lunch, offers Elizabeth a cookery show. She agrees because she cannot afford not to. At the pilot taping she throws the set's sentimental knickknacks into the audience, refuses the cue cards, and reframes cooking as chemistry. The show is, against every prediction, a hit.",
+      "significance": "The novel's reversal of fortune. Television, the most despised medium of mid-century cultural criticism, becomes the only place in 1956 America where Elizabeth Zott can be Elizabeth Zott. The studio is her second laboratory."
+    },
+    {
+      "index": 7,
+      "title": "Donatti steals her work; Lebensmal collapses; the show grows",
+      "location": "Chapters 21 and 30",
+      "summary": "Elizabeth returns briefly to Hastings in a lab-tech demotion, only to discover Donatti has plagiarised her abiogenesis research and published it under his own name. She quits, then turns Supper at Six into an explicitly political show: refusing the canned-soup sponsor on air, encouraging Mrs Fillis to become a heart surgeon, declaring she does not believe in God. Phil Lebensmal, KCTV's executive producer, summons her to his office, attempts to assault her, and has a heart attack mid-attempt.",
+      "significance": "The novel's middle reversal. The institutions of science and television both attempt the same theft (her work, her body); the second collapses under its own pressure, and Elizabeth and Walter inherit it."
+    },
+    {
+      "index": 8,
+      "title": "Life magazine, Avery Parker, return to research",
+      "location": "Chapters 36 to 45",
+      "summary": "A Life cover story betrays Elizabeth, taking her on-record vulnerability and weaponising it through quotes from Donatti, Meyers, and Mudford. The article paradoxically also makes her a phenomenon. Avery Parker, the founder of the Parker Foundation, buys Hastings, fires Donatti, and reveals herself to Elizabeth as Calvin's biological mother, alive after a Catholic-home stillbirth lie. Elizabeth resigns from Supper at Six, accepts the directorship of Chemistry at Hastings, and reopens her abiogenesis notebook.",
+      "significance": "The novel's restoration. The grudge-father Calvin hated turns out to have been a never-given-up mother. The family Madeline drew on her tree turns out to have been the right one. Elizabeth ends, as Calvin once predicted, where Calvin himself never reached: back in the lab, with abiogenesis, with everyone she has assembled around her."
+    }
+  ],
+  "keyMoments": [
+    {
+      "id": "km-beakers",
+      "title": "Elizabeth steals Calvin's beakers",
+      "location": "Chapter 3: Hastings Research Institute",
+      "whatHappens": "Elizabeth, sent to Calvin's private lab on a beaker errand, ignores his keep-out signs, switches off his Frank Sinatra, and is told to send a chemist down. She announces she is the chemist, takes the beakers anyway, and walks out. Calvin's grudge attaches to her.",
+      "whyItMatters": "The novel's first scene of the Calvin-Elizabeth relationship. The novel's most efficient demonstration of the gendered presumption Elizabeth meets every day: Calvin reads her lab coat as a secretary's uniform. Her refusal sets the terms of the marriage that will follow.",
+      "modeDeployment": {
+        "CC": "The 1952 American research institute as a workplace where lab coats on women are read as costumes. The cultural context's gender expectations rendered in a single misreading.",
+        "GVV": "The vision's first comic register. The novel will let Elizabeth correct the record; it will not let her be silenced.",
+        "LG": "Comic-romantic opening. The novel's tone is set: domestic-intellectual collision rendered with deadpan irony.",
+        "TI": "Gender in the workplace. The professional woman read as a typist."
+      },
+      "anchorQuoteIds": [
+        "q-i-am-a-scientist",
+        "q-im-a-chemist"
+      ],
+      "linkSentenceTemplate": "Garmus opens the Calvin-Elizabeth romance on an act of professional theft and gendered misreading, in a way that compares with [Text B]'s opening of..."
+    },
+    {
+      "id": "km-pencils",
+      "title": "Pencils. I regret not having more of them.",
+      "location": "Chapter 3: Hastings Research Institute, the UCLA flashback",
+      "whatHappens": "Two years before the novel's main action, Elizabeth, a master's candidate ten days from graduation, is raped by her thesis advisor Dr Meyers. She drives a number-two pencil into his side. The campus police officer asks her if she has a statement of regret. She tells him she regrets not having more pencils.",
+      "whyItMatters": "The novel's most concentrated act of self-defence and its first encounter with the institution's preferred response to assault. UCLA expels her, not him. The pencil becomes the novel's recurring icon: it will sit in her hair through every Supper at Six broadcast.",
+      "modeDeployment": {
+        "CC": "Mid-century American academia as a sexual-violence machine: predatory advisors, complicit institutions, blaming officers. The cultural context the novel's characters inherit.",
+        "GVV": "The vision's bleakest stretch and its most defiant. The novel will not let her be ashamed of the pencil.",
+        "LG": "Flashback embedded in close third-person. The pencil established as an object that will become a recurring motif.",
+        "TI": "Sexual assault, institutional cover-up, and the woman's refusal to repent of survival."
+      },
+      "anchorQuoteIds": [
+        "q-pencils-regret",
+        "q-violated-by-advisor"
+      ],
+      "linkSentenceTemplate": "Elizabeth's pencil-line in Lessons in Chemistry refuses the institution's demand for repentance, in a register that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-marriage-refused",
+      "title": "Elizabeth refuses Calvin's marriage proposal",
+      "location": "Chapter 6: The Hastings Cafeteria",
+      "whatHappens": "Calvin, who has carried a ring for three months, finally produces the small blue box at the cafeteria table. Elizabeth refuses. She explains that her work would be submerged under his name, that even keeping her name legally would not stop society from making her Mrs Calvin Evans. The watching colleagues read the moment as a breakup; it is not, but the marriage will never happen.",
+      "whyItMatters": "The novel's argument about identity reaches its sharpest point. Elizabeth's refusal is not a refusal of Calvin but of the cultural machine. The novel will spend the rest of its length proving she was right: every workplace, every magazine, every school will try to define her by someone else's name.",
+      "modeDeployment": {
+        "CC": "The 1952 marriage convention rendered as a name-erasure machine. The cultural context's strongest social pressure on the professional woman.",
+        "GVV": "The vision permits a successful relationship without the institution that the culture insists must contain it.",
+        "LG": "Public-private comedy. The cafeteria scene is staged for the watching colleagues whose voyeurism the novel mocks.",
+        "TI": "Marriage, name, and the woman's right to her own professional identity."
+      },
+      "anchorQuoteIds": [
+        "q-want-to-be-eliz-zott"
+      ],
+      "linkSentenceTemplate": "The cafeteria proposal scene in Lessons in Chemistry stages a refusal of marriage on professional-identity grounds, in a way that contrasts with [Text B]'s..."
+    },
+    {
+      "id": "km-calvin-death",
+      "title": "Calvin is killed by a backfiring police car",
+      "location": "Chapter 11: Budget Cuts",
+      "whatHappens": "On a foggy morning run, with Six-Thirty newly leashed for the first time at Elizabeth's insistence, Calvin slips on motor oil outside a budget-starved police station as a patrol car backfires. The leash, taut, makes the dog and the man pull in opposite directions. Calvin falls. The patrol car, its brakes uninspected because the city has cut funds for maintenance, runs over him.",
+      "whyItMatters": "The novel's central catastrophe rendered as the convergence of small failures: a leash law, a city budget, a slick of motor oil, a startle reflex. The narrator refuses to make Calvin's death meaningful; it is meaningless, accidental, mechanical. Elizabeth will spend the rest of the novel trying to live with that.",
+      "modeDeployment": {
+        "CC": "Municipal budget cuts and underfunded public services as the cause of a private tragedy. The cultural context's neglect rendered as a mortal force.",
+        "GVV": "The vision's bleakest act. The novel will not console; it will only continue.",
+        "LG": "Free indirect through Six-Thirty. The novel's only chapter narrated almost entirely from the dog's perspective. A bold structural choice that places the witness lowest to the ground.",
+        "TI": "Grief, contingency, and the meaninglessness of accident."
+      },
+      "anchorQuoteIds": [
+        "q-its-six-thirty"
+      ],
+      "linkSentenceTemplate": "Calvin's death in Lessons in Chemistry is rendered through the dog's eyes as a series of small mechanical failures, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-fired-pregnant",
+      "title": "Elizabeth is fired from Hastings for being pregnant and unwed",
+      "location": "Chapter 13: Idiots",
+      "whatHappens": "Donatti and Frask call Elizabeth into a meeting and present a termination notice. Elizabeth points out that the man who made her pregnant would not be fired. Donatti calls the rule unwritten; Frask calls Elizabeth unprofessional. Elizabeth refuses to plead. She is fired anyway. She quietly takes her boxes and leaves.",
+      "whyItMatters": "The novel's most concentrated rendering of institutional sexism. The facts of biology are rerouted through institutional convention so that the unwritten rule lands on the woman alone. Elizabeth's reply (the man would not be fired) is the unanswerable line the institution does not bother to answer.",
+      "modeDeployment": {
+        "CC": "Mid-century American workplace gender policy: unwritten rules enforced selectively against women. The cultural context's institutional cruelty.",
+        "GVV": "The vision's clear-eyed insistence that the institution will not protect her. The novel does not stage a rescue.",
+        "LG": "Three-handed dialogue. The fired employee, the boss, and the personnel administrator who pretends to be neutral.",
+        "TI": "Pregnancy, work, and the asymmetry of institutional consequence."
+      },
+      "anchorQuoteIds": [
+        "q-im-a-chemist",
+        "q-cunt"
+      ],
+      "linkSentenceTemplate": "Elizabeth's firing for pregnancy in Lessons in Chemistry stages the novel's clearest case for institutional misogyny, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-pilot",
+      "title": "Supper at Six pilot, the knickknacks scene",
+      "location": "Chapter 25: The Average Jane",
+      "whatHappens": "On the pilot's first taping, Elizabeth surveys the saccharine kitchen set, ignores the cue cards, and invites the studio audience to take its sentimental knickknacks home. She then strips the show of its decorative apparatus and reframes cooking as chemistry. Walter, watching from the producer's chair, believes his career is over. The audience, instead, leans in.",
+      "whyItMatters": "The novel's argument about women's labour and women's intelligence is staged in real time on a wooden set. The knickknacks are the cultural context's sedatives; Elizabeth, by giving them away, refuses the audience's anaesthesia. The show's success follows from the refusal.",
+      "modeDeployment": {
+        "CC": "1956 daytime television as a sedative for the depressed housewife. The cultural context's view of its own female audience.",
+        "GVV": "The vision's most generative act. Elizabeth's refusal is the novel's first hopeful reversal.",
+        "LG": "Set-piece comedy. Garmus uses the studio set as a stage prop the protagonist physically deconstructs.",
+        "TI": "Women's labour, women's intelligence, and the refusal of cultural condescension."
+      },
+      "anchorQuoteIds": [
+        "q-chemistry-is-change",
+        "q-im-elizabeth-zott",
+        "q-children-set-table",
+        "q-not-an-entertainer"
+      ],
+      "linkSentenceTemplate": "The Supper at Six pilot in Lessons in Chemistry stages a public refusal of cultural condescension, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-fillis",
+      "title": "Mrs Fillis, the open-heart surgeon",
+      "location": "Chapter 29: Bonding",
+      "whatHappens": "A studio audience member named Mrs Fillis confesses, ashamed, that she had once dreamed of being an open-heart surgeon. Elizabeth tests her on the molecular weight of barium chloride; Fillis answers correctly. Elizabeth tells her she will be fine. The audience rises. Months later, the novel reports, Fillis has been accepted to medical school.",
+      "whyItMatters": "The novel's most public conversion. The line that gives Supper at Six its real subject: the talent the culture has been instructed to call delusion. Fillis's reappearance in the final broadcast confirms the novel's thesis: courage, given a public stage, replicates.",
+      "modeDeployment": {
+        "CC": "1957 American gender expectations rendered as the housewife's internalised shame at her own ambition.",
+        "GVV": "The vision's most generative single moment. The novel permits a stranger to change her life on television.",
+        "LG": "Set-piece audience scene. The novel's most concentrated demonstration of the show's argument.",
+        "TI": "Women's ambition, education, and the cultural shame that suppresses them."
+      },
+      "anchorQuoteIds": [
+        "q-not-just-housewife",
+        "q-half-population-wasted"
+      ],
+      "linkSentenceTemplate": "The Mrs Fillis scene in Lessons in Chemistry stages a public correction of internalised shame, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-avery-revelation",
+      "title": "Avery Parker reveals herself as Calvin's mother",
+      "location": "Chapter 43: Stillborn",
+      "whatHappens": "In Calvin's old laboratory, Avery Parker, founder of the Parker Foundation, tells Elizabeth that she is Calvin's biological mother, that she did not give him up but was told he was stillborn, that she only learned the truth a decade later, that she sent Wilson to All Saints to fetch him, and that the bishop lied about Calvin's death. The grudge-father Calvin hated turns out to have been a never-given-up mother.",
+      "whyItMatters": "The novel's reversal. Calvin's lifelong grudge was directed at the wrong person. The Catholic-home institution, not the parent, was the source of the abandonment. The novel's most generous gesture: a grandmother walks into a granddaughter's family tree and turns out to have been there, as the unnamed acorn, all along.",
+      "modeDeployment": {
+        "CC": "1940s Catholic homes for unwed mothers as a system designed to extract babies from frightened girls. The cultural context's most concentrated cruelty.",
+        "GVV": "The vision's restoration. The novel grants Calvin, posthumously, the family he was told he had lost.",
+        "LG": "Frame-closing reversal. The fairy-godmother acorn on Madeline's tree is identified.",
+        "TI": "Family, institutional cruelty, and the reunion the novel permits the dead son's daughter."
+      },
+      "anchorQuoteIds": [
+        "q-im-calvin-mother",
+        "q-the-acorn",
+        "q-whole-family"
+      ],
+      "linkSentenceTemplate": "Avery Parker's revelation in Lessons in Chemistry stages a restoration of family across institutional lies, in a way that compares with [Text B]'s..."
+    }
+  ],
+  "characters": [
+    {
+      "id": "char-elizabeth",
+      "name": "Elizabeth Zott",
+      "role": "Protagonist. Chemist, single mother, television cookery host, and reluctant icon. The novel's centre of consciousness, though the narration moves around her.",
+      "socialPosition": "Mid-century American professional woman. Master's degree in chemistry from UCLA; expelled from her doctoral program after surviving a sexual assault. Lab tech, then research chemist, then unwed mother, then television host, then director of Chemistry at Hastings.",
+      "mindset": "Direct, literal, scientific. Allergic to euphemism, sentimentality, and cultural deference. Moves through the world as if its conventions were a category error she has been asked to humour. Permanently grieving Calvin and her brother; only Mad, Six-Thirty, and her work hold her in the room.",
+      "contradictions": "The most public woman in the novel and the most private. A celebrity who hates fame. A mother who never wanted to be one and who is unmistakably, fiercely good at it. A woman who tells the truth on television and who is destroyed by a magazine that says she did.",
+      "arc": "From shared-bench lab tech to research chemist; from Calvin's partner to single mother; from disgraced unmarried pregnancy to celebrity; from celebrity to scapegoat; from scapegoat to director of Chemistry. The novel's arc is the slow restoration of the conditions under which she can be a chemist.",
+      "keyRelationshipIds": [
+        "rel-elizabeth-calvin",
+        "rel-elizabeth-mad",
+        "rel-elizabeth-harriet",
+        "rel-elizabeth-six-thirty",
+        "rel-elizabeth-frask",
+        "rel-elizabeth-walter"
+      ],
+      "keyQuoteIds": [
+        "q-life-was-over",
+        "q-im-elizabeth-zott",
+        "q-children-set-table",
+        "q-want-to-be-eliz-zott",
+        "q-im-a-chemist",
+        "q-i-am-a-scientist",
+        "q-pencils-regret",
+        "q-violated-by-advisor",
+        "q-cooking-is-chemistry",
+        "q-chemistry-is-change",
+        "q-courage-is-root",
+        "q-design-future",
+        "q-class-dismissed",
+        "q-soup-poison",
+        "q-not-an-entertainer",
+        "q-not-smart-enough",
+        "q-the-acorn",
+        "q-whole-family",
+        "q-abiogenesis-get-started"
+      ]
+    },
+    {
+      "id": "char-calvin",
+      "name": "Calvin Evans",
+      "role": "Chemist, rower, soulmate, and absent father. Killed early in the novel; present throughout via memory, diary, correspondence, and the daughter who inherits his face.",
+      "socialPosition": "Famous chemist, Cambridge-trained, twice-Nobel-nominated, brought up at All Saints Catholic Boys Home in Iowa. Tall, ungainly, beloved at the boathouse, despised by Donatti, devoted to Elizabeth.",
+      "mindset": "Brilliant, awkward, prone to grudges and to running outdoors when everyone else does not. Believes himself to be a jinx, certain that everyone he loves will die. Permanently angry at his father, who he hopes is dead, and who he does not know is in fact a never-given-up mother.",
+      "contradictions": "The novel's most respected scientist and the most unprotected child. A man who insisted his work mattered and who never realised that his absent parent had been funding his education all along. A man whose grudge-father was a stranger to him.",
+      "arc": "From orphaned All Saints boy to Cambridge rower to Hastings star to Elizabeth's partner to Madeline's father; killed before he learns he is to be a father; present throughout via the boxes, diary, and posthumous reunions the novel arranges around his absence.",
+      "keyRelationshipIds": [
+        "rel-elizabeth-calvin",
+        "rel-calvin-avery"
+      ],
+      "keyQuoteIds": [
+        "q-elizabeth-change-world",
+        "q-hate-father-caps",
+        "q-its-six-thirty"
+      ]
+    },
+    {
+      "id": "char-mad",
+      "name": "Madeline (Mad) Zott",
+      "role": "Elizabeth and Calvin's daughter. Five at the novel's frame opening, born early in the novel's middle. Precocious early reader, watcher of TVs, devoted to Six-Thirty.",
+      "socialPosition": "Illegitimate daughter of a famous dead chemist and a famous television host, in a 1956-1962 California where illegitimacy is still a stigma. Pupil at Woody Elementary under Mrs Mudford, who disapproves of her.",
+      "mindset": "Curious, literal, watchful. Conducts conversations with Six-Thirty in babbled syllables and treats other adults' lies as data points. Senses her mother's pain in a way Elizabeth cannot quite hide.",
+      "contradictions": "A child who reads Dickens at age five and pretends she cannot read so as to fit in at school. A daughter who is the source of her mother's deepest love and the reason the world keeps refusing to give her mother peace.",
+      "arc": "From baby to early reader to family-tree investigator. The child who, by writing to the Parker Foundation, eventually unlocks the truth about Calvin's mother. The novel's quiet engine of restoration.",
+      "keyRelationshipIds": [
+        "rel-elizabeth-mad"
+      ],
+      "keyQuoteIds": [
+        "q-not-meant-tree",
+        "q-faith-not-religion",
+        "q-fuel-for-learning",
+        "q-play-sports",
+        "q-most-people-awful"
+      ]
+    },
+    {
+      "id": "char-six-thirty",
+      "name": "Six-Thirty",
+      "role": "The family's dog. Failed bomb-sniffer, washed out from Camp Pendleton, who attaches himself to Elizabeth on a Saturday evening and never leaves. The novel's witness to Calvin's death and its silent guardian of Mad.",
+      "socialPosition": "Dropout from a Marine training programme. Adopted by Elizabeth and Calvin. Featured guest on Supper at Six.",
+      "mindset": "Loyal, observant, anxious. Carries the weight of Calvin's death as his own failure. Counts the words Elizabeth has taught him.",
+      "contradictions": "A dog who cannot speak and who is one of the novel's most articulate registers of grief. A creature trained to detect bombs who failed at the time it mattered most.",
+      "arc": "From abandoned alleyway dog to family member to bomb-detector at KCTV. The novel grants him the second chance to find a bomb, this time successfully.",
+      "keyRelationshipIds": [
+        "rel-elizabeth-six-thirty"
+      ],
+      "keyQuoteIds": [
+        "q-its-six-thirty"
+      ]
+    },
+    {
+      "id": "char-harriet",
+      "name": "Harriet Sloane",
+      "role": "Elizabeth's neighbour, eventually her closest friend, and the children's everyday caretaker. Married, unhappily, to the abusive Mr Sloane.",
+      "socialPosition": "Mid-century American Catholic housewife, mother of four grown children, trapped in a marriage she cannot leave on religious grounds.",
+      "mindset": "Practical, judgemental in the small things and generous in the large ones. Reader of women's magazines and disbeliever in their advice. Eventually a magazine pitcher herself.",
+      "contradictions": "A devout Catholic who hopes her husband goes to hell. A woman who cannot leave her marriage and who tells Elizabeth, on the day they meet, to take a moment for herself every day.",
+      "arc": "From across-the-street curtain-watcher to Elizabeth's kin. Eventually divorces Mr Sloane and finds an unexpected, late-life love with Walter Pine.",
+      "keyRelationshipIds": [
+        "rel-elizabeth-harriet",
+        "rel-harriet-walter"
+      ],
+      "keyQuoteIds": [
+        "q-take-moment-for-yourself",
+        "q-recommit"
+      ]
+    },
+    {
+      "id": "char-walter",
+      "name": "Walter Pine",
+      "role": "Television producer, single father of Amanda, executive producer of Supper at Six. Eventually Elizabeth's closest male friend and Harriet's late-life partner.",
+      "socialPosition": "Mid-career producer at KCTV, recently divorced, raising an adopted daughter alone. Quiet, anxious, conscious of his lack of glamour.",
+      "mindset": "Self-deprecating, decent, exhausted. Lives in fear of Phil Lebensmal and the institution he cannot quite separate himself from. Slowly learns, under Elizabeth's pressure, what doing the right thing looks like.",
+      "contradictions": "The producer of a show he barely understands; a father whose daughter is not technically his and whom he loves without reservation. A man who pretends to be in charge and who only learns to be in charge by following Elizabeth's example.",
+      "arc": "From mid-career producer to executive producer of KCTV. The novel's quiet study of a man who learns that being decent is itself a form of professional behaviour.",
+      "keyRelationshipIds": [
+        "rel-elizabeth-walter",
+        "rel-harriet-walter"
+      ],
+      "keyQuoteIds": []
+    },
+    {
+      "id": "char-donatti",
+      "name": "Dr Donatti",
+      "role": "Director of Chemistry at Hastings. Elizabeth's antagonist for most of the novel. Plagiarist, harasser, and the nepotism-installed son-in-law of the Hastings CEO.",
+      "socialPosition": "Mid-career chemist whose career has been built on family connections and the labour of his subordinates. Married, philandering, contemptuous of women.",
+      "mindset": "Cunning, lazy, status-conscious. Believes the institution's hierarchy is the same as his merit. Deeply threatened by Elizabeth's competence.",
+      "contradictions": "The director of a research department who does no research. A man who calls a woman a slur and signs her termination notice in the same week. A nepotism appointment who is finally undone by the woman whose work he stole.",
+      "arc": "From insulted-by-Calvin Harvard rower to harassed Hastings director to fired employee. Garmus closes the novel's longest grudge by handing Elizabeth the pen with which Donatti must sign his own termination.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": [
+        "q-cunt",
+        "q-not-smart-enough"
+      ]
+    },
+    {
+      "id": "char-frask",
+      "name": "Miss Frask",
+      "role": "Personnel administrator at Hastings, then Elizabeth's tormentor, then her ally. Eventually head of Personnel under the Parker Foundation.",
+      "socialPosition": "Mid-level personnel professional, once a doctoral student, now a corporate gossip columnist and weight-loss-programme target. Fired for gaining seven pounds; rehired by Avery Parker after her Life letter changes the institution's direction.",
+      "mindset": "Sharp, lonely, self-loathing in places, professionally precise. Spreads Elizabeth's pregnancy news; later writes the letter that exposes Donatti's plagiarism.",
+      "contradictions": "The Personnel administrator who enforces a sexist rule and who turns out to have been a survivor of the same advisor-rape pattern Elizabeth survived. The novel's most complete redemption arc.",
+      "arc": "From hateable Personnel snitch to bathroom-stall confessor to Hastings head of Personnel under Avery Parker. The novel grants her, of all people, the power to fire Donatti.",
+      "keyRelationshipIds": [
+        "rel-elizabeth-frask"
+      ],
+      "keyQuoteIds": [
+        "q-frask-same"
+      ]
+    },
+    {
+      "id": "char-wakely",
+      "name": "Reverend Wakely",
+      "role": "First Presbyterian minister in Commons. Calvin's old pen pal, Madeline's library-friend, and Elizabeth's late-novel confessor.",
+      "socialPosition": "Fifth-generation minister, Harvard Divinity School graduate, surfer. A man who took up his profession because his family expected it of him.",
+      "mindset": "Doubting, kind, ironic. Reads Mad magazine inside his Bible. Treats faith as separate from institution and admires science from the outside.",
+      "contradictions": "A minister who privately doubts the doctrine he preaches. The man who once told Calvin that California had the best weather and who has carried the guilt of that weather since.",
+      "arc": "From Calvin's lost pen pal to Madeline's library accomplice to Elizabeth's confessor on the back step. The man who eventually names what Elizabeth's grief actually wants: not out, but back in.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": [
+        "q-not-meant-tree",
+        "q-status-quo",
+        "q-want-back-in"
+      ]
+    },
+    {
+      "id": "char-avery",
+      "name": "Avery Parker",
+      "role": "Founder of the Parker Foundation. Late-novel revelation: Calvin's biological mother. Eventually buys Hastings, fires Donatti, and offers Elizabeth the directorship of Chemistry.",
+      "socialPosition": "Wealthy heiress raised by parents who funded the unwed mothers home that took her son. Founder of a philanthropic foundation she cannot legally control without a male trustee.",
+      "mindset": "Guarded, grieving, methodical. Has spent decades searching, then mourning, then re-searching for the son the bishop told her was dead. The novel's most concentrated study of long-form grief.",
+      "contradictions": "An immensely wealthy woman whose hands are tied by her own foundation's bylaws. A devout-by-upbringing Catholic who does not believe in God for personal reasons.",
+      "arc": "From seventeen-year-old in a Catholic home for unwed mothers to foundation founder to grandmother. The novel grants her, in its closing chapters, the family she was told she had lost.",
+      "keyRelationshipIds": [
+        "rel-calvin-avery"
+      ],
+      "keyQuoteIds": [
+        "q-im-calvin-mother"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel-elizabeth-calvin",
+      "characterAId": "char-elizabeth",
+      "characterBId": "char-calvin",
+      "type": "romantic",
+      "startStatus": "Two unmarried chemists at Hastings, one famous and one demoted, who collide in a private lab over a box of beakers and again, more memorably, in a theatre lobby.",
+      "endStatus": "A widow holding her dead lover's diary, raising his daughter, refusing to let his name be Mrs in front of her own.",
+      "trajectory": "The novel's central love story is structured around an inversion of cultural expectation. Calvin treats Elizabeth's work as seriously as his own; she refuses to take his name. They live together unmarried, raise a dog, plan no children, and produce one anyway. The marriage that never happens is, in the novel's argument, the most successful marriage in the book. Calvin's death does not end the relationship; it converts it into a long act of posthumous fidelity that the novel will eventually permit Elizabeth to set aside, but never to forget.",
+      "keyMomentIds": [
+        "km-beakers",
+        "km-marriage-refused",
+        "km-calvin-death"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "CC"
+      ]
+    },
+    {
+      "id": "rel-elizabeth-mad",
+      "characterAId": "char-elizabeth",
+      "characterBId": "char-mad",
+      "type": "family",
+      "startStatus": "Reluctant unwed mother and unwanted-by-the-culture daughter, born to a household of grief.",
+      "endStatus": "Pedagogical partnership. The mother teaches the daughter chemistry through lunch box notes; the daughter teaches the mother how to be a parent, then how to find Avery.",
+      "trajectory": "Elizabeth had not planned to be a mother and is at first overwhelmed by the work. The relationship the novel renders is unlike most fictional mother-daughter relationships: it is intellectual, deliberately unsentimental, conducted partly through experiment and partly through deadpan honesty. The lunch box notes are its idiom. Mad eventually solves the family-tree mystery her mother had not even known to ask, identifying Avery as the fairy-godmother acorn. The relationship's arc is the gradual conversion of unplanned motherhood into chosen kinship.",
+      "keyMomentIds": [
+        "km-fired-pregnant",
+        "km-avery-revelation"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "CC"
+      ]
+    },
+    {
+      "id": "rel-elizabeth-harriet",
+      "characterAId": "char-elizabeth",
+      "characterBId": "char-harriet",
+      "type": "friendship",
+      "startStatus": "Across-the-street neighbours who have barely spoken. Harriet has been watching Elizabeth's house for months through her curtains.",
+      "endStatus": "Chosen kin. Harriet is the children's everyday adult, Elizabeth's confidante, and eventually the woman whose name Elizabeth thanks on national television.",
+      "trajectory": "The friendship begins on the day after Madeline's birth, when Harriet lets herself in and finds Elizabeth asleep on the lab floor. From there the two women build a working domestic partnership that lasts the rest of the novel. The relationship is the novel's clearest example of female solidarity across age, religion, and temperament. Harriet's parting advice on the day they meet (take a moment for yourself; then recommit) becomes the philosophical engine of Supper at Six and of Elizabeth's eventual exit from it.",
+      "keyMomentIds": [
+        "km-pilot"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "CC"
+      ]
+    },
+    {
+      "id": "rel-elizabeth-six-thirty",
+      "characterAId": "char-elizabeth",
+      "characterBId": "char-six-thirty",
+      "type": "family",
+      "startStatus": "Stray dog in an alley and woman walking home with a salami; the dog falls in line behind her.",
+      "endStatus": "Co-mourners, co-parents of Mad, and at the close, the two beings beside the open notebook on which abiogenesis will be written.",
+      "trajectory": "Six-Thirty's relationship with Elizabeth is the novel's quietest love story. The dog grieves Calvin's death as fully as she does and shares her vigilance over Mad. The novel grants him chapters of free indirect narration, including the chapter of Calvin's death itself. The relationship closes the book: the final line is delivered to him.",
+      "keyMomentIds": [
+        "km-calvin-death"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "LG"
+      ]
+    },
+    {
+      "id": "rel-elizabeth-walter",
+      "characterAId": "char-elizabeth",
+      "characterBId": "char-walter",
+      "type": "professional",
+      "startStatus": "An angry mother walks into a TV producer's office about a stolen lunch and the producer mistakes her lab coat for an audition costume.",
+      "endStatus": "Professional partners and the closest thing each has to a best friend. Walter is the only producer Elizabeth would have, and Elizabeth is the only star Walter could have.",
+      "trajectory": "The novel's deepest cross-gender friendship. Walter is the man who learns, slowly, to take Elizabeth seriously, to stop trying to make her smile, and finally to follow her example in dealing with Phil Lebensmal. Their friendship is conducted around a child each is raising alone and a show that everyone keeps trying to cancel. The relationship eventually generates the unexpected late romance between Walter and Harriet.",
+      "keyMomentIds": [
+        "km-pilot"
+      ],
+      "modeRelevance": [
+        "TI",
+        "CC"
+      ]
+    },
+    {
+      "id": "rel-elizabeth-frask",
+      "characterAId": "char-elizabeth",
+      "characterBId": "char-frask",
+      "type": "antagonistic",
+      "startStatus": "Personnel administrator and unmarried pregnant scientist; Frask spreads the news of Elizabeth's pregnancy and then enforces her firing.",
+      "endStatus": "Allies. Frask, restored to power under Avery Parker, is the one who fires Donatti and brings Elizabeth back to Hastings.",
+      "trajectory": "The novel's most complete enemy-to-ally arc. The conversion happens in a Hastings bathroom stall, where the two women, shouting at each other, accidentally discover that they were each raped by their thesis advisor. The shared fact does not erase what Frask did to Elizabeth; the novel does not pretend it does. But it makes a kind of solidarity possible. Frask's letter to Life eventually triggers the institutional reckoning the novel needs to end on.",
+      "keyMomentIds": [
+        "km-fired-pregnant"
+      ],
+      "modeRelevance": [
+        "TI",
+        "CC",
+        "GVV"
+      ]
+    },
+    {
+      "id": "rel-calvin-avery",
+      "characterAId": "char-calvin",
+      "characterBId": "char-avery",
+      "type": "family",
+      "startStatus": "Mother and son, separated at birth by an unwed mothers home that lied to both of them. Each told the other was dead.",
+      "endStatus": "An unmet mother and a buried son. Avery, in the novel's closing chapters, is allowed to give her son a granddaughter, a daughter-in-law-in-effect, and the family her institution had stolen from him.",
+      "trajectory": "The novel's most painful relationship is rendered almost entirely through absence. Avery's letters to Calvin (signed Sad Mother) were treated by Calvin as scams. The bishop's lie about Calvin's death convinced Avery for years that her son was lost; when Calvin's face appeared on the cover of Chemistry Today, she lost the funding leverage too. The novel grants her the granddaughter only after the son is unreachable. The relationship is the novel's sharpest indictment of the Catholic-charity apparatus that destroyed it.",
+      "keyMomentIds": [
+        "km-avery-revelation"
+      ],
+      "modeRelevance": [
+        "TI",
+        "CC",
+        "GVV"
+      ]
+    },
+    {
+      "id": "rel-harriet-walter",
+      "characterAId": "char-harriet",
+      "characterBId": "char-walter",
+      "type": "romantic",
+      "startStatus": "Producer and neighbour of his star, who occasionally drops by his office. Both lonely; neither aware of the other's loneliness.",
+      "endStatus": "A late-life partnership, announced to a startled Elizabeth on Walter's doorstep, conducted in secret while Harriet's divorce is finalised.",
+      "trajectory": "The novel's quietest romance. The relationship develops in the spaces between Elizabeth's chapters and is granted to two characters the culture has long since written off as unromantic. The novel honours their late-life union by letting the reader (and Elizabeth) discover it accidentally, on a doorstep, while Mad is asleep in the car.",
+      "keyMomentIds": [],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "CC"
+      ]
+    }
+  ],
+  "culturalContext": {
+    "socialClass": {
+      "applies": "yes",
+      "summary": "Lessons in Chemistry is set in a precise mid-century American class layer: educated professional Commons, California, where the Hastings Research Institute and KCTV both pay men far more than women for the same work. Elizabeth's penury after Calvin's death is rendered as a structural fact, not a personal one: she has been fired for unmarried pregnancy and is not eligible for benefits or references. Calvin's wealth, by contrast, is the product of nepotistic philanthropy he never knew was funding him. The novel measures class by paychecks, profit-sharing schedules, and the specific cost of a baby's diapers.",
+      "anchorMomentIds": [
+        "km-fired-pregnant",
+        "km-pilot"
+      ],
+      "anchorQuoteIds": [
+        "q-half-population-wasted"
+      ],
+      "argumentHook": "Class in Lessons in Chemistry is rendered as the precise gap between the professional woman's paycheck and the professional man's, with the institutional rules that protect that gap visible at every level."
+    },
+    "gender": {
+      "applies": "yes",
+      "summary": "The novel's most sustained subject. Garmus's 1952-1962 California is patriarchal at every institutional level: universities expel raped women; research institutes fire pregnant women; television networks hire women only as set-dressing; magazines reduce them to cover photographs. Elizabeth's resistance is the engine of the novel. She refuses Calvin's name, refuses Walter's cue cards, refuses Phil Lebensmal's belt, and refuses Donatti's plagiarism. The novel's argument, voiced repeatedly, is that the gender hierarchy is cultural, not biological, and that the cost of the lie is half the species' wasted intellect.",
+      "anchorMomentIds": [
+        "km-pencils",
+        "km-marriage-refused",
+        "km-fired-pregnant",
+        "km-pilot",
+        "km-fillis"
+      ],
+      "anchorQuoteIds": [
+        "q-im-a-chemist",
+        "q-i-am-a-scientist",
+        "q-want-to-be-eliz-zott",
+        "q-half-population-wasted",
+        "q-cultural-not-biological",
+        "q-not-just-housewife",
+        "q-pencils-regret",
+        "q-cunt"
+      ],
+      "argumentHook": "Gender in Lessons in Chemistry is rendered as the structural condition every institution in the novel exists to enforce, with the protagonist's refusal of that structure as the novel's plot."
+    },
+    "religion": {
+      "applies": "yes",
+      "summary": "The cultural context is mid-century American Catholic philanthropy and Presbyterian small-town ministry. The novel's most damning institution is the Catholic All Saints Boys Home, where Calvin grew up under abusive priests, and the Catholic home for unwed mothers where Avery was told her live baby was dead. Reverend Wakely, by contrast, is a Presbyterian minister who reads Mad magazine inside his Bible and admits privately that he has lost faith in his profession. Elizabeth declares on national television that she does not believe in God, an act the novel treats as both a rational position and a costly one. The cultural context's religion is the apparatus that took Calvin from Avery, that took Elizabeth's brother from her, and that now picket-signs Elizabeth as a Godless heathen on her own studio's doorstep.",
+      "anchorMomentIds": [
+        "km-avery-revelation"
+      ],
+      "anchorQuoteIds": [
+        "q-faith-not-religion",
+        "q-hate-father-caps",
+        "q-im-calvin-mother"
+      ],
+      "argumentHook": "Religion in Lessons in Chemistry is rendered as the institutional apparatus that the novel's two grudge-holding men (Calvin's father, Elizabeth's father) inherit and exploit, and that the novel's most sympathetic clergyman privately renounces."
+    },
+    "familyAndMarriage": {
+      "applies": "yes",
+      "summary": "The novel works marriage and family at four registers: the unmarried-but-permanent partnership of Elizabeth and Calvin; the all-female caretaker household of Elizabeth, Harriet, and Madeline; the bureaucratic-cruel Catholic home for unwed mothers that took Calvin from Avery; and the late-life union of Walter and Harriet. Garmus's argument is that family is what the participants build, not what the institution permits. The cultural context's preferred unit (married heterosexual nuclear family with father at work) is rendered as either a fiction or a catastrophe; every other arrangement the novel stages is more functional.",
+      "anchorMomentIds": [
+        "km-marriage-refused",
+        "km-fired-pregnant",
+        "km-avery-revelation"
+      ],
+      "anchorQuoteIds": [
+        "q-want-to-be-eliz-zott",
+        "q-not-meant-tree",
+        "q-the-acorn",
+        "q-whole-family",
+        "q-not-every-woman"
+      ],
+      "argumentHook": "Family and marriage in Lessons in Chemistry are rendered through four overlapping arrangements whose geometries (unmarried partnership, female caretaker household, institutional cruelty, late-life union) together describe a chosen-kin alternative to the cultural context's preferred unit."
+    },
+    "authorityAndPower": {
+      "applies": "yes",
+      "summary": "Authority in Lessons in Chemistry operates at four scales: the workplace (Donatti, Lebensmal); the school (Mudford); the church (the bishop, Father Benedict's mid-century equivalents); and the state (UCLA campus police, the city budget that kills Calvin). The novel works the scales together so that the same kind of arbitrary, gendered, institutionally protected authority shows up wherever Elizabeth goes. The reversal is granted in the closing chapters: Avery Parker buys Hastings; Frask becomes head of Personnel; Donatti is fired; Elizabeth becomes director of Chemistry. The novel does not pretend that authority itself has changed; it has only changed hands.",
+      "anchorMomentIds": [
+        "km-pencils",
+        "km-fired-pregnant",
+        "km-pilot",
+        "km-avery-revelation"
+      ],
+      "anchorQuoteIds": [
+        "q-cunt",
+        "q-not-smart-enough",
+        "q-pencils-regret"
+      ],
+      "argumentHook": "Authority in Lessons in Chemistry is rendered as a self-protective network of male-controlled institutions whose hands the novel's reversal eventually moves into the hands of the women they had previously punished."
+    }
+  },
+  "generalVisionAndViewpoint": {
+    "oneLineVision": "Lessons in Chemistry offers a comic-tragic, ultimately recovering vision: the institutions of mid-century America are shown to do enormous harm to women, but the novel finds, in chosen kinship, in scientific honesty, in television's accidental democratic reach, and in the closing reunion of mother and granddaughter, a hard-won possibility of restoration.",
+    "openingShapesVision": "The vision is set up by an act of mourning. The opening chapter places the reader in 1961 inside the consciousness of a woman whose narrator declares her life is over. The novel doubles back from that line to explain how she got there, but the line itself sets the vision: bleakness is the starting condition, not the arrival.",
+    "climaxShapesVision": "The vision's bleakest stretches are Calvin's death (rendered as municipal-budget contingency) and the Life magazine betrayal (rendered as institutional vampirism on a survivor's honesty). Garmus does not soften either. The vision insists that the institutions doing the harm are doing it on purpose and that they will keep doing it.",
+    "closingShapesVision": "The closing recovers a register of qualified hope. Avery Parker buys Hastings; Frask fires Donatti; Elizabeth becomes director of Chemistry; the abiogenesis notebook reopens. But Calvin is still dead, the bishop is still in business, and the cultural context that produced all of this is still intact. The novel's hope is local and chosen, not systemic.",
+    "ambiguity": "The vision is qualified throughout. Television, the medium that gives Elizabeth her platform, is also the medium that produces the canned-soup sponsor, the Life magazine cover, and Phil Lebensmal. Motherhood, which Elizabeth loves, was also the trap institutional power used to fire her. The novel does not resolve these tensions; it lets them stand.",
+    "anchorMomentIds": [
+      "km-calvin-death",
+      "km-fired-pregnant",
+      "km-pilot",
+      "km-fillis",
+      "km-avery-revelation"
+    ]
+  },
+  "literaryGenre": {
+    "toolkit": "novel",
+    "elements": [
+      {
+        "name": "Comic-tragic register",
+        "description": "Garmus's principal tonal achievement. The novel handles sexual assault, plagiarism, infant mortality, and grief in the same prose that handles the absurdity of cookery-show wardrobe meetings. The register's effect is to refuse both melodrama and sitcom: the novel earns its laughter by also rendering the harm.",
+        "anchorMomentIds": [
+          "km-pencils",
+          "km-pilot",
+          "km-fired-pregnant"
+        ],
+        "keyExample": "The pencil scene is rendered through the campus officer's bureaucratic notebook even as the protagonist is still bleeding. The scene is funny and terrible in the same sentence."
+      },
+      {
+        "name": "Third-person omniscient with shifting close interiority",
+        "description": "The narration travels between Elizabeth, Calvin, Mad, Six-Thirty, Walter, Harriet, Frask, Wakely, and Avery, granting each character a chapter or stretch in their own register. The technique gives the novel its breadth and lets it render the same event from competing perspectives.",
+        "anchorMomentIds": [
+          "km-calvin-death",
+          "km-avery-revelation"
+        ],
+        "keyExample": "Calvin's death is rendered partly from Calvin's perspective, partly from the patrolman's, and finally from Six-Thirty's, with each register adding its own loss."
+      },
+      {
+        "name": "The dog narrator",
+        "description": "Six-Thirty is granted free indirect chapters in his own voice. He counts the words Elizabeth has taught him, narrates his guilt over Calvin's death, observes Madeline, and finally identifies the bomb at KCTV. The novel's most audacious structural choice and its most direct rebuke to the species hierarchy that excludes him from the cultural conversation.",
+        "anchorMomentIds": [
+          "km-calvin-death"
+        ],
+        "keyExample": "The chapter of Calvin's death is narrated almost entirely from Six-Thirty's vantage. The witness lowest to the ground is granted the central testimony."
+      },
+      {
+        "name": "Frame structure",
+        "description": "The novel opens in 1961 and doubles back to 1952 to explain how Elizabeth arrived at the Supper at Six set. The frame creates a kind of dramatic irony: the reader knows from the first page that Calvin is dead, that Madeline exists, and that the show is a hit, even before any of those facts are explained.",
+        "anchorMomentIds": [
+          "km-beakers"
+        ],
+        "keyExample": "The opening line ('her life was over') sits in the reader's head for hundreds of pages before the novel finally permits Elizabeth to recover from it."
+      },
+      {
+        "name": "The lunch box notes",
+        "description": "Garmus's recurring textual motif. Elizabeth's daily handwritten notes to Madeline, slipped into the lunch box and read in the novel's framing chapter, sit at the start of the book and recur at intervals. They are simultaneously a mother's pedagogy, a private idiom, and the novel's most concentrated examples of Elizabeth's voice.",
+        "anchorMomentIds": [
+          "km-fillis"
+        ],
+        "keyExample": "The opening trio (fuel for learning; play sports at recess but do not automatically let the boys win; most people are awful) sets the moral register of the entire novel."
+      },
+      {
+        "name": "The Supper at Six broadcasts",
+        "description": "Garmus integrates the show's broadcasts into the novel as set-pieces, rendered in real time on the page with stage directions, audience reactions, and producer-chair commentary. The technique converts the novel into a kind of partial performance: the show's monologues are also the novel's didactic core.",
+        "anchorMomentIds": [
+          "km-pilot",
+          "km-fillis"
+        ],
+        "keyExample": "The pilot taping is rendered with Walter's interior collapse alternating against the audience's accumulating engagement; the same technique recurs at the chicken-pot-pie episode and the resignation broadcast."
+      },
+      {
+        "name": "Satire of mid-century institutions",
+        "description": "Garmus uses sustained, deadpan satire to render Hastings, KCTV, Woody Elementary, and All Saints. Each institution is given representative figures (Donatti, Lebensmal, Mudford, the bishop) whose dialogue is rendered with such precision that the satire becomes indistinguishable from realism.",
+        "anchorMomentIds": [
+          "km-fired-pregnant",
+          "km-pilot"
+        ],
+        "keyExample": "Donatti's termination meeting with Elizabeth is rendered with the exact bureaucratic register of a real such meeting; the satire is in the literalness."
+      },
+      {
+        "name": "Symbolism: pencil, lab coat, leash, acorn",
+        "description": "The novel works a small set of recurring symbolic objects. The number-two pencil is Elizabeth's weapon, her hair pin, and her instrument of correction. The lab coat is the costume the world misreads as a uniform. The leash is the object whose introduction kills Calvin. The acorn on Madeline's family tree is the unidentified fairy-godmother who turns out to be Avery.",
+        "anchorMomentIds": [
+          "km-pencils",
+          "km-beakers",
+          "km-calvin-death",
+          "km-avery-revelation"
+        ],
+        "keyExample": "The pencil appears on the first page (a sharpened number-two) and the last (Elizabeth removes it from her hair to write 'abiogenesis'). The novel's most consistent visual."
+      }
+    ]
+  },
+  "themeOrIssue": {
+    "primaryThemes": [
+      {
+        "name": "Women in science and the structural waste of female intellect",
+        "summary": "The novel's central theme. Elizabeth's argument, voiced repeatedly, is that half the species is being wasted because the institutions of education, employment, and culture are built to keep women out. Mrs Fillis, Mrs Frask, and the unnamed Vogue-letter writers are the novel's evidence: when the wall is breached even slightly, the talent that pours through is enormous.",
+        "pivotalMomentIds": [
+          "km-pencils",
+          "km-fired-pregnant",
+          "km-pilot",
+          "km-fillis",
+          "km-avery-revelation"
+        ],
+        "contradictoryAspect": "The novel's argument is feminist but its mechanism of broadcast is a 1956 daytime cookery show. The same medium that lets Elizabeth reach Mrs Fillis is the medium that also produces the Life cover that nearly destroys her. Garmus does not pretend the platform is innocent."
+      },
+      {
+        "name": "Grief and the limits of consolation",
+        "summary": "The novel's most sustained private theme. Elizabeth has lost a brother to suicide, a lover to a freak accident, and a mother to Brazil. Calvin has lost two sets of parents, an aunt, and the mother he never knew was alive. Avery has lost a son she never met. The novel does not pretend any of these losses are recoverable; what it offers, instead, is the slow chosen-kin reconstruction of a family in their wake.",
+        "pivotalMomentIds": [
+          "km-calvin-death",
+          "km-avery-revelation"
+        ],
+        "contradictoryAspect": "Wakely's late-novel diagnosis (it's that you want back in) names the contradiction: grief's bleakest hour is also the proof that the griever still wants to live. Garmus does not let either side of the contradiction win."
+      },
+      {
+        "name": "Faith, science, and the institutions that conflate them",
+        "summary": "The novel's running argument. Elizabeth declares she does not believe in God; Wakely admits, privately, that he does not either; Avery Parker has lost faith for personal reasons; Calvin has lost faith because the All Saints priests beat him with rulers. Garmus's separation of faith and institution is most clearly stated by Madeline: faith isn't based on religion. The novel's most generous theological statement is given to a child.",
+        "pivotalMomentIds": [
+          "km-avery-revelation"
+        ],
+        "contradictoryAspect": "The Catholic charity that took Calvin from Avery is the same charity that, if its leaders had been honest, could have given him back. The institution is the harm; the institution is also the only available conduit."
+      },
+      {
+        "name": "Motherhood and the cultural price of choice",
+        "summary": "The novel's most quietly radical theme. Elizabeth had not planned to be a mother and is rendered, on the page, as a woman wrestling with that fact even as she also loves her child. Dr Mason's line (not every woman wants to be a mother; not every woman should be) is the line the cultural context will not permit a doctor to say in 1956. The novel grants it, and grants Elizabeth the capacity to be both ambivalent about and devoted to her daughter.",
+        "pivotalMomentIds": [
+          "km-fired-pregnant"
+        ],
+        "contradictoryAspect": "The novel honours women who choose motherhood, women who do not, and women who choose it without having meant to. It will not pick a side. The honesty is the ethics."
+      },
+      {
+        "name": "Chosen kinship versus institutional family",
+        "summary": "The novel's restorative theme. The biological-legal family the cultural context insists on (married, religious, nuclear) is rendered, in the novel's three principal cases, as either a fiction or a catastrophe. The chosen families the novel honours (Elizabeth, Harriet, Mad, Six-Thirty, Walter, Wakely, Mason, Frask, Avery) are the families that actually function. Madeline's family-tree project is the novel's symbol of this argument: she draws the family that exists, and the institution punishes her for it.",
+        "pivotalMomentIds": [
+          "km-avery-revelation"
+        ],
+        "contradictoryAspect": "The novel's chosen family includes Avery, who is biologically a grandmother. The chosen-kin argument does not exclude blood; it just refuses to let blood be the only legitimate ground."
+      },
+      {
+        "name": "Self-determination and the power of the public refusal",
+        "summary": "The novel's structural theme. Elizabeth's victories are public refusals: refusing Calvin's name, refusing Walter's cue cards, refusing Lebensmal's clothing demands, refusing the canned soup, refusing the Life magazine narrative. Each refusal exacts a cost; each refusal also produces a new platform. The novel argues that the public no, performed honestly and at scale, is itself a kind of generative act.",
+        "pivotalMomentIds": [
+          "km-marriage-refused",
+          "km-pilot",
+          "km-fillis"
+        ],
+        "contradictoryAspect": "Public refusal requires a public, and the public the novel's protagonist reaches is a 1956 daytime audience whose enthusiasm she finds, at times, suffocating. The platform is necessary and uncomfortable in equal measure."
+      }
+    ]
+  },
+  "examinerPitfalls": [
+    "Treating Lessons in Chemistry as primarily a romance. The Calvin-Elizabeth relationship is the novel's emotional engine but Calvin dies a third of the way in. Strong answers register that the novel is structured around his absence and that the cookery show, the Avery reunion, and the abiogenesis return are the novel's main material.",
+    "Reducing Elizabeth to a 'feisty heroine'. The novel renders her as someone whose refusals exact costs (firing, social ostracism, the Life betrayal) and whose victories are local and partial. Strong answers register the toll, not just the triumph.",
+    "Underrating the dog. Six-Thirty is granted free indirect chapters and is the witness to Calvin's death. Literary Genre answers that ignore his narrative role miss one of the novel's most distinctive structural choices.",
+    "Reading the closing as triumphant. Avery's reunion and Elizabeth's directorship are real, but Calvin is still dead, the bishop is still in business, and the cultural context has not changed. Strong answers read the closing as qualified, chosen restoration, not systemic resolution.",
+    "Forgetting the Catholic-home apparatus. The novel's deepest cruelty is not Donatti or Lebensmal but the unwed-mothers home that took Avery's son and the Catholic boys home that lied about his death. Cultural Context and Theme or Issue answers that ignore the religious-charitable institutions miss the structural villain.",
+    "Treating the show's broadcasts as filler. They are the novel's didactic core. Garmus uses them to render Elizabeth's argument in the same form the audience hears it. Literary Genre answers that ignore them miss the novel's structural claim about how feminist argument reaches an audience.",
+    "Underwriting Avery Parker. The novel grants her the closing reversal and uses her to render the Catholic-home apparatus that destroyed Calvin's family. Theme or Issue and Cultural Context answers that treat her as a deus ex machina miss the careful seeding of her presence (the science books at All Saints, the Sad Mother letters Calvin discarded, the funded boys-home rowing programme).",
+    "Reading the novel as set in the present. The novel is set in the early 1960s, deliberately. The 1960s setting is what permits the institutional behaviours the novel renders. Strong Cultural Context answers register the historicity of the cultural context, not just its resemblance to today's."
+  ],
+  "status": "draft",
+  "schemaVersion": 1,
+  "lastReviewedAt": null
+}

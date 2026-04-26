@@ -1,0 +1,535 @@
+{
+  "textId": "purple-hibiscus",
+  "title": "Purple Hibiscus",
+  "author": "Chimamanda Ngozi Adichie",
+  "type": "novel",
+  "yearsPrescribed": [2026],
+  "copyrightStatus": "rights_managed",
+  "attributionLine": "Purple Hibiscus by Chimamanda Ngozi Adichie (2003). Used here for educational analysis under fair dealing; quotations are short verified excerpts.",
+
+  "plotBeats": [
+    {
+      "index": 1,
+      "title": "Palm Sunday: the figurines break",
+      "location": "Part One: Breaking Gods (frame opening)",
+      "summary": "Kambili Achike, fifteen, narrates from after the events. Her seventeen-year-old brother Jaja refuses to take communion. Their father Eugene flings his missal across the room and shatters their mother's beige ballet-dancer figurines on the étagère. Kambili registers, in the moment, that more than the figurines is breaking.",
+      "significance": "The novel's framing device. Adichie opens with the family's collapse, then doubles back to show how it became inevitable. The intertextual nod to Achebe in the opening sentence places the novel in the line of Nigerian fiction about things falling apart."
+    },
+    {
+      "index": 2,
+      "title": "Before Palm Sunday: the Achike household at full pressure",
+      "location": "Part Two: Speaking With Our Spirits",
+      "summary": "The novel doubles back. Kambili and Jaja live by handwritten daily schedules Eugene draws up. Eugene is a wealthy publisher of the Standard newspaper, generous to his church and town, brutally violent to his family. Beatrice (Mama) miscarries after he beats her. Kambili comes second in her class and Eugene punishes her. Visits to Papa-Nnukwu, Eugene's traditionalist father, are restricted to fifteen minutes.",
+      "significance": "Establishes the household's cruelty as routine. The miscarriage and the report-card scene show that Eugene's violence is not exceptional; it is structural. The fifteen-minute rule on Papa-Nnukwu visits sets up the religious schism the novel will widen."
+    },
+    {
+      "index": 3,
+      "title": "The first trip to Nsukka",
+      "location": "Part Two: Speaking With Our Spirits",
+      "summary": "Aunty Ifeoma, Eugene's widowed sister and a university lecturer in Nsukka, pressures Eugene into letting Kambili and Jaja visit. They find a small, poor flat, no power half the time, but a household full of conversation, debate, laughter, and prayer that includes singing. They meet Father Amadi, the young priest who attends the chaplaincy.",
+      "significance": "The novel's structural turn. Nsukka is the book's purple hibiscus: the alternative life that exists, that Kambili and Jaja are now contaminated by. Everything that happens after this trip is conditioned by what Nsukka has shown them is possible."
+    },
+    {
+      "index": 4,
+      "title": "Papa-Nnukwu and the boiling water",
+      "location": "Part Two and Part Three",
+      "summary": "Papa-Nnukwu falls ill and Aunty Ifeoma brings him to Nsukka while Kambili and Jaja are still visiting. Kambili secretly watches him perform itu-nzu, his morning declaration of innocence. Amaka begins a portrait of him; he dies before it is finished. Eugene arrives, takes Kambili and Jaja home, and pours boiling water on Kambili's feet for sleeping in the same house as her 'heathen' grandfather.",
+      "significance": "The novel's central religious sequence. Papa-Nnukwu's prayer and Catholic rosary are placed deliberately side by side. Eugene's reaction shows the inheritance of his violence: he tells Kambili the priest who raised him once boiled his hands. The painting Amaka gives Kambili will return as the trigger for the climactic beating."
+    },
+    {
+      "index": 5,
+      "title": "Mama's flight and return",
+      "location": "Part Three: The Pieces of Gods",
+      "summary": "Beatrice arrives in Nsukka in the middle of the day, in slippers, her wrapper hanging loose. Eugene has beaten her so badly she has miscarried again. She tells Aunty Ifeoma what happened. Aunty Ifeoma urges her to leave. Beatrice returns to Eugene the next day, defending him.",
+      "significance": "The clearest single statement of Beatrice's economic and social entrapment. Her reply 'Where would I go?' names the cultural context that holds her in place. The scene also seeds the poisoning: the woman who cannot leave will eventually choose the only exit available."
+    },
+    {
+      "index": 6,
+      "title": "The painting destroyed; Kambili nearly killed",
+      "location": "Part Three: The Pieces of Gods",
+      "summary": "Back in Enugu, Eugene finds Kambili and Jaja looking at Amaka's painting of Papa-Nnukwu. He tears it. Kambili throws herself on the pieces. Eugene kicks and beats her until she is unconscious. She is hospitalised with internal bleeding and a broken rib. Aunty Ifeoma comes to take her, and Jaja, back to Nsukka to recover.",
+      "significance": "The novel's climactic act of physical violence. Kambili survives but the household has been broken open. Aunty Ifeoma's removal of Kambili to Nsukka, with Beatrice's reluctant consent, is the first crack in Eugene's domestic authority."
+    },
+    {
+      "index": 7,
+      "title": "Easter at Nsukka: scattering",
+      "location": "Part Three: The Pieces of Gods",
+      "summary": "Kambili and Jaja return to Nsukka for Easter. Aunty Ifeoma is being terminated by the university for refusing to support the sole administrator. Father Amadi is being sent to Germany. The family makes a pilgrimage to Aokpe. Father Amadi's last visits and Aunty Ifeoma's American visa interview both succeed: he leaves and she leaves.",
+      "significance": "The alternative life Nsukka represented is being dispersed by the same political and economic conditions that produced Eugene's wealth. The novel refuses to let Nsukka stand as a permanent refuge. Kambili's love for Father Amadi continues without him; her aunt's life continues without Nigeria."
+    },
+    {
+      "index": 8,
+      "title": "Palm Sunday again, Mama poisons Papa, Jaja takes the blame",
+      "location": "Part Four: A Different Silence",
+      "summary": "The frame closes. After Papa breaks the figurines, Beatrice quietly tells Kambili and Jaja that she had been putting poison in his tea for weeks. Eugene dies. Jaja confesses to the police and is taken to prison. Years later, with the military Head of State dead and a civilian government installed, Jaja is finally to be released. Kambili and Mama drive to the prison.",
+      "significance": "The novel's reversal. The tea Eugene used to burn his love into his children is the tea Beatrice uses to kill him. Jaja's confession is his act of taking care of his mother; Beatrice is broken anyway. The closing image of clouds heavy with new rain delivers a qualified hope: the household has been destroyed and a different silence has begun."
+    }
+  ],
+
+  "keyMoments": [
+    {
+      "id": "km-figurines-break",
+      "title": "The figurines break on Palm Sunday",
+      "location": "Opening pages, Part One",
+      "whatHappens": "Eugene flings his missal at Jaja for not taking communion. The book misses Jaja and shatters the étagère of beige ballet-dancing figurines, which Beatrice has been polishing since the novel can remember.",
+      "whyItMatters": "The frame moment. The figurines were Beatrice's displacement object, polished after every beating. Their breaking signals that the household's structure of silence has cracked. The novel will return to and elaborate every element of this opening scene.",
+      "modeDeployment": {
+        "CC": "The Achike household renders the cultural context's marriage of Catholic devotion, patriarchal rule, and economic privilege in a single tableau. The figurines are imported, the missal is leatherbound, the dining table is glass.",
+        "GVV": "The vision is set early. The breaking is welcome and disastrous at once. Adichie offers no consolation about either the household's prior order or the new disorder that has begun.",
+        "LG": "Frame opening. The novel doubles back from this scene. Adichie uses the figurines as a controlling image throughout.",
+        "TI": "Religion as instrument. The act that breaks the figurines is a religious act: a missal flung in defence of communion."
+      },
+      "anchorQuoteIds": ["q-kambili-things-fall-apart", "q-jaja-then-i-will-die"],
+      "linkSentenceTemplate": "Adichie opens Purple Hibiscus on a single image of breakage that contains the novel's whole argument, where [Text B]'s opening..."
+    },
+    {
+      "id": "km-love-sip",
+      "title": "Papa's 'love sip' burns Kambili's tongue",
+      "location": "Part One, before the Palm Sunday lunch",
+      "whatHappens": "Eugene pours tea from his china set and offers Kambili a sip. The tea is too hot. It burns her tongue. She thinks of the burn as the imprint of his love.",
+      "whyItMatters": "The scene where the abuser's logic enters the child's interior. The line that names the household's emotional grammar is also the line in which Kambili reveals how completely she has accepted it.",
+      "modeDeployment": {
+        "CC": "Domestic ritual as instrument of control. The china tea set, the love sip, the morning newspaper read aloud are the apparatus by which the household conducts its abuse in the language of devotion.",
+        "GVV": "The bleak strand of the vision. The narration is in Kambili's own voice; the reader must register that she means it when she calls the burn love.",
+        "LG": "First-person retrospective narration at its sharpest. The adult Kambili lets the child Kambili speak; the reader supplies the moral context.",
+        "TI": "Religion as instrument. The tea ritual is paired with rosaries, missal readings, and Father Benedict's sermons in the household's vocabulary of love."
+      },
+      "anchorQuoteIds": ["q-kambili-burned-papas-love"],
+      "linkSentenceTemplate": "The 'love sip' scene in Purple Hibiscus shows abuse delivered in the grammar of devotion, comparable in effect to [Text B]'s..."
+    },
+    {
+      "id": "km-fifteen-minutes-papa-nnukwu",
+      "title": "Fifteen minutes with Papa-Nnukwu",
+      "location": "Part Two, the Christmas visit to Abba",
+      "whatHappens": "Eugene allows Kambili and Jaja to visit his father, but only for fifteen minutes, with Kevin watching. They cannot eat or drink in his house because his food is offered to ancestors. Papa-Nnukwu jokes, asks after them, blesses them, never criticises Eugene.",
+      "whyItMatters": "Stages the novel's central religious and familial schism. Eugene's refusal of his own father is the load-bearing structural fact behind every other tension in the novel.",
+      "modeDeployment": {
+        "CC": "The cultural context's religious schism rendered as family schism. Papa-Nnukwu's mud-and-thatch compound and Eugene's white four-storey house sit in the same village.",
+        "GVV": "The vision's tenderness sits in this scene. Papa-Nnukwu does not rage; the bleakness is in his quiet acceptance.",
+        "LG": "Compressed scene-setting. Adichie gives the reader the entirety of the family schism in one fifteen-minute visit.",
+        "TI": "Colonialism and inheritance. Papa-Nnukwu's refusal to convert is the novel's most respected position."
+      },
+      "anchorQuoteIds": ["q-papa-nnukwu-tufia-equal", "q-amaka-takes-it-well", "q-jaja-hides-it-well"],
+      "linkSentenceTemplate": "The fifteen-minute visit to Papa-Nnukwu in Purple Hibiscus stages the cultural and religious schism of post-colonial Nigeria as a family rule, where [Text B]'s equivalent..."
+    },
+    {
+      "id": "km-purple-hibiscus-named",
+      "title": "Aunty Ifeoma's purple hibiscus named",
+      "location": "Part Two, on Aunty Ifeoma's verandah in Nsukka",
+      "whatHappens": "Aunty Ifeoma shows Jaja the rare purple hibiscus growing in her front garden. Jaja, unaware that hibiscuses come in purple, examines a flower and runs his finger over a petal.",
+      "whyItMatters": "The novel's title metaphor seeded. The purple hibiscus is the experimental rarity Aunty Ifeoma's botanist friend bred; Jaja's defiance later is named in Kambili's narration as the same kind of rare freedom. The flower returns at the close, when Kambili imagines planting it at home.",
+      "modeDeployment": {
+        "CC": "The cultural context admits an alternative. Aunty Ifeoma's small, struggling academic household is poorer than Eugene's by every economic measure and freer by every other measure.",
+        "GVV": "The hopeful strand of the vision. The novel's most quoted symbol is also its most quoted possibility.",
+        "LG": "Symbolism made explicit. Adichie names her own central image and lets the protagonist articulate what it stands for.",
+        "TI": "Freedom 'to be, to do', distinguished from the public political freedom of the post-coup chants."
+      },
+      "anchorQuoteIds": ["q-kambili-purple-hibiscus-freedom", "q-aunty-ifeoma-defiance-marijuana"],
+      "linkSentenceTemplate": "The purple hibiscus is the novel's controlling symbol of a private freedom that contrasts with [Text B]'s..."
+    },
+    {
+      "id": "km-itu-nzu",
+      "title": "Papa-Nnukwu's itu-nzu prayer at dawn",
+      "location": "Part Two, in Aunty Ifeoma's flat",
+      "whatHappens": "Aunty Ifeoma wakes Kambili before dawn and tells her to watch from the doorway. Papa-Nnukwu performs his daily itu-nzu, drawing chalk lines on the verandah floor while declaring his innocence, blessing his children and grandchildren, blessing Eugene by name.",
+      "whyItMatters": "The novel's structural pairing of traditional prayer and Catholic prayer in a single chapter. Aunty Ifeoma had told Kambili the day before that Papa-Nnukwu is not a heathen but a traditionalist; this scene is the demonstration. The blessing of Eugene by the father he refuses to greet is the novel's most generous moment.",
+      "modeDeployment": {
+        "CC": "Religion in the cultural context as practice rather than label. Adichie places itu-nzu and the rosary on a single page and lets the reader register that the difference is one of vocabulary, not of moral content.",
+        "GVV": "The vision's expansive register. The novel's deepest tenderness is reserved for a man Eugene calls a heathen.",
+        "LG": "Tableau staging. Kambili at the door, Papa-Nnukwu at the chalk lines, the kerosene lamp turned low. Adichie composes the scene like a painting.",
+        "TI": "Colonialism and the inheritance of prayer. The novel's argument that what Eugene was taught to call paganism is in fact a complete and dignified religious practice."
+      },
+      "anchorQuoteIds": ["q-papa-nnukwu-killed-no-one", "q-aunty-ifeoma-traditionalist", "q-papa-nnukwu-prayer-eugene"],
+      "linkSentenceTemplate": "The itu-nzu scene in Purple Hibiscus places traditional religious practice and Catholic devotion side by side, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-boiling-water",
+      "title": "Eugene pours boiling water on Kambili's feet",
+      "location": "Part Three, the bathroom in Enugu after the trip to Nsukka",
+      "whatHappens": "Eugene brings Kambili into the bathroom, asks her to climb into the tub, and pours boiling water on her feet. He cries as he pours. Afterwards, sitting on her bed, he tells her about the priest who once boiled his hands as a boy.",
+      "whyItMatters": "The novel's most precise rendering of the inheritance of abuse. Eugene's violence is presented neither as monstrosity nor as exception but as something he himself was taught was love. The 'I committed a sin against my own body once' line names the lineage.",
+      "modeDeployment": {
+        "CC": "The colonial education of Eugene by missionary priests is the cultural context that produced his abuse. Adichie does not let the reader place the violence outside the colonial encounter.",
+        "GVV": "The bleak strand of the vision. Eugene's tears are real; the violence is real; both are equally true.",
+        "LG": "Tight, close-third-person interiority filtered through Kambili's first-person retrospect. The scalding is rendered through Kambili's senses; the explanation is delivered as Eugene's voice.",
+        "TI": "Religion as instrument and inheritance. The line of violence runs from missionary priest to Eugene to Kambili, and the line of religious explanation runs alongside it."
+      },
+      "anchorQuoteIds": ["q-papa-pour-water-on-feet", "q-papa-everything-i-do-for-you", "q-papa-i-committed-sin-against-body"],
+      "linkSentenceTemplate": "The boiling-water scene in Purple Hibiscus traces violence to its colonial-religious source in a way [Text B]'s equivalent..."
+    },
+    {
+      "id": "km-mama-flight",
+      "title": "Mama arrives in Nsukka in slippers",
+      "location": "Part Three, on Aunty Ifeoma's verandah",
+      "whatHappens": "Beatrice arrives at Aunty Ifeoma's flat in the middle of the day, in rubber slippers, her wrapper hanging loose, the birthmark above her left breast exposed. Eugene has beaten her again and she has lost the new pregnancy. She defends him to Aunty Ifeoma. She returns to Enugu the next morning.",
+      "whyItMatters": "The novel's clearest staging of Beatrice's entrapment. The cultural context, the economic dependence, the social shame, and her own conditioning all hold her in the marriage. Aunty Ifeoma's offer of refuge is genuine and rejected.",
+      "modeDeployment": {
+        "CC": "The full apparatus of the cultural context that holds a wealthy woman in an abusive marriage. Beatrice names it: there is nowhere else to go, the umunna pressed for Eugene to take a second wife, marriage is what gives her a public name.",
+        "GVV": "The vision admits Beatrice's case. She is not a fool; her decision to return is a clear-eyed reading of the available alternatives.",
+        "LG": "Two-handed dialogue between sisters-in-law. Adichie writes the scene with no melodrama; the horror is in Beatrice's calm.",
+        "TI": "Marriage and economic complicity. The theme stated by the woman who is its clearest case."
+      },
+      "anchorQuoteIds": ["q-mama-where-would-i-go", "q-mama-eugene-not-been-well", "q-aunty-ifeoma-life-begins-marriage-ends", "q-aunty-ifeoma-cannot-let-it-happen"],
+      "linkSentenceTemplate": "Mama's arrival in Nsukka stages a wife's full economic and cultural entrapment in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-poisoning-jaja-takes-blame",
+      "title": "Mama poisons Papa, Jaja takes the blame",
+      "location": "Part Four, at the close of the frame",
+      "whatHappens": "Eugene is found dead at his desk. Beatrice tells Kambili and Jaja she had been putting poison in his tea for weeks, since before the Easter visit to Nsukka. The police come. Jaja confesses, despite his innocence, and is taken to prison. Beatrice breaks; for years she does not speak unless spoken to.",
+      "whyItMatters": "The novel's reversal and closing. The tea Eugene used to burn his love into Kambili is the tea Beatrice used to kill him. Jaja's confession is his act of taking care of the mother he could not protect when she was being beaten. The closing is hopeful only because Jaja will eventually be released; everything else is ruin.",
+      "modeDeployment": {
+        "CC": "The marriage's only available exit, in this cultural context, was murder. Adichie does not flinch from the implication.",
+        "GVV": "The vision's final pivot. Hope is delivered in the closing image of the new rains; bleakness is everywhere else.",
+        "LG": "Frame closure. The novel ends where its opening began but on the other side of the household's destruction. The tea, the figurines, the Palm Sunday all return.",
+        "TI": "Vengeance, sacrifice, and the cost of the marriage's exit. Beatrice acts; Jaja takes the consequence; Kambili narrates."
+      },
+      "anchorQuoteIds": ["q-mama-i-started-putting-poison", "q-jaja-i-should-have-taken-care", "q-kambili-final-clouds"],
+      "linkSentenceTemplate": "The closing reversal of Purple Hibiscus, in which the abused wife kills the abuser using his own ritual of love, compares in moral structure with [Text B]'s..."
+    }
+  ],
+
+  "characters": [
+    {
+      "id": "char-kambili",
+      "name": "Kambili Achike",
+      "role": "Protagonist and first-person narrator. Fifteen at the novel's opening. The interior of the novel is her growing voice.",
+      "socialPosition": "Daughter of Eugene Achike, the wealthiest man in their town. Convent schoolgirl. Privileged in money and class, terrorised at home, silent at school where her classmates call her 'backyard snob' because she will not speak.",
+      "mindset": "At the opening, Kambili speaks more with her spirit than her lips, in the household's private language of glances. Through Nsukka and Father Amadi she begins to speak, to laugh, to run, to want. Her narration is retrospective; the older Kambili lets the younger one speak, and trusts the reader with the gap.",
+      "contradictions": "She loves her father and is terrified of him. She believes the burn of his tea is the imprint of his love; the novel does not let the reader read this ironically only. Her interior is divided in a way that the prose registers without resolving.",
+      "arc": "Silent schoolgirl in Enugu; awakened cousin in Nsukka; physical-violence survivor in hospital; lover of a priest who must leave; surviving daughter at the prison. The arc is the gradual emergence of a voice that, at the close, can imagine the future and laugh.",
+      "keyRelationshipIds": ["rel-kambili-papa", "rel-kambili-jaja", "rel-kambili-aunty-ifeoma", "rel-kambili-amaka", "rel-kambili-father-amadi"],
+      "keyQuoteIds": ["q-kambili-things-fall-apart", "q-kambili-burned-papas-love", "q-kambili-spoke-with-spirits", "q-kambili-purple-hibiscus-freedom", "q-kambili-scaled-the-rod-terrified", "q-kambili-good-legs-for-running", "q-kambili-final-clouds", "q-amaka-takes-it-well"]
+    },
+    {
+      "id": "char-jaja",
+      "name": "Jaja (Chukwuka) Achike",
+      "role": "Kambili's seventeen-year-old brother. The figure whose first refusal opens the novel. Named after Jaja of Opobo, the defiant king Aunty Ifeoma reminds him of.",
+      "socialPosition": "Eldest son of a wealthy Catholic publisher. Convent-school equivalent for boys, daily schedule, deformed left little finger from when Eugene punished him at ten for missing two questions on a catechism test.",
+      "mindset": "Quieter than Kambili externally, harder underneath. He thinks before he speaks. His mind has been working out the household's wrong for longer than she realises. Nsukka brings out a man who already existed.",
+      "contradictions": "He is the household's protected son and the household's earliest dissenter. The deformed finger marks both his subjection and the limit of subjection. He claims a crime he did not commit at the close, in the act that defines him.",
+      "arc": "Subordinate son in Enugu; awakened gardener and football player in Nsukka; refuser of communion at the second Palm Sunday; voluntary prisoner at the close. His final act, taking the blame, is a coherent extension of every earlier defiance.",
+      "keyRelationshipIds": ["rel-kambili-jaja", "rel-jaja-papa", "rel-jaja-aunty-ifeoma"],
+      "keyQuoteIds": ["q-jaja-then-i-will-die", "q-jaja-no-words-in-my-mouth", "q-jaja-hides-it-well", "q-jaja-i-should-have-taken-care"]
+    },
+    {
+      "id": "char-papa",
+      "name": "Eugene Achike (Papa)",
+      "role": "Antagonist. Wealthy publisher of the Standard newspaper, devout Catholic, philanthropist, domestic abuser, and Big Man of his town.",
+      "socialPosition": "Self-made tycoon, the largest single donor to St. Agnes Cathedral, recipient of an Amnesty World human rights award, sponsor of the school fees of much of his umunna. Educated by missionary priests in his youth.",
+      "mindset": "He believes his violence is love. He weeps after he hurts his children and he means it. Adichie writes him neither as a monster nor as an excuse but as a man whose moral interior was formed by missionaries who taught him that pain was the proper instrument of correction.",
+      "contradictions": "He prints the most fearless newspaper in Nigeria and beats his pregnant wife. He pays for his father's funeral and refuses to greet him while he lives. He gives away his money and times his children's bathroom visits. The novel refuses to resolve the contradictions; it presents them.",
+      "arc": "Static across most of the novel; the change is in everyone around him. By the second Palm Sunday his face is rashed and swollen with the poison Beatrice has been giving him. He dies at his desk. The novel narrates no inner shift in him.",
+      "keyRelationshipIds": ["rel-kambili-papa", "rel-jaja-papa", "rel-papa-mama", "rel-papa-papa-nnukwu", "rel-papa-aunty-ifeoma"],
+      "keyQuoteIds": ["q-papa-walk-into-sin", "q-papa-pour-water-on-feet", "q-papa-everything-i-do-for-you", "q-papa-i-committed-sin-against-body", "q-amaka-uncle-eugene-not-bad-man"]
+    },
+    {
+      "id": "char-mama",
+      "name": "Beatrice Achike (Mama)",
+      "role": "The household's quiet mother and, eventually, its decisive actor. The character whose voice is the novel's lowest in volume and whose action is its loudest.",
+      "socialPosition": "Wife of Eugene; daughter of a man whose house and standing she has long surpassed materially. Mother of two living children and at least two miscarried. She brought a fortune to her marriage; that fortune is no longer her route out.",
+      "mindset": "Gentle, internal, devoted to her children, conditioned to take Eugene's violence as the price of her place. She speaks rarely. Her interiority is registered through her hands: polishing the figurines after every beating, plaiting Kambili's hair, knotting and unknotting her wrapper.",
+      "contradictions": "She defends Eugene to Aunty Ifeoma the day after he beats her into miscarriage. She loves him and she eventually kills him. The novel does not present these as opposed; it presents them as parts of the same exhaustion.",
+      "arc": "Silent in Part One; flight to Nsukka and return in Part Three; murderer in Part Four; broken survivor in Part Four. Her arc is the slowest, smallest, and most decisive in the novel.",
+      "keyRelationshipIds": ["rel-papa-mama", "rel-mama-aunty-ifeoma", "rel-kambili-mama"],
+      "keyQuoteIds": ["q-mama-where-would-i-go", "q-mama-eugene-not-been-well", "q-mama-i-started-putting-poison"]
+    },
+    {
+      "id": "char-aunty-ifeoma",
+      "name": "Aunty Ifeoma",
+      "role": "Eugene's sister. University lecturer at Nsukka. Widow with three children. The novel's matriarchal counterweight to Eugene's patriarchal household.",
+      "socialPosition": "Academic middle class in a Nigerian university entering economic collapse. Lives in a small flat with intermittent power. Loud, fearless, devout in her own register, unafraid of Eugene.",
+      "mindset": "Believes in argument, conversation, and laughter as the conditions of a household. She raises her children to question; she calls her sister-in-law 'nwunye m', my wife, in the Igbo idiom of family solidarity.",
+      "contradictions": "She is a Catholic who refuses to call her father a heathen. She is broke and proud. She loves Nigeria and emigrates from it. The novel presents these as parts of one coherent woman, not as flaws.",
+      "arc": "Visiting sister in Part One; alternative-life provider in Parts Two and Three; terminated lecturer and emigrant in Part Three; epistolary voice from America in Part Four. She is the novel's most consistently active force.",
+      "keyRelationshipIds": ["rel-kambili-aunty-ifeoma", "rel-mama-aunty-ifeoma", "rel-papa-aunty-ifeoma"],
+      "keyQuoteIds": ["q-aunty-ifeoma-traditionalist", "q-aunty-ifeoma-defiance-marijuana", "q-aunty-ifeoma-life-begins-marriage-ends", "q-aunty-ifeoma-cannot-let-it-happen", "q-aunty-ifeoma-curse-sand", "q-aunty-ifeoma-rules-disrespectful-children"]
+    },
+    {
+      "id": "char-papa-nnukwu",
+      "name": "Papa-Nnukwu",
+      "role": "Eugene and Aunty Ifeoma's father. Kambili's grandfather. A traditionalist, lifelong worshipper of his ancestors and the old gods, with a small house in Abba.",
+      "socialPosition": "An old man near the bottom of the village's economic order, sustained by Aunty Ifeoma's small remittances and refused entry to the wealthy son's house because he will not convert.",
+      "mindset": "Gentle, humorous, dignified, a teller of folktales, a daily practitioner of itu-nzu. He blesses Eugene every morning despite Eugene's refusal of him. He never criticises his son to his grandchildren.",
+      "contradictions": "He refused to convert and lost his son. He is the most respected adult in the novel and the one with the least social standing. His prayer for Eugene is the novel's most generous gesture.",
+      "arc": "Visited by Kambili and Jaja in Abba; brought to Nsukka by Aunty Ifeoma when ill; observed at dawn by Kambili; painted by Amaka; dies in his sleep, smiling. His arc is short in real time and structurally central.",
+      "keyRelationshipIds": ["rel-papa-papa-nnukwu", "rel-kambili-papa-nnukwu"],
+      "keyQuoteIds": ["q-papa-nnukwu-tufia-equal", "q-papa-nnukwu-killed-no-one", "q-papa-nnukwu-prayer-eugene"]
+    },
+    {
+      "id": "char-amaka",
+      "name": "Amaka",
+      "role": "Aunty Ifeoma's fifteen-year-old daughter. Kambili's cousin, foil, and eventual friend. Painter of Papa-Nnukwu.",
+      "socialPosition": "Academic-middle-class teenager, listening to politically conscious Igbo musicians, deeply attached to her grandfather, unimpressed by her wealthy uncle.",
+      "mindset": "Sharp, impatient, articulate, watchful. She challenges Kambili's silence at first and gradually recognises what it has cost her. She refuses an English confirmation name.",
+      "contradictions": "She speaks the novel's most explicit anti-colonial critiques and is the cousin who softens Kambili's interior most. She defends Eugene's complexity to Kambili after Papa-Nnukwu's funeral, refusing the easy verdict.",
+      "arc": "Hostile cousin in Part Two; ally and friend by the end of Part Two; epistolary voice from America in Part Four. The painting she gives Kambili survives the novel as a token.",
+      "keyRelationshipIds": ["rel-kambili-amaka"],
+      "keyQuoteIds": ["q-amaka-uncle-eugene-not-bad-man", "q-amaka-takes-papa-nnukwu"]
+    },
+    {
+      "id": "char-obiora",
+      "name": "Obiora",
+      "role": "Aunty Ifeoma's fourteen-year-old son. The household's intellectual and sceptic.",
+      "socialPosition": "Recently completed his ima mmuo (initiation into the spirit world). Grammar-school student, gifted, sharp-tongued.",
+      "mindset": "Curious about everything, cynical about institutions, generous to his cousins. He pushes back on Father Amadi, on his mother's friend, on every received certainty.",
+      "contradictions": "The household's protected youngest son and its most advanced critic. The novel uses him to articulate political and religious questions Kambili and Jaja cannot yet voice.",
+      "arc": "Steady. He helps the household run, drives nuance into every conversation, and emigrates with his mother and siblings.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-aunty-ifeoma-rules-disrespectful-children"]
+    },
+    {
+      "id": "char-father-amadi",
+      "name": "Father Amadi",
+      "role": "Young Catholic priest at the university chaplaincy. The figure through whom Kambili first encounters religious life as joy rather than fear.",
+      "socialPosition": "Member of a missionary order; coaches township boys at the stadium; visited often by every household at Nsukka. Singer, runner, listener.",
+      "mindset": "Warm, attentive, undidactic. He plays football in his soutane, sings Igbo praise songs in the car, asks questions and waits for answers.",
+      "contradictions": "He is a priest and Kambili is his closest friend in the novel. The bond never crosses into romance; the longing is honoured and not enacted.",
+      "arc": "Mentor to township boys in Nsukka; daily presence in Kambili's awakening; sent to Germany by his order. He continues, in letters, after he leaves.",
+      "keyRelationshipIds": ["rel-kambili-father-amadi"],
+      "keyQuoteIds": ["q-father-amadi-show-me-love-jesus", "q-father-amadi-believe-something-never-question", "q-kambili-good-legs-for-running", "q-father-amadi-where-the-lord-sends"]
+    },
+    {
+      "id": "char-aunty-chiaku",
+      "name": "Aunty Chiaku",
+      "role": "Aunty Ifeoma's friend on the verandah. A minor character whose scene articulates the novel's national-political layer.",
+      "socialPosition": "University lecturer, like Aunty Ifeoma, similarly impoverished by salary delays and the academic exodus.",
+      "mindset": "Cleareyed about the cost of the educated emigration that Aunty Ifeoma is contemplating. The novel uses her as the voice of the case against leaving.",
+      "contradictions": "The character who articulates the moral cost of leaving is a friend of the character who leaves. The novel does not arbitrate.",
+      "arc": "One scene, one position. Adichie uses her as a chorus moment.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-aunty-chiaku-educated-leave"]
+    }
+  ],
+
+  "relationships": [
+    {
+      "id": "rel-kambili-papa",
+      "characterAId": "char-kambili",
+      "characterBId": "char-papa",
+      "type": "family",
+      "startStatus": "Father and adoring, terrified daughter. Kambili measures her days by his approval. The 'love sip' ritual stands in for the relationship.",
+      "endStatus": "Daughter narrating a dead father in retrospect, refusing both demonisation and absolution.",
+      "trajectory": "The novel's most disturbing relationship. Kambili's love for her father is real and the violence done to her by him is real and the prose insists on holding both at once. Her arc, including her love for Father Amadi and her conscious recovery in the Nsukka months, is also her gradual ability to love Eugene without being consumed by him. She does not convert to hating him. The closing image of her at the prison contains his absence rather than dramatising it.",
+      "keyMomentIds": ["km-love-sip", "km-boiling-water", "km-poisoning-jaja-takes-blame"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    },
+    {
+      "id": "rel-papa-mama",
+      "characterAId": "char-papa",
+      "characterBId": "char-mama",
+      "type": "romantic",
+      "startStatus": "Public partnership; private violence. Beatrice's birthmark is exposed when her wrapper slips, signalling the body she conceals from public view.",
+      "endStatus": "Murderer and victim. The marriage ended by tea, in the household's own ritual of love.",
+      "trajectory": "The novel's central marriage works as a document of how a wealthy, devout, educated husband can spend years beating his wife into miscarriages. Beatrice cannot leave; her cultural context, economic dependence and conditioned devotion all hold her. The poisoning is not a moment of insanity; the novel makes clear it began before the trip to Nsukka. The marriage ends as it must, given that no other ending was available to her.",
+      "keyMomentIds": ["km-figurines-break", "km-mama-flight", "km-poisoning-jaja-takes-blame"],
+      "modeRelevance": ["CC", "TI", "GVV"]
+    },
+    {
+      "id": "rel-kambili-jaja",
+      "characterAId": "char-kambili",
+      "characterBId": "char-jaja",
+      "type": "family",
+      "startStatus": "Siblings communicating mainly with their eyes, in the household's private language of glances.",
+      "endStatus": "Sister visiting brother in prison, brother taking the blame so that the sister can be free.",
+      "trajectory": "The relationship shifts from co-survivors to co-witnesses to co-actors. Nsukka separates them slightly; Kambili awakens through Father Amadi, Jaja through Aunty Ifeoma's garden and Obiora's friendship. The closing image is asymmetric: Kambili will live a future, Jaja has chosen to lose years for it.",
+      "keyMomentIds": ["km-figurines-break", "km-purple-hibiscus-named", "km-poisoning-jaja-takes-blame"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    },
+    {
+      "id": "rel-papa-papa-nnukwu",
+      "characterAId": "char-papa",
+      "characterBId": "char-papa-nnukwu",
+      "type": "family",
+      "startStatus": "Father and son who do not speak. Eugene sends money via the driver. Papa-Nnukwu prays for Eugene every morning.",
+      "endStatus": "Eugene pays for the funeral but refuses to attend; Aunty Ifeoma refuses the Catholic funeral he tries to impose.",
+      "trajectory": "The novel's central religious schism rendered as a familial one. Eugene's refusal of his own father is the most damning indictment of the missionary education that produced him. The relationship is one-sided in its rupture: Papa-Nnukwu does not refuse Eugene back. He blesses him and dies smiling.",
+      "keyMomentIds": ["km-fifteen-minutes-papa-nnukwu", "km-itu-nzu"],
+      "modeRelevance": ["CC", "TI", "GVV"]
+    },
+    {
+      "id": "rel-kambili-aunty-ifeoma",
+      "characterAId": "char-kambili",
+      "characterBId": "char-aunty-ifeoma",
+      "type": "family",
+      "startStatus": "Niece who hardly knows her aunt. Aunty Ifeoma's loud Igbo and laughter are foreign to her.",
+      "endStatus": "Niece in regular epistolary contact with the aunt who saved her, both literally (the second hospital trip) and structurally (Nsukka).",
+      "trajectory": "Aunty Ifeoma is the alternative mother Kambili did not know was possible. Their relationship is conducted partly through small acts (a glass of soybean milk, a hand on the cornrow) and partly through structural rescue (the trip to Nsukka, the Easter return, the post-hospital relocation). The relationship is the novel's clearest case for chosen kinship.",
+      "keyMomentIds": ["km-purple-hibiscus-named", "km-itu-nzu", "km-poisoning-jaja-takes-blame"],
+      "modeRelevance": ["TI", "GVV", "CC"]
+    },
+    {
+      "id": "rel-kambili-father-amadi",
+      "characterAId": "char-kambili",
+      "characterBId": "char-father-amadi",
+      "type": "romantic",
+      "startStatus": "Stranger priest visiting the Nsukka household. Kambili cannot meet his eyes.",
+      "endStatus": "Epistolary correspondents on different continents. The love continues, unconsummated and undiminished.",
+      "trajectory": "The novel's tenderest relationship. Father Amadi is the first man who treats Kambili's body as her own, who praises her legs for running rather than her hair for being properly covered, who takes her to the stadium and makes her laugh. The bond is unmistakably romantic and is contained by the priesthood. Adichie does not stage a crisis; she lets the relationship be a continuing presence in Kambili's interior life across the closing section.",
+      "keyMomentIds": ["km-purple-hibiscus-named", "km-itu-nzu"],
+      "modeRelevance": ["TI", "GVV"]
+    },
+    {
+      "id": "rel-mama-aunty-ifeoma",
+      "characterAId": "char-mama",
+      "characterBId": "char-aunty-ifeoma",
+      "type": "family",
+      "startStatus": "Sisters-in-law of long acquaintance. Aunty Ifeoma calls Beatrice 'nwunye m', Beatrice nods and smiles.",
+      "endStatus": "Aunty Ifeoma in America, writing letters. Beatrice in Enugu, broken, scarcely speaking.",
+      "trajectory": "The relationship between the woman who chose another life and the woman who could not. Aunty Ifeoma offers refuge multiple times; Beatrice refuses. The novel respects both decisions. The arc registers the limits of solidarity within a cultural context the wealthy sister-in-law cannot escape.",
+      "keyMomentIds": ["km-mama-flight"],
+      "modeRelevance": ["CC", "TI", "GVV"]
+    }
+  ],
+
+  "culturalContext": {
+    "socialClass": {
+      "applies": "yes",
+      "summary": "Purple Hibiscus measures class precisely across three households. The Achikes in Enugu live behind high walls topped with electric wire, with a Mercedes, a Volvo, a Peugeot, and a chauffeur. Aunty Ifeoma's flat in Nsukka has no power most evenings, no fuel for the car, and only one room of bookshelves. Papa-Nnukwu's house in Abba is mud-and-thatch with an outhouse. The novel's class structure is not abstract; it is the texture of three domestic worlds set on the same Nigerian map. Eugene's wealth, derived from his factories and the Standard, sits inside a national economy in which Aunty Ifeoma cannot afford milk and Papa-Nnukwu cannot afford meat in his soup.",
+      "anchorMomentIds": ["km-fifteen-minutes-papa-nnukwu", "km-purple-hibiscus-named"],
+      "anchorQuoteIds": ["q-aunty-chiaku-educated-leave"],
+      "argumentHook": "Class in Purple Hibiscus is rendered as the texture of three domestic worlds; the novel's cultural context is made concrete by the difference between a Mercedes, a flat with intermittent power, and a thatched outhouse."
+    },
+    "gender": {
+      "applies": "yes",
+      "summary": "The cultural context is patriarchal at every level. Eugene rules his household with religious and physical violence. Beatrice cannot leave him because her economic and social existence is tied to the marriage. The umunna press Eugene to take a second wife when she has only two children. Aunty Ifeoma is the novel's clearest alternative: a widowed academic raising her children alone, repeatedly told that life as a woman without a husband is impossible, repeatedly demonstrating that it is not. Kambili's awakening is also a gendered awakening: a body that has been subject to control becomes, briefly, capable of running, of being praised for its legs, of laughing.",
+      "anchorMomentIds": ["km-mama-flight", "km-purple-hibiscus-named"],
+      "anchorQuoteIds": ["q-mama-where-would-i-go", "q-aunty-ifeoma-life-begins-marriage-ends", "q-kambili-good-legs-for-running"],
+      "argumentHook": "Gender in Purple Hibiscus determines what a woman can and cannot do, and the novel runs three women's responses (Beatrice's silence, Aunty Ifeoma's defiance, Kambili's awakening) through the same cultural context."
+    },
+    "religion": {
+      "applies": "yes",
+      "summary": "Religion saturates the novel and is its most important critical category. Eugene's Catholicism is the inheritance of missionary education, taken to a fundamentalist register. Father Benedict, the white parish priest, sermonises about Eugene by name. Father Amadi, the young Igbo Catholic priest, sings Igbo praise songs and plays football with township boys; his Catholicism reads as continuous with Igbo life rather than against it. Papa-Nnukwu's itu-nzu is the novel's clearest example of a religious practice that the dominant culture calls heathenism and the novel honours. Aunty Ifeoma names the distinction: Papa-Nnukwu is not a pagan, he is a traditionalist. The cultural context is post-colonial Catholic Nigeria, in which the imported religion is inseparable from the colonial encounter.",
+      "anchorMomentIds": ["km-fifteen-minutes-papa-nnukwu", "km-itu-nzu", "km-boiling-water"],
+      "anchorQuoteIds": ["q-papa-nnukwu-killed-no-one", "q-aunty-ifeoma-traditionalist", "q-papa-nnukwu-prayer-eugene", "q-papa-i-committed-sin-against-body"],
+      "argumentHook": "Religion in Purple Hibiscus is the post-colonial inheritance of missionary education, and the novel sets the violence Eugene calls Catholicism beside the dignity Papa-Nnukwu calls tradition."
+    },
+    "familyAndMarriage": {
+      "applies": "yes",
+      "summary": "The novel works marriage and family at three registers: the Achike marriage as abuse maintained by religion and economics; Aunty Ifeoma's widowed household as a working alternative; Papa-Nnukwu's solitary old age as the cost a father pays for not converting. The umunna, the extended family, presses Eugene to take a second wife and presses Aunty Ifeoma to remarry. The cultural context's family structures are simultaneously protective and coercive. The novel's phrase 'nwunye m', my wife, names Aunty Ifeoma's gesture of solidarity with Beatrice and is also the cultural context's idiom for treating women as collective property.",
+      "anchorMomentIds": ["km-fifteen-minutes-papa-nnukwu", "km-mama-flight"],
+      "anchorQuoteIds": ["q-mama-where-would-i-go", "q-aunty-ifeoma-life-begins-marriage-ends"],
+      "argumentHook": "Family and marriage in this cultural context are rendered through three households whose geometries (abusive marriage, widowed solidarity, refused son) together describe the structure that holds Beatrice in place."
+    },
+    "authorityAndPower": {
+      "applies": "yes",
+      "summary": "Authority operates in Purple Hibiscus at three scales: the household (Eugene's daily schedules and physical violence), the church (Father Benedict's sermons, the bishop's confirmations, the Aokpe pilgrimage), and the state (the military Head of State, the Big Oga, the soldiers who plant rats in factories and shoot Nwankiti Ogechi and detonate a letter bomb in Ade Coker's hands). The novel works the three scales together: Eugene the publisher of dissent at the national scale is Eugene the tyrant at the household scale, and the priest who praises him at the parish scale is the priest who forms his idea of love. There is no formal authority in the novel that intervenes against any abuse; the closing change is a Head of State's death and the new civilian government that will release Jaja.",
+      "anchorMomentIds": ["km-figurines-break", "km-boiling-water", "km-poisoning-jaja-takes-blame"],
+      "anchorQuoteIds": ["q-aunty-chiaku-educated-leave"],
+      "argumentHook": "Authority in Purple Hibiscus is layered across household, church, and state, and the novel works the layers together so that the household tyrant and the national tyrant are the same kind of figure operating at different scales."
+    }
+  },
+
+  "generalVisionAndViewpoint": {
+    "oneLineVision": "Purple Hibiscus offers a qualified, ultimately recovering vision: post-colonial Nigerian Catholic patriarchy is shown to do enormous harm, but the novel finds, in Aunty Ifeoma's Nsukka, in Father Amadi's faith, in Kambili's voice, and in the closing image of new rains, a hard-won possibility of a different life.",
+    "openingShapesVision": "The vision is set up by an act of breakage. The opening Palm Sunday scene presents the household at the moment something has finally cracked. Adichie does not let the reader pretend the prior order was a peace; she signals from the first sentence that things were already falling. The reader spends Parts Two and Three understanding what was so wrong before the breakage came.",
+    "climaxShapesVision": "The vision's bleakest stretches are the boiling-water scene and the painting beating. Eugene's violence is rendered without narrative softening; the moral weight is delivered in his own logic, in the language of sin and love, which is the logic that produced him. The vision insists that the violence is real and that Eugene is real, both at once.",
+    "closingShapesVision": "The closing recovers a register of qualified hope. Beatrice is broken, Jaja is in prison, Father Amadi is in Germany, Aunty Ifeoma is in America. But Jaja will be released. Kambili imagines planting purple hibiscus and ixora at home. The new rains will come. The novel will not promise restoration; it promises continuation.",
+    "ambiguity": "The vision is qualified throughout. Eugene is not a monster; Father Benedict is not malicious; the umunna is not a villain; Aunty Ifeoma's emigration is not a moral solution. Adichie holds every position open at once. Even the closing rain is double-edged: rain promises growth and rain washes away. The novel's hope is real and its cost is unforgotten.",
+    "anchorMomentIds": ["km-figurines-break", "km-purple-hibiscus-named", "km-itu-nzu", "km-poisoning-jaja-takes-blame"]
+  },
+
+  "literaryGenre": {
+    "toolkit": "novel",
+    "elements": [
+      {
+        "name": "First-person retrospective narration",
+        "description": "The entire novel is narrated by Kambili, looking back from a point after Jaja's release is imminent. The retrospective stance lets Adichie place the older Kambili's understanding inside the younger Kambili's voice. The reader hears the daughter's love for the father in the daughter's own words and is trusted to register what the daughter cannot yet name.",
+        "anchorMomentIds": ["km-love-sip"],
+        "keyExample": "The 'love sip' line: Kambili at fifteen narrates the burn as Papa's love being branded into her, and the reader registers both her sincerity and the abuse it conceals. The narrator does not gloss; the reader supplies the gap."
+      },
+      {
+        "name": "Frame structure",
+        "description": "The novel's four parts are titled Breaking Gods, Speaking With Our Spirits (Before Palm Sunday), The Pieces of Gods, and A Different Silence. Adichie opens with the Palm Sunday breakage, doubles back to show how it became inevitable, returns to it, and closes after it. The frame is not decorative; it embeds the novel's argument that everything was already falling before the visible fall.",
+        "anchorMomentIds": ["km-figurines-break", "km-poisoning-jaja-takes-blame"],
+        "keyExample": "The Palm Sunday opening returns at the end of Part Three; the figurines, the missal, the étagère reappear with their full weight after the reader has lived the household for two hundred pages."
+      },
+      {
+        "name": "Igbo language interweaving",
+        "description": "Adichie uses Igbo words and phrases throughout without italics or footnoted translation: kedu, nwunye m, umunna, ezi okwu, nne, biko. The technique is structural. The English-language reader is asked to read in two registers, just as Kambili lives in two. The Igbo is not flavour; it is the cultural context's language insisting on its own presence.",
+        "anchorMomentIds": ["km-fifteen-minutes-papa-nnukwu", "km-itu-nzu"],
+        "keyExample": "Aunty Ifeoma's address to Beatrice as 'nwunye m', my wife, is left untranslated for many pages. The reader gradually understands what the phrase carries."
+      },
+      {
+        "name": "Symbolism: hibiscus, figurines, schedules, tea",
+        "description": "Purple Hibiscus is the title symbol: the rare flower bred experimentally, signalling private freedom. Red hibiscus, by contrast, is the everyday flower in the Achike garden, plucked by parishioners and bribers alike. Beatrice's beige ballet-dancing figurines stand in for the marriage's daily violence; they are polished after every beating. Papa's daily schedules, written in his hand, are the household's grammar of control. Tea is the household's ritual of love and, finally, the instrument of Eugene's death.",
+        "anchorMomentIds": ["km-purple-hibiscus-named", "km-figurines-break", "km-love-sip", "km-poisoning-jaja-takes-blame"],
+        "keyExample": "The tea sequence: the love sip burns Kambili's tongue in Part One; Beatrice puts the poison in Eugene's tea in Part Four. The same object holds two opposite meanings, in the novel's most precise piece of symbolic patterning."
+      },
+      {
+        "name": "Postcolonial intertextuality",
+        "description": "The opening sentence places Adichie in dialogue with Achebe's Things Fall Apart: 'Things started to fall apart at home.' The novel as a whole is a deliberate continuation of Achebe's project, set sixty years later, asking what the descendants of the missionary encounter inherit from it. Eugene is in a sense the child of Mr Brown and Mr Smith; Papa-Nnukwu is the child of those who would not convert.",
+        "anchorMomentIds": ["km-figurines-break", "km-itu-nzu"],
+        "keyExample": "The opening sentence and the boiling-water revelation ('I committed a sin against my own body once') work together: the novel's frame and its causal explanation are both Achebean in inheritance."
+      },
+      {
+        "name": "Sensory detail and cuisine",
+        "description": "Adichie writes through smell and taste. Egusi soup, ofe nsala, ube, jollof rice, palm wine, akamu. The cultural context's domestic life is rendered through its kitchen. Eugene's wealth shows in china teacups and imported wafers; Aunty Ifeoma's solidarity shows in shared moi-moi and stewed greens; Papa-Nnukwu's poverty shows in soup without meat.",
+        "anchorMomentIds": ["km-fifteen-minutes-papa-nnukwu"],
+        "keyExample": "Aunty Ifeoma's dinners (less meat, more conversation, the small bowls, the kerosene-stove cooking) are described with the same care Adichie gives to Eugene's pristine table. Class is rendered through cuisine without any sentence having to say so."
+      },
+      {
+        "name": "Silence as theme and structural device",
+        "description": "Silence in Purple Hibiscus is a method of communication and a method of repression. Kambili and Jaja and Beatrice speak with their spirits; Eugene speaks with his belt; Aunty Ifeoma speaks with her laughter. Section Four is titled 'A Different Silence' to mark that silence has not ended at the close, only changed register. The novel is a sustained study of what silence can carry.",
+        "anchorMomentIds": ["km-figurines-break", "km-poisoning-jaja-takes-blame"],
+        "keyExample": "Beatrice's near-mute condition in the closing section. Adichie does not narrate her thoughts; the reader registers her grief through her undone wrapper, the carcass of figurines she will not replace, the unspoken visits to the prison."
+      }
+    ]
+  },
+
+  "themeOrIssue": {
+    "primaryThemes": [
+      {
+        "name": "Religion as instrument of abuse and as instrument of freedom",
+        "summary": "The novel's central theme. Eugene's Catholicism produces violence. Papa-Nnukwu's traditionalism produces dignity. Father Amadi's Catholicism produces joy. Aunty Ifeoma's Catholicism produces argument. The novel does not condemn or endorse religion as a category; it asks what specific religious formation does to specific people in a specific cultural context.",
+        "pivotalMomentIds": ["km-itu-nzu", "km-boiling-water", "km-purple-hibiscus-named"],
+        "contradictoryAspect": "The same Catholicism that produces Eugene produces Father Amadi. The novel insists that the variable is not the religion but the inheritance, the relationship, and the use. Adichie refuses both anti-clerical satire and devotional defence."
+      },
+      {
+        "name": "Silence and the finding of voice",
+        "summary": "Kambili begins the novel barely able to speak. Her classmates call her a snob. Her cousins find her bewildering. Father Amadi notices it before he names it. Through Nsukka, through running, through love, through grief, through writing, she gradually finds a voice. The closing narration, by definition, is voiced: a young woman has written this book, in retrospect, in her own words.",
+        "pivotalMomentIds": ["km-figurines-break", "km-purple-hibiscus-named", "km-poisoning-jaja-takes-blame"],
+        "contradictoryAspect": "Beatrice's voice is destroyed by the same household that calls Kambili's awakening rebellion. Two women in one home; one finds a voice, one loses what little she had. Voice is not a guaranteed product of suffering; the novel does not romanticise it."
+      },
+      {
+        "name": "Domestic violence and patriarchy",
+        "summary": "Eugene's daily violence against his wife and children is the novel's most sustained subject. Adichie writes it without cinematic flinching and without melodramatic emphasis: a missal flung, a tea sip burned, boiling water poured, a kick that ruptures internal organs. The violence is delivered in the language of love and is shaped by religious authority and patriarchal expectation. The novel's argument is that this is not exceptional but structural.",
+        "pivotalMomentIds": ["km-love-sip", "km-boiling-water", "km-mama-flight", "km-poisoning-jaja-takes-blame"],
+        "contradictoryAspect": "Eugene loves his children and beats them into hospital. Beatrice loves Eugene and kills him. The novel does not let love and violence be opposites. It asks the reader to register that they coexist in the same household, every day."
+      },
+      {
+        "name": "Colonial legacy and post-colonial identity",
+        "summary": "Eugene was educated by missionary priests who boiled his hands as a boy. Father Benedict insists that the Credo be recited only in Latin and calls Igbo offertory songs 'native'. Papa-Nnukwu refused to convert and lives in poverty. The novel's Nigeria is structured by the colonial encounter, and the violence Eugene calls Catholicism is the inheritance of that encounter. Aunty Ifeoma, Father Amadi, Amaka, and Obiora articulate, in different voices, what a different post-colonial settlement could look like.",
+        "pivotalMomentIds": ["km-itu-nzu", "km-boiling-water"],
+        "contradictoryAspect": "The novel's most sympathetic religious figure (Father Amadi) is a Catholic priest. The novel's least sympathetic (Eugene) is a Catholic layman. Adichie's argument is not that the church is wrong; it is that the colonial inheritance of how to be Catholic in Nigeria is what has gone wrong, and other inheritances are possible."
+      },
+      {
+        "name": "Authority across scales: household, church, state",
+        "summary": "Eugene rules his household; Father Benedict rules his parish; the Big Oga rules Nigeria; the soldiers shoot Nwankiti Ogechi and bomb Ade Coker. The novel works all three scales simultaneously and shows them as continuous. Eugene at one scale is the dissident publisher; at another, he is the tyrant. The Head of State who kills journalists at the national scale enables, through his economic chaos, the conditions in which Beatrice cannot leave. Authority is the same kind of structure repeated.",
+        "pivotalMomentIds": ["km-figurines-break", "km-poisoning-jaja-takes-blame"],
+        "contradictoryAspect": "The military Head of State's death and the new civilian government release Jaja. The novel does not pretend politics is irrelevant to private suffering, and it also does not pretend politics resolves it. The state's change opens a door; everything else still has to be lived."
+      },
+      {
+        "name": "Sisterhood and chosen family",
+        "summary": "Aunty Ifeoma calls Beatrice 'nwunye m' and means it. She takes Kambili and Jaja into her flat and her household and her Easter pilgrimage. She slaps her daughter for disrespect and listens to her at the verandah at night. She offers refuge to Beatrice when no one else will. The novel's most generative relationships are sisterly and chosen: aunts, cousins, friends. The patriarchal household is undone partly by these other geometries.",
+        "pivotalMomentIds": ["km-purple-hibiscus-named", "km-mama-flight"],
+        "contradictoryAspect": "Aunty Ifeoma cannot save Beatrice; she can only offer. The novel respects the limit of even the strongest chosen-family bond: a wife can be welcomed into a sister-in-law's household and still choose to return to the husband who is killing her, because the cultural context outside both households is structured against her leaving."
+      }
+    ]
+  },
+
+  "examinerPitfalls": [
+    "Reducing Purple Hibiscus to 'a novel about domestic abuse'. The abuse is the foreground, but the novel works at three scales (household, church, state) and three textual layers (post-colonial inheritance, Catholic-traditional dialogue, sister-mother solidarity). Strong answers register more than the foreground.",
+    "Treating Eugene as a monster. Adichie writes him as the product of missionary education and an inheritor of violence ('I committed a sin against my own body once'). Strong answers hold the violence and the inheritance together; weaker answers only condemn.",
+    "Underrating Beatrice's agency. Beatrice poisons Eugene over weeks, deliberately, beginning before the trip to Nsukka. Reading her as purely passive misses the novel's most decisive act.",
+    "Forgetting the political backdrop. The Standard newspaper, Ade Coker, Nwankiti Ogechi, the Head of State, the university riots, the closure of the lecturers' salary system, are not background colour. The cultural context is post-1984-coup Nigeria. Cultural Context answers that ignore the state miss half the novel.",
+    "Reading the closing as straightforwardly hopeful. The new rains come, but Beatrice is broken, Jaja has lost years, Aunty Ifeoma is in America. Adichie's hope is qualified. Strong answers read the closing as a beginning, not a resolution.",
+    "Missing the intertextual frame. The opening sentence is a deliberate echo of Achebe. Strong Theme or Issue and Literary Genre answers register that Adichie is writing in conscious continuity with the Nigerian novel tradition.",
+    "Treating Papa-Nnukwu as a peripheral character. His itu-nzu prayer is one of the novel's two religious centres, set deliberately beside the rosary. Cultural Context and Theme or Issue answers that ignore him leave the strongest evidence on the table.",
+    "Confusing Father Amadi with a love interest only. He is also the novel's clearest example of an alternative Catholicism, of religious life lived as joy and presence rather than fear and command. Strong answers register the religious dimension of his role, not only the romantic one."
+  ],
+
+  "status": "draft",
+  "schemaVersion": 1,
+  "lastReviewedAt": null
+}

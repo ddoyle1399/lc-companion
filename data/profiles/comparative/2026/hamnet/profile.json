@@ -1,0 +1,801 @@
+{
+  "textId": "hamnet",
+  "title": "Hamnet",
+  "author": "Maggie O'Farrell",
+  "type": "novel",
+  "yearsPrescribed": [
+    2026
+  ],
+  "copyrightStatus": "rights_managed",
+  "attributionLine": "Hamnet by Maggie O'Farrell (2020). Used here for educational analysis under fair dealing; quotations are short verified excerpts taken verbatim from the 2020 Tinder Press edition.",
+  "plotBeats": [
+    {
+      "index": 1,
+      "title": "An eleven-year-old boy alone in an empty house",
+      "location": "Opening chapter, Henley Street, Stratford, summer 1596",
+      "summary": "Hamnet, eleven, comes down a flight of stairs in his grandparents' house searching for an adult. His twin sister Judith has fallen ill. He calls; no one answers. He runs through the kitchen, the workshop, the yard, the apothecary's shop. The novel's opening puts the reader in real time inside one boy's panic.",
+      "significance": "The frame action that the entire novel is in conversation with. Every other plot beat will, eventually, be re-read as either preceding or echoing this scene. The structural absence of adults around an ill child is the catastrophe the novel slowly explains."
+    },
+    {
+      "index": 2,
+      "title": "Agnes's youth at Hewlands",
+      "location": "Past timeline, Hewlands farm outside Stratford",
+      "summary": "Agnes (sometimes called Anne) grows up at her father's farm with her stepmother Joan and half-siblings. She is ungovernable, attached to the woods, trains a kestrel, gathers herbs, has second sight. After her father's death she is left in Joan's hostile household, protected only by her brother Bartholomew.",
+      "significance": "Establishes Agnes as the novel's centre of consciousness and as a marginal, gifted, herb-knowing woman who will not fit easily into any household she joins. Her gift of foresight and her healing knowledge are seeded here for use later."
+    },
+    {
+      "index": 3,
+      "title": "Agnes and the Latin tutor",
+      "location": "Past timeline, the apple store at Hewlands",
+      "summary": "The young Latin tutor, sent to teach Agnes's half-brothers, meets Agnes in the apple store. She presses his hand and registers, through her gift, the size of the future inside him. They begin a relationship; she becomes pregnant. Joan tries to refuse the marriage; Bartholomew forces it.",
+      "significance": "The marriage at the heart of the novel begins. The tutor's name is never given. The narrative voice grants Agnes the seeing of him; he is registered always through her, never as himself. This is the engine of the novel's structural decision to decentre Shakespeare."
+    },
+    {
+      "index": 4,
+      "title": "Henley Street: marriage, debts, and three children",
+      "location": "Past timeline, the Shakespeare household, Stratford",
+      "summary": "The young couple move into the husband's family home in Stratford with John the glover, Mary, and the husband's siblings. Susanna is born, then twins Hamnet and Judith. John's debts and bullying are constant. Agnes runs a small herbalist practice from the rooms across the yard.",
+      "significance": "The household setting that produces both the catastrophe and the marriage's slow unravelling. The economic and patriarchal constraints of John's house are as decisive as the plague. The cottage rooms across the yard become Agnes's only domain."
+    },
+    {
+      "index": 5,
+      "title": "The husband leaves for London",
+      "location": "Past timeline, mid-marriage",
+      "summary": "Agnes recognises that her husband is being suffocated by his father's rule and his trade. She arranges, through her brother and the wool-trade, for him to be sent to London on family business. He stays. He becomes a player and writer. He returns home only intermittently.",
+      "significance": "The marriage's structural absence begins with Agnes's own decision. The novel does not let the reader read his absence simply as desertion: it begins as Agnes's gift to him. The cost of the gift is the central marital wound."
+    },
+    {
+      "index": 6,
+      "title": "The flea chapter",
+      "location": "Chapter 9, an extended set-piece",
+      "summary": "The narration zooms out of Stratford and traces the route of a single flea from Alexandria, via Venetian glass-bead trade, a ship's monkey, a sailor, a glass-maker, and a parcel of beads delivered to Stratford, finally to a boy's hand. The chapter's voice is ironic, omniscient, panoramic.",
+      "significance": "The novel's most distinctive structural set-piece. Plague is rendered not as moral judgement but as the contingent, traceable consequence of a connected world. The chapter widens the frame from one household to a continent."
+    },
+    {
+      "index": 7,
+      "title": "Hamnet dies; Judith lives; the swap",
+      "location": "Part Two, the bedchamber",
+      "summary": "Hamnet, who has run the village searching for help, lies down beside Judith in her sickbed. He resolves to trick Death into taking him in her place. He sickens; she recovers. Agnes returns from her cottage too late to stop it. The husband arrives from London after the funeral.",
+      "significance": "The novel's central tragedy. The swap is rendered as a child's act of love and as the failure of every adult (mother, father, household) to be there. The first thing the novel told the reader, that a boy is coming down a flight of stairs, returns as a death."
+    },
+    {
+      "index": 8,
+      "title": "Four years later, Agnes goes to London and watches Hamlet",
+      "location": "Closing chapter, the Globe, c. 1600",
+      "summary": "Agnes makes the journey to London. She finds the playhouse. She watches the play. She hears her dead son's name spoken on the wooden stage. She sees her husband walk on, in costume, as the ghost of the dead father. She listens to the line 'Remember me.'",
+      "significance": "The novel's reversal and consolation. The husband has done with Hamnet what no one in the novel can do: he has made a memorial. The marriage is reconciled, partially, through the recognition of what the play has done. Grief is not resolved; it is given a public voice."
+    }
+  ],
+  "keyMoments": [
+    {
+      "id": "km-empty-house-opening",
+      "title": "Hamnet runs through the empty house",
+      "location": "Opening chapter, Henley Street",
+      "whatHappens": "Hamnet descends the staircase, calls for his grandmother, the maid, the apprentice, his uncle. The kitchen is empty, the workshop is empty, the yard is empty. He runs to fetch the doctor. No adult is in any of the houses he tries.",
+      "whyItMatters": "The frame moment. The novel's opening is a child's panic in real time. Every later plot beat reads back to it. The structural absence of adults around the ill twin is the catastrophe the rest of the novel explains.",
+      "modeDeployment": {
+        "CC": "The early-modern household at full extension: a dozen people in the rooms above and across the yard, all of them somewhere else, on errands the household requires. The cultural context produces the absence.",
+        "GVV": "The vision is set early. A child running for help in an empty house is the novel's image of the world it lives in.",
+        "LG": "Frame opening. The novel will return to and re-read this scene from every angle.",
+        "TI": "Motherhood as presence and as failure. Agnes is in her cottage gathering honey while her son runs the village."
+      },
+      "anchorQuoteIds": [
+        "q-opening-boy-stairs",
+        "q-no-one-here",
+        "q-where-is-everyone",
+        "q-absent-mother-epicentre",
+        "q-lie-at-her-core"
+      ],
+      "linkSentenceTemplate": "O'Farrell opens Hamnet on a child's panic in an empty house, an image that compares with [Text B]'s opening in that..."
+    },
+    {
+      "id": "km-agnes-meets-tutor",
+      "title": "Agnes presses the Latin tutor's hand in the apple store",
+      "location": "Past timeline, Hewlands farm",
+      "whatHappens": "The young tutor is teaching Agnes's half-brothers Latin. Agnes corners him in the apple store. She presses the muscle between his thumb and forefinger and registers, through her gift, the breadth of the future inside him.",
+      "whyItMatters": "The marriage begins. The novel's structural choice to grant Agnes the seeing of him, and never to grant him a name, is set up here. Agnes is the centre of the novel; he is reduced to his roles within it.",
+      "modeDeployment": {
+        "CC": "Courtship across a small social gap, structured by Latin and pregnancy. The cultural context's marriage rules are visible: a tutor is legible as a husband, a pregnancy seals the case.",
+        "GVV": "The vision's first generative pairing. Agnes sees a future the husband cannot yet see in himself.",
+        "LG": "Free indirect through Agnes; the husband never speaks for himself. The technique is set up.",
+        "TI": "Marriage and the seeing of the other. Agnes is the only character in the novel who fully sees him."
+      },
+      "anchorQuoteIds": [
+        "q-tutor-anne-agnes",
+        "q-husband-never-named",
+        "q-loves-her-sees-world"
+      ],
+      "linkSentenceTemplate": "Hamnet's apple-store scene begins a marriage centred on the wife's seeing of the husband, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-agnes-sends-husband-london",
+      "title": "Agnes arranges for her husband to leave for London",
+      "location": "Past timeline, mid-marriage",
+      "whatHappens": "Agnes recognises that the husband is suffocating in his father's house and his father's trade. Through her brother and the wool-trade contacts, she has him sent to London on family business. He goes. He stays. He becomes a player.",
+      "whyItMatters": "The novel's most morally complex marital action. Agnes herself initiates the absence that will keep her husband from Hamnet's deathbed. The novel asks the reader to hold the gift and the cost together.",
+      "modeDeployment": {
+        "CC": "The cultural context's marriage in detail: the wife managing the husband's life through the patriarchal channels she does not herself control. Trade, family, debt, all routed through Bartholomew.",
+        "GVV": "The vision's first inversion. The good thing Agnes does for him will be the thing that puts him out of reach.",
+        "LG": "Dual timeline at work. The reader knows what the absence will cost; Agnes does not yet.",
+        "TI": "Marriage and absence. Sacrifice as a marital category."
+      },
+      "anchorQuoteIds": [
+        "q-bartholomew-man-needs-work",
+        "q-bartholomew-all-head",
+        "q-john-arrangement"
+      ],
+      "linkSentenceTemplate": "Agnes's own arrangement of her husband's departure makes Hamnet's central marriage a study in chosen absence, in a way that parallels [Text B]'s..."
+    },
+    {
+      "id": "km-flea-chapter",
+      "title": "The flea travels from Alexandria to Stratford",
+      "location": "Chapter 9, the flea chapter",
+      "whatHappens": "The narration leaves Stratford and traces a single flea from a monkey on a ship in Alexandria, into a Venetian glass-blower's bag of beads, onto a sailor, into a parcel travelling overland, finally to a Stratford boy who opens the parcel.",
+      "whyItMatters": "The novel's most distinctive set-piece. Plague is presented as the consequence of a connected world rather than a moral judgement. The chapter is the structural pivot from family novel to historical novel and back.",
+      "modeDeployment": {
+        "CC": "The cultural context expanded to its full scale. Trade, empire, glassmaking, the mathematics of contact; the novel insists that the household's catastrophe has a continental cause.",
+        "GVV": "The vision's bleak strand. Plague does not see the household; it does not punish; it follows trade.",
+        "LG": "Stylistic exception. The chapter's panoramic third-person omniscient is not used elsewhere; the novel grants itself this single zoom-out.",
+        "TI": "Fate, contingency, and the precariousness of life. The theme stated at scale."
+      },
+      "anchorQuoteIds": [
+        "q-flea-chapter-opening"
+      ],
+      "linkSentenceTemplate": "Hamnet's flea chapter renders plague as the consequence of a connected world, in a register that compares with [Text B]'s use of structural set-piece..."
+    },
+    {
+      "id": "km-twin-swap",
+      "title": "Hamnet lies in Judith's bed and tries to trick Death",
+      "location": "Part Two, the bedchamber",
+      "whatHappens": "Hamnet lies down beside the feverish Judith. He resolves, in the eleven-year-old's logic of magical thinking, to offer himself in her place. He sickens; she recovers. The novel honours the logic and lets the trick work.",
+      "whyItMatters": "The novel's central tragedy and its act of love. Hamnet's death is rendered not as accident but as a brother's offering. The reader is asked to register the seriousness of a child's reasoning.",
+      "modeDeployment": {
+        "CC": "Twin-relations in the early-modern household; the cultural context's understanding of disease and intercession; a child's solitary reasoning in a bedchamber no adult enters.",
+        "GVV": "The bleakest single moment of the vision and the novel's most tender. The two registers are inseparable.",
+        "LG": "Free indirect through Hamnet at its most concentrated. The novel grants the boy his own reasoning, not the adults' interpretation of it.",
+        "TI": "Sacrifice, love, and the logic of childhood. The theme is stated through a child's act."
+      },
+      "anchorQuoteIds": [
+        "q-twin-swap-hoodwink",
+        "q-cannot-both-live",
+        "q-hamnet-you-will-stay",
+        "q-judith-dont-cry",
+        "q-judith-you-shall-be-well",
+        "q-judith-they-need-you"
+      ],
+      "linkSentenceTemplate": "The twin-swap moment in Hamnet renders a child's act of self-offering as the novel's central tragedy, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-agnes-too-late",
+      "title": "Agnes returns to find her son dead",
+      "location": "Part Two, immediately after Hamnet's death",
+      "whatHappens": "Agnes returns from her cottage and her hives. She enters the bedchamber. She finds Hamnet dead in Judith's bed. She washes his body. She narrates, to herself, the negation of every gesture his living body made: he will not rise, he will not turn his head, he will not open his eyes.",
+      "whyItMatters": "The most painful structural irony in the novel. The mother of second sight did not see; the herbalist did not save; the woman whose lifelong vision had two children at her old-age bedside has lost one of them. The vision is wrong.",
+      "modeDeployment": {
+        "CC": "Death-rituals in the early-modern household: women wash the body, the men dig the grave, the priest is summoned. The cultural context provides the rituals; the novel renders them in their actual, slow, hand-on-hand form.",
+        "GVV": "The vision's central wound. The novel will not console.",
+        "LG": "Rhetorical repetition. The negation list (will not rise, will not turn his head, will not open his eyes) is the novel's grammar of grief.",
+        "TI": "Motherhood and the failure of the gift. The theme that runs through the rest of the novel."
+      },
+      "anchorQuoteIds": [
+        "q-snow-falling",
+        "q-last-breath",
+        "q-eliza-letter"
+      ],
+      "linkSentenceTemplate": "Agnes's return to find Hamnet dead stages the failure of the mother's gift, in a register that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-husband-returns-late",
+      "title": "The husband returns from London after the funeral",
+      "location": "Part Two, the Henley Street household",
+      "whatHappens": "The husband rides back to Stratford from London. He arrives after Hamnet has been buried. The marriage's first uncrossable absence has happened. Agnes does not forgive him for not being there. He cannot forgive himself.",
+      "whyItMatters": "The marriage's central wound. The novel's earlier sympathetic account of the husband's London life now sits inside this fact. The absence Agnes herself arranged has become the absence that made him miss his son's death.",
+      "modeDeployment": {
+        "CC": "The early-modern marriage between Stratford and London; the post-roads, the riding times, the cost of being away. The cultural context shapes the wound.",
+        "GVV": "The vision's bleak insistence. The husband's grief is real; Agnes's anger at him is also real; the novel will not pick.",
+        "LG": "Restraint. The novel does not stage a confrontation. The grief is rendered through what the husband and wife cannot say.",
+        "TI": "Marriage, absence, and the inadequacy of return. The theme stated."
+      },
+      "anchorQuoteIds": [
+        "q-am-i-too-late",
+        "q-werent-here",
+        "q-pawmarks-other-women",
+        "q-hooked-fish",
+        "q-place-in-head-landscape",
+        "q-not-even-death-of-child"
+      ],
+      "linkSentenceTemplate": "The husband's late return in Hamnet renders the marriage's central wound through restraint, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-agnes-watches-hamlet",
+      "title": "Agnes hears Hamnet's name spoken on the stage",
+      "location": "Closing chapter, the Globe",
+      "whatHappens": "Four years after Hamnet's death, Agnes travels to London. She finds the playhouse. She watches the play. The actors speak the name Hamlet, which is also Hamnet. Her husband walks on, dressed as the ghost of the dead father, and speaks the line 'Remember me.' Agnes registers what he has done with their son.",
+      "whyItMatters": "The novel's closing recognition. The husband has made a memorial Agnes could not make. The play is the answer to the empty house. Grief is not resolved; it is given a public voice in the only register he had access to.",
+      "modeDeployment": {
+        "CC": "The early-modern playhouse, the wooden stage, the audience standing in the pit; the cultural context that produced both the marriage and the play that ends it.",
+        "GVV": "The vision's qualified recovery. Hope is delivered through the play; the loss is not undone.",
+        "LG": "Frame closure. The opening boy on the stairs returns as the dead son spoken aloud. The intertextual frame (Hamnet/Hamlet) is finally activated.",
+        "TI": "Art as memorial. Grief as the material art transforms but does not erase. The theme stated in the novel's closing image."
+      },
+      "anchorQuoteIds": [
+        "q-it-is-him-it-is-not",
+        "q-two-people-alive-dead",
+        "q-resurrecting-the-boy",
+        "q-brought-him-back-to-life",
+        "q-ghost-o-horrible",
+        "q-final-remember-me",
+        "q-hamnet-hamlet-interchangeable"
+      ],
+      "linkSentenceTemplate": "The closing scene of Hamnet, in which a grieving mother watches her son's name spoken on a stage, transforms loss into art in a way that parallels [Text B]'s closing..."
+    }
+  ],
+  "characters": [
+    {
+      "id": "char-hamnet",
+      "name": "Hamnet",
+      "role": "Eleven-year-old twin son. The novel's titular figure. The character whose absence the novel is structured around.",
+      "socialPosition": "Son of a glove-maker's son and an herbalist; grandson of a former bailiff; brother to Susanna and Judith. Educated at the local grammar school, fluent in his father's books, restless, observant.",
+      "mindset": "A bright, curious, lively boy. Quick to act, slow to despair. The novel grants him an inner life of full eleven-year-old reasoning: he believes he can trick Death into taking him in his sister's place, and he commits to the belief.",
+      "contradictions": "He is, in the novel, the most fully imagined character and the one with the shortest time. His logic is a child's, and the novel takes it as seriously as any adult's. He is named in the title but rarely the narrating consciousness.",
+      "arc": "Living, ill, dead. The novel honours the brevity by letting the rest of the book be a slow re-reading of the scene the opening narrated.",
+      "keyRelationshipIds": [
+        "rel-hamnet-judith",
+        "rel-agnes-hamnet",
+        "rel-husband-hamnet"
+      ],
+      "keyQuoteIds": [
+        "q-opening-boy-stairs",
+        "q-where-is-everyone",
+        "q-twin-swap-hoodwink",
+        "q-hamnet-you-will-stay",
+        "q-snow-falling",
+        "q-last-breath"
+      ]
+    },
+    {
+      "id": "char-agnes",
+      "name": "Agnes",
+      "role": "The husband's wife. The mother. The novel's centre of consciousness. Healer, herbalist, falconer, woman of second sight.",
+      "socialPosition": "Daughter of a yeoman farmer (now dead). Stepdaughter to Joan. Sister to Bartholomew. Married to a glove-maker's son and Latin tutor. Mother of three. Runs a small herbalist practice from the cottage rooms across the yard.",
+      "mindset": "Strong, gifted, marginal. She has always known things; she has always healed. Her gift is real to the novel, not a literary device. After Hamnet's death the gift's failure becomes the novel's central wound, and her recovery is partial and grudging.",
+      "contradictions": "She arranges her husband's London absence and cannot forgive him for being away when their son died. She is the most powerful seer in the novel and was not at home when she was needed. The novel does not resolve these; it stages them.",
+      "arc": "Wild girl at Hewlands; pregnant bride; matriarch of the cottage rooms; grieving mother; widow-in-effect of the husband's London life; finally, traveller to the playhouse and witness of the play. Her arc is the novel's arc.",
+      "keyRelationshipIds": [
+        "rel-agnes-husband",
+        "rel-agnes-hamnet",
+        "rel-agnes-judith",
+        "rel-agnes-bartholomew",
+        "rel-agnes-joan"
+      ],
+      "keyQuoteIds": [
+        "q-house-is-an-A",
+        "q-name-was-agnes",
+        "q-myth-childhood",
+        "q-agnes-not-my-mother",
+        "q-loves-her-sees-world",
+        "q-werent-here",
+        "q-pawmarks-other-women",
+        "q-hooked-fish",
+        "q-place-in-head-landscape",
+        "q-not-even-death-of-child",
+        "q-it-is-him-it-is-not",
+        "q-resurrecting-the-boy",
+        "q-brought-him-back-to-life",
+        "q-absent-mother-epicentre",
+        "q-lie-at-her-core"
+      ]
+    },
+    {
+      "id": "char-husband",
+      "name": "the husband (the Latin tutor, the father, the playwright)",
+      "role": "Husband, father, playwright. Named only by epithet. The figure whose absence and whose play structure the novel.",
+      "socialPosition": "Son of John, the glove-maker. Tutor to the Hewlands sons. Husband of Agnes. Father of three. Player and writer in London from the early 1590s.",
+      "mindset": "The novel grants him interiority sparingly. The reader meets him through Agnes's seeing, through John's bullying, through the apprentices' chatter, through letters. He is restless, frustrated, gifted, ambitious, dutiful in his marriage and absent from it.",
+      "contradictions": "The named figure of history is the unnamed figure of the novel. The novel's most famous character is the one most carefully kept off-centre. He misses his son's death and writes the play that will speak the son's name aloud.",
+      "arc": "Tutor at Hewlands; son-in-the-glover's-house; player in London; absent father; finally the actor in the ghost's costume on the wooden stage. The play is the novel's account of his answer.",
+      "keyRelationshipIds": [
+        "rel-agnes-husband",
+        "rel-husband-hamnet",
+        "rel-husband-john"
+      ],
+      "keyQuoteIds": [
+        "q-husband-never-named",
+        "q-tutor-anne-agnes",
+        "q-loves-her-sees-world",
+        "q-am-i-too-late",
+        "q-ghost-o-horrible",
+        "q-final-remember-me",
+        "q-resurrecting-the-boy"
+      ]
+    },
+    {
+      "id": "char-judith",
+      "name": "Judith",
+      "role": "Hamnet's twin sister. The surviving twin. The character on whose face the household keeps looking for the brother.",
+      "socialPosition": "Younger daughter of the household. Twin to Hamnet. Sister to Susanna.",
+      "mindset": "Quiet, watchful, slighter than Hamnet, the one the household assumed would not live. She survives the illness Hamnet meets in her place. She lives the rest of her life as the visible reminder of the absence.",
+      "contradictions": "She is the survivor and the one most marked by the survival. The novel does not soften the cost of being the twin who lived.",
+      "arc": "Ill, recovering, surviving, growing into a young woman whose face is constantly being read for her brother's. The novel attends to her quietly.",
+      "keyRelationshipIds": [
+        "rel-hamnet-judith",
+        "rel-agnes-judith"
+      ],
+      "keyQuoteIds": [
+        "q-judith-dont-cry",
+        "q-judith-you-shall-be-well",
+        "q-judith-they-need-you",
+        "q-twin-no-longer-word",
+        "q-maybe-there-isnt-one"
+      ]
+    },
+    {
+      "id": "char-susanna",
+      "name": "Susanna",
+      "role": "The eldest daughter. Born before her parents' marriage was solemnised. Watchful, dutiful, the household's first child.",
+      "socialPosition": "Eldest daughter of the marriage. Conceived before the wedding, born after. The senior child of three.",
+      "mindset": "Practical, attentive, the daughter who notices what the others miss. She is the household's first witness; she sees everything.",
+      "contradictions": "Born of the marriage's social precariousness, she becomes its steadiest member. The novel uses her quietly, without making her a moral.",
+      "arc": "Eldest sister; older sister to twins; surviving sister to Judith. Her arc is steady through the novel's wreckage.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": []
+    },
+    {
+      "id": "char-john",
+      "name": "John (the glove-maker)",
+      "role": "The husband's father. Former bailiff of Stratford, debt-ridden glove-maker, household tyrant. The novel's most concentrated figure of patriarchal failure.",
+      "socialPosition": "Master of the Henley Street household. Holder of debts. Beater of his sons. Once the bailiff, fallen from civic standing.",
+      "mindset": "Resentful, drunken, violent, ashamed of his fall. The novel renders him with no excuse and no caricature. His violence is the structural condition that drives the husband to London.",
+      "contradictions": "The patriarch whose authority is empty; the bailiff whose town no longer trusts him; the father whose son will outshine every Shakespeare in history. The novel does not let the reader miss the irony.",
+      "arc": "Static across the novel; the change is in the household around him. He survives the events he set in motion.",
+      "keyRelationshipIds": [
+        "rel-husband-john"
+      ],
+      "keyQuoteIds": [
+        "q-john-glover",
+        "q-john-arrangement"
+      ]
+    },
+    {
+      "id": "char-mary",
+      "name": "Mary",
+      "role": "The husband's mother. Mother-in-law to Agnes. Watchful matriarch of the Henley Street household.",
+      "socialPosition": "Wife of John. Mother of the husband and his siblings. Higher-born than her husband; nominally in his household, structurally its real keeper.",
+      "mindset": "Capable, controlling, ambivalent about Agnes. She wanted a different marriage for her son; she manages the marriage that occurred.",
+      "contradictions": "The mother who could not protect her son from his father's beatings, the mother-in-law who could not love the woman who married him, the grandmother who feeds and clothes the children of that marriage. The novel attends to her without softening.",
+      "arc": "Steady, present, the household's ballast. After Hamnet's death she becomes the figure who keeps the surviving children in food and routine.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": []
+    },
+    {
+      "id": "char-eliza",
+      "name": "Eliza",
+      "role": "The husband's younger sister. Agnes's closest ally inside the Henley Street household.",
+      "socialPosition": "Daughter of John and Mary. Sister to the husband. Lives at home until her own marriage.",
+      "mindset": "Warm, attentive, kind. The novel uses her to give Agnes one friendly face in her husband's family.",
+      "contradictions": "The household's gentlest member sits inside the household's harshest patriarchy. The novel registers the asymmetry without dramatising it.",
+      "arc": "Steady. She helps Agnes through the births, the absences, the funerals, and her own marriage carries her into the next generation.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": [
+        "q-eliza-letter"
+      ]
+    },
+    {
+      "id": "char-bartholomew",
+      "name": "Bartholomew",
+      "role": "Agnes's half-brother. Shepherd, protector, the one constant figure from Agnes's first household into her marriage.",
+      "socialPosition": "Eldest son of Agnes's father; Joan's stepson; manager of the Hewlands sheep. Practical, taciturn, principled.",
+      "mindset": "Gentle and severe in equal measure. He forces the marriage when Joan tries to refuse it; he walks the fields all night when Agnes is in trouble; he never raises his voice and never wavers.",
+      "contradictions": "The novel's most consistently good adult is its least talkative. Bartholomew acts. The novel honours the action.",
+      "arc": "Steady across the novel. The protector who is always there, in the way Agnes's husband is not.",
+      "keyRelationshipIds": [
+        "rel-agnes-bartholomew"
+      ],
+      "keyQuoteIds": [
+        "q-bartholomew-take-good-care",
+        "q-bartholomew-man-needs-work",
+        "q-bartholomew-all-head"
+      ]
+    },
+    {
+      "id": "char-joan",
+      "name": "Joan",
+      "role": "Agnes's stepmother. The household figure who will not let Agnes belong to Hewlands.",
+      "socialPosition": "Second wife of Agnes's father. Mother of Agnes's half-siblings. Keeper of Hewlands after the father's death.",
+      "mindset": "Resentful of Agnes's gift, jealous of her father's affection, suspicious of her woodland habits. The novel writes her without redeeming her; she is consistently cruel.",
+      "contradictions": "She is the household's nominal mother and the novel's image of the failure of motherhood. The novel uses her sparingly, but the pressure she puts on Agnes is what drives Agnes towards the marriage.",
+      "arc": "Static. She remains who she has always been. Her cruelty is one of the conditions Agnes leaves Hewlands to escape.",
+      "keyRelationshipIds": [
+        "rel-agnes-joan"
+      ],
+      "keyQuoteIds": [
+        "q-agnes-not-my-mother"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel-agnes-husband",
+      "characterAId": "char-agnes",
+      "characterBId": "char-husband",
+      "type": "romantic",
+      "startStatus": "Tutor and ungovernable older woman; pregnancy at the altar; a marriage forced through Joan's refusal by Bartholomew's quiet pressure.",
+      "endStatus": "Wife who has watched her husband's play of their dead son. Marriage partly reconciled, in the only register he had.",
+      "trajectory": "The novel's central marriage is structured by Agnes's seeing of him and her arrangement of his absence. She perceives the size of the future inside him; she sends him to London; she does not forgive him for being there when their son dies. The wound is the marriage's permanent fact. The reconciliation is partial and made through the play, not through any conversation. The novel's most precise study of marriage as the work of holding two unequal absences in the same household.",
+      "keyMomentIds": [
+        "km-agnes-meets-tutor",
+        "km-agnes-sends-husband-london",
+        "km-husband-returns-late",
+        "km-agnes-watches-hamlet"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "CC"
+      ]
+    },
+    {
+      "id": "rel-hamnet-judith",
+      "characterAId": "char-hamnet",
+      "characterBId": "char-judith",
+      "type": "family",
+      "startStatus": "Twins. The household's working assumption is that Judith is the weaker. Hamnet has always looked after her.",
+      "endStatus": "One twin dead, the other living. The relationship continues, in absence, on Judith's face for the rest of her life.",
+      "trajectory": "The novel honours twin-relations as a particular intimacy with its own logic. Hamnet's reasoning that he can offer himself in Judith's place is not melodrama; it is the working of a brother who has spent eleven years inside one shared sphere. The relationship's transformation, from co-twins to sole survivor, is the novel's central tragedy and the structural fact of Judith's adult life.",
+      "keyMomentIds": [
+        "km-empty-house-opening",
+        "km-twin-swap"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "LG"
+      ]
+    },
+    {
+      "id": "rel-agnes-hamnet",
+      "characterAId": "char-agnes",
+      "characterBId": "char-hamnet",
+      "type": "family",
+      "startStatus": "Mother and son. Agnes's lifelong vision had two children at her old-age bedside.",
+      "endStatus": "Mother washing the dead body of her son; mother in the playhouse hearing his name spoken on the stage four years later.",
+      "trajectory": "The relationship the novel is built to make the reader feel. Agnes's gift, her healing, her vision all promised her this child would survive her. The novel's deepest cut is that she was not at home, that she was gathering honey at her cottage, that she did not know. The grief that follows is the novel's largest material; the closing playhouse scene is the only register the marriage can find for it.",
+      "keyMomentIds": [
+        "km-empty-house-opening",
+        "km-agnes-too-late",
+        "km-agnes-watches-hamlet"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "LG"
+      ]
+    },
+    {
+      "id": "rel-husband-hamnet",
+      "characterAId": "char-husband",
+      "characterBId": "char-hamnet",
+      "type": "family",
+      "startStatus": "Father and son separated by the husband's London life. Hamnet sees him on visits, reads the books he leaves behind, knows the absence as the household's normal state.",
+      "endStatus": "Father whose son has died while he was away; playwright who four years later writes the play that gives his son's name to the central character of his most famous tragedy.",
+      "trajectory": "The relationship the novel renders almost entirely through absence. The husband's grief is delivered indirectly: through his being too late, through his silence at the funeral, through the four-year gap, and finally through Hamlet. The play is the novel's account of what the father did with his grief. It does not redeem the absence; it makes a memorial out of the absence.",
+      "keyMomentIds": [
+        "km-husband-returns-late",
+        "km-agnes-watches-hamlet"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "LG"
+      ]
+    },
+    {
+      "id": "rel-husband-john",
+      "characterAId": "char-husband",
+      "characterBId": "char-john",
+      "type": "family",
+      "startStatus": "Beaten son and bullying father. The husband's deformed-by-childhood relationship to his trade and his town is John's making.",
+      "endStatus": "Famous son and ruined father. John outlives his civic standing while his son becomes the most famous Englishman of the age.",
+      "trajectory": "The patriarchy the novel gives the husband to flee. John's debts, his violence, his shame at his own fall, are the structural conditions that drive his son to London. The relationship is not reconciled; the husband leaves and stays gone. The novel does not soften the father's part in producing the son's absence from his own household.",
+      "keyMomentIds": [
+        "km-agnes-sends-husband-london"
+      ],
+      "modeRelevance": [
+        "CC",
+        "TI"
+      ]
+    },
+    {
+      "id": "rel-agnes-bartholomew",
+      "characterAId": "char-agnes",
+      "characterBId": "char-bartholomew",
+      "type": "family",
+      "startStatus": "Half-siblings raised together at Hewlands; Bartholomew Agnes's principal protector under Joan's hostility.",
+      "endStatus": "Adult siblings on neighbouring properties. Bartholomew remains the constant: he is the one who walks the fields all night for her, the one whose pressure forced the marriage, the one she calls in any crisis.",
+      "trajectory": "The novel's image of steady kinship. Bartholomew is the adult who is always there. The relationship makes the husband's absence visible by contrast. Agnes's brother is the man who never disappoints her; her husband is the man whose absence is the marriage's central fact.",
+      "keyMomentIds": [
+        "km-agnes-meets-tutor",
+        "km-agnes-sends-husband-london"
+      ],
+      "modeRelevance": [
+        "CC",
+        "TI",
+        "GVV"
+      ]
+    },
+    {
+      "id": "rel-agnes-judith",
+      "characterAId": "char-agnes",
+      "characterBId": "char-judith",
+      "type": "family",
+      "startStatus": "Mother and second daughter. Judith the smaller twin, the one Agnes has always tended more carefully.",
+      "endStatus": "Mother and only surviving daughter of the twin pair. The relationship continues with the missing brother always present.",
+      "trajectory": "The relationship the novel attends to most quietly. After Hamnet's death Agnes turns to Judith with the love she had spread across two children. The novel renders the love as steady, undramatic, and constantly inflected by the brother's absence. Judith is loved as Judith and looked at as the survivor at once.",
+      "keyMomentIds": [
+        "km-twin-swap",
+        "km-agnes-too-late"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV"
+      ]
+    },
+    {
+      "id": "rel-agnes-joan",
+      "characterAId": "char-agnes",
+      "characterBId": "char-joan",
+      "type": "antagonistic",
+      "startStatus": "Stepmother and stepdaughter. Joan resentful of Agnes's gift, jealous of her father's affection, suspicious of her woodland habits.",
+      "endStatus": "Old grievance, now distant. Agnes leaves Hewlands; Joan keeps it. The cruelty is past tense but not forgotten.",
+      "trajectory": "The novel's image of the failed stepmother. Joan's hostility is one of the conditions Agnes leaves Hewlands to escape. The relationship matters as a pressure point; it produces the marriage. The novel does not redeem Joan and does not need to.",
+      "keyMomentIds": [
+        "km-agnes-meets-tutor"
+      ],
+      "modeRelevance": [
+        "CC",
+        "TI"
+      ]
+    }
+  ],
+  "culturalContext": {
+    "socialClass": {
+      "applies": "yes",
+      "summary": "Hamnet is set in a precise Stratford class layer: the glover's household, formerly civic and respectable, now indebted and falling. The husband's family had standing; John's debts have eroded it. Agnes brings her own modest yeoman background. Across the marriage we see three Stratford registers: the indebted glover's house at Henley Street, the herbalist's cottage rooms across the yard, and the wider rural world of Hewlands and Bartholomew's sheep. London, when the husband moves there, is a different class economy entirely. The novel measures class through household details: the size of John's debts, the cost of paper, the household's dependence on Mary's management, the apprentice's wages.",
+      "anchorMomentIds": [
+        "km-agnes-meets-tutor",
+        "km-agnes-sends-husband-london"
+      ],
+      "anchorQuoteIds": [
+        "q-john-arrangement",
+        "q-john-glover",
+        "q-bartholomew-man-needs-work"
+      ],
+      "argumentHook": "Class in Hamnet is rendered as the texture of a fallen civic family in late Elizabethan Stratford, with John's debts and the husband's London ambitions both consequences of the same downward slide."
+    },
+    "gender": {
+      "applies": "yes",
+      "summary": "The novel's most sustained subject. Agnes is a woman of unusual gifts in a world that does not have a category for her. She is read as wild, ungovernable, possibly witch-adjacent; she is also the household's healer, herbalist, falconer, and seer. The novel renders her marginalisation precisely: Joan's hostility, the priest's discomfort, Mary's ambivalence, the village's whispers. Marriage offers her a partial place; pregnancy makes the marriage social. The husband's London life and Agnes's Stratford life are gendered geographies. Judith and Susanna inherit a world in which their mother's gift is at once respected and feared. The novel's centre of consciousness is a woman whose interior is granted full narrative weight; the man who would historically have centred the story is decentred so that Agnes can be seen.",
+      "anchorMomentIds": [
+        "km-agnes-meets-tutor",
+        "km-agnes-sends-husband-london",
+        "km-agnes-too-late"
+      ],
+      "anchorQuoteIds": [
+        "q-girl-edge-forest",
+        "q-name-was-agnes",
+        "q-myth-childhood",
+        "q-agnes-not-my-mother",
+        "q-house-is-an-A"
+      ],
+      "argumentHook": "Gender in Hamnet is the structural decision: O'Farrell decentres the most famous male writer in English so that the wife's seeing of him, and the household she runs, can be the novel's centre."
+    },
+    "religion": {
+      "applies": "yes",
+      "summary": "The cultural context is post-Reformation England in the late sixteenth century. The novel does not foreground doctrinal conflict; it registers the period's religious texture indirectly. Funerals and burials happen by parish ritual. The plague is interpreted by some as judgement and by the novel as contingency. Agnes's herbal practice and second sight sit on the edge of what the parish authorities tolerate; the novel implies the danger of being read as a witch without dramatising a witch-trial. Religion in Hamnet is the cultural context's framework for grief, marriage, and birth, more than a topic of disputation. The husband's later writing for the playhouses works inside the same religious atmosphere, with the ghost in the play borrowing energy from doctrines the Reformation has disturbed.",
+      "anchorMomentIds": [
+        "km-agnes-too-late",
+        "km-flea-chapter"
+      ],
+      "anchorQuoteIds": [
+        "q-flea-chapter-opening",
+        "q-final-remember-me"
+      ],
+      "argumentHook": "Religion in Hamnet is the cultural context's structuring atmosphere: the parish ritual that buries Hamnet, the witch-shadow that hangs over Agnes's herbalism, and the ghost in the play that closes the novel are all instances of one post-Reformation register."
+    },
+    "familyAndMarriage": {
+      "applies": "yes",
+      "summary": "The novel works marriage and family at four registers: the marriage at the centre (Agnes and the husband, structured by absence and seeing); the patriarchal household John runs at Henley Street (debt, violence, hierarchy); the Hewlands stepmother household Agnes leaves (Joan's hostility, Bartholomew's protection); and the new family Agnes builds in the cottage rooms across the yard with her three children. The cultural context's marriage rules are precisely shown: pregnancy at the altar, dowry negotiations, the apprentice's wages, the rights of the husband's father over the household. The novel's family is large, multigenerational, and structurally unequal.",
+      "anchorMomentIds": [
+        "km-agnes-meets-tutor",
+        "km-empty-house-opening",
+        "km-husband-returns-late"
+      ],
+      "anchorQuoteIds": [
+        "q-john-arrangement",
+        "q-bartholomew-take-good-care",
+        "q-tutor-anne-agnes",
+        "q-agnes-not-my-mother"
+      ],
+      "argumentHook": "Family and marriage in Hamnet are rendered through four overlapping households whose geometries (the marriage of seeing, the indebted patriarchy, the cruel stepmother, the new herbalist's cottage) together describe the structure inside which Hamnet lives and dies."
+    },
+    "authorityAndPower": {
+      "applies": "yes",
+      "summary": "Authority in Hamnet works through three layers: the father (John in his Henley Street household; the absent husband in his London life), the parish (the priest at the funeral, the bailiff who once was John, the doctor who is sent for and not found), and trade (the wool-merchants who route the husband to London, the glass-merchants whose bag of beads carries the flea, the playhouse impresarios who later employ the husband). The novel does not stage a confrontation with civic or political power; it works the layers as the conditions inside which the household lives. The flea chapter is the novel's most explicit case for a power that has no malice, only consequence.",
+      "anchorMomentIds": [
+        "km-flea-chapter",
+        "km-empty-house-opening",
+        "km-husband-returns-late"
+      ],
+      "anchorQuoteIds": [
+        "q-flea-chapter-opening",
+        "q-john-glover",
+        "q-john-arrangement"
+      ],
+      "argumentHook": "Authority in Hamnet operates at the household, parish and trade-route scale, and the novel's flea chapter renders the largest of these (a connected continental economy) as the impersonal force that delivers a single boy his death."
+    }
+  },
+  "generalVisionAndViewpoint": {
+    "oneLineVision": "Hamnet offers a bleak, recovering, and finally restorative vision: the household cannot be protected from a connected world, but grief can be transformed, partially, into a public memorial that does not erase the loss.",
+    "openingShapesVision": "The vision is set with extraordinary precision in the opening chapter. A boy comes down a flight of stairs in an empty house. The novel's structural decision to begin with the catastrophe in motion, rather than with a stable household to be disrupted, signals that bleakness is the novel's starting condition rather than its arrival.",
+    "climaxShapesVision": "The vision's bleakest stretch is the twin-swap and the death. O'Farrell does not soften the death of an eleven-year-old; she gives Hamnet his own reasoning and lets the child's logic of self-offering be honoured by the narrative. Agnes's return from the cottage and her negation-list as she washes the body are the vision's bleakest hour.",
+    "closingShapesVision": "The closing recovers a register of qualified hope. Agnes hears her son's name spoken on the wooden stage. The husband's play has done what no one in the novel can do: made a public memorial. The grief is not undone; it is given a voice it did not have before. The vision's redemption is artistic, not familial.",
+    "ambiguity": "The vision is qualified throughout. Agnes's gift of foresight is real and fails. The husband's absence is both Agnes's choice and his own desire. The play that closes the novel was made out of the death of the boy whose name it borrows. Each consoling element of the vision contains the cost it cannot reverse.",
+    "anchorMomentIds": [
+      "km-empty-house-opening",
+      "km-flea-chapter",
+      "km-twin-swap",
+      "km-agnes-too-late",
+      "km-agnes-watches-hamlet"
+    ]
+  },
+  "literaryGenre": {
+    "toolkit": "novel",
+    "elements": [
+      {
+        "name": "Dual timeline structure",
+        "description": "The novel alternates between two timelines: the immediate present of summer 1596, in which Hamnet runs through the empty house and Judith falls ill, and the past, in which Agnes grows up at Hewlands, meets the Latin tutor, marries, and bears her three children. The two timelines converge at the death and then diverge again as the novel pushes forward to the closing playhouse scene four years later. The technique builds dread (the reader knows from the title where the present-day strand is going) and grants Agnes's youth narrative weight.",
+        "anchorMomentIds": [
+          "km-empty-house-opening",
+          "km-agnes-meets-tutor",
+          "km-twin-swap"
+        ],
+        "keyExample": "The opening chapter cuts away from Hamnet on the stairs to a chapter set fifteen years earlier with the young tutor approaching Hewlands. The reader is held inside both timelines simultaneously."
+      },
+      {
+        "name": "Free indirect discourse",
+        "description": "O'Farrell's principal narrative technique. The novel's third-person narration moves close to the consciousness of whichever character is in the scene, rendering their perceptions, idioms and emotional registers as the narrative's voice. The technique is most concentrated on Agnes; it is also granted to Hamnet in the swap chapter.",
+        "anchorMomentIds": [
+          "km-agnes-meets-tutor",
+          "km-twin-swap",
+          "km-agnes-too-late"
+        ],
+        "keyExample": "The swap chapter is narrated in close third through Hamnet, granting his eleven-year-old reasoning the seriousness the novel asks the reader to grant."
+      },
+      {
+        "name": "The unnamed husband",
+        "description": "Throughout the novel the husband-father figure is named only by epithet (the Latin tutor, the husband, the father, the playwright). He is never called William or Shakespeare. The decision is structural: the historical figure is decentred so that the wife's life can be the novel's centre. The reader registers, gradually, that the most famous Englishman in English literature is being kept off-stage by his own novel.",
+        "anchorMomentIds": [
+          "km-agnes-meets-tutor",
+          "km-agnes-watches-hamlet"
+        ],
+        "keyExample": "The closing recognition lands in part because the husband, having been unnamed for four hundred pages, walks on as the ghost in a play whose hero shares his dead son's name."
+      },
+      {
+        "name": "The flea chapter as panoramic exception",
+        "description": "Chapter 9 leaves Stratford and traces a single flea's route from Alexandria to a Stratford boy's hand. The voice expands from the close third of the rest of the novel to a panoramic, ironic, omniscient register. The chapter is not used elsewhere; the novel grants itself this single zoom-out as a structural set-piece.",
+        "anchorMomentIds": [
+          "km-flea-chapter"
+        ],
+        "keyExample": "The chapter follows the flea by ship, by glass-bead bag, by sailor, by parcel, by overland route, by river barge, by Stratford messenger, into the boy's hand. The narrative voice is unique to this chapter."
+      },
+      {
+        "name": "Repetition figures",
+        "description": "O'Farrell uses repeated negations and rhythmic listing as the novel's grammar of grief. Agnes washing Hamnet's body produces a sequence of will-not clauses; the novel's later passages on grief return to similar rhythmic structures. The technique gives loss a measurable, audible shape.",
+        "anchorMomentIds": [
+          "km-agnes-too-late"
+        ],
+        "keyExample": "The negation list as Agnes washes the body. The clauses accumulate without resolving."
+      },
+      {
+        "name": "Symbolism: kestrel, apple store, hives, stage",
+        "description": "The novel works a small set of recurring symbols. Agnes's trained kestrel stands for her wildness and her capacity to hold something at arm's length. The apple store is the small private space the marriage begins in. The hives at Agnes's cottage stand for her absence on the day Hamnet dies. The wooden stage at the close stands for the only public memorial the marriage will produce.",
+        "anchorMomentIds": [
+          "km-agnes-meets-tutor",
+          "km-agnes-too-late",
+          "km-agnes-watches-hamlet"
+        ],
+        "keyExample": "The hives appear early as a sign of Agnes's competence; they reappear as the reason she was not at home; they recur in the novel's economy as the structural emblem of her absence."
+      },
+      {
+        "name": "Intertextual frame: Hamnet/Hamlet",
+        "description": "The novel's epigraph cites the historical fact that Hamnet and Hamlet were the same name in Stratford records. The closing scene activates the intertext. The novel is in continuous conversation with the play that bears its title figure's name; the closing recognition lands because the reader has been holding the intertext through four hundred pages.",
+        "anchorMomentIds": [
+          "km-empty-house-opening",
+          "km-agnes-watches-hamlet"
+        ],
+        "keyExample": "The epigraph and the closing line ('Remember me') hold the novel between them. The play closes the novel."
+      },
+      {
+        "name": "Present-tense narration",
+        "description": "Most of the novel is in the present tense. The technique is not flashy; it gives the narration a sustained immediacy that suits both the urgency of the opening (a child running through an empty house) and the slow drift of grief in the later chapters. The closing playhouse scene gains its force partly from being narrated as it happens.",
+        "anchorMomentIds": [
+          "km-empty-house-opening",
+          "km-agnes-watches-hamlet"
+        ],
+        "keyExample": "The opening chapter's present tense puts the reader inside Hamnet's panic; the closing chapter's present tense puts the reader inside Agnes's recognition."
+      }
+    ]
+  },
+  "themeOrIssue": {
+    "primaryThemes": [
+      {
+        "name": "Grief and the inadequacy of language",
+        "summary": "The novel's central theme. Agnes's grief is rendered as the failure of speech to reach the dead son. The whole household speaks past the loss because no register is adequate. The closing playhouse scene is the novel's argument that grief can be given a public voice through art, but only at the cost of admitting that the loss was real and is permanent.",
+        "pivotalMomentIds": [
+          "km-agnes-too-late",
+          "km-husband-returns-late",
+          "km-agnes-watches-hamlet"
+        ],
+        "contradictoryAspect": "The husband, who could not say the right thing in his own household, writes the play that says it for both of them. Language fails Agnes inside the marriage and reaches her, finally, on a wooden stage."
+      },
+      {
+        "name": "Motherhood and the failure of the gift",
+        "summary": "Agnes's lifelong vision had two children at her old-age bedside. Her gift of second sight has always been her assurance that her children will outlive her. The novel is built around the failure of that vision. The theme is delivered without consolation: the gift was real, and the gift was wrong, and the mother whose gift it was must live with both facts.",
+        "pivotalMomentIds": [
+          "km-empty-house-opening",
+          "km-agnes-too-late"
+        ],
+        "contradictoryAspect": "The seer who did not see. The healer who could not heal. The novel does not offer the consolation that nothing could have been done; it offers the fact that nothing was done because she was not there."
+      },
+      {
+        "name": "Marriage and absence",
+        "summary": "The marriage at the novel's centre is structured by an absence Agnes herself arranged. She sent the husband to London. He stayed. He missed his son's death. The theme runs through the novel as the precise cost of love offered at a distance. The closing partial reconciliation does not undo the absence; it gives the absence a public form.",
+        "pivotalMomentIds": [
+          "km-agnes-sends-husband-london",
+          "km-husband-returns-late",
+          "km-agnes-watches-hamlet"
+        ],
+        "contradictoryAspect": "Agnes loves her husband and cannot forgive him. He loves his son and was not there. The novel does not present these as failures of feeling; it presents them as the geometry of a marriage held across a hundred miles."
+      },
+      {
+        "name": "Art as memorial",
+        "summary": "The novel's closing argument. The husband's play takes their dead son's name and makes a memorial that no household ritual could match. The theme is not that art consoles, but that art records. The closing scene is the novel's image of the only adequate response to the death of a child: a public language, made by the parents, for everyone else to repeat.",
+        "pivotalMomentIds": [
+          "km-agnes-watches-hamlet"
+        ],
+        "contradictoryAspect": "The same play that memorialises the son was made out of his death. The novel does not pretend the memorial repairs the loss; it claims only that the memorial gives the loss a voice."
+      },
+      {
+        "name": "Plague and the precariousness of life",
+        "summary": "The flea chapter delivers the theme at scale. Plague is not judgement; it is the contingent consequence of a connected world. The novel's argument is that the household cannot be protected from the world it is part of. The theme is delivered with no melodrama: the flea travels, the boy opens the parcel, the household catastrophe is the world's by-product.",
+        "pivotalMomentIds": [
+          "km-flea-chapter",
+          "km-twin-swap"
+        ],
+        "contradictoryAspect": "The cultural context's most precious unit (the household) is shown to be most vulnerable to the cultural context's most distant force (the trade route). The novel insists that nothing is local."
+      },
+      {
+        "name": "Twins and the logic of love",
+        "summary": "Hamnet's offering of himself in Judith's place is the novel's most sustained meditation on what love between twins can do. The theme is delivered through a child's reasoning, which the novel takes at face value. Judith's adult life, lived as the surviving twin, is the theme's long aftermath.",
+        "pivotalMomentIds": [
+          "km-twin-swap",
+          "km-empty-house-opening"
+        ],
+        "contradictoryAspect": "The act of love produces the loss. The brother saving his sister is the novel's tragedy, not its resolution. The novel honours the love and the cost together."
+      }
+    ]
+  },
+  "examinerPitfalls": [
+    "Treating Hamnet as 'the novel about Shakespeare's son'. The husband is decentred deliberately, never named, kept off-stage; Agnes is the centre of consciousness. Strong answers register the structural decentring as the novel's main creative choice.",
+    "Reducing the novel to a study of grief. Grief is the largest theme, but the novel works at four scales (household, marriage, parish, trade route). The flea chapter alone forbids reading the novel only as domestic.",
+    "Reading Agnes as a witch or as a magic-realist figure. The novel grants her gift as a real fact of the cultural context, not as a flourish. Strong answers register the precision with which O'Farrell sets her gift inside the period's epistemology.",
+    "Forgetting that Agnes herself sent the husband to London. The marriage's central absence is her own decision before it is his choice. Marriage answers that read him simply as the absent husband miss half the relationship.",
+    "Treating the closing as straightforwardly redemptive. Agnes hears her son's name on a stage; the loss is not undone; the marriage is partly reconciled in a register the husband alone could supply. Strong answers read the closing as qualified consolation, not resolution.",
+    "Missing the flea chapter's structural role. The chapter is the novel's case for plague as contingency, not judgement, and is the largest single piece of evidence for a Cultural Context answer that takes in trade and continental scale.",
+    "Underwriting Judith. The surviving twin is the novel's quiet long subject; her adult life is lived as the visible reminder of the absence. Theme or Issue answers that ignore her miss a major piece of evidence.",
+    "Reading the unnaming of the husband as coyness. It is structural. The novel's centre is Agnes; the husband is rendered through her seeing of him; the unnaming is the technique by which the novel's gravitational centre is held."
+  ],
+  "status": "draft",
+  "schemaVersion": 1,
+  "lastReviewedAt": null
+}
