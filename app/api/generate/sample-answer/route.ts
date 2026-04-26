@@ -6,15 +6,11 @@ import { validateQuotes } from "@/lib/sampleAnswer/quoteValidator";
 import { generateSampleAnswer } from "@/lib/claude/generateSampleAnswer";
 import type { GradeTier } from "@/lib/claude/sampleAnswerPrompt";
 import { getCircularYears, getPoemsForPoet } from "@/data/circulars";
+import { rollPclm } from "@/lib/sampleAnswer/rollPclm";
 
 const VALID_TIERS: GradeTier[] = ["H1", "H2", "H3"];
 
-const PCLM_TARGETS: Record<GradeTier, { P: number; C: number; L: number; M: number }> = {
-  H1: { P: 28, C: 27, L: 27, M: 9 },
-  H2: { P: 25, C: 23, L: 23, M: 8 },
-  H3: { P: 21, C: 19, L: 19, M: 7 },
-  H4: { P: 17, C: 15, L: 15, M: 6 },
-};
+const POETRY_MARK_CAP = 50;
 
 const TARGET_WORD_COUNTS: Record<GradeTier, number> = {
   H1: 1400,
@@ -195,9 +191,9 @@ export async function POST(request: NextRequest) {
     questionId,
     tier,
     questionType: "poetry",
-    markCap: 50,
+    markCap: POETRY_MARK_CAP,
     markingMode: "discrete",
-    pclmTarget: PCLM_TARGETS[tier],
+    pclmTarget: rollPclm(tier, POETRY_MARK_CAP),
     answerText: generationResult.answer_text,
     wordCount: generationResult.word_count,
     quotesUsed: validatorResult.matched_quotes,

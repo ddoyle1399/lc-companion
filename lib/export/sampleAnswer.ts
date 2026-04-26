@@ -4,6 +4,7 @@ export interface SampleAnswerFull {
   word_count: number;
   grade_tier: string;
   pclm_target: { P: number; C: number; L: number; M: number } | null;
+  mark_cap: number | null;
   selected_poems: string[] | null;
   generation_model: string | null;
   generated_at: string;
@@ -33,11 +34,19 @@ function pclmBreakdown(pclm: SampleAnswerFull["pclm_target"]): string | null {
   return `P ${pclm.P} · C ${pclm.C} · L ${pclm.L} · M ${pclm.M}`;
 }
 
-function gradeHeadline(grade_tier: string, pclm: SampleAnswerFull["pclm_target"]): string {
+function gradeHeadline(
+  grade_tier: string,
+  pclm: SampleAnswerFull["pclm_target"],
+  mark_cap: number | null,
+): string {
   const total = pclmTotal(pclm);
-  return total !== null
-    ? `${grade_tier} Sample Answer · ${total}/100`
-    : `${grade_tier} Sample Answer`;
+  if (total !== null && mark_cap) {
+    return `${grade_tier} Sample Answer · ${total}/${mark_cap}`;
+  }
+  if (total !== null) {
+    return `${grade_tier} Sample Answer · ${total}`;
+  }
+  return `${grade_tier} Sample Answer`;
 }
 
 // Split into clean paragraphs. Each paragraph becomes its own array entry
@@ -52,7 +61,7 @@ function splitParagraphs(answer_text: string): string[] {
 }
 
 export function toPlainText(row: SampleAnswerFull): string {
-  const { question, grade_tier, pclm_target, selected_poems, answer_text } = row;
+  const { question, grade_tier, pclm_target, mark_cap, selected_poems, answer_text } = row;
   const year = question.exam_year ?? "Unknown year";
   const breakdown = pclmBreakdown(pclm_target);
   const poems =
@@ -62,7 +71,7 @@ export function toPlainText(row: SampleAnswerFull): string {
   const paragraphs = splitParagraphs(answer_text);
 
   const lines: (string | null)[] = [
-    gradeHeadline(grade_tier, pclm_target),
+    gradeHeadline(grade_tier, pclm_target, mark_cap),
     `Leaving Certificate English · Higher Level Paper 2`,
     `${year} · ${question.subject_key}`,
     breakdown ? `PCLM: ${breakdown}` : null,
@@ -82,7 +91,7 @@ export function toPlainText(row: SampleAnswerFull): string {
 }
 
 export function toHtml(row: SampleAnswerFull): string {
-  const { question, grade_tier, pclm_target, selected_poems, answer_text } = row;
+  const { question, grade_tier, pclm_target, mark_cap, selected_poems, answer_text } = row;
   const year = question.exam_year ?? "Unknown year";
   const breakdown = pclmBreakdown(pclm_target);
   const poems =
@@ -95,7 +104,7 @@ export function toHtml(row: SampleAnswerFull): string {
 
   return `<article>
   <header style="border-bottom:2px solid #0f172a;padding-bottom:12px;margin-bottom:20px">
-    <h1 style="margin:0 0 4px 0;font-size:22px">${escapeHtml(gradeHeadline(grade_tier, pclm_target))}</h1>
+    <h1 style="margin:0 0 4px 0;font-size:22px">${escapeHtml(gradeHeadline(grade_tier, pclm_target, mark_cap))}</h1>
     <p style="margin:0;color:#475569;font-size:13px">
       Leaving Certificate English · Higher Level Paper 2<br>
       ${escapeHtml(String(year))} · ${escapeHtml(question.subject_key)}
