@@ -45,13 +45,21 @@ const SHARED_RULES = `You are producing study notes for an Irish Leaving Certifi
 
 ABSOLUTE RULES:
 - Every quote you embed must be copied verbatim from the QUOTE BANK provided. Do not invent quotes. If a point needs a quote you do not have, adjust the point.
-- Use UK English spelling. Never em dashes. No "delve", "nuanced" overuse, "tapestry", "multifaceted".
-- Output Markdown only. Use ## for section headers, > for quote blocks, **bold** for key terms. Do not include code fences.
+- Use UK English spelling. Never em dashes (—), en dashes (–), or double hyphens used as a substitute (--). Use a comma, colon, semicolon, or full stop instead. This is a hard rule because students paste output into Word, which autocorrects -- into — and exposes the AI tell.
+- Banned words: "delve", "nuanced" (unless genuinely necessary), "tapestry", "multifaceted", "landscape" (figurative), "furthermore" / "moreover" / "additionally" used in sequence.
+- Output Markdown only. Do not include code fences.
+- Heading hierarchy is strict and must always be:
+    # for the single note title at the very top (one only)
+    ## for major sections
+    ### for sub-sections inside a section (use when grouping multiple characters, themes, scenes, or sub-points)
+  Never use #### or deeper. Never skip levels (no ### before any ## has appeared in the document).
+- Use > for quote blocks when standalone, otherwise embed quotes inline in prose with double quotes.
+- Use **bold** for key terms and exam-relevant flagging only, not for headings.
 - Stay focused on the requested SUBJECT. Do not drift to other characters / themes / scenes unless they directly illuminate the subject.
 - Embed quotes inline in prose, not as lists. Lead into each quote with a clause that earns it.
-- End with a section titled "How this could come up in the exam" listing 2-3 past question patterns this material answers, with a one-sentence note on how to deploy it.`;
+- Always end with a "## How this could come up in the exam" section listing 2-3 past question patterns this material answers, with a one-sentence note on how to deploy it.`;
 
-const HL_VOICE = `VOICE: Sophisticated but accessible. Sentence length varies. The notes should sound like an experienced LC teacher dictating revision material — confident, specific, examiner-aware. Make argumentative claims, not summaries. Acknowledge complexity where it earns its place.
+const HL_VOICE = `VOICE: Sophisticated but accessible. Sentence length varies. The notes should sound like an experienced LC teacher dictating revision material: confident, specific, examiner-aware. Make argumentative claims, not summaries. Acknowledge complexity where it earns its place.
 
 NO meta-commentary. Do not write "this is important because..." or "what is striking is...". Make the move; let the reader see why it matters.`;
 
@@ -104,6 +112,8 @@ SUBJECT: ${subjectDisplay}
 
 Produce a comprehensive character study of ${subjectDisplay} suitable for ${levelLabel} exam preparation. Structure:
 
+# ${subjectDisplay} in ${textKey}
+
 ## Overview
 3-5 sentences placing the character in the play. What is their role? What is their relationship to the protagonist or central conflict? What is the single most important thing to understand about them?
 
@@ -114,7 +124,7 @@ How does ${subjectDisplay} change from first appearance to final appearance? Use
 The 2-3 most important relationships this character has, and what each reveals.
 
 ## Defining quotes
-6-10 quotes drawn from the bank that capture this character's voice, role, and arc. Each quote should be embedded in 2-3 sentences of analysis that explains what the quote shows AND how it could be used in an exam answer. Do not list quotes — weave them into argument.
+6-10 quotes drawn from the bank that capture this character's voice, role, and arc. Each quote should be embedded in 2-3 sentences of analysis that explains what the quote shows AND how it could be used in an exam answer. Do not list quotes; weave them into argument.
 
 ## Themes this character carries
 Which 2-4 of the play's central themes does this character embody, complicate, or oppose? One paragraph each.
@@ -132,8 +142,10 @@ SUBJECT: ${subjectDisplay}
 
 Produce a comprehensive analysis of the theme "${subjectDisplay}" in ${textKey} suitable for ${levelLabel} exam preparation. Structure:
 
+# ${subjectDisplay} in ${textKey}
+
 ## What the theme is in this play
-3-5 sentences. What does ${textKey} actually say about ${subjectDisplay}? Not a generic definition — the play's specific argument. If the play takes a position, name it.
+3-5 sentences. What does ${textKey} actually say about ${subjectDisplay}? Not a generic definition: the play's specific argument. If the play takes a position, name it.
 
 ## Where the theme appears
 Trace the theme through key scenes. Use act references. Show how it develops, intensifies, or is resolved.
@@ -159,6 +171,8 @@ NOTE TYPE: Relationship Study
 SUBJECT: ${subjectDisplay}
 
 Produce a study of the relationship "${subjectDisplay}" in ${textKey} suitable for ${levelLabel} exam preparation. Structure:
+
+# ${subjectDisplay} in ${textKey}
 
 ## The nature of the relationship
 3-5 sentences. What is the bond? Power dynamic? What does each character want from the other? What does the relationship symbolise in the play's larger argument?
@@ -188,6 +202,8 @@ SUBJECT: ${subjectDisplay}
 
 Produce a detailed analysis of the scene "${subjectDisplay}" in ${textKey} suitable for ${levelLabel} exam preparation. Structure:
 
+# Scene Analysis: ${subjectDisplay} (${textKey})
+
 ## Setup
 What is happening in the play immediately before this scene? What does the audience know that characters don't (dramatic irony)?
 
@@ -215,24 +231,28 @@ Write the note now.`;
       return `${HEADER}
 
 NOTE TYPE: Plot Summary
-SUBJECT: ${textKey} — Full Play Overview
+SUBJECT: ${textKey} (Full Play Overview)
 
 Produce an act-by-act summary of ${textKey} suitable for ${levelLabel} exam preparation. Structure:
 
-## Act 1 — Setup
+# ${textKey}: Full Plot Summary
+
+## Act 1: Setup
 What establishes the world, characters, and central conflict. Key turning point.
 
-## Act 2 — Rising action
+## Act 2: Rising action
 The pivotal action that sets the tragedy in motion. Aftermath.
 
-## Act 3 — Climax
+## Act 3: Climax
 The point of no return.
 
-## Act 4 — Falling action
+## Act 4: Falling action
 Consequences spread. Other characters react.
 
-## Act 5 — Resolution
+## Act 5: Resolution
 How it ends. What is restored, what is lost.
+
+Note: if the text is a novel rather than a play, replace the act structure with appropriate structural divisions (parts, sections, or major chapter groups). Adjust the H2 headings accordingly but keep the same five-stage arc (Setup, Rising action, Climax, Falling action, Resolution).
 
 For each act: 3-5 paragraphs. Embed key quotes from the bank where they capture a moment. Mark the most exam-relevant moments with **bold** so a student scanning can find them.
 
@@ -251,12 +271,15 @@ SUBJECT: ${subjectDisplay}
 
 Produce a curated quote bank focused on "${subjectDisplay}". Structure:
 
-Group the most relevant 12-20 quotes from the bank into 3-5 sub-themes or sub-categories. For each quote:
-- The quote in a > blockquote
-- Attribution: speaker (if drama) and act/scene/line if available in the bank metadata
+# Quote Bank: ${subjectDisplay} (${textKey})
+
+Group the most relevant 12-20 quotes from the bank into 3-5 sub-themes or sub-categories. Each sub-grouping is a ## section. Within each, quotes appear with a ### heading naming the moment or character (e.g. "### Lady Macbeth, Act 1 Scene 5") followed by:
+- The quote itself in a > blockquote
+- Attribution line: speaker (if drama) and act/scene/line if available
 - 2-3 sentences explaining what the quote shows and how a student could deploy it in an exam answer
 
-End with "Quick reference for past questions" — list 3-5 past question patterns these quotes serve.
+## Quick reference for past questions
+List 3-5 past question patterns these quotes serve.
 
 Write the bank now.`;
 
@@ -268,11 +291,13 @@ SUBJECT: ${subjectDisplay}
 
 Produce an analysis of the dramatic technique "${subjectDisplay}" as used in ${textKey}. Structure:
 
+# ${subjectDisplay} as Dramatic Technique in ${textKey}
+
 ## What the technique is
 2-3 sentences defining the technique briefly for student readers.
 
 ## How ${textKey} uses it
-Specific examples — at least 4 separate moments in the play. Embed quotes from the bank.
+Specific examples: at least 4 separate moments in the play. Embed quotes from the bank.
 
 ## What effect it creates
 Why does the playwright use this technique? What is the audience experience?
@@ -292,6 +317,8 @@ NOTE TYPE: Critical Reading
 SUBJECT: ${subjectDisplay}
 
 Produce a critical/theoretical reading of ${textKey} from the perspective of "${subjectDisplay}". Structure:
+
+# ${subjectDisplay} of ${textKey}
 
 ## The reading in 3 sentences
 What does this critical lens claim about the play?
@@ -316,6 +343,8 @@ SUBJECT: ${subjectDisplay}
 Take the following past exam question and produce a structured walkthrough that a student could use as a planning template:
 
 QUESTION: ${subjectDisplay}
+
+# Past Question Walkthrough: ${textKey}
 
 ## Unpacking the question
 What is the question literally asking? Identify the keywords. Identify any traps (e.g. "to what extent" requires balanced agreement/disagreement).
