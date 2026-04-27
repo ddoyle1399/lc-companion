@@ -85,6 +85,13 @@ export async function POST(request: NextRequest) {
   let displaySubject = subjectKey;
   let subjectMeta: Record<string, unknown> = {};
 
+  // Note types that operate on the whole text rather than a catalogue subject.
+  // The form sends subjectKey="full_play" for these. Skip the catalogue lookup
+  // and use the text title as the display subject.
+  const SUBJECTLESS_NOTE_TYPES: readonly NoteType[] = ["plot_summary"];
+  const isSubjectless =
+    SUBJECTLESS_NOTE_TYPES.includes(noteType) || subjectKey === "full_play";
+
   if (noteType === "past_question_walkthrough") {
     // subjectKey is a past_questions.id
     const { data: q } = await supabase
@@ -96,6 +103,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "past_question_not_found" }, { status: 404 });
     }
     displaySubject = `${q.exam_year}: ${q.question_text}`;
+  } else if (isSubjectless) {
+    displaySubject = textKey;
+    subjectMeta = {};
   } else {
     const { data: asset } = await supabase
       .from("single_text_assets")
