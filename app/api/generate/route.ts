@@ -340,6 +340,7 @@ export async function POST(request: NextRequest) {
           comparativeArgumentFocus,
           comparativeQuestionText,
           comparativeQuestionFormat,
+          comparativeDepth,
         } = body;
 
         const noteType = comparativeNoteType || "mode_grid";
@@ -418,6 +419,9 @@ export async function POST(request: NextRequest) {
         context.comparativeArgumentFocus = comparativeArgumentFocus;
         context.comparativeQuestionText = comparativeQuestionText;
         context.comparativeQuestionFormat = comparativeQuestionFormat;
+        if (comparativeDepth === 'quick' || comparativeDepth === 'standard' || comparativeDepth === 'deep') {
+          context.comparativeDepth = comparativeDepth;
+        }
         if (comparativeMode) {
           context.comparativeExamPattern = buildComparativeExamSummary(comparativeMode);
         }

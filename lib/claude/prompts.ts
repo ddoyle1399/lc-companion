@@ -153,6 +153,14 @@ export interface PromptContext {
   comparativeArgumentFocus?: string;       // for comparative_argument
   comparativeQuestionText?: string;        // for question_plan / sample_answer
   comparativeQuestionFormat?: 'Q1a_30' | 'Q1b_40' | 'Q2_70';
+  /**
+   * Output depth. Affects word target and section comprehensiveness.
+   *   quick    — ~700 words, the essentials only
+   *   standard — ~1400 words, the default substantive note
+   *   deep     — ~2200 words, flagship resource covering everything
+   * Currently honoured by text_mode_profile. Other note types ignore it.
+   */
+  comparativeDepth?: 'quick' | 'standard' | 'deep';
 
   userInstructions?: string;
   examSummary?: string;
@@ -1362,15 +1370,63 @@ function buildComparativeModeProfilePrompt(context: PromptContext): string {
   const mode = context.comparativeMode || 'Cultural Context';
   const axes = getModeAxes(mode);
   const focus = getModeFocusBlock(mode);
+  const depth = context.comparativeDepth ?? 'standard';
   const userInstr = context.userInstructions
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
+  // Depth-driven targets. Quick is a tight reference. Standard is a substantive
+  // working note. Deep is a flagship resource the H1 Club can publish: every
+  // axis covered in full, multiple worked examples per past question, an
+  // expanded comparison block, and a dedicated essay-language section.
+  const depthBlock =
+    depth === 'quick'
+      ? {
+          totalWords: '600-800',
+          openParaWords: '70-90',
+          axisParaWords: '60-80',
+          comparePara: '3 to 4 short paragraphs (one to two sentences each)',
+          pastQuestions: 'one or two',
+          pastQuestionParaWords: '60-80',
+          mistakes: 'three short paragraphs',
+          extras: '',
+        }
+      : depth === 'deep'
+        ? {
+            totalWords: '2000-2500',
+            openParaWords: '140-180',
+            axisParaWords: '180-240',
+            comparePara: '6 to 8 paragraphs (three to five sentences each)',
+            pastQuestions: 'three or four',
+            pastQuestionParaWords: '160-200',
+            mistakes: 'five to seven short paragraphs',
+            extras: `
+
+## Essay language you can lift
+
+Six to ten short, ready-to-deploy sentences a student can paste into an essay on this mode and this text. Each sentence should be specific to ${text?.title ?? "the text"} (not generic). Mix opening sentences, transition sentences, and closing flourishes. Format as a simple bulleted list, one sentence per line. Each sentence stands alone and is examiner-friendly.
+
+## A worked top-band paragraph
+
+One model paragraph (around 180-220 words) that a student could sit beside their answer as a template. It must demonstrate the moves an examiner rewards on this mode: a clear thesis sentence, two or three concrete moments from this text, one embedded short quote, one named technique connected to meaning, and a closing sentence that lifts to the mode-level argument. Do not annotate the paragraph; just write it cleanly.`,
+          }
+        : {
+            totalWords: '1300-1600',
+            openParaWords: '100-130',
+            axisParaWords: '100-140',
+            comparePara: '4 to 6 paragraphs (two to three sentences each)',
+            pastQuestions: 'two or three',
+            pastQuestionParaWords: '100-130',
+            mistakes: 'three to five short paragraphs',
+            extras: '',
+          };
+
   return `Generate a single-text profile of ${textRef} through the lens of ${mode}, written for an Irish Leaving Certificate Higher Level student.
 
-Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
+Year: ${context.year} | Level: ${context.level} | Mode: ${mode} | Depth: ${depth}
+Target word count: ${depthBlock.totalWords} words.
 
-This is a one-text-one-mode deep profile. A student preparing for a ${mode} question on this text uses this note to know exactly what evidence, what moments, and what angles they can pull. The note must read like an experienced teacher dictating revision material, not like a config form or a textbook table of contents.
+This is a one-text-one-mode resource. A student preparing for a ${mode} question on this text uses this note to know exactly what evidence, what moments, and what angles they can pull. The note must read like an experienced teacher dictating revision material, not like a config form or a textbook table of contents. At deep level it should be the single best resource a Higher Level student could have for this mode on this text.
 
 ${focus}
 
@@ -1382,32 +1438,32 @@ Begin the response with a single H1 line that names the actual subject. Use this
 
 # ${mode} in ${text?.title ?? "this text"}
 
-Then write the following four ## sections, in this order, using these exact heading texts. Do not number them. Do not invent additional sections.
+Then write the following ## sections, in this order, using these exact heading texts. Do not number them. Do not invent additional sections.
 
 ## What this mode actually means here
 
-One paragraph, around 100 words. Open by saying what ${mode} is examining (in plain student language, not a textbook gloss), then state in one direct sentence where this text sits on this mode and why. The student should leave this paragraph with a defendable position they could open an essay with.
+One paragraph of around ${depthBlock.openParaWords} words. Open by saying what ${mode} is examining (in plain student language, not a textbook gloss), then state in one direct sentence where this text sits on this mode and why. The student should leave this paragraph with a defendable position they could open an essay with.
 
 ## How ${mode} plays out across the text
 
 For each axis listed above, write a sub-section using ### with the axis name as the heading. Inside each sub-section, deliver the content as flowing prose, not as bold field labels. Do NOT write "**Summary:**" or "**Anchor moments:**" or "**Key quote:**" or "**Argument hook:**" or "**Applies to this text:**" anywhere. Replace them with prose:
 
 - If the axis genuinely does not apply, open the sub-section by saying so in one sentence, then move on. Do not pad.
-- If it does apply, write one substantive paragraph (around 80-120 words) that names two or three specific scenes or moments anchored in concrete detail, embeds one short verified quote inline with attribution (or paraphrases the line if the exact wording is uncertain, naming it as a paraphrase), and finishes with one sharp sentence the student could lift straight into an essay. The lifted sentence is not labelled; it just lands as the closing line of the paragraph.
+- If it does apply, write one substantive paragraph of around ${depthBlock.axisParaWords} words that names two or three specific scenes or moments anchored in concrete detail, embeds one short verified quote inline with attribution (or paraphrases the line if the exact wording is uncertain, naming it as a paraphrase), and finishes with one sharp sentence the student could lift straight into an essay. The lifted sentence is not labelled; it just lands as the closing line of the paragraph.
 
 The information is identical to the bracketed-label version. The delivery is prose. This is a hard rule.
 
 ## Comparing this against your other texts
 
-Four to six short paragraphs, each one to three sentences. Each paragraph offers one comparison angle this text supports on this mode against another text a student might be studying alongside it (you do not know which text they have paired this with, so suggest categories: a text where the social setting is more rigid, a text where the family unit is the source of conflict, a text whose vision is more pessimistic, etc.). Each paragraph should end with a usable link sentence the student could adapt. Do not number the paragraphs. Do not use bullet points; write them as prose paragraphs.
+${depthBlock.comparePara}. Each paragraph offers one comparison angle this text supports on this mode against another text a student might be studying alongside it (you do not know which text they have paired this with, so suggest categories: a text where the social setting is more rigid, a text where the family unit is the source of conflict, a text whose vision is more pessimistic, etc.). Each paragraph should end with a usable link sentence the student could adapt. Do not number the paragraphs. Do not use bullet points; write them as prose paragraphs.
 
 ## How to use this in past exam questions
 
-Take two or three verbatim past SEC questions on ${mode} (you may use web search to find recent papers). For each, use ### with the year and a short tag as the heading, then write one paragraph (80-100 words) showing how this text would be deployed: the angle to take, the moments to pull, and the link sentence to use. Do not just restate the question; show how this specific text answers it.
+Take ${depthBlock.pastQuestions} verbatim past SEC questions on ${mode} (you may use web search to find recent papers). For each, use ### with the year and a short tag as the heading, then write one paragraph of around ${depthBlock.pastQuestionParaWords} words showing how this text would be deployed: the angle to take, the moments to pull, the link sentence to use, and (where space allows) one or two technique-and-effect notes. Do not just restate the question; show how this specific text answers it.
 
-## Pitfalls to avoid
+## Where students lose marks
 
-Three to five short paragraphs (not a bulleted list). Each names a specific mistake students make when using this text on this mode and gives one corrective move. If the mode is Cultural Context, the first pitfall must be the mistake of treating it as a theme rather than a setting question.
+${depthBlock.mistakes}. Each names a specific mistake students make when using this text on this mode and gives one corrective move. Frame each as something a teacher would say to a student during a one-to-one grind, not as an abstract caution. If the mode is Cultural Context, the first item must be the mistake of treating it as a theme rather than a setting question.${depthBlock.extras}
 
 QUOTE HANDLING
 

@@ -11,6 +11,7 @@ import comp2027 from "@/data/circulars/2027-comparative.json";
 import comp2028 from "@/data/circulars/2028-comparative.json";
 
 type Level = "HL" | "OL";
+type Depth = "quick" | "standard" | "deep";
 
 type NoteType =
   | "mode_grid"
@@ -264,6 +265,7 @@ export default function ComparativePage() {
   const [argumentFocus, setArgumentFocus] = useState("");
   const [questionText, setQuestionText] = useState("");
   const [questionFormat, setQuestionFormat] = useState<QuestionFormat>("Q2_70");
+  const [depth, setDepth] = useState<Depth>("standard");
   const [instructions, setInstructions] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -359,6 +361,7 @@ export default function ComparativePage() {
         ? questionText.trim()
         : undefined,
       comparativeQuestionFormat: meta.needsQuestion ? questionFormat : undefined,
+      comparativeDepth: depth,
       userInstructions: instructions || undefined,
     });
   }
@@ -656,6 +659,31 @@ export default function ComparativePage() {
               </div>
             </>
           )}
+
+          {/* Depth */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Depth
+            </label>
+            <div className="flex gap-3 flex-wrap">
+              {(["quick", "standard", "deep"] as Depth[]).map((d) => (
+                <label key={d} className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="comparativeDepth"
+                    value={d}
+                    checked={depth === d}
+                    onChange={() => setDepth(d)}
+                    className="accent-teal"
+                  />
+                  <span className="text-sm text-navy capitalize">{d}</span>
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              Quick = 600-800 words, the essentials. Standard = 1300-1600 words, the working note. Deep = 2000-2500 words, flagship resource with essay-language section and a worked top-band paragraph.
+            </p>
+          </div>
 
           {/* Additional instructions */}
           <div className="mb-4">
