@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import type { Asset, AssetsByText } from "./page";
+import { wrapForH1Club } from "@/lib/export/h1ClubHtml";
 
 type Level = "higher" | "ordinary";
 type Depth = "quick" | "standard" | "deep";
@@ -68,6 +69,31 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
   const [instructions, setInstructions] = useState<string>("");
   const [generating, setGenerating] = useState(false);
   const [results, setResults] = useState<Record<string, ItemStatus>>({});
+  // Tracks which "{jobKey}::{action}" was just copied, so we can flash "Copied!"
+  const [copiedKey, setCopiedKey] = useState<string>("");
+
+  function flashCopied(jobKey: string, action: "md" | "html") {
+    const k = `${jobKey}::${action}`;
+    setCopiedKey(k);
+    window.setTimeout(() => {
+      setCopiedKey((cur) => (cur === k ? "" : cur));
+    }, 1800);
+  }
+
+  async function copyMarkdown(jobKey: string, body: string) {
+    await navigator.clipboard.writeText(body);
+    flashCopied(jobKey, "md");
+  }
+
+  async function copyAsH1ClubHtml(
+    jobKey: string,
+    body: string,
+    title: string,
+  ) {
+    const html = wrapForH1Club({ markdown: body, title, level });
+    await navigator.clipboard.writeText(html);
+    flashCopied(jobKey, "html");
+  }
 
   const noteTypeMeta = NOTE_TYPES.find((t) => t.key === noteType)!;
 
@@ -456,12 +482,25 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
                     <div className="prose prose-sm max-w-none text-navy whitespace-pre-wrap">
                       {status.note.body_markdown}
                     </div>
-                    <div className="mt-4 flex gap-3">
+                    <div className="mt-4 flex flex-wrap gap-3">
                       <button
-                        onClick={() => navigator.clipboard.writeText(status.note.body_markdown)}
+                        onClick={() => copyMarkdown(job.displayKey, status.note.body_markdown)}
                         className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
                       >
-                        Copy Markdown
+                        {copiedKey === `${job.displayKey}::md` ? "Copied!" : "Copy Markdown"}
+                      </button>
+                      <button
+                        onClick={() =>
+                          copyAsH1ClubHtml(
+                            job.displayKey,
+                            status.note.body_markdown,
+                            status.note.display_subject,
+                          )
+                        }
+                        className="px-4 py-2 text-sm bg-teal text-white rounded hover:bg-teal/90"
+                        title="Copy as H1 Club HTML, ready to paste into the H1 Club CMS"
+                      >
+                        {copiedKey === `${job.displayKey}::html` ? "Copied!" : "Copy for H1 Club"}
                       </button>
                       <a
                         href={`/single-text/library/${status.note.id}`}

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { generateTextNote } from "@/lib/claude/generateTextNote";
+import { findSingleTextAuthor } from "@/data/circulars";
 import type {
   Depth,
   Level,
@@ -23,11 +24,12 @@ const VALID_NOTE_TYPES: NoteType[] = [
   "past_question_walkthrough",
 ];
 
-// Single-text texts currently supported. Author lookup for prompt header.
-const SUPPORTED_TEXTS: Record<string, { author: string }> = {
-  Macbeth: { author: "William Shakespeare" },
-  Othello: { author: "William Shakespeare" },
-};
+// Author for a given text title is resolved at request time from the
+// prescribed circulars (2026/2027/2028). To add a new prescribed single text
+// in future, add it to the circular JSON files only; no code change needed
+// here. The route accepts any title that:
+//   (a) appears as a prescribed single text in any cycle, AND
+//   (b) has a verified quote bank in the notes table.
 
 export async function POST(request: NextRequest) {
   let body: unknown;
@@ -64,9 +66,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!SUPPORTED_TEXTS[textKey]) {
+  const author = findSingleTextAuthor(textKey);
+  if (!author) {
     return NextResponse.json(
-      { error: "unsupported_text", supported: Object.keys(SUPPORTED_TEXTS) },
+      {
+        error: "unsupported_text",
+        detail: `${textKey} is not prescribed as a single text in any current cycle.`,
+      },
       { status: 400 },
     );
   }
@@ -150,7 +156,7 @@ export async function POST(request: NextRequest) {
   const result = await generateTextNote({
     noteType,
     textKey,
-    author: SUPPORTED_TEXTS[textKey].author,
+    author,
     subjectDisplay: displaySubject,
     subjectMeta,
     level,

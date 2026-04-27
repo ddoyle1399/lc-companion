@@ -165,6 +165,32 @@ export function getSingleTexts(year: number, level?: Level): SingleText[] {
   );
 }
 
+/**
+ * Look up the author of a prescribed single text by title, across all
+ * prescribed years. Used by the API to resolve the author without a
+ * hardcoded allowlist. Returns undefined if the title is not prescribed
+ * in any cycle (which is the right outcome: we should not generate notes
+ * for a text that no exam cycle prescribes).
+ *
+ * Title comparison is case-sensitive against the canonical title in the
+ * circular JSON. Callers should pass the same string the dropdown uses
+ * (which itself comes from the circular JSON), so this stays consistent.
+ */
+export function findSingleTextAuthor(title: string): string | undefined {
+  for (const circular of Object.values(circulars)) {
+    const match = circular.singleTexts.find((t) => t.title === title);
+    if (match) return match.author;
+  }
+  return undefined;
+}
+
+/**
+ * Whether a title is prescribed as a single text in any cycle.
+ */
+export function isPrescribedSingleText(title: string): boolean {
+  return findSingleTextAuthor(title) !== undefined;
+}
+
 export function getComparativeTexts(year: number) {
   const circular = circulars[year];
   if (!circular) return null;
