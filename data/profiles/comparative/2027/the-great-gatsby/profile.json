@@ -1,0 +1,799 @@
+{
+  "textId": "the-great-gatsby",
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "type": "novel",
+  "yearsPrescribed": [
+    2027
+  ],
+  "copyrightStatus": "public_domain",
+  "attributionLine": "The Great Gatsby by F. Scott Fitzgerald (1925). In the public domain in the United States and most other jurisdictions; quotations are taken verbatim from the Project Gutenberg edition.",
+  "plotBeats": [
+    {
+      "index": 1,
+      "title": "Nick arrives in West Egg; the Buchanans at East Egg",
+      "location": "Chapter I, summer 1922, Long Island",
+      "summary": "Nick Carraway, recently demobilised from the war, moves from the Middle West to a rented bungalow in West Egg, next door to the unknown Mr Gatsby's mansion. He drives to East Egg to dine with his cousin Daisy Buchanan and her husband Tom, an old college acquaintance. He meets Jordan Baker, a young golf champion. He learns that Tom keeps a mistress in New York. At the close, he sees Gatsby for the first time, alone on his lawn, reaching out across the water toward a distant green light.",
+      "significance": "The frame opening that establishes the novel's geography (West Egg, East Egg, Manhattan), its narrator's reserved position, and its central symbol. Every later scene reads back to this dinner."
+    },
+    {
+      "index": 2,
+      "title": "The valley of ashes and Myrtle's apartment",
+      "location": "Chapter II, the valley of ashes and West 158th Street",
+      "summary": "Tom takes Nick to meet Myrtle Wilson, his mistress, the wife of George Wilson, a garage owner who lives in the valley of ashes between West Egg and Manhattan. Tom and Myrtle take an apartment in New York for a drunken afternoon party. Myrtle insists on saying Daisy's name. Tom breaks her nose with his open hand.",
+      "significance": "The novel's sharpest single rendering of class, violence, and the cultural context's protected cruelty. The valley of ashes, watched by the eyes of Doctor T. J. Eckleburg, becomes the novel's recurring backdrop."
+    },
+    {
+      "index": 3,
+      "title": "Gatsby's parties and the first meeting",
+      "location": "Chapter III, Gatsby's mansion",
+      "summary": "Nick attends one of Gatsby's enormous parties, formally invited by note. He meets Owl Eyes in the library and finally encounters Gatsby himself, who turns out to be the unassuming young man with the famously reassuring smile. Jordan, summoned alone for a private conversation, learns something that, she tells Nick, is amazing.",
+      "significance": "The novel's most concentrated set-piece of West Egg parties and the introduction of Gatsby as a character. The library scene with Owl Eyes establishes Gatsby's books as real; the rest of him is to be tested."
+    },
+    {
+      "index": 4,
+      "title": "Jordan's revelation; the green light explained",
+      "location": "Chapter IV, the Plaza tea-garden and Central Park",
+      "summary": "Jordan tells Nick the story of Daisy and Gatsby's 1917 Louisville romance, his Camp Taylor uniform, his disappearance to the war, his return to find Daisy married to Tom. She reveals that Gatsby bought his West Egg mansion to be across the bay from Daisy and asks Nick to invite Daisy to tea so that Gatsby may come over.",
+      "significance": "The novel's structural reveal. The green light Nick saw in Chapter I is now identified as the end of Daisy's dock. Every detail of Gatsby's spectacle is reframed as architecture for an arranged meeting."
+    },
+    {
+      "index": 5,
+      "title": "The reunion at Nick's cottage",
+      "location": "Chapter V, Nick's cottage in West Egg",
+      "summary": "Daisy comes to tea at Nick's; Gatsby is there. After an excruciating half-hour they emerge transformed. Gatsby takes them across the lawn to his mansion and shows Daisy his clothes, his rooms, his shirts. Daisy weeps over the shirts. The green light, Gatsby reflects, has lost its colossal significance: his count of enchanted objects has diminished by one.",
+      "significance": "The novel's central reunion and its first elegiac note. The green light, having been a religious object, is now a green light on a dock. Gatsby's project has reached its peak; the novel will spend the rest of its length watching it fail."
+    },
+    {
+      "index": 6,
+      "title": "James Gatz, Dan Cody, and Tom's dawning suspicion",
+      "location": "Chapter VI, the Cody backstory and Gatsby's party with the Buchanans",
+      "summary": "Nick reveals Gatsby's origin story: a poor North Dakota boy named James Gatz, taken aboard Dan Cody's yacht at seventeen, reinvented as Jay Gatsby. Tom and Daisy come to one of Gatsby's parties. Daisy is appalled by West Egg. After they leave, Gatsby tells Nick he wants Daisy to tell Tom she never loved him, then go back to Louisville and marry from her house, as if the five years had never happened. Nick warns him you cannot repeat the past. Gatsby disagrees.",
+      "significance": "The novel's central exposition of Gatsby's manufactured self and its central naming of his temporal pathology. Tom's suspicion is now alive; the Plaza confrontation is being prepared."
+    },
+    {
+      "index": 7,
+      "title": "The Plaza confrontation and Myrtle's death",
+      "location": "Chapter VII, the Buchanan house, the Plaza Hotel suite, the valley of ashes",
+      "summary": "On a stifling afternoon Tom drives Gatsby's yellow car into Manhattan; the others follow. At the Plaza, Tom forces a confrontation. Daisy collapses; she will not say she never loved Tom. Tom triumphantly sends Daisy home in Gatsby's car. Driving back through the valley of ashes, Daisy at the wheel of the yellow car, they hit and kill Myrtle Wilson. Gatsby will say he was driving.",
+      "significance": "The novel's central catastrophe. The Plaza scene proves the limit of Gatsby's project; the Myrtle death proves the human cost of the Buchanans' carelessness. Gatsby's protective lie about who was driving is the gesture that will lead, via Tom's later disclosure to Wilson, to Gatsby's own death."
+    },
+    {
+      "index": 8,
+      "title": "Gatsby's death; the funeral; the closing meditation",
+      "location": "Chapters VIII to IX, West Egg",
+      "summary": "Gatsby waits at home, hoping Daisy will phone. She does not. George Wilson, told by Tom that the yellow car belongs to Gatsby, walks across Long Island and shoots Gatsby in the swimming pool, then himself. Nick organises the funeral. Almost no one comes: Gatsby's father, the minister, the servants, Owl Eyes, Nick. Daisy and Tom have gone away. The novel closes with Nick's meditation on the Dutch sailors' new world and the green light Gatsby believed in.",
+      "significance": "The novel's restoration of moral order is exactly its refusal to restore one. The Buchanans escape; Gatsby is buried alone; the closing meditation widens the private elegy into a national one."
+    }
+  ],
+  "keyMoments": [
+    {
+      "id": "km-green-light",
+      "title": "Gatsby reaches for the green light",
+      "location": "Chapter I, closing image",
+      "whatHappens": "Late at night Nick sees a figure on the lawn next door. The man stretches out his arms toward the dark water; far across the bay there is a single green light, minute and far away, that might have been the end of a dock. When Nick looks again, the man has vanished.",
+      "whyItMatters": "The novel's most famous symbol, introduced before the reader knows what it means. The green light will be re-explained in Chapter V (it is the end of Daisy's dock) and reframed in the closing meditation (it is the orgiastic future). The novel's economy is built on the gradual demystification of this single image.",
+      "modeDeployment": {
+        "CC": "The green light is the cultural context's class symbol made into a private religious object. The bay separates new money (West Egg) from old money (East Egg).",
+        "GVV": "The vision is set early. A man reaching across the water for a light he cannot quite reach is the novel's image of the world it lives in.",
+        "LG": "Frame opening symbol. The novel will return to and re-read this image at every structural turn.",
+        "TI": "Hope, dream, and the deferral of the future. The theme stated in a single image."
+      },
+      "anchorQuoteIds": [
+        "q-green-light",
+        "q-orgiastic-future",
+        "q-boats-against-current",
+        "q-gift-for-hope",
+        "q-fresh-green-breast",
+        "q-last-greatest-dream"
+      ],
+      "linkSentenceTemplate": "Fitzgerald opens The Great Gatsby on an image of a man reaching across the water for a single green light, an image that compares with [Text B]'s opening in that..."
+    },
+    {
+      "id": "km-beautiful-fool",
+      "title": "Daisy's 'beautiful little fool' speech",
+      "location": "Chapter I, the veranda",
+      "whatHappens": "Daisy, having drawn Nick aside on the porch, tells him what she said when her daughter Pammy was born: she hoped the child would be a fool. She declares herself sophisticated and immediately reveals, by her tone, the basic insincerity of the claim. Nick registers a feeling that the whole evening has been a trick to extract a contributory emotion from him.",
+      "whyItMatters": "The novel's most concentrated rendering of Daisy's bind. The line names the cultural context's preferred role for women in her class and Daisy's rueful, performed acceptance of it. Nick's reading of her insincerity sets up the novel's final view of her as a person who cannot be trusted with the dreams projected upon her.",
+      "modeDeployment": {
+        "CC": "The cultural context's preferred role for upper-class women in 1922: decorative, ignorant, safely contained. Daisy names it bitterly.",
+        "GVV": "The vision's bleakest small moment. Daisy is not stupid; she is constrained.",
+        "LG": "Free indirect through Nick. The reader registers the insincerity Nick names without him having to belabour it.",
+        "TI": "Gender, motherhood, and the cultural restriction of women's lives. The theme stated by the woman the novel will eventually condemn for her carelessness."
+      },
+      "anchorQuoteIds": [
+        "q-beautiful-little-fool",
+        "q-sophisticated"
+      ],
+      "linkSentenceTemplate": "Daisy's beautiful-little-fool speech in The Great Gatsby names the cultural context's preferred role for upper-class women, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-broken-nose",
+      "title": "Tom breaks Myrtle's nose",
+      "location": "Chapter II, the New York apartment",
+      "whatHappens": "At Tom and Myrtle's drunken Sunday-afternoon apartment party, Myrtle insists on saying Daisy's name. Tom, with a short deft movement, breaks her nose with his open hand. Bloody towels appear; women scold and console; Mr McKee, dazed, leaves; Nick follows.",
+      "whyItMatters": "The novel's first overt depiction of Tom's physical violence. The cultural context's protected cruelty rendered in two sentences. Tom faces no consequence; the apartment continues; the novel registers it and moves on, which is itself a verdict.",
+      "modeDeployment": {
+        "CC": "Mid-1920s American class violence: the protected man strikes the unprotected woman without consequence. The cultural context's preferred form of domestic discipline.",
+        "GVV": "The vision's brutal stretch. Tom is not a caricature; the brutality is real.",
+        "LG": "Compressed scene-construction. Fitzgerald renders the moment with a single short sentence and lets the reader feel the force.",
+        "TI": "Class, gender, and protected violence. The theme stated."
+      },
+      "anchorQuoteIds": [
+        "q-tom-broke-nose",
+        "q-tom-white-race"
+      ],
+      "linkSentenceTemplate": "Tom's breaking of Myrtle's nose in The Great Gatsby renders mid-1920s class violence in a single sentence, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-shirts",
+      "title": "The reunion and the shirts",
+      "location": "Chapter V, Nick's cottage and Gatsby's mansion",
+      "whatHappens": "After an excruciating opening at Nick's cottage (Gatsby tipping a defunct mantelpiece clock), Daisy and Gatsby move to Gatsby's mansion. He shows her his rooms, his clothes, his shirts. He throws shirts before her, one by one, in many-coloured disarray. Daisy bends her head into the shirts and weeps stormily. She has never seen such beautiful shirts before.",
+      "whyItMatters": "The novel's central reunion rendered as a transaction in fabric. The shirts are the physical proof of Gatsby's accumulated wealth and the proof, too, that Daisy's wealth-encoded sensibility is what is reachable in her. The novel will not let the reader read the moment as merely sentimental: the shirts are the medium, and Daisy's tears are about the shirts.",
+      "modeDeployment": {
+        "CC": "1920s American consumption rendered as a love language. Shirts as the novel's most concentrated single class object.",
+        "GVV": "The vision's most generative small moment. Gatsby has won; Gatsby has not.",
+        "LG": "Object-led scene-construction. The scene is staged through one object, repeated.",
+        "TI": "Love, money, and the cultural inseparability of the two."
+      },
+      "anchorQuoteIds": [
+        "q-bought-house-across-bay"
+      ],
+      "linkSentenceTemplate": "The shirts scene in The Great Gatsby renders the love-and-money inseparability of the cultural context, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-platonic-conception",
+      "title": "James Gatz invents Jay Gatsby",
+      "location": "Chapter VI, the Lake Superior backstory",
+      "whatHappens": "Nick reveals that the seventeen-year-old James Gatz, loafing along Lake Superior in a torn green jersey, rowed out to Dan Cody's yacht and warned him about the wind. He had had the name Jay Gatsby ready for a long time. He went aboard Cody's yacht, served five years as steward, mate, skipper, secretary, and jailor, and emerged, at the end, as the substantiated Jay Gatsby.",
+      "whyItMatters": "The novel's central revelation about Gatsby's manufactured self. The line that Jay Gatsby sprang from his Platonic conception of himself names the novel's American-dream argument: Gatsby is not a confidence trick; he is a self-creation that the cultural context permits and then punishes.",
+      "modeDeployment": {
+        "CC": "The American cultural context's signature myth: the self-made man. Fitzgerald renders both its possibility and its limits.",
+        "GVV": "The vision's most generous reading of Gatsby. He is not contemptible; he is committed.",
+        "LG": "Embedded backstory. Nick interrupts the present-tense narrative to deliver the past.",
+        "TI": "Self-invention, the American dream, and the cultural context's complicity in its own myth."
+      },
+      "anchorQuoteIds": [
+        "q-platonic-conception",
+        "q-james-gatz",
+        "q-old-sport",
+        "q-blue-gardens-moths"
+      ],
+      "linkSentenceTemplate": "The James Gatz revelation in The Great Gatsby renders self-invention as the cultural context's signature myth, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-plaza",
+      "title": "The Plaza Hotel confrontation",
+      "location": "Chapter VII, the Plaza Hotel suite",
+      "whatHappens": "On a stifling afternoon Tom forces the company into a Plaza suite for mint juleps. He takes Gatsby on directly, calling out his Oxford lie, his bootlegging, his Wolfshiem connection. Gatsby insists Daisy say she never loved Tom. She cannot; she admits she loved both. The dead dream fights on as the afternoon slips away. Tom, satisfied, sends Daisy home in Gatsby's car.",
+      "whyItMatters": "The novel's central confrontation and the moment Gatsby's project is exposed as ungrantable. Daisy will not perform the past Gatsby has rebuilt his life around. The novel does not let the reader pretend he could have won: the past is unrecoverable, and Daisy is unwilling.",
+      "modeDeployment": {
+        "CC": "The cultural context's class confidence rendered in dialogue. Tom dismantles Gatsby with the unanswerable assurance of inherited wealth.",
+        "GVV": "The vision's most concentrated bleak hour. Daisy's love is real and insufficient.",
+        "LG": "Sustained dialogue scene. Fitzgerald lets the heat, the wedding-march intrusion, and the four-handed quarrel build without authorial intervention.",
+        "TI": "Past, love, class, and the limit of the dream the novel grants Gatsby."
+      },
+      "anchorQuoteIds": [
+        "q-cant-repeat-past",
+        "q-voice-full-of-money",
+        "q-golden-girl",
+        "q-loved-you-too",
+        "q-she-doesnt-look-like-her-father"
+      ],
+      "linkSentenceTemplate": "The Plaza confrontation in The Great Gatsby renders the limit of self-invention against inherited wealth, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-myrtle-death",
+      "title": "Myrtle Wilson is killed",
+      "location": "Chapter VII, the valley of ashes at dusk",
+      "whatHappens": "Driving back from the Plaza in Gatsby's yellow car, Daisy at the wheel, they hit Myrtle, who has run out into the road believing the car contains Tom. The car does not stop. Myrtle is killed instantly. Tom, arriving moments later in the blue coupé, weeps that the driver did not stop. Gatsby will tell Nick that Daisy was driving but that he will say he was.",
+      "whyItMatters": "The novel's central death and its clearest single rendering of the cultural context's careless cruelty. Daisy kills Myrtle; Tom misnames the car; Gatsby covers for Daisy; the protected couple retreats into its money. Myrtle's blood mingles with the dust of the valley of ashes she had been trying to escape.",
+      "modeDeployment": {
+        "CC": "The cultural context's class casualness. The Buchanans crash and retreat; the working woman dies; the system is set up to absorb the difference.",
+        "GVV": "The vision's bleakest exterior moment. Fitzgerald does not soften the death.",
+        "LG": "Multiple-perspective rendering. The death is narrated from Michaelis's vantage and recapitulated later by Gatsby.",
+        "TI": "Carelessness, class, and the protection inherited wealth provides. The theme rendered as a single body in the road."
+      },
+      "anchorQuoteIds": [
+        "q-myrtle-extinguished",
+        "q-takes-two-accident",
+        "q-careless-people"
+      ],
+      "linkSentenceTemplate": "The death of Myrtle in The Great Gatsby renders the cultural context's class casualness in a single act, in a way that compares with [Text B]'s..."
+    },
+    {
+      "id": "km-funeral",
+      "title": "Gatsby's funeral and Owl Eyes's verdict",
+      "location": "Chapter IX, the West Egg cemetery",
+      "whatHappens": "Almost no one comes to Gatsby's funeral. Daisy and Tom have left town and sent no message. Wolfshiem refuses. Klipspringer wants his tennis shoes back. Only Nick, the minister, the servants, Henry C. Gatz, and Owl Eyes attend in the rain. Owl Eyes pronounces the only public eulogy: 'The poor son-of-a-bitch.'",
+      "whyItMatters": "The novel's clearest single image of the cost of Gatsby's project. The man who hosted hundreds is buried by five. The Buchanans' careless retreat and the rest of the West Egg crowd's indifference are rendered in a single absent gathering. Owl Eyes's three-word verdict is the novel's only public elegy.",
+      "modeDeployment": {
+        "CC": "The cultural context's transactional friendships rendered as their own indictment. The hundreds who came for the parties stay home for the burial.",
+        "GVV": "The vision's most concentrated bleakness. The novel does not pretend the world has registered the loss.",
+        "LG": "Frame closure. The cemetery scene sits opposite the opening party scenes and acquires its meaning from the contrast.",
+        "TI": "Friendship, death, and the limit of transactional sociability."
+      },
+      "anchorQuoteIds": [
+        "q-poor-son-of-a-bitch",
+        "q-blessed-rain-falls-on",
+        "q-rotten-crowd",
+        "q-incorruptible-dream"
+      ],
+      "linkSentenceTemplate": "The funeral in The Great Gatsby stages the cost of transactional sociability in the cultural context, in a way that compares with [Text B]'s..."
+    }
+  ],
+  "characters": [
+    {
+      "id": "char-nick",
+      "name": "Nick Carraway",
+      "role": "Narrator and observer. Bond salesman, recently demobilised from the war, second cousin once removed of Daisy Buchanan, college acquaintance of Tom, neighbour of Gatsby. The novel is his retrospective account, written from the Middle West two years after the events.",
+      "socialPosition": "Yale graduate, 1915. From a moderately prominent Middle Western family. Modestly funded by his father for a year while he learns the bond business. Lives in a weather-beaten cardboard bungalow at eighty dollars a month, between two of West Egg's largest mansions.",
+      "mindset": "Reserved, snobbish, self-described as one of the few honest people he has ever known. Trained to suspend judgement; prone to register everyone else's snobbery while maintaining his own. The novel's account of his honesty is the novel's running irony.",
+      "contradictions": "Claims to reserve judgement and judges. Calls himself honest while sustaining a relationship with a serial liar. Disapproves of Gatsby from beginning to end and tells him he is worth more than the rest of them put together. The novel's narrator is its most contradictory character.",
+      "arc": "From eager Easterner to disillusioned Middle Westerner. Returns to the Midwest at the close, having seen what the East was made of. The novel itself is the document of his return.",
+      "keyRelationshipIds": [
+        "rel-nick-gatsby",
+        "rel-nick-jordan",
+        "rel-nick-tom"
+      ],
+      "keyQuoteIds": [
+        "q-fathers-advice",
+        "q-reserve-judgements",
+        "q-fundamental-decencies",
+        "q-honest-people",
+        "q-rotten-crowd",
+        "q-careless-people",
+        "q-westerners-unadaptable",
+        "q-thirty-years-too-old",
+        "q-boats-against-current",
+        "q-gift-for-hope",
+        "q-foul-dust"
+      ]
+    },
+    {
+      "id": "char-gatsby",
+      "name": "Jay Gatsby (James Gatz)",
+      "role": "Protagonist. Wealthy West Egg host, born James Gatz of North Dakota. Bootlegger, war veteran, self-invented man. The figure whose dream and death the novel is structured around.",
+      "socialPosition": "Self-made (and self-invented) Long Island host, fortune from bootlegging and stolen-bond schemes with Wolfshiem. Lives alone, except for servants, in a forty-acre Hôtel-de-Ville imitation across the bay from his lost love.",
+      "mindset": "Single-minded, romantic, mannered. Has rebuilt himself over five years to win back a woman who married another man. Believes the past is recoverable and acts accordingly. The novel grants him his sincerity even as it documents his failure.",
+      "contradictions": "A bootlegger with an incorruptible dream. A self-invented identity and the most sincerely committed character in the novel. A man whose criminal money was acquired entirely as a means to a private romantic end the criminal world cannot satisfy.",
+      "arc": "From James Gatz of North Dakota to Cody's yacht-boy to wartime officer to bootlegger to West Egg host. Murdered in his own swimming pool. Buried by five.",
+      "keyRelationshipIds": [
+        "rel-nick-gatsby",
+        "rel-gatsby-daisy",
+        "rel-gatsby-cody"
+      ],
+      "keyQuoteIds": [
+        "q-green-light",
+        "q-eternal-reassurance-smile",
+        "q-platonic-conception",
+        "q-james-gatz",
+        "q-old-sport",
+        "q-cant-repeat-past",
+        "q-voice-full-of-money",
+        "q-bought-house-across-bay",
+        "q-fixed-world-series",
+        "q-incorruptible-dream",
+        "q-orgiastic-future"
+      ]
+    },
+    {
+      "id": "char-daisy",
+      "name": "Daisy Buchanan",
+      "role": "Nick's second cousin once removed; Tom's wife; Gatsby's lost love. The figure whose voice Gatsby names as full of money and whom the novel renders as the central object of every man's projection.",
+      "socialPosition": "Louisville debutante married to Chicago old money. Mother of Pammy, age three at the novel's opening. Lives at East Egg in a cheerful red-and-white Georgian Colonial mansion.",
+      "mindset": "Charming, performative, exhausted. Knows what is expected of her and provides it. The novel renders her with both deep sympathy (the beautiful-little-fool speech) and cold judgement (the carelessness verdict). She is constrained, and the novel does not let her constraint excuse the death she causes.",
+      "contradictions": "Loved Gatsby, married Tom, loves Gatsby again, will not leave Tom. Kills Myrtle and lets Gatsby take the blame. The novel grants her sincerity at the Plaza ('I did love him once, but I loved you too') and condemns her at the close.",
+      "arc": "From Louisville golden girl to married East Egg matron to careless driver. Vanishes from the novel before Gatsby's funeral, gone away with Tom, leaving no address.",
+      "keyRelationshipIds": [
+        "rel-tom-daisy",
+        "rel-gatsby-daisy"
+      ],
+      "keyQuoteIds": [
+        "q-beautiful-little-fool",
+        "q-sophisticated",
+        "q-loved-you-too",
+        "q-she-doesnt-look-like-her-father"
+      ]
+    },
+    {
+      "id": "char-tom",
+      "name": "Tom Buchanan",
+      "role": "Daisy's husband. Old-money Chicago heir, ex-Yale football star, occupant of East Egg. The novel's clearest single rendering of inherited-wealth brutality and complacency.",
+      "socialPosition": "Wealthy enough at twenty-one to have brought down a string of polo ponies from Lake Forest. Old money, hardened by privilege, frightened by the modernising world. The novel's most concentrated indictment of the East Egg class.",
+      "mindset": "Aggressive, anxious, intellectually small. Reads white-supremacist tracts and calls them science. Strikes Myrtle without compunction. Sends Wilson to Gatsby's house knowing what he is doing. The novel does not soften him.",
+      "contradictions": "A man of physical force and intellectual smallness. A husband who keeps a mistress and demands his wife's loyalty. A bully who can weep over a box of dog biscuits. The novel grants him no redemption.",
+      "arc": "Static. Tom does not change. He smashes things, retreats into his money, and is last seen on Fifth Avenue going into a jewellery store to buy a pearl necklace. The novel's verdict is fixed.",
+      "keyRelationshipIds": [
+        "rel-tom-daisy",
+        "rel-tom-myrtle",
+        "rel-nick-tom"
+      ],
+      "keyQuoteIds": [
+        "q-tom-white-race",
+        "q-tom-broke-nose",
+        "q-careless-people"
+      ]
+    },
+    {
+      "id": "char-jordan",
+      "name": "Jordan Baker",
+      "role": "Professional golfer, Daisy's friend, Nick's romantic interest. The figure who narrates Gatsby's Louisville backstory and arranges the reunion.",
+      "socialPosition": "Champion golfer, photographed for the rotogravure pictures of Asheville and Hot Springs and Palm Beach. From an old Louisville family, raised by an aunt about a thousand years old.",
+      "mindset": "Cool, jaunty, incurably dishonest. Lives by the protective code of the upper-class woman. Avoids clever, shrewd men because she would rather not be seen through. The novel renders her with both attraction and verdict.",
+      "contradictions": "A champion sportswoman who cheated at her first big tournament. A young woman who attaches herself to Nick partly because he is honest, and who tells him at the close that she has decided he is not.",
+      "arc": "From the cool, balancing girl on the East Egg divan to the engaged young woman who tells Nick he was a bad driver after all. The novel grants her the closing verdict on Nick.",
+      "keyRelationshipIds": [
+        "rel-nick-jordan"
+      ],
+      "keyQuoteIds": [
+        "q-takes-two-accident",
+        "q-bought-house-across-bay"
+      ]
+    },
+    {
+      "id": "char-myrtle",
+      "name": "Myrtle Wilson",
+      "role": "George Wilson's wife and Tom Buchanan's mistress. Lives above her husband's garage in the valley of ashes; killed by Daisy in Gatsby's yellow car.",
+      "socialPosition": "Wife of a small-time garage owner in the valley of ashes between West Egg and Manhattan. Mistress to Tom Buchanan. Sister to Catherine, who lives at a hotel in New York.",
+      "mindset": "Vital, status-hungry, performative. Plays the upper-class hostess in the New York apartment Tom rents and the resentful working wife in the garage. The novel renders her as both ambitious and trapped.",
+      "contradictions": "The most physically vital woman in the novel and the only one the novel kills. A woman who insists on saying Daisy's name and dies running toward the car she thinks contains the man who has been concealing it.",
+      "arc": "From the second-floor window above the Wilson garage to the apartment over the West Hundreds to the road outside her husband's garage. Killed instantly by Daisy in Gatsby's yellow car.",
+      "keyRelationshipIds": [
+        "rel-myrtle-george",
+        "rel-tom-myrtle"
+      ],
+      "keyQuoteIds": [
+        "q-myrtle-extinguished",
+        "q-tom-broke-nose"
+      ]
+    },
+    {
+      "id": "char-george",
+      "name": "George Wilson",
+      "role": "Garage owner in the valley of ashes; Myrtle's husband. The man who, told by Tom that Gatsby owned the yellow car, walks across Long Island to Gatsby's pool and shoots him.",
+      "socialPosition": "Owner of an unprosperous garage in the valley of ashes. Anaemic, faintly handsome, ash-coated. The novel's clearest single representative of the valley-of-ashes class.",
+      "mindset": "Spent, deferential, increasingly desperate. After Myrtle's death he reads the Eckleburg billboard as the eyes of God and, in his grief, becomes the novel's instrument of moral retribution that the social order will not deliver.",
+      "contradictions": "The most exploited character in the novel and the one who kills the man he believes to have killed his wife. The novel does not let the reader pretend he is the actual culprit.",
+      "arc": "From garage owner to widower to murderer to suicide. The novel's only character whose action breaks out of the cultural context's protected immobility.",
+      "keyRelationshipIds": [
+        "rel-myrtle-george"
+      ],
+      "keyQuoteIds": [
+        "q-god-sees-everything",
+        "q-eckleburg-eyes"
+      ]
+    },
+    {
+      "id": "char-wolfshiem",
+      "name": "Meyer Wolfshiem",
+      "role": "Gatsby's New York business associate. The man, Gatsby tells Nick, who fixed the World's Series of 1919. Refuses to attend Gatsby's funeral.",
+      "socialPosition": "New York gambler and racketeer, operating out of the Swastika Holding Company on Broadway. Wears human-molar cuff buttons. Belongs, he says, to another generation.",
+      "mindset": "Sentimental, calculating, transactional. Made Gatsby in a poolroom in 1919; will not attend his funeral; sends a letter explaining that he never likes to get mixed up when a man gets killed.",
+      "contradictions": "The friend who made Gatsby and who will not bury him. The cultural context's sentimental criminality at its most concentrated.",
+      "arc": "Static. Wolfshiem persists. The novel's last word from him is a refusal: he keeps out.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": [
+        "q-fixed-world-series"
+      ]
+    },
+    {
+      "id": "char-owl-eyes",
+      "name": "Owl Eyes",
+      "role": "An anonymous middle-aged drunk in enormous owl-eyed spectacles. Encountered by Nick and Jordan in Gatsby's library; reappears at Gatsby's funeral.",
+      "socialPosition": "An unidentified party-goer whose name Nick never learns. The novel's clearest single representative of the West Egg crowd as they really are: drunk, awed, inattentive.",
+      "mindset": "Drunk, observant, surprised by the books' realness, surprised that they had not had their pages cut. Returns at the funeral, his glasses fogged in the rain, to deliver the novel's only sincere public verdict.",
+      "contradictions": "An anonymous drunk who delivers the novel's most precise eulogy. The character who least belongs at the funeral and who shows up.",
+      "arc": "Two appearances. The library, the funeral. The novel grants him both, in a kind of structural rhyme.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": [
+        "q-poor-son-of-a-bitch",
+        "q-blessed-rain-falls-on"
+      ]
+    },
+    {
+      "id": "char-gatz",
+      "name": "Henry C. Gatz",
+      "role": "Gatsby's father. A solemn old man from Minnesota, bundled into a cheap ulster, who arrives by train for the funeral.",
+      "socialPosition": "Shiftless, unsuccessful Minnesota farm-stock parent of the seventeen-year-old who reinvented himself. The man Gatsby's imagination had never really accepted as his father at all.",
+      "mindset": "Reverent, awed, broken. Carries with him a photograph of Gatsby's mansion and a copy of Hopalong Cassidy with the seventeen-year-old's self-improvement schedule. Believes his son would have helped build up the country.",
+      "contradictions": "The biological father Gatsby's Platonic conception had displaced and the only family member at the burial. The man whose son had rejected him and who alone arrives to claim the body.",
+      "arc": "One arrival. The novel grants him the dignity of his pride and does not pretend it can outweigh the rest.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": []
+    }
+  ],
+  "relationships": [
+    {
+      "id": "rel-gatsby-daisy",
+      "characterAId": "char-gatsby",
+      "characterBId": "char-daisy",
+      "type": "romantic",
+      "startStatus": "Penniless army officer and Louisville debutante, in love in 1917. He goes to war; she marries Tom; he comes back to find her gone.",
+      "endStatus": "Dead lover whose body Daisy does not visit, killed by a man Tom redirected to him because of a death she caused in his car.",
+      "trajectory": "The novel's central relationship is structured by Gatsby's project of recovery. He spends five years and a fortune to be across the bay from her. The Plaza confrontation reveals that she will not say what he needs her to say. Myrtle's death exposes that she will not even take the consequences. The relationship's arc ends with Daisy gone away, leaving no address, while Gatsby is buried by strangers.",
+      "keyMomentIds": [
+        "km-green-light",
+        "km-shirts",
+        "km-plaza",
+        "km-myrtle-death"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "CC"
+      ]
+    },
+    {
+      "id": "rel-tom-daisy",
+      "characterAId": "char-tom",
+      "characterBId": "char-daisy",
+      "type": "romantic",
+      "startStatus": "Wealthy Yale football star and Louisville debutante, married in 1919 with a string of pearls and a hundred guests. The novel's case for the moneyed marriage.",
+      "endStatus": "A couple over cold fried chicken at the kitchen table, conspiring quietly, on the night Myrtle died. Gone the next day, no address.",
+      "trajectory": "The novel's most cynical marriage. Tom keeps a mistress; Daisy considers leaving for Gatsby; the marriage holds because the protective shared class identity is stronger than either affair. The Buchanans retreat into their money. The marriage's arc is its persistence.",
+      "keyMomentIds": [
+        "km-broken-nose",
+        "km-plaza",
+        "km-myrtle-death"
+      ],
+      "modeRelevance": [
+        "CC",
+        "TI",
+        "GVV"
+      ]
+    },
+    {
+      "id": "rel-tom-myrtle",
+      "characterAId": "char-tom",
+      "characterBId": "char-myrtle",
+      "type": "romantic",
+      "startStatus": "Married Long Island heir and married garage owner's wife, met on a New York train in dress suit and patent leather shoes.",
+      "endStatus": "A man who breaks her nose, redirects her husband to the wrong car, and weeps over her dog biscuits while continuing his marriage.",
+      "trajectory": "The novel's clearest single rendering of the protected affair. Tom rents an apartment, hosts parties there, and treats Myrtle as the signal of his class freedom; he breaks her nose without consequence; he sends her husband to Gatsby because he cannot quite bring himself to be the man Wilson will kill. The relationship's arc is the novel's clearest case for protected class violence.",
+      "keyMomentIds": [
+        "km-broken-nose",
+        "km-myrtle-death"
+      ],
+      "modeRelevance": [
+        "CC",
+        "TI",
+        "GVV"
+      ]
+    },
+    {
+      "id": "rel-myrtle-george",
+      "characterAId": "char-myrtle",
+      "characterBId": "char-george",
+      "type": "romantic",
+      "startStatus": "A garage owner and his wife, married eleven years above the garage in the valley of ashes. She thought he was a gentleman.",
+      "endStatus": "Widower over corpse, then murderer-suicide. The relationship the novel allows to break out of its inertia by turning into the only act of revenge the social order does not contain.",
+      "trajectory": "The novel's most exploited marriage. George is unaware of Tom; Myrtle is contemptuous of George; the marriage's class trap is rendered through the dog-leash Wilson finds and the bruised face he registers. After Myrtle's death George reads the Eckleburg billboard as God and walks across Long Island to commit the act the protected class will not allow.",
+      "keyMomentIds": [
+        "km-myrtle-death",
+        "km-funeral"
+      ],
+      "modeRelevance": [
+        "CC",
+        "TI",
+        "GVV"
+      ]
+    },
+    {
+      "id": "rel-nick-gatsby",
+      "characterAId": "char-nick",
+      "characterBId": "char-gatsby",
+      "type": "friendship",
+      "startStatus": "Next-door neighbours who have not met. Nick is invited to one of Gatsby's parties by formal note; they meet at a table in the garden.",
+      "endStatus": "Friend and pall-bearer. The only person who attends to the body, organises the funeral, and writes the book.",
+      "trajectory": "The novel's most consequential friendship. Nick is the witness Gatsby needed and did not realise he needed: the chronicler who would, against his own disapproval, render the dream as worth rendering. The friendship's arc is the novel itself.",
+      "keyMomentIds": [
+        "km-shirts",
+        "km-plaza",
+        "km-funeral"
+      ],
+      "modeRelevance": [
+        "TI",
+        "GVV",
+        "LG"
+      ]
+    },
+    {
+      "id": "rel-nick-jordan",
+      "characterAId": "char-nick",
+      "characterBId": "char-jordan",
+      "type": "romantic",
+      "startStatus": "The reserved narrator and the contemptuous champion golfer, attached to one another by mutual proximity to the Buchanan-Gatsby drama.",
+      "endStatus": "A telephone hang-up and a final meeting in which Jordan tells Nick he was a bad driver after all. Engaged to another man.",
+      "trajectory": "The novel's quietly compromised romance. Nick is attracted to her precisely because of what he calls his own honesty and what he diagnoses as her dishonesty. The relationship ends because Nick will not be honest enough to make it work and is too honest to pretend it ever could have. Jordan delivers the novel's parting verdict on him.",
+      "keyMomentIds": [
+        "km-platonic-conception"
+      ],
+      "modeRelevance": [
+        "TI",
+        "LG"
+      ]
+    },
+    {
+      "id": "rel-nick-tom",
+      "characterAId": "char-nick",
+      "characterBId": "char-tom",
+      "type": "antagonistic",
+      "startStatus": "College acquaintances, in the same senior society. Nick has not seen Tom since Yale. Tom has not changed.",
+      "endStatus": "A man Nick will not shake hands with on Fifth Avenue. The encounter at the jewellery store is the novel's last meeting between any two characters.",
+      "trajectory": "The novel's most slowly clarified moral relationship. Nick begins by disapproving, suspends judgement, and ends by saying so to Tom's face. The arc is Nick's slow conversion of suspended judgement into named verdict.",
+      "keyMomentIds": [
+        "km-broken-nose",
+        "km-plaza",
+        "km-myrtle-death"
+      ],
+      "modeRelevance": [
+        "TI",
+        "CC",
+        "GVV"
+      ]
+    },
+    {
+      "id": "rel-gatsby-cody",
+      "characterAId": "char-gatsby",
+      "characterBId": "char-gatz",
+      "type": "family",
+      "startStatus": "A seventeen-year-old who has invented his own name and the unsuccessful Minnesota farmer who is his actual father. The Platonic conception had never accepted the biological one.",
+      "endStatus": "A solemn old man on a bedroom upstairs, reading aloud his dead son's self-improvement schedule from a copy of Hopalong Cassidy.",
+      "trajectory": "The novel's quiet family arc. Gatsby has displaced his father with a self-invented one (the Platonic conception, the rich Middle Westerners 'all dead now'). Henry C. Gatz arrives at the funeral with proof that the displacement was incomplete: a photograph of the mansion, a self-improvement schedule, the certainty that Jimmy would have built up the country. The novel grants him the dignity of his pride.",
+      "keyMomentIds": [
+        "km-platonic-conception",
+        "km-funeral"
+      ],
+      "modeRelevance": [
+        "TI",
+        "CC",
+        "GVV"
+      ]
+    }
+  ],
+  "culturalContext": {
+    "socialClass": {
+      "applies": "yes",
+      "summary": "The Great Gatsby is set in a precise mid-1920s American class layer: the inherited East Egg wealth of the Buchanans, the new bootleg West Egg wealth of Gatsby, the working ash-grey poverty of the Wilsons, and the Yale-and-bond-business middle of Nick. The novel measures class through architecture (the Hôtel-de-Ville imitation versus the cheerful red-and-white Georgian Colonial), through possessions (Tom's polo ponies, Gatsby's shirts, Daisy's pearls), through voice (Daisy's voice is full of money), and through impunity (Tom strikes Myrtle without consequence; Daisy kills her without consequence; Gatsby dies for both). The novel's argument is that inherited wealth purchases protection that new wealth cannot.",
+      "anchorMomentIds": [
+        "km-broken-nose",
+        "km-shirts",
+        "km-plaza",
+        "km-myrtle-death"
+      ],
+      "anchorQuoteIds": [
+        "q-fundamental-decencies",
+        "q-voice-full-of-money",
+        "q-golden-girl",
+        "q-careless-people",
+        "q-valley-of-ashes"
+      ],
+      "argumentHook": "Class in The Great Gatsby is rendered as the precise gap between inherited East Egg wealth and self-made West Egg wealth, with the cultural context's institutional protections visible at every scale of architecture, voice, and impunity."
+    },
+    "gender": {
+      "applies": "yes",
+      "summary": "Gender in the novel is the cultural context's preferred constraint on women. Daisy names it: the best thing a girl can be in this world is a beautiful little fool. Jordan negotiates it through the protective code of the dishonest woman. Myrtle escapes it briefly and is killed for trying. Catherine, Mrs McKee, the unnamed party-girls drift through the apartments and parties as decorative objects. The novel's male characters speak loudly about their gender attitudes (Tom's frightened patriarchy, Gatsby's projection of Daisy as a class symbol); the women answer them in voice and gesture. Daisy's voice, full of money, is the novel's clearest single image of how class and gender are inseparable in this cultural context.",
+      "anchorMomentIds": [
+        "km-beautiful-fool",
+        "km-broken-nose"
+      ],
+      "anchorQuoteIds": [
+        "q-beautiful-little-fool",
+        "q-sophisticated",
+        "q-tom-broke-nose",
+        "q-she-doesnt-look-like-her-father"
+      ],
+      "argumentHook": "Gender in The Great Gatsby is rendered as the cultural context's preferred constraint on women, with Daisy's beautiful-little-fool speech as its clearest internal naming and Tom's open-handed violence as its clearest external enforcement."
+    },
+    "religion": {
+      "applies": "partially",
+      "summary": "Religion in the novel is mostly absent as institution and present as misread image. The cultural context is post-religious in the sense that no character is meaningfully observant: Wolfshiem refuses funerals, Gatsby has invented his Platonic son-of-God identity, the Buchanans ignore the church, the parties are sustained by champagne and not by Sunday school. The clearest single religious image in the novel is the Eckleburg billboard, which George Wilson reads as God and which Michaelis assures him is an advertisement. The novel's argument is that the cultural context has converted its theology into commerce, with a faded oculist's billboard standing in for divine surveillance.",
+      "anchorMomentIds": [
+        "km-funeral"
+      ],
+      "anchorQuoteIds": [
+        "q-eckleburg-eyes",
+        "q-god-sees-everything",
+        "q-blessed-rain-falls-on",
+        "q-foul-dust"
+      ],
+      "argumentHook": "Religion in The Great Gatsby is rendered as institutional absence and commercial residue, with the Eckleburg billboard as its clearest single image: divine surveillance reduced to a faded oculist's advertisement."
+    },
+    "familyAndMarriage": {
+      "applies": "yes",
+      "summary": "The novel works marriage and family at four registers: the protected East Egg marriage of Tom and Daisy, sustained by class loyalty rather than affection; the exploited valley-of-ashes marriage of George and Myrtle, broken by class infidelity and ended by class redirection; the never-completed pre-war near-marriage of Daisy and Gatsby, which Gatsby spends five years trying to recover; and the displaced biological family of James Gatz and Henry C. Gatz, which the Platonic conception had renamed and which the funeral restores. The novel's argument is that the cultural context's preferred unit (married, monogamous, monied) is in every case a fiction; the affairs, the displacements, and the lost pre-marriages are the material the novel is actually made of.",
+      "anchorMomentIds": [
+        "km-shirts",
+        "km-broken-nose",
+        "km-platonic-conception",
+        "km-funeral"
+      ],
+      "anchorQuoteIds": [
+        "q-bought-house-across-bay",
+        "q-loved-you-too",
+        "q-she-doesnt-look-like-her-father",
+        "q-careless-people"
+      ],
+      "argumentHook": "Family and marriage in The Great Gatsby are rendered through four overlapping arrangements whose geometries (protected marriage, exploited marriage, lost near-marriage, displaced family) together describe the cultural context's preferred fiction and its material reality."
+    },
+    "authorityAndPower": {
+      "applies": "yes",
+      "summary": "Authority in The Great Gatsby is the cultural context's protective-class authority. Tom can strike Myrtle; Daisy can kill her; Gatsby's bootlegging can fund a forty-acre lawn; Wolfshiem can fix the World's Series. The novel's clearest case for authority is Tom's redirection of Wilson's gun: a man of the East Egg class, with a single half-honest sentence, can move a working man across Long Island to commit murder for him. The novel's most concentrated rendering of impunity. The state, the police, the church, the press: all of them are present in the novel at the margins and have no real purchase on the action. The Buchanans retreat back into their money; the system absorbs the death; Gatsby is the only person punished, and he is punished by the wrong man.",
+      "anchorMomentIds": [
+        "km-broken-nose",
+        "km-myrtle-death",
+        "km-funeral"
+      ],
+      "anchorQuoteIds": [
+        "q-tom-broke-nose",
+        "q-fixed-world-series",
+        "q-careless-people"
+      ],
+      "argumentHook": "Authority in The Great Gatsby is the cultural context's protective-class authority, rendered most concentratedly in Tom's redirection of Wilson's gun: a single half-honest sentence moves a working man across Long Island to commit a murder the East Egg class will not be punished for."
+    }
+  },
+  "generalVisionAndViewpoint": {
+    "oneLineVision": "The Great Gatsby offers a bleak, elegiac, ultimately national vision: the cultural context's careless inherited-wealth class is shown to destroy a genuinely committed dreamer, and the novel finds, in Gatsby's romantic readiness and in Nick's elegiac voice, a hard-won, qualified beauty in the very dream the world annihilates.",
+    "openingShapesVision": "The vision is set up by an act of judgement-suspension. Nick's father's advice, his snobbish gloss, and his admission that his tolerance has a limit prepare the reader for a narrator who will register and then condemn. The closing image of Chapter I, Gatsby reaching across the water for the green light, sets the elegiac tone the rest of the novel will sustain.",
+    "climaxShapesVision": "The vision's bleakest stretches are the Plaza confrontation and the Myrtle death. Fitzgerald does not soften either. Daisy's failure to give Gatsby the past he needs is rendered without consolation; Myrtle's death is rendered without elevation. The vision insists that the cultural context is doing what it always does: protecting its own and discarding the rest.",
+    "closingShapesVision": "The closing recovers a register of qualified national beauty. The Dutch sailors' fresh green breast of the new world, the orgiastic future receding before us, the boats against the current: Fitzgerald widens the private elegy into a national one. Hope is preserved; it is also, the novel insists, behind us.",
+    "ambiguity": "The vision is qualified throughout. Gatsby's dream is rendered as both meretricious and incorruptible. Nick's narration is rendered as both honest and self-flattering. Daisy is rendered as both constrained and culpable. The novel does not resolve any of these tensions; it sets them at angles to each other and asks the reader to register both.",
+    "anchorMomentIds": [
+      "km-green-light",
+      "km-shirts",
+      "km-plaza",
+      "km-myrtle-death",
+      "km-funeral"
+    ]
+  },
+  "literaryGenre": {
+    "toolkit": "novel",
+    "elements": [
+      {
+        "name": "First-person retrospective narration",
+        "description": "The novel is narrated by Nick Carraway from the Middle West, two years after the events. The retrospective stance lets Fitzgerald embed the elegiac frame from the first page: the reader knows from the opening that Gatsby is dead and that the world that killed him remains intact. Nick's voice carries the novel's irony, its elegy, and its judgement.",
+        "anchorMomentIds": [
+          "km-funeral"
+        ],
+        "keyExample": "The opening pages place the reader inside Nick's reserved, self-flattering voice, and the closing pages widen that voice into the novel's national meditation. The voice is the structural achievement."
+      },
+      {
+        "name": "Symbolism",
+        "description": "Fitzgerald works a small set of recurring symbols. The green light at the end of Daisy's dock is the novel's controlling image of deferred desire. The Eckleburg billboard, with its blue and gigantic eyes over the valley of ashes, stands for absent surveillance. The valley of ashes itself stands for the industrial-class waste the East Egg lifestyle requires. The yellow car is both Gatsby's class trophy and the murder weapon.",
+        "anchorMomentIds": [
+          "km-green-light",
+          "km-myrtle-death"
+        ],
+        "keyExample": "The green light is a religious object in Chapter I, an architectural fact in Chapter V, and a national symbol in Chapter IX. Fitzgerald demystifies and remystifies the same image across the novel."
+      },
+      {
+        "name": "Lyric prose",
+        "description": "Fitzgerald's prose moves between deadpan reportage and high lyric. The shirts scene, the closing meditation, and the Plaza-suite scenes alternate sharp dialogue with cadenced description. The novel's signature is the unexpected lyric run mid-paragraph, abruptly converting a social scene into elegy.",
+        "anchorMomentIds": [
+          "km-platonic-conception",
+          "km-funeral"
+        ],
+        "keyExample": "The closing two pages move from a particular man on a Long Island lawn to the Dutch sailors' new world to the boats against the current. The single paragraph is the novel's most concentrated demonstration of its lyric register."
+      },
+      {
+        "name": "Irony, free indirect, and unreliable narration",
+        "description": "Nick's claim to be one of the few honest people he has ever known is the novel's signature ironic gesture. Fitzgerald lets Nick's self-flattery sit on the page next to his sustained relationship with Jordan, his partial concealment of Daisy's role in Myrtle's death, and his elegiac defence of Gatsby. The novel's structural argument is that Nick is honest enough to record what happened and dishonest enough to keep flattering himself about it.",
+        "anchorMomentIds": [
+          "km-funeral"
+        ],
+        "keyExample": "Nick's late confession that he had thrown Jordan over on the telephone, paired with his immediate insistence that he is too old to lie to himself and call it honour, is the novel's most concentrated demonstration of the technique."
+      },
+      {
+        "name": "Compressed scene-construction",
+        "description": "Fitzgerald renders crisis in extreme compression. Tom's breaking of Myrtle's nose is given a single sentence. Myrtle's death is given a single paragraph. The shirts scene is staged through one repeated object. The compression is the novel's ethical signature: the world does not pause for these moments, and Fitzgerald insists his prose will not pause either.",
+        "anchorMomentIds": [
+          "km-broken-nose",
+          "km-myrtle-death",
+          "km-shirts"
+        ],
+        "keyExample": "The single sentence 'Making a short deft movement, Tom Buchanan broke her nose with his open hand' is the novel's most concentrated demonstration of its scene-construction. The world does not stop; the prose does not stop; the consequence is permanent."
+      },
+      {
+        "name": "Set-piece parties and crowd-scenes",
+        "description": "Gatsby's parties are rendered as social-context set-pieces, with crowd-cataloguing, anonymous voices, drifting orchestras, and individuated guests (Owl Eyes, Klipspringer, the singing red-haired woman). Fitzgerald uses the parties to render the West Egg world as both gorgeous and meaningless, populated by people who do not know their host.",
+        "anchorMomentIds": [
+          "km-platonic-conception"
+        ],
+        "keyExample": "The Chapter IV catalogue of guest-names, written on the empty spaces of a 1922 timetable and read aloud by Nick, is the novel's most concentrated single demonstration of the technique."
+      },
+      {
+        "name": "Frame structure",
+        "description": "The novel opens with Nick's father's advice and closes with the Dutch sailors and the boats against the current. The frame is the novel's argument: a private American story, told by a moralising Middle Westerner, is also the national story. The recurring image of the green light, introduced at the close of Chapter I and named in the closing line, holds the frame.",
+        "anchorMomentIds": [
+          "km-green-light",
+          "km-funeral"
+        ],
+        "keyExample": "The opening (the unequally distributed fundamental decencies) and the closing (the boats against the current) are the novel's two ethical anchors. Everything between them is a working-out of how the first produces the second."
+      },
+      {
+        "name": "East-vs-West axis",
+        "description": "Fitzgerald structures the novel around an explicit East-vs-West argument, named in Chapter IX: the central characters are all Westerners, possessed of a deficiency that makes them subtly unadaptable to Eastern life. The axis is not just geographic; it is moral. The East is the place of corruption; the West is the place from which Nick comes and to which he returns.",
+        "anchorMomentIds": [
+          "km-funeral"
+        ],
+        "keyExample": "Nick's vision in the closing pages of Long Island as a night-scene by El Greco, with four solemn men carrying a stretcher with a drunken woman in a white evening dress, is the novel's most concentrated rendering of the East as moral wreckage."
+      }
+    ]
+  },
+  "themeOrIssue": {
+    "primaryThemes": [
+      {
+        "name": "The American Dream and its corruption",
+        "summary": "The novel's central theme. Gatsby's project (the self-invention, the accumulated wealth, the green light, the recovery of Daisy) is the novel's most concentrated rendering of the American Dream. The closing meditation explicitly widens the private project into a national one: the Dutch sailors' new world, the orgiastic future, the boats against the current. The novel does not condemn the dream; it grants its incorruptibility. What the novel condemns is the cultural context that monetises and then destroys the dreamer.",
+        "pivotalMomentIds": [
+          "km-platonic-conception",
+          "km-shirts",
+          "km-plaza",
+          "km-funeral"
+        ],
+        "contradictoryAspect": "The novel's most pointed contradiction is that Gatsby is sincere and his money is criminal. The dream is incorruptible; the means to fund it are not. Fitzgerald does not let the reader resolve this. The dream is American precisely because it cannot disentangle itself from the corruption that funds it."
+      },
+      {
+        "name": "Class, money, and impunity",
+        "summary": "The novel's most sustained social theme. Tom can strike Myrtle, Daisy can kill her, both can leave town, and neither is punished. Gatsby can buy a mansion and shirts and parties and is killed in his own pool. Wilson can read God in a billboard and shoot the wrong man. The novel's argument is that inherited wealth in this cultural context purchases impunity, that new wealth cannot, and that the working class buys neither.",
+        "pivotalMomentIds": [
+          "km-broken-nose",
+          "km-myrtle-death",
+          "km-funeral"
+        ],
+        "contradictoryAspect": "Daisy is constrained by gender and protected by class. The novel does not let either fact erase the other. Her culpability for Myrtle's death is real; her constraint inside the Buchanan marriage is real; the protection that lets her drive away is also real. The novel asks the reader to hold all three at once."
+      },
+      {
+        "name": "Time, memory, and the past",
+        "summary": "The novel's most explicit single argument is Gatsby's belief that you can repeat the past. Fitzgerald grants the proposition seriously. Gatsby's project is to undo five years; his entire West Egg architecture is built to support it. The Plaza confrontation proves the limit. The closing line ('borne back ceaselessly into the past') extends the argument from Gatsby to the country: the past is not recoverable, and yet we keep trying.",
+        "pivotalMomentIds": [
+          "km-shirts",
+          "km-plaza",
+          "km-funeral"
+        ],
+        "contradictoryAspect": "The past is gone and yet, the novel admits, the impulse to recover it is the most generative human impulse the novel knows. The contradiction is the novel's structural condition. Gatsby is wrong about the past; Gatsby is also right about the longing for it."
+      },
+      {
+        "name": "Self-invention and identity",
+        "summary": "The James Gatz chapter is the novel's most concentrated single statement of self-invention as American identity. Gatsby's name, his Oxford story, his old-sport address, his medals, his rooms, his clothes, are all manufactured. The novel grants the manufacture as both magnificent and meretricious. Nick's reading of Gatsby's smile and the Platonic-conception passage are the novel's clearest defences of the made self; the bootlegging and the World's Series fix are the cost.",
+        "pivotalMomentIds": [
+          "km-platonic-conception"
+        ],
+        "contradictoryAspect": "The most sincere character in the novel is the most invented one. The most inherited character (Tom) is the least sincere. Fitzgerald inverts the cultural context's assumed equivalence of birthright and authenticity."
+      },
+      {
+        "name": "Carelessness and moral consequence",
+        "summary": "Jordan's casual Chapter III line ('It takes two to make an accident') is the novel's structural diagnosis. Tom is careless with Myrtle's body; Daisy is careless with Myrtle's life; Wolfshiem is careless with Gatsby's grave; the West Egg crowd is careless with Gatsby's hospitality. The novel's most concentrated single moral verdict is Nick's late line: they were careless people. The cultural context's defining feature, the novel argues, is the impunity that protects carelessness at the top.",
+        "pivotalMomentIds": [
+          "km-myrtle-death",
+          "km-funeral"
+        ],
+        "contradictoryAspect": "Nick is also careless: with Jordan, with the truth about who was driving, with his own narrator's claim to honesty. The novel does not let him pretend he was outside the carelessness he names. He was inside it; he is therefore qualified to name it."
+      },
+      {
+        "name": "Hope, longing, and the deferred future",
+        "summary": "The closing pages convert the novel's private elegy into a national one. The green light, the orgiastic future, the boats against the current: Fitzgerald grants Gatsby's longing as the novel's deepest theme and admits it as a structural condition rather than a fault. The future is always receding; we run faster, stretch out our arms further; it eludes us. The theme is delivered in the closing paragraph as the novel's final word.",
+        "pivotalMomentIds": [
+          "km-green-light",
+          "km-funeral"
+        ],
+        "contradictoryAspect": "Hope is what the novel honours and what the novel mourns. The deferred future is both the source of beauty (the romantic readiness) and the cause of the destruction (Gatsby's project). The novel does not pick a side."
+      }
+    ]
+  },
+  "examinerPitfalls": [
+    "Reading Gatsby as a love story. The Gatsby-Daisy relationship is the engine, but the novel is structured around its failure and around the cultural context that made it impossible. Strong answers register that Daisy will not say what Gatsby needs her to say, and that the novel does not pretend she could have.",
+    "Treating Daisy as a villain or a victim. The novel does both at once. Strong answers hold the beautiful-little-fool speech and the careless-driver verdict together, neither cancelling the other.",
+    "Forgetting Myrtle. The valley of ashes and the Wilson marriage are the novel's clearest single rendering of the cultural context's class economy. Cultural Context and Theme or Issue answers that ignore Myrtle and George miss half the indictment.",
+    "Reading Nick as a reliable narrator. The novel's signature irony is that he calls himself one of the few honest people he has ever known. Strong Literary Genre answers register the gap between the narration and the narrator.",
+    "Treating the closing as triumphant. The boats-against-the-current line is elegiac, not consolatory. Strong answers read the closing as a national lament for a deferred future, not a celebration of perseverance.",
+    "Underrating the East-vs-West axis. The novel is explicit in Chapter IX that this has been a story of the West. The geography is not decorative; it is structural. Cultural Context answers that ignore the East-vs-West frame miss the novel's own self-reading.",
+    "Ignoring the Eckleburg billboard. The novel's clearest single religious image is a faded oculist's advertisement read as God by a working-class widower. Cultural Context and Theme or Issue answers that ignore the billboard miss the novel's commercial-religious argument.",
+    "Treating Gatsby's wealth as innocent. The shirts and the parties are funded by bootlegging and stolen-bond schemes. The novel does not let the reader pretend the romantic dream was paid for honestly. The dream is incorruptible; the money is not. Strong answers hold both."
+  ],
+  "status": "draft",
+  "schemaVersion": 1,
+  "lastReviewedAt": null
+}

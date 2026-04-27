@@ -31,6 +31,8 @@ import hamnetProfile from "./2026/hamnet/profile.json";
 import hamnetQuotes from "./2026/hamnet/quotes.json";
 import lessonsInChemistryProfile from "./2026/lessons-in-chemistry/profile.json";
 import lessonsInChemistryQuotes from "./2026/lessons-in-chemistry/quotes.json";
+import gatsbyProfile from "./2027/the-great-gatsby/profile.json";
+import gatsbyQuotes from "./2027/the-great-gatsby/quotes.json";
 
 // ---- Manifest --------------------------------------------------------------
 
@@ -66,7 +68,12 @@ export const PROFILES: Record<number, Record<string, ProfileEntry>> = {
       quotes: lessonsInChemistryQuotes as QuoteBank,
     },
   },
-  2027: {},
+  2027: {
+    "the-great-gatsby": {
+      profile: gatsbyProfile as ComparativeTextProfile,
+      quotes: gatsbyQuotes as QuoteBank,
+    },
+  },
   2028: {},
 };
 

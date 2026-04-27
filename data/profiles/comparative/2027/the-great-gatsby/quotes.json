@@ -1,0 +1,396 @@
+{
+  "textId": "the-great-gatsby",
+  "schemaVersion": 1,
+  "quotes": [
+    {
+      "id": "q-fathers-advice",
+      "text": "Whenever you feel like criticizing anyone, just remember that all the people in this world haven't had the advantages that you've had.",
+      "speaker": "Nick's father (recalled)",
+      "location": "Chapter I, opening lines",
+      "context": "The novel's opening epigraphic memory. Nick's father's advice, which Nick says he has been turning over in his mind ever since. Sets up the narrator's claim to reserved judgement and the class argument that runs through the book.",
+      "themeTags": ["narrative-voice", "class", "judgement", "advantage"],
+      "modeTags": ["LG", "TI", "CC"],
+      "characterTags": ["Nick Carraway"]
+    },
+    {
+      "id": "q-reserve-judgements",
+      "text": "I'm inclined to reserve all judgements, a habit that has opened up many curious natures to me and also made me the victim of not a few veteran bores.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter I, opening pages",
+      "context": "Nick's self-presentation as the novel's reserved narrator. The line that asks the reader to trust him, and that the rest of the book will repeatedly test.",
+      "themeTags": ["narrative-voice", "honesty", "reserve"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Nick Carraway"]
+    },
+    {
+      "id": "q-fundamental-decencies",
+      "text": "a sense of the fundamental decencies is parcelled out unequally at birth.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter I, opening pages",
+      "context": "Nick's snobbish gloss on his father's advice. Names the novel's argument that morality, like wealth, is unevenly distributed by accident of class.",
+      "themeTags": ["class", "morality", "snobbery"],
+      "modeTags": ["TI", "CC"],
+      "characterTags": ["Nick Carraway"]
+    },
+    {
+      "id": "q-gift-for-hope",
+      "text": "an extraordinary gift for hope, a romantic readiness such as I have never found in any other person and which it is not likely I shall ever find again.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter I, opening pages",
+      "context": "Nick's account of what made Gatsby exceptional. The line that licenses the novel's elegiac tone and that the closing pages will return to.",
+      "themeTags": ["hope", "romantic-readiness", "Gatsby"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Gatsby", "Nick Carraway"]
+    },
+    {
+      "id": "q-foul-dust",
+      "text": "Gatsby turned out all right at the end; it is what preyed on Gatsby, what foul dust floated in the wake of his dreams that temporarily closed out my interest in the abortive sorrows and short-winded elations of men.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter I, opening pages",
+      "context": "Nick's verdict on Gatsby and on the world that destroyed him. The line that names the novel's structural argument: Gatsby is exempt; the foul dust is the indictment.",
+      "themeTags": ["judgement", "social-decay", "elegy"],
+      "modeTags": ["GVV", "TI", "CC"],
+      "characterTags": ["Gatsby", "Nick Carraway"]
+    },
+    {
+      "id": "q-beautiful-little-fool",
+      "text": "I hope she'll be a fool, that's the best thing a girl can be in this world, a beautiful little fool.",
+      "speaker": "Daisy Buchanan",
+      "location": "Chapter I, the veranda confession",
+      "context": "Daisy telling Nick what she said when her daughter was born. The line that names the cultural-context argument the novel makes about women in the Buchanan class: the only safe role is decorative ignorance.",
+      "themeTags": ["gender", "motherhood", "class", "cynicism"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Daisy Buchanan"]
+    },
+    {
+      "id": "q-sophisticated",
+      "text": "Sophisticated, God, I'm sophisticated!",
+      "speaker": "Daisy Buchanan",
+      "location": "Chapter I, the veranda confession",
+      "context": "Daisy's self-mocking exclamation after telling Nick she has been everywhere and seen everything. Nick immediately senses the basic insincerity of what she has said. The line names the novel's reading of Daisy: a performance of worldliness over a known emptiness.",
+      "themeTags": ["performance", "insincerity", "class"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Daisy Buchanan"]
+    },
+    {
+      "id": "q-green-light",
+      "text": "a single green light, minute and far away, that might have been the end of a dock.",
+      "speaker": "narrator",
+      "location": "Chapter I, closing image",
+      "context": "Nick's first sight of Gatsby reaching out across the water toward something he cannot yet name. The novel's most famous symbol introduced before the reader knows what it means.",
+      "themeTags": ["symbolism", "longing", "dream", "hope"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Gatsby"]
+    },
+    {
+      "id": "q-valley-of-ashes",
+      "text": "a fantastic farm where ashes grow like wheat into ridges and hills and grotesque gardens; where ashes take the forms of houses and chimneys and rising smoke and, finally, with a transcendent effort, of ash-grey men, who move dimly and already crumbling through the powdery air.",
+      "speaker": "narrator",
+      "location": "Chapter II, opening",
+      "context": "Nick's first description of the valley of ashes, the industrial dumping ground between West Egg and New York. The novel's most extended single image and its clearest social-context indictment.",
+      "themeTags": ["class", "industrial-waste", "symbolism"],
+      "modeTags": ["LG", "CC", "TI"],
+      "characterTags": ["narrator"]
+    },
+    {
+      "id": "q-eckleburg-eyes",
+      "text": "the eyes of Doctor T. J. Eckleburg are blue and gigantic, their retinas are one yard high. They look out of no face, but, instead, from a pair of enormous yellow spectacles which pass over a nonexistent nose.",
+      "speaker": "narrator",
+      "location": "Chapter II",
+      "context": "The faded billboard above the valley of ashes that Wilson will later read as the eyes of God. The novel's most overt symbol of an absent surveillance, set above the most concentrated image of class disposal.",
+      "themeTags": ["symbolism", "religion", "surveillance", "industrial-waste"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["narrator", "George Wilson"]
+    },
+    {
+      "id": "q-tom-white-race",
+      "text": "if we don't look out the white race will be, will be utterly submerged. It's all scientific stuff; it's been proved.",
+      "speaker": "Tom Buchanan",
+      "location": "Chapter I, the dinner-table outburst",
+      "context": "Tom's earnest endorsement of a contemporary white-supremacist text. The line names the cultural context's casual racism and Tom's intellectual register: stupid, frightened, eager to call its prejudice science.",
+      "themeTags": ["race", "class", "ideology", "Tom"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Tom Buchanan"]
+    },
+    {
+      "id": "q-tom-broke-nose",
+      "text": "Making a short deft movement, Tom Buchanan broke her nose with his open hand.",
+      "speaker": "narrator",
+      "location": "Chapter II, the apartment in New York",
+      "context": "Tom's casual physical violence against Myrtle when she will not stop saying Daisy's name. The novel's first overt depiction of his brutality.",
+      "themeTags": ["violence", "gender", "Tom", "class"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Tom Buchanan", "Myrtle Wilson"]
+    },
+    {
+      "id": "q-honest-people",
+      "text": "I am one of the few honest people that I have ever known.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter III, closing line",
+      "context": "Nick's claim about himself, set immediately after he has confessed to being half in love with Jordan, who is a serial liar, and after he has reserved judgement on Gatsby, Tom, and the rest. The novel asks the reader to register the irony.",
+      "themeTags": ["honesty", "narrator", "self-deception"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Nick Carraway"]
+    },
+    {
+      "id": "q-takes-two-accident",
+      "text": "It takes two to make an accident.",
+      "speaker": "Jordan Baker",
+      "location": "Chapter III",
+      "context": "Jordan's casual reply when Nick accuses her of being a careless driver. The line proleptically names the moral economy of the whole novel: Myrtle's death, Gatsby's death, Daisy's marriage. Carelessness is the engine.",
+      "themeTags": ["carelessness", "responsibility", "class"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Jordan Baker"]
+    },
+    {
+      "id": "q-blue-gardens-moths",
+      "text": "There was music from my neighbour's house through the summer nights. In his blue gardens men and girls came and went like moths among the whisperings and the champagne and the stars.",
+      "speaker": "narrator",
+      "location": "Chapter III, opening",
+      "context": "Nick's first description of Gatsby's parties. The novel's most concentrated rendering of the West Egg parties and of the moth-like guests who define their atmosphere.",
+      "themeTags": ["parties", "wealth", "performance", "atmosphere"],
+      "modeTags": ["LG", "CC", "TI"],
+      "characterTags": ["Gatsby", "narrator"]
+    },
+    {
+      "id": "q-eternal-reassurance-smile",
+      "text": "It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life. It faced, or seemed to face, the whole eternal world for an instant, and then concentrated on you with an irresistible prejudice in your favour.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter III, the first meeting with Gatsby",
+      "context": "Nick's account of Gatsby's smile when he finally meets him at the party. The novel's first granular description of the famous Gatsby manner.",
+      "themeTags": ["Gatsby", "performance", "charm"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Gatsby", "Nick Carraway"]
+    },
+    {
+      "id": "q-poor-son-of-a-bitch",
+      "text": "The poor son-of-a-bitch.",
+      "speaker": "Owl Eyes",
+      "location": "Chapter IX, the funeral",
+      "context": "Owl Eyes's verdict at Gatsby's funeral. The only mourner besides Nick, the minister, and Gatsby's father. The line that the novel grants as its only public elegy.",
+      "themeTags": ["elegy", "funeral", "judgement"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Owl Eyes", "Gatsby"]
+    },
+    {
+      "id": "q-fixed-world-series",
+      "text": "He's the man who fixed the World's Series back in 1919.",
+      "speaker": "Gatsby (about Wolfshiem)",
+      "location": "Chapter IV",
+      "context": "Gatsby's reply when Nick asks who Wolfshiem is. The line names the novel's clearest case for the criminal underground that funds Gatsby's wealth and the moral universe (a man who could play with the faith of fifty million people) the cultural context permits.",
+      "themeTags": ["crime", "money", "American-corruption"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Meyer Wolfshiem", "Gatsby"]
+    },
+    {
+      "id": "q-bought-house-across-bay",
+      "text": "Gatsby bought that house so that Daisy would be just across the bay.",
+      "speaker": "Jordan Baker",
+      "location": "Chapter IV",
+      "context": "Jordan's revelation to Nick of the novel's central architectural fact. The line that explains everything that has come before and that converts the green light from a symbol into a strategy.",
+      "themeTags": ["love", "Gatsby", "obsession", "architecture"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Gatsby", "Daisy Buchanan", "Jordan Baker"]
+    },
+    {
+      "id": "q-platonic-conception",
+      "text": "Jay Gatsby of West Egg, Long Island, sprang from his Platonic conception of himself. He was a son of God, a phrase which, if it means anything, means just that, and he must be about His Father's business, the service of a vast, vulgar, and meretricious beauty.",
+      "speaker": "narrator",
+      "location": "Chapter VI",
+      "context": "Nick's account of the seventeen-year-old James Gatz's reinvention of himself as Jay Gatsby. The novel's most explicit theological gloss on its protagonist.",
+      "themeTags": ["self-invention", "American-dream", "identity"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Gatsby"]
+    },
+    {
+      "id": "q-james-gatz",
+      "text": "James Gatz, that was really, or at least legally, his name.",
+      "speaker": "narrator",
+      "location": "Chapter VI",
+      "context": "Nick's revelation of Gatsby's birth name. The line that names the gap between the legal self and the chosen self that the novel makes its central theme.",
+      "themeTags": ["identity", "self-invention", "name"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Gatsby"]
+    },
+    {
+      "id": "q-cant-repeat-past",
+      "text": "Can't repeat the past? Why of course you can!",
+      "speaker": "Gatsby",
+      "location": "Chapter VI, the post-party walk with Nick",
+      "context": "Gatsby's incredulous reply when Nick warns him not to ask too much of Daisy. The line that names the novel's structural argument about Gatsby's relationship to time.",
+      "themeTags": ["past", "obsession", "time", "American-dream"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Gatsby", "Nick Carraway"]
+    },
+    {
+      "id": "q-voice-full-of-money",
+      "text": "Her voice is full of money.",
+      "speaker": "Gatsby",
+      "location": "Chapter VII",
+      "context": "Gatsby's sudden naming of what is in Daisy's voice. The line that Nick says he had never understood before: the inexhaustible charm that rose and fell in it. The novel's clearest single statement of Daisy's class-essence.",
+      "themeTags": ["class", "money", "Daisy", "voice"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Gatsby", "Daisy Buchanan"]
+    },
+    {
+      "id": "q-golden-girl",
+      "text": "High in a white palace the king's daughter, the golden girl",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter VII",
+      "context": "Nick's amplification of Gatsby's line about Daisy's voice. The novel's most concentrated mythologisation of Daisy as a class-symbol rather than a person.",
+      "themeTags": ["class", "money", "Daisy", "mythologisation"],
+      "modeTags": ["TI", "LG"],
+      "characterTags": ["Daisy Buchanan", "Nick Carraway"]
+    },
+    {
+      "id": "q-loved-you-too",
+      "text": "Oh, you want too much! I love you now, isn't that enough? I can't help what's past. I did love him once, but I loved you too.",
+      "speaker": "Daisy Buchanan",
+      "location": "Chapter VII, the Plaza Hotel confrontation",
+      "context": "Daisy's collapse at the Plaza when Gatsby insists she say she never loved Tom. The line that names the limit of Gatsby's project: Daisy will not say what he needs her to say, because the past she shared with Tom was real.",
+      "themeTags": ["love", "past", "Gatsby", "Daisy"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Daisy Buchanan", "Gatsby", "Tom Buchanan"]
+    },
+    {
+      "id": "q-myrtle-extinguished",
+      "text": "Myrtle Wilson, her life violently extinguished, knelt in the road and mingled her thick dark blood with the dust.",
+      "speaker": "narrator",
+      "location": "Chapter VII, the death of Myrtle",
+      "context": "The novel's rendering of the central death the rest of the novel will revolve around. The dust she mingles with is the dust of the valley of ashes she was trying to escape.",
+      "themeTags": ["death", "class", "violence", "valley-of-ashes"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Myrtle Wilson"]
+    },
+    {
+      "id": "q-careless-people",
+      "text": "They were careless people, Tom and Daisy, they smashed up things and creatures and then retreated back into their money or their vast carelessness, or whatever it was that kept them together, and let other people clean up the mess they had made.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter IX",
+      "context": "Nick's verdict on Tom and Daisy near the end of the novel. The line that names the novel's clearest moral judgement and the class-protection that makes the carelessness possible.",
+      "themeTags": ["class", "money", "carelessness", "judgement"],
+      "modeTags": ["TI", "CC", "GVV"],
+      "characterTags": ["Tom Buchanan", "Daisy Buchanan", "Nick Carraway"]
+    },
+    {
+      "id": "q-rotten-crowd",
+      "text": "They're a rotten crowd. You're worth the whole damn bunch put together.",
+      "speaker": "Nick Carraway",
+      "location": "Chapter VIII, the final goodbye",
+      "context": "Nick's last words to Gatsby. The line he says he is always glad he said. The novel's only direct compliment to Gatsby and its only direct condemnation of the Buchanan world.",
+      "themeTags": ["judgement", "Gatsby", "class", "friendship"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Nick Carraway", "Gatsby"]
+    },
+    {
+      "id": "q-incorruptible-dream",
+      "text": "concealing his incorruptible dream",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter VIII",
+      "context": "Nick's gloss on Gatsby's posture as he waved his guests goodbye. The line that names the novel's ethical separation of Gatsby from the world that destroyed him.",
+      "themeTags": ["dream", "Gatsby", "purity", "judgement"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Gatsby", "Nick Carraway"]
+    },
+    {
+      "id": "q-fresh-green-breast",
+      "text": "a fresh, green breast of the new world.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter IX, the closing meditation",
+      "context": "Nick's vision of the original Long Island as Dutch sailors first saw it. The line that converts the novel's final pages from a private elegy into a national one.",
+      "themeTags": ["American-dream", "history", "land", "wonder"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Nick Carraway"]
+    },
+    {
+      "id": "q-last-greatest-dream",
+      "text": "the last and greatest of all human dreams; for a transitory enchanted moment man must have held his breath in the presence of this continent, compelled into an aesthetic contemplation he neither understood nor desired, face to face for the last time in history with something commensurate to his capacity for wonder.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter IX, the closing meditation",
+      "context": "Nick's expansion of the Dutch-sailor vision into the novel's most explicit reading of the American dream. The line names what Gatsby was reaching for and what the novel argues was already lost.",
+      "themeTags": ["American-dream", "wonder", "history", "loss"],
+      "modeTags": ["GVV", "TI", "CC"],
+      "characterTags": ["Nick Carraway"]
+    },
+    {
+      "id": "q-orgiastic-future",
+      "text": "Gatsby believed in the green light, the orgiastic future that year by year recedes before us. It eluded us then, but that's no matter, tomorrow we will run faster, stretch out our arms further, And one fine morning",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter IX, the closing pages",
+      "context": "Nick's final formulation of Gatsby's relationship to the green light. The line that ends with an unfinished gesture, the future deferred forever.",
+      "themeTags": ["dream", "future", "Gatsby", "deferral"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Gatsby", "Nick Carraway"]
+    },
+    {
+      "id": "q-boats-against-current",
+      "text": "So we beat on, boats against the current, borne back ceaselessly into the past.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter IX, the closing line",
+      "context": "The novel's final sentence. The line that converts Gatsby's individual obsession with the past into a universal condition.",
+      "themeTags": ["past", "American-dream", "closure", "futility"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Nick Carraway"]
+    },
+    {
+      "id": "q-old-sport",
+      "text": "old sport",
+      "speaker": "Gatsby (recurring address)",
+      "location": "Throughout, Gatsby's habitual address to Nick",
+      "context": "Gatsby's signature phrase, queried by Tom in the Plaza scene. A piece of borrowed Oxford-public-school address that Gatsby uses to project the class identity he has manufactured.",
+      "themeTags": ["self-invention", "class", "performance", "Gatsby"],
+      "modeTags": ["LG", "TI", "CC"],
+      "characterTags": ["Gatsby"]
+    },
+    {
+      "id": "q-thirty-years-too-old",
+      "text": "I'm thirty. I'm five years too old to lie to myself and call it honour.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter IX",
+      "context": "Nick's farewell line to Jordan, refusing the romantic ending the novel might otherwise offer him. The line names the moral closure Nick gives himself: he will not pretend the East was honourable.",
+      "themeTags": ["honesty", "age", "judgement", "Nick"],
+      "modeTags": ["TI", "LG"],
+      "characterTags": ["Nick Carraway", "Jordan Baker"]
+    },
+    {
+      "id": "q-she-doesnt-look-like-her-father",
+      "text": "She doesn't look like her father. She looks like me.",
+      "speaker": "Daisy Buchanan",
+      "location": "Chapter VII, the Buchanan house",
+      "context": "Daisy's remark about her daughter Pammy in front of Gatsby. The line that the novel renders with quiet brutality: Gatsby has not until that moment really believed in the daughter's existence, and Daisy will not let her resemble Tom.",
+      "themeTags": ["motherhood", "Daisy", "Gatsby", "class"],
+      "modeTags": ["TI", "LG", "CC"],
+      "characterTags": ["Daisy Buchanan", "Gatsby"]
+    },
+    {
+      "id": "q-god-sees-everything",
+      "text": "God sees everything.",
+      "speaker": "George Wilson",
+      "location": "Chapter VIII, the dawn after Myrtle's death",
+      "context": "Wilson's repeated assertion as he looks out at the Eckleburg billboard. Michaelis assures him it is an advertisement. The novel's most concentrated rendering of religion as misread industrial signage.",
+      "themeTags": ["religion", "surveillance", "valley-of-ashes", "George Wilson"],
+      "modeTags": ["LG", "CC", "TI"],
+      "characterTags": ["George Wilson", "Michaelis"]
+    },
+    {
+      "id": "q-westerners-unadaptable",
+      "text": "I see now that this has been a story of the West, after all, Tom and Gatsby, Daisy and Jordan and I, were all Westerners, and perhaps we possessed some deficiency in common which made us subtly unadaptable to Eastern life.",
+      "speaker": "Nick Carraway (narrator)",
+      "location": "Chapter IX",
+      "context": "Nick's late reframing of the novel's geography. The line that names the cultural context's East-West axis as the structural axis of the novel.",
+      "themeTags": ["East-vs-West", "geography", "American-identity"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Nick Carraway", "Gatsby", "Tom Buchanan", "Daisy Buchanan", "Jordan Baker"]
+    },
+    {
+      "id": "q-blessed-rain-falls-on",
+      "text": "Blessed are the dead that the rain falls on",
+      "speaker": "unidentified mourner (overheard by Nick)",
+      "location": "Chapter IX, Gatsby's funeral",
+      "context": "An overheard fragment at the funeral, immediately answered by Owl Eyes's 'Amen to that'. The novel's only quasi-liturgical moment, granted not by the minister but by an anonymous voice.",
+      "themeTags": ["funeral", "elegy", "religion"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Owl Eyes", "Gatsby"]
+    }
+  ]
+}
