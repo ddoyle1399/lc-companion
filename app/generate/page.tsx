@@ -1,5 +1,5 @@
 import { getServerSupabase } from "@/lib/supabase/server";
-import { getCircularYears } from "@/data/circulars";
+import { getCircularYears, getPoetsHL, getSingleTexts } from "@/data/circulars";
 import Nav from "@/components/nav";
 import GenerateForm from "./GenerateForm";
 
@@ -36,6 +36,17 @@ export default async function GeneratePage() {
     Math.max(...availableYears),
   );
 
+  // Full prescribed lists per cycle so the form can show the gaps
+  // (greyed-out poets/texts that don't yet have verified banks).
+  const prescribedPoetsByYear: Record<number, string[]> = {};
+  const prescribedSingleTextsByYear: Record<number, string[]> = {};
+  for (const y of availableYears) {
+    prescribedPoetsByYear[y] = getPoetsHL(y);
+    prescribedSingleTextsByYear[y] = Array.from(
+      new Set(getSingleTexts(y, "HL").map((t) => t.title)),
+    ).sort();
+  }
+
   // Section availability is driven by whether ANY verified banks exist for
   // that content type. As banks are added, sections unlock automatically.
   const sectionAvailability = {
@@ -63,6 +74,8 @@ export default async function GeneratePage() {
           poets={poets}
           singleTextSubjects={singleTextSubjects}
           comparativeSubjects={comparativeSubjects}
+          prescribedPoetsByYear={prescribedPoetsByYear}
+          prescribedSingleTextsByYear={prescribedSingleTextsByYear}
           sectionAvailability={sectionAvailability}
           availableYears={availableYears}
           defaultYear={defaultYear}

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { getPoetsHL } from "@/data/circulars";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 type GradeTier = "H1" | "H2" | "H3";
 
@@ -67,6 +66,8 @@ interface Props {
   poets: string[];
   singleTextSubjects: string[];
   comparativeSubjects: string[];
+  prescribedPoetsByYear: Record<number, string[]>;
+  prescribedSingleTextsByYear: Record<number, string[]>;
   sectionAvailability: SectionAvailability;
   availableYears: number[];
   defaultYear: number;
@@ -82,6 +83,8 @@ export default function GenerateForm({
   poets,
   singleTextSubjects,
   comparativeSubjects,
+  prescribedPoetsByYear,
+  prescribedSingleTextsByYear,
   sectionAvailability,
   availableYears,
   defaultYear,
@@ -118,9 +121,21 @@ export default function GenerateForm({
   const [stLoading, setStLoading] = useState(false);
   const [stError, setStError] = useState("");
 
-  // Poets available for the selected exam cycle year
-  const prescribedPoets = getPoetsHL(examCycleYear);
-  const filteredPoets = poets.filter((p) => prescribedPoets.includes(p));
+  // Full prescribed poet list for the selected exam cycle year. We render
+  // every prescribed poet, with non-verified ones shown disabled so the user
+  // can see the gap rather than wondering why poets are missing.
+  const prescribedPoets = prescribedPoetsByYear[examCycleYear] ?? [];
+  const verifiedPoetSet = useMemo(() => new Set(poets), [poets]);
+
+  // Union of HL single texts across all prescribed years, deduped.
+  const allPrescribedSingleTexts = useMemo(() => {
+    const set = new Set<string>();
+    for (const list of Object.values(prescribedSingleTextsByYear)) {
+      for (const t of list) set.add(t);
+    }
+    return Array.from(set).sort();
+  }, [prescribedSingleTextsByYear]);
+  const verifiedSingleTextSet = useMemo(() => new Set(singleTextSubjects), [singleTextSubjects]);
 
   const loadQuestions = useCallback(async (selectedPoet: string) => {
     if (!selectedPoet) {
@@ -418,10 +433,20 @@ export default function GenerateForm({
               className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-navy focus:outline-none focus:border-teal"
             >
               <option value="">Select a text…</option>
-              {singleTextSubjects.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
+              {allPrescribedSingleTexts.map((t) => {
+                const verified = verifiedSingleTextSet.has(t);
+                return (
+                  <option key={t} value={t} disabled={!verified}>
+                    {t}{verified ? "" : "  (no verified bank)"}
+                  </option>
+                );
+              })}
             </select>
+            <p className="text-xs text-gray-400 mt-1">
+              {allPrescribedSingleTexts.length - singleTextSubjects.length > 0
+                ? `${singleTextSubjects.length} of ${allPrescribedSingleTexts.length} prescribed single texts verified. Greyed-out texts need anthology uploads.`
+                : `All ${allPrescribedSingleTexts.length} prescribed single texts verified.`}
+            </p>
           </div>
 
           {stTextKey && (<>
@@ -523,15 +548,20 @@ export default function GenerateForm({
               className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-navy focus:outline-none focus:border-teal"
             >
               <option value="">Select a poet…</option>
-              {filteredPoets.map((p) => (
-                <option key={p} value={p}>{p}</option>
-              ))}
+              {prescribedPoets.map((p) => {
+                const verified = verifiedPoetSet.has(p);
+                return (
+                  <option key={p} value={p} disabled={!verified}>
+                    {p}{verified ? "" : "  (no verified bank)"}
+                  </option>
+                );
+              })}
             </select>
-            {poet && !filteredPoets.includes(poet) && (
-              <p className="text-xs text-amber-600 mt-1">
-                This poet is not prescribed for {examCycleYear}. Switch year or choose another poet.
-              </p>
-            )}
+            <p className="text-xs text-gray-400 mt-1">
+              {prescribedPoets.length - prescribedPoets.filter((p) => verifiedPoetSet.has(p)).length > 0
+                ? `${prescribedPoets.filter((p) => verifiedPoetSet.has(p)).length} of ${prescribedPoets.length} poets verified for ${examCycleYear}. Greyed-out poets need anthology uploads.`
+                : `All ${prescribedPoets.length} prescribed poets verified for ${examCycleYear}.`}
+            </p>
           </div>
 
           {/* Past question */}

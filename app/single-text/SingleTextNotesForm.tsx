@@ -21,7 +21,7 @@ interface NoteTypeMeta {
   key: NoteType;
   label: string;
   description: string;
-  // The asset_type in single_text_assets that drives the Subject dropdown
+  // The asset_type in single_text_assets that drives the Subject picker
   // for this note type. null = no subject needed (plot summary etc).
   driver: string | null;
 }
@@ -38,6 +38,9 @@ const NOTE_TYPES: NoteTypeMeta[] = [
   { key: "plot_summary", label: "Plot Summary", description: "Full play overview", driver: null },
 ];
 
+const MAX_BATCH = 8;
+const PARALLELISM = 3;
+
 interface Props {
   availableTexts: string[];
   assetsByText: AssetsByText;
@@ -50,16 +53,21 @@ interface GeneratedNote {
   word_count: number;
 }
 
+type ItemStatus =
+  | { state: "queued" }
+  | { state: "generating" }
+  | { state: "done"; note: GeneratedNote }
+  | { state: "error"; message: string };
+
 export default function SingleTextNotesForm({ availableTexts, assetsByText }: Props) {
   const [text, setText] = useState<string>(availableTexts[0] ?? "");
   const [level, setLevel] = useState<Level>("higher");
   const [noteType, setNoteType] = useState<NoteType>("character_profile");
-  const [subjectKey, setSubjectKey] = useState<string>("");
+  const [subjectKeys, setSubjectKeys] = useState<Set<string>>(new Set());
   const [depth, setDepth] = useState<Depth>("standard");
   const [instructions, setInstructions] = useState<string>("");
   const [generating, setGenerating] = useState(false);
-  const [error, setError] = useState<string>("");
-  const [note, setNote] = useState<GeneratedNote | null>(null);
+  const [results, setResults] = useState<Record<string, ItemStatus>>({});
 
   const noteTypeMeta = NOTE_TYPES.find((t) => t.key === noteType)!;
 
@@ -71,38 +79,60 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
     return all.filter((a) => a.asset_type === noteTypeMeta.driver);
   }, [text, noteTypeMeta, assetsByText]);
 
-  // When note type changes, clear subject so user is forced to pick a valid one
+  const subjectRequired = noteTypeMeta.driver !== null;
+
   function handleNoteTypeChange(nt: NoteType) {
     setNoteType(nt);
-    setSubjectKey("");
-    setNote(null);
-    setError("");
+    setSubjectKeys(new Set());
+    setResults({});
   }
 
   function handleTextChange(t: string) {
     setText(t);
-    setSubjectKey("");
-    setNote(null);
-    setError("");
+    setSubjectKeys(new Set());
+    setResults({});
   }
 
-  const subjectRequired = noteTypeMeta.driver !== null;
-  const canGenerate =
-    !!text &&
-    !!noteType &&
-    (!subjectRequired || !!subjectKey) &&
-    !!level &&
-    !!depth &&
-    !generating;
+  function toggleSubject(key: string) {
+    setSubjectKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else if (next.size < MAX_BATCH) {
+        next.add(key);
+      }
+      return next;
+    });
+    setResults({});
+  }
 
-  async function handleGenerate() {
-    if (!canGenerate) return;
-    setGenerating(true);
-    setError("");
-    setNote(null);
+  function selectAllVisible() {
+    if (subjectKeys.size === Math.min(subjectOptions.length, MAX_BATCH)) {
+      setSubjectKeys(new Set());
+    } else {
+      setSubjectKeys(new Set(subjectOptions.slice(0, MAX_BATCH).map((o) => o.subject_key)));
+    }
+    setResults({});
+  }
 
-    const effectiveSubject = subjectRequired ? subjectKey : "full_play";
+  // Job: a single (textKey, noteType, subjectKey) tuple to generate.
+  type Job = { displayKey: string; subjectKey: string; displayName: string };
 
+  function buildJobs(): Job[] {
+    if (!subjectRequired) {
+      return [{ displayKey: "full_play", subjectKey: "full_play", displayName: text }];
+    }
+    return Array.from(subjectKeys).map((sk) => {
+      const opt = subjectOptions.find((o) => o.subject_key === sk);
+      return {
+        displayKey: sk,
+        subjectKey: sk,
+        displayName: opt?.display_name ?? sk,
+      };
+    });
+  }
+
+  async function generateOne(job: Job): Promise<ItemStatus> {
     try {
       const res = await fetch("/api/generate/text-note", {
         method: "POST",
@@ -110,29 +140,64 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
         body: JSON.stringify({
           textKey: text,
           noteType,
-          subjectKey: effectiveSubject,
+          subjectKey: job.subjectKey,
           level,
           depth,
           userInstructions: instructions || undefined,
         }),
       });
       const json = await res.json();
-
       if (!res.ok) {
         const msg =
           json.error === "no_verified_bank" || json.error === "quote_bank_too_thin"
-            ? `No verified quote bank for ${text}. Upload an anthology first.`
+            ? `No verified quote bank for ${text}.`
             : json.error === "subject_not_in_catalogue"
               ? "Subject not found in catalogue."
               : json.error === "generation_failed"
                 ? `Generation failed: ${json.detail ?? "unknown error"}`
                 : json.error || "Unknown error";
-        setError(msg);
-      } else {
-        setNote(json.note);
+        return { state: "error", message: msg };
       }
+      return { state: "done", note: json.note };
     } catch {
-      setError("Network error. Try again.");
+      return { state: "error", message: "Network error." };
+    }
+  }
+
+  async function runJobsThrottled(jobs: Job[]) {
+    // Mark all as queued upfront so user sees the full list.
+    const initial: Record<string, ItemStatus> = {};
+    for (const j of jobs) initial[j.displayKey] = { state: "queued" };
+    setResults(initial);
+
+    let cursor = 0;
+    async function worker() {
+      while (cursor < jobs.length) {
+        const idx = cursor++;
+        const job = jobs[idx];
+        setResults((prev) => ({ ...prev, [job.displayKey]: { state: "generating" } }));
+        const status = await generateOne(job);
+        setResults((prev) => ({ ...prev, [job.displayKey]: status }));
+      }
+    }
+    const workers = Array.from({ length: Math.min(PARALLELISM, jobs.length) }, () => worker());
+    await Promise.all(workers);
+  }
+
+  const jobs = buildJobs();
+  const canGenerate =
+    !!text &&
+    !!noteType &&
+    (!subjectRequired || subjectKeys.size > 0) &&
+    !!level &&
+    !!depth &&
+    !generating;
+
+  async function handleGenerate() {
+    if (!canGenerate) return;
+    setGenerating(true);
+    try {
+      await runJobsThrottled(jobs);
     } finally {
       setGenerating(false);
     }
@@ -148,6 +213,12 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
       </div>
     );
   }
+
+  // Summary bar values
+  const total = Object.keys(results).length;
+  const done = Object.values(results).filter((r) => r.state === "done").length;
+  const failed = Object.values(results).filter((r) => r.state === "error").length;
+  const inFlight = Object.values(results).filter((r) => r.state === "generating").length;
 
   return (
     <div className="space-y-6">
@@ -215,24 +286,59 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
           </div>
         </div>
 
-        {/* Step 4 — Subject (conditional) */}
+        {/* Step 4 — Subject (multi-select, conditional) */}
         {subjectRequired && (
           <div>
-            <label className="block text-sm font-medium text-navy mb-2">4. Subject</label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-navy">
+                4. Subjects <span className="text-gray-400 font-normal">(pick 1 to {MAX_BATCH})</span>
+              </label>
+              {subjectOptions.length > 0 && (
+                <button
+                  type="button"
+                  onClick={selectAllVisible}
+                  className="text-xs text-teal-700 hover:underline"
+                >
+                  {subjectKeys.size === Math.min(subjectOptions.length, MAX_BATCH) ? "Clear all" : `Select all (${Math.min(subjectOptions.length, MAX_BATCH)})`}
+                </button>
+              )}
+            </div>
             {subjectOptions.length === 0 ? (
               <p className="text-sm text-gray-400">No catalogue entries available for this combination.</p>
             ) : (
-              <select
-                value={subjectKey}
-                onChange={(e) => { setSubjectKey(e.target.value); setNote(null); setError(""); }}
-                className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-navy focus:outline-none focus:border-teal"
-              >
-                <option value="">Select…</option>
-                {subjectOptions.map((opt) => (
-                  <option key={opt.subject_key} value={opt.subject_key}>{opt.display_name}</option>
-                ))}
-              </select>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1.5">
+                {subjectOptions.map((opt) => {
+                  const checked = subjectKeys.has(opt.subject_key);
+                  const atMax = subjectKeys.size >= MAX_BATCH && !checked;
+                  return (
+                    <label
+                      key={opt.subject_key}
+                      className={`flex items-center gap-2 text-sm rounded border px-2.5 py-1.5 transition-colors ${
+                        checked
+                          ? "border-teal bg-teal/10"
+                          : atMax
+                            ? "border-gray-200 opacity-50 cursor-not-allowed"
+                            : "border-gray-200 hover:border-teal cursor-pointer"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        disabled={atMax}
+                        onChange={() => toggleSubject(opt.subject_key)}
+                        className="accent-teal"
+                      />
+                      <span className="text-navy">{opt.display_name}</span>
+                    </label>
+                  );
+                })}
+              </div>
             )}
+            <p className="text-xs text-gray-400 mt-2">
+              {subjectKeys.size === 0
+                ? "Pick one or more. Each generates a separate note."
+                : `${subjectKeys.size} selected. Generating in parallel (${PARALLELISM} at a time).`}
+            </p>
           </div>
         )}
 
@@ -286,45 +392,89 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
                 : "bg-gray-100 text-gray-400 cursor-not-allowed"
             }`}
           >
-            {generating ? "Generating…" : "Generate Note"}
+            {generating
+              ? `Generating ${done}/${total}…`
+              : `Generate ${jobs.length} note${jobs.length === 1 ? "" : "s"}`}
           </button>
           {generating && (
             <p className="text-xs text-gray-400 mt-2">
-              This takes 30-90 seconds depending on depth.
+              {inFlight} in flight. Each note takes 30-90 seconds depending on depth.
             </p>
           )}
         </div>
       </div>
 
-      {error && (
-        <div className="bg-white border border-red-200 rounded-lg p-5">
-          <p className="text-sm text-red-600">{error}</p>
-        </div>
-      )}
-
-      {note && (
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <div className="flex items-baseline justify-between mb-3">
-            <h2 className="text-lg font-semibold text-navy">{note.display_subject}</h2>
-            <span className="text-xs text-gray-400">{note.word_count} words</span>
-          </div>
-          <div className="prose prose-sm max-w-none text-navy whitespace-pre-wrap">
-            {note.body_markdown}
-          </div>
-          <div className="mt-4 flex gap-3">
-            <button
-              onClick={() => navigator.clipboard.writeText(note.body_markdown)}
-              className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
-            >
-              Copy Markdown
-            </button>
+      {/* Per-item results */}
+      {total > 0 && (
+        <div className="space-y-3">
+          {/* Summary bar */}
+          <div className="flex items-center justify-between bg-white border border-gray-200 rounded-lg px-5 py-3">
+            <div className="text-sm text-navy">
+              <span className="font-medium">{done}</span> done
+              {failed > 0 && <span className="text-red-600 ml-3"><span className="font-medium">{failed}</span> failed</span>}
+              {inFlight > 0 && <span className="text-gray-500 ml-3"><span className="font-medium">{inFlight}</span> in flight</span>}
+              <span className="text-gray-400 ml-3">of {total}</span>
+            </div>
             <a
-              href={`/single-text/library/${note.id}`}
-              className="px-4 py-2 text-sm border border-teal-700 text-teal-700 rounded hover:bg-teal/10"
+              href="/single-text/library"
+              className="text-sm text-teal-700 hover:underline whitespace-nowrap"
             >
-              View in library
+              View library →
             </a>
           </div>
+
+          {/* Per-job cards */}
+          {jobs.map((job) => {
+            const status = results[job.displayKey];
+            if (!status) return null;
+            return (
+              <div key={job.displayKey} className="bg-white border border-gray-200 rounded-lg p-5">
+                <div className="flex items-baseline justify-between mb-3">
+                  <h2 className="text-base font-semibold text-navy">
+                    {status.state === "done" ? status.note.display_subject : job.displayName}
+                  </h2>
+                  <span className="text-xs text-gray-400">
+                    {status.state === "queued" && "Queued"}
+                    {status.state === "generating" && "Generating…"}
+                    {status.state === "done" && `${status.note.word_count} words`}
+                    {status.state === "error" && <span className="text-red-600">Failed</span>}
+                  </span>
+                </div>
+
+                {status.state === "error" && (
+                  <p className="text-sm text-red-600">{status.message}</p>
+                )}
+
+                {status.state === "generating" && (
+                  <div className="h-1 w-full bg-gray-100 rounded overflow-hidden">
+                    <div className="h-full w-1/3 bg-teal animate-pulse"></div>
+                  </div>
+                )}
+
+                {status.state === "done" && (
+                  <>
+                    <div className="prose prose-sm max-w-none text-navy whitespace-pre-wrap">
+                      {status.note.body_markdown}
+                    </div>
+                    <div className="mt-4 flex gap-3">
+                      <button
+                        onClick={() => navigator.clipboard.writeText(status.note.body_markdown)}
+                        className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                      >
+                        Copy Markdown
+                      </button>
+                      <a
+                        href={`/single-text/library/${status.note.id}`}
+                        className="px-4 py-2 text-sm border border-teal-700 text-teal-700 rounded hover:bg-teal/10"
+                      >
+                        View in library
+                      </a>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
