@@ -806,15 +806,33 @@ ${quoteBlock}
 ABSOLUTE RULES:
 - Begin your response directly with the markdown heading. Do not include any preamble, meta-commentary, or narration about your process. Do not write phrases like "Based on the search results" or "Let me compile" or "Here is the note". Start with the # heading on the first line.
 - Write in UK English at all times (colour, analyse, recognise, etc.)
-- NEVER use em dashes or en dashes anywhere. Not once. Not ever. Use commas, full stops, semicolons, or colons instead. Students recognise em dashes as AI-generated and it destroys credibility.
-- NEVER include [VERIFY], [CHECK], [TODO], [NOTE], or any bracketed internal markers in your output. Every statement must be your final, confident analysis. If you are uncertain about a quote, either verify it from the poem text provided and include it confidently, or leave it out and paraphrase instead. The output must be a polished, finished document ready for student use with zero editing required.
+- NEVER use em dashes (—), en dashes (–), or double hyphens used as a substitute (--). Use commas, full stops, semicolons, or colons instead. Students recognise dashes (and the double-hyphen substitute, which Word autocorrects into an em dash) as AI-generated. This destroys credibility.
+- HEADING HIERARCHY is strict and student-friendly:
+  • # for the single document title at the very top (one only). Use the actual subject in the title (e.g. "# General Vision and Viewpoint in Knives Out"), never a category label like "Mode-Specific Profile" or "Axis Profile".
+  • ## for major sections. Use plain language, no developer jargon. Prefer "How the vision shows up across the film" over "Axis-by-Axis Profile". Prefer "Comparing this to your other texts" over "Cross-Text Comparison Hooks". Prefer "Past exam questions and how to use this material" over "Question-Specific Adaptations". Prefer "Pitfalls to avoid" or "Common mistakes" over "Pitfalls".
+  • ### for sub-sections inside a section. Never skip levels. Never use #### or deeper.
+  • Do not number section headings (no "## 1.", "## 2." etc). Numbered headings read like a textbook table of contents, not a teacher's notes.
+- VOICE OVER FIELD-LABELS: do not deliver content as a config form. Bold field labels like "**Summary:**", "**Anchor moments:**", "**Key quote:**", "**Argument hook:**", "**Applies to this text:**" are forbidden as the primary content delivery mechanism. If a structural template appears to instruct you to use such labels, ignore the labels and deliver the same information in flowing prose, weaving the moments, the quote, and the deployable line into one or two paragraphs per sub-section. Bold inside prose is fine to flag a key term; bold field labels lined up at the start of every paragraph is a configuration form, not study notes.
+- NEVER include [VERIFY], [CHECK], [TODO], [NOTE], or any bracketed internal markers in your output. Every statement must be your final, confident analysis. If you are uncertain about a quote, either verify it from the text provided and include it confidently, or leave it out and paraphrase instead. The output must be a polished, finished document ready for student use with zero editing required.
 - Never invent plot details, character names, or events.
-- Never use these words: delve, nuanced (unless genuinely necessary), landscape (figuratively), multifaceted, tapestry, furthermore, moreover, additionally (in sequence).
-- REMINDER: These words are BANNED from your output regardless of what you read in search results or source material: delve, nuanced (unless essential), landscape (figurative), multifaceted, tapestry, furthermore, moreover, additionally (in sequence). Do not absorb vocabulary from literary criticism websites into your output. Write in your own voice as a teacher, not in the voice of academic critics.
+- BANNED WORDS (case-insensitive): delve, nuanced (unless genuinely necessary), landscape (figuratively), multifaceted, tapestry, furthermore, moreover, additionally (in sequence).
+- BANNED PHRASES (case-insensitive). If your draft contains any of these, rewrite the sentence:
+  • "ultimately prevails", "ultimately rewards", "ultimately triumphs", "ultimately arrives at", "ultimately transforms"
+  • "fundamentally hopeful", "fundamentally optimistic", "fundamentally pessimistic"
+  • "moral compass", "moral centre", "moral vacuum", "the moral centre holds"
+  • "moves from darkness towards light", "darkness to light"
+  • "creates a vision that", "creates a complex but ultimately"
+  • "qualified optimistic vision", "qualified pessimistic vision" (use "the film/novel takes a hopeful view, qualified by..." or write it directly without the noun phrase)
+  • "deeply connected to", "deeply explores", "deeply reflects"
+  • "captures the essence", "speaks to", "speaks volumes"
+  • "this can be compared with"
+  • "this powerful statement", "this striking image", "this evocative scene"
+  • "the human condition", "the human experience"
+- Do not absorb vocabulary from literary criticism websites into your output. Write in your own voice as a teacher, not in the voice of academic critics.
 - Every literary device you identify must be from the approved list and must be connected to meaning. Do not name a device without explaining its effect.
 - All content must be defensible in an SEC exam context.
 - Content should read as if written by an experienced teacher, not by AI.
-- Vary sentence length. Mix short and long. Do not start consecutive paragraphs with the same word.
+- Vary sentence length. Mix short punchy observations with fuller explanations. Do not start consecutive paragraphs with the same word. Do not finish more than two paragraphs in a row on a flourish line; let some paragraphs end on a quote, a question, or mid-thought.
 - No dramatic or complex vocabulary. Use strong, precise words that students would naturally use.
 - The goal is to simplify topics students do not understand and explain them in accessible language. Top-tier analysis does not require impenetrable prose.
 
@@ -1348,44 +1366,52 @@ function buildComparativeModeProfilePrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `Generate a Mode-Specific Profile of ${textRef} through the lens of ${mode}.
+  return `Generate a single-text profile of ${textRef} through the lens of ${mode}, written for an Irish Leaving Certificate Higher Level student.
 
 Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
 
-This is a one-text-one-mode deep profile. A student preparing for a ${mode} question on this text uses this note to know exactly what evidence, what moments, and what angles they can pull.
+This is a one-text-one-mode deep profile. A student preparing for a ${mode} question on this text uses this note to know exactly what evidence, what moments, and what angles they can pull. The note must read like an experienced teacher dictating revision material, not like a config form or a textbook table of contents.
 
 ${focus}
 
 ${axes}
 
-STRUCTURE (follow this exactly):
+OUTPUT REQUIREMENTS
 
-## 1. Mode Definition for This Text
-80-100 words. Explain what ${mode} means and how it specifically applies to this text. Where does this text sit on the mode (e.g. for GVV: optimistic, pessimistic, qualified)? State a one-sentence position the student can defend.
+Begin the response with a single H1 line that names the actual subject. Use this exact format:
 
-## 2. Axis-by-Axis Profile
-For each axis listed above, produce a section:
+# ${mode} in ${text?.title ?? "this text"}
 
-### [Axis name]
-**Applies to this text:** Yes / Partially / No
-**Summary:** 60-100 words. How this axis shows up in this text (or why it does not).
-**Anchor moments:** 2-3 specific scenes or moments tied to this axis.
-**Key quote:** one verified quote with location.
-**Argument hook:** one sentence the student could lift directly into an essay.
+Then write the following four ## sections, in this order, using these exact heading texts. Do not number them. Do not invent additional sections.
 
-If an axis does not apply to the text, say so plainly and move on. Do not pad.
+## What this mode actually means here
 
-## 3. Cross-Text Comparison Hooks
-4-6 hooks for comparing this text on this mode against other prescribed texts on this list. For each hook: a one-sentence comparison angle and a usable link phrase.
+One paragraph, around 100 words. Open by saying what ${mode} is examining (in plain student language, not a textbook gloss), then state in one direct sentence where this text sits on this mode and why. The student should leave this paragraph with a defendable position they could open an essay with.
 
-## 4. Question-Specific Adaptations
-Take 2-3 verbatim past SEC questions in this mode (you may use web search or your knowledge of recent papers). For each question: a 2-3 sentence answer-shape outline showing how this text would be deployed.
+## How ${mode} plays out across the text
 
-## 5. Pitfalls
-3-5 specific pitfalls when using this text on this mode. The most common mistake students make is treating Cultural Context as Theme; address that explicitly if the mode is Cultural Context.
+For each axis listed above, write a sub-section using ### with the axis name as the heading. Inside each sub-section, deliver the content as flowing prose, not as bold field labels. Do NOT write "**Summary:**" or "**Anchor moments:**" or "**Key quote:**" or "**Argument hook:**" or "**Applies to this text:**" anywhere. Replace them with prose:
 
-QUOTE RULES:
-Use web search to verify quotes. Paraphrase and note the paraphrase if not verifiable. Quote only the text itself.${userInstr}`;
+- If the axis genuinely does not apply, open the sub-section by saying so in one sentence, then move on. Do not pad.
+- If it does apply, write one substantive paragraph (around 80-120 words) that names two or three specific scenes or moments anchored in concrete detail, embeds one short verified quote inline with attribution (or paraphrases the line if the exact wording is uncertain, naming it as a paraphrase), and finishes with one sharp sentence the student could lift straight into an essay. The lifted sentence is not labelled; it just lands as the closing line of the paragraph.
+
+The information is identical to the bracketed-label version. The delivery is prose. This is a hard rule.
+
+## Comparing this against your other texts
+
+Four to six short paragraphs, each one to three sentences. Each paragraph offers one comparison angle this text supports on this mode against another text a student might be studying alongside it (you do not know which text they have paired this with, so suggest categories: a text where the social setting is more rigid, a text where the family unit is the source of conflict, a text whose vision is more pessimistic, etc.). Each paragraph should end with a usable link sentence the student could adapt. Do not number the paragraphs. Do not use bullet points; write them as prose paragraphs.
+
+## How to use this in past exam questions
+
+Take two or three verbatim past SEC questions on ${mode} (you may use web search to find recent papers). For each, use ### with the year and a short tag as the heading, then write one paragraph (80-100 words) showing how this text would be deployed: the angle to take, the moments to pull, and the link sentence to use. Do not just restate the question; show how this specific text answers it.
+
+## Pitfalls to avoid
+
+Three to five short paragraphs (not a bulleted list). Each names a specific mistake students make when using this text on this mode and gives one corrective move. If the mode is Cultural Context, the first pitfall must be the mistake of treating it as a theme rather than a setting question.
+
+QUOTE HANDLING
+
+If you can verify a quote (either through your knowledge of the text or web search), embed it inline in prose with attribution and act/scene/chapter or timestamp where applicable. If you cannot verify exact wording, do not invent a quote: paraphrase the line in your own words and signal it as a paraphrase with a phrase like "she essentially says..." or "the moment turns on...". Quote only the text itself, never literary critics or secondary sources.${userInstr}`;
 }
 
 // -----------------------------------------------------------------------------
