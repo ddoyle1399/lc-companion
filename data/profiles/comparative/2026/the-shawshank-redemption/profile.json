@@ -1,0 +1,622 @@
+{
+  "textId": "the-shawshank-redemption",
+  "title": "The Shawshank Redemption",
+  "author": "Frank Darabont",
+  "type": "film",
+  "yearsPrescribed": [2026],
+  "copyrightStatus": "rights_managed",
+  "attributionLine": "The Shawshank Redemption (1994), directed by Frank Darabont, screenplay by Frank Darabont based on the novella by Stephen King. Used here for educational analysis under fair dealing.",
+
+  "plotBeats": [
+    {
+      "index": 1,
+      "title": "Andy is convicted in a Maine courtroom",
+      "location": "Opening trial / Maine, 1947",
+      "summary": "The film cross-cuts between Andy Dufresne, a young Portland banker, drinking in his car outside the cottage where his wife is meeting her lover, and Andy in a Maine courtroom being interrogated by a prosecutor who builds a circumstantial case for double murder. The jury convicts. The judge sentences him to two consecutive life terms at Shawshank State Penitentiary.",
+      "significance": "The opening establishes both the central injustice (Andy is innocent, but the evidence reads otherwise) and the film's framing device. We never see the murder, only the inference. From the first scene, Darabont sets up a film about how institutions read people and how easily that reading can be wrong."
+    },
+    {
+      "index": 2,
+      "title": "Arrival, induction and the first night",
+      "location": "Andy's first night",
+      "summary": "Andy is bussed to Shawshank with a fresh batch of prisoners. The men are stripped, deloused and given uniforms by Hadley and Norton. That night the inmates take bets on which 'fresh fish' will break first. A heavyset newcomer cracks, weeps, and is beaten to death by Hadley's guards for crying too loud. Andy stays silent through the night.",
+      "significance": "Shawshank's two-tier authority is introduced: the warden's pious sermons paired with the Captain's casual brutality. Andy's silence becomes his signature; while other men plead and break, he watches. Red's voiceover sets up that he had the longest odds and won the cigarettes the next morning."
+    },
+    {
+      "index": 3,
+      "title": "Red, the man who can get things",
+      "location": "Yard / Red's introduction",
+      "summary": "Andy approaches Red in the yard and asks him to obtain a small rock hammer. Red explains he is the man who knows how to get things inside Shawshank. Andy pays in cash earned during induction. Their relationship begins as a transaction. Red expects Andy is planning to use the hammer as a weapon; the size of it, he notes, makes that unlikely.",
+      "significance": "Red is established as our narrator, our access point and the film's moral barometer. The hammer is the first of the film's planted objects whose true purpose is concealed for almost two decades of story time. The transactional opening of the friendship makes its later depth more earned."
+    },
+    {
+      "index": 4,
+      "title": "Tar on the rooftop and three beers a man",
+      "location": "Tar on the rooftop, 1949",
+      "summary": "Andy overhears Hadley complaining about an inheritance he is about to lose to taxes. He approaches the captain on the roof of the licence-plate factory and offers to shelter the money legally, asking only that his work crew be given a few bottles of beer to drink in the sun. Hadley agrees. The men sit on the rooftop drinking cold beer in the spring sunlight while Andy sits apart, smiling.",
+      "significance": "The first act of qualified hope. Andy uses his banking knowledge to buy his fellow prisoners a single morning of dignity. Red's voiceover frames it as Andy's way of feeling free, even briefly, and of conferring that feeling on the men around him. The scene is the film's first proof that hope, at scale, is workable."
+    },
+    {
+      "index": 5,
+      "title": "Mozart on the loudspeakers",
+      "location": "Library / Mozart, 1955",
+      "summary": "Working in the library, Andy receives a donation crate from the state and finds an LP of Mozart's The Marriage of Figaro. He locks the office door, puts the record on, and broadcasts the duet over the prison's public-address system. The yard, the workshops, the laundry all stop. Andy is sent to the hole for two weeks. He emerges saying it was the easiest time he ever did because he had Mozart in his head.",
+      "significance": "The film's central scene on transcendence. Music briefly converts the prison into a place where men are free in their heads. Andy's claim that the music was 'in here' (his head and chest) lays out the film's argument about hope as something institutions cannot finally take. Red disagrees, arguing hope is dangerous. The disagreement becomes the spine of their friendship."
+    },
+    {
+      "index": 6,
+      "title": "Building the library and educating Tommy",
+      "location": "Library expansion / Tommy's GED",
+      "summary": "Andy writes weekly to the state senate begging for funds for the library. After six years a token donation arrives, then more. He builds the best prison library in New England. He helps inmates pass their high-school equivalency exams. The young thief Tommy Williams, illiterate on arrival, becomes his most committed pupil and eventually passes the GED.",
+      "significance": "Andy's project widens from his own survival to the dignity of every inmate who walks into that library. Shawshank's bleak vision is actively reshaped from inside, one bookshelf and one literacy hour at a time. The library is the film's most patient image of constructive hope."
+    },
+    {
+      "index": 7,
+      "title": "Brooks is paroled and cannot live outside",
+      "location": "Brooks's parole",
+      "summary": "After fifty years inside, the elderly librarian Brooks Hatlen is paroled. He nearly takes a fellow inmate hostage rather than leave. Outside, lodged in a halfway house and bagging groceries, Brooks finds the world too fast and too loud. He carves 'Brooks was here' into the rafter of his room and hangs himself.",
+      "significance": "Institutionalisation, the film's hardest theme, is given its starkest example. Brooks is not punished for a crime; he is punished by release. The sequence is quoted by Red word for word later in the film and becomes the warning Andy is fighting to outrun."
+    },
+    {
+      "index": 8,
+      "title": "Tommy's revelation and Norton's response",
+      "location": "Tommy's revelation",
+      "summary": "Tommy tells Red and Andy that a former cellmate at another prison bragged about a country-club murder that exactly matches Andy's case. Andy takes the testimony to Warden Norton, certain it will reopen the conviction. Norton sends Andy to solitary for a month. When Tommy refuses to retract, Norton has Hadley shoot him in the yard, calling it an escape attempt.",
+      "significance": "The point at which the film's vision turns at its bleakest. Andy's faith in the legal system is permanently broken; the warden has revealed that the institution will kill to protect its private use of him. Tommy's death is the engine that turns Andy's quiet patience into the long plan we did not know he had been making."
+    },
+    {
+      "index": 9,
+      "title": "Andy disappears through the wall",
+      "location": "Andy's escape",
+      "summary": "After a stormy night, the guards open Andy's cell to find it empty. Norton hurls a stone at Raquel Welch on the cell wall. The poster tears. Behind it is a tunnel Andy has dug for nineteen years with the rock hammer he bought from Red. He has crawled through five hundred yards of sewer pipe, stripped, washed in the rain, and walked out into the night.",
+      "significance": "The film's signature reveal. Every quiet detail (the rock hammer, the posters of Rita Hayworth, Marilyn Monroe and Raquel Welch, the missing rocks in the yard, the seemingly modest progress) is retrospectively reframed as part of a single patient operation. Hope, the film argues, is what you do in the dark when no one is watching."
+    },
+    {
+      "index": 10,
+      "title": "Norton's downfall and Andy's revenge",
+      "location": "Norton's suicide",
+      "summary": "Andy walks into a dozen banks under the alias Randall Stephens, withdraws every dollar Norton laundered through him, and posts the warden's ledgers and proof of the laundering scheme to a Portland newspaper. The state police arrive at Shawshank to arrest Hadley, who weeps, and Norton, who shoots himself in his office under the embroidered sampler reading 'His judgement cometh and that right soon'.",
+      "significance": "Justice arrives, but not through the courts. Andy's revenge is precise, financial, and silent; the institution that thought it owned him is dismantled by the very ledgers he was forced to keep. The sampler line becomes a piece of self-fulfilling irony. The film insists that justice is possible, but rarely from the system that promised it."
+    },
+    {
+      "index": 11,
+      "title": "Red's parole and the choice in Buxton",
+      "location": "Red's parole / Buxton field",
+      "summary": "Red, now an old man, is paroled at his fortieth-year hearing after a deliberately uninterested speech about rehabilitation. He works the same grocery job Brooks worked, sleeps in the same room, eyes the same compass. He remembers Andy's instruction to find a hayfield in Buxton with a stone wall and an oak tree. Under the wall he finds a tin with cash and a letter. Andy tells him to get busy living, or get busy dying.",
+      "significance": "The film's redemptive arc clicks into place. Red, who had argued that hope was dangerous, accepts hope on Andy's terms. The choice to break parole and travel to Mexico is a choice to refuse the institutionalised script Brooks could not refuse. The bleak setup has bent into qualified, hard-won light."
+    },
+    {
+      "index": 12,
+      "title": "Reunion on the beach at Zihuatanejo",
+      "location": "Zihuatanejo reunion",
+      "summary": "The film closes with Red on a bus crossing into Mexico, voicing over his hope that the Pacific is as blue as it has been in his dreams. He walks down a beach where Andy is sanding the hull of a small wooden boat. Andy looks up. The two friends embrace as the camera pulls back over the Pacific.",
+      "significance": "The redemptive register is allowed its full release in the closing image. The film does not pretend the prison did not happen; it argues that friendship and patience can outrun it. The visual language of cream sand, blue ocean and sky inverts every grey institutional frame that came before."
+    }
+  ],
+
+  "keyMoments": [
+    {
+      "id": "km-opening-trial",
+      "title": "Andy's circumstantial conviction",
+      "location": "Opening trial / Maine, 1947",
+      "whatHappens": "The film cross-cuts between Andy outside the cottage with the gun and the prosecutor walking the jury through the evidence in the courtroom. The prosecutor stresses the bottle of bourbon, the footprints, the loaded weapon, and Andy's own admission that he wanted to kill his wife. The jury convicts.",
+      "whyItMatters": "Establishes the central injustice on which every later scene rests, and introduces the film's quiet thesis that institutions do not read inner life. The audience is positioned to know what the court cannot. From the opening minutes the film is already arguing that legal truth and moral truth are not the same thing.",
+      "modeDeployment": {
+        "CC": "Postwar American justice is presented as procedural rather than empathetic. A respectable banker is processed by a system that has only the categories of motive and means.",
+        "GVV": "Sets the bleak vision early. A young man with a future is delivered into a closed institution in the first ten minutes of the film.",
+        "LG": "Cross-cutting between the cottage and the witness stand stages the prosecutor's narrative as if it were the truth. Darabont uses editing to let the wrong story win.",
+        "TI": "Justice and law diverge from the start. The theme of innocence-meets-institution is announced before Andy is even inside Shawshank."
+      },
+      "anchorQuoteIds": ["q-prosecutor-cold-blooded", "q-andy-i-loved-her-very-much", "q-red-rookie-i-ever-saw"],
+      "linkSentenceTemplate": "The opening of The Shawshank Redemption frames a court convicting an innocent man, which contrasts with how [Text B] presents the moment its protagonist is judged."
+    },
+    {
+      "id": "km-first-night-fish",
+      "title": "Fresh fish and the first beating",
+      "location": "Andy's first night",
+      "whatHappens": "On the new prisoners' first night, the older inmates bet cigarettes on which one will crack. The largest of the new arrivals weeps loudly. Captain Hadley enters the cellblock and beats him so badly he dies in the infirmary by morning. The doctor on duty has gone home. Andy never makes a sound and Red wins the bet.",
+      "whyItMatters": "Establishes Hadley's casual lethality and Andy's defining stillness in the same scene. The institution kills a man for the noise he makes; survival inside Shawshank is shown to require a kind of public composure most men will never manage. Red's voiceover lets the audience watch through the eyes of someone already shaped by years of this.",
+      "modeDeployment": {
+        "CC": "The carceral culture of late-1940s America is presented as half boarding house, half abattoir. Authority is exercised through fists, cigarettes and a doctor who has already gone home.",
+        "GVV": "The vision is at its darkest here. A man is killed in his first night for crying. The film insists, in its first half-hour, that this is the world it is asking us to inhabit.",
+        "LG": "Red's narration mediates the violence; we see most of the beating in shadow and hear it through the cellblock. Voiceover and offscreen sound do the work the camera will not.",
+        "TI": "Dehumanisation as routine. The theme is staged as ritual, not exception."
+      },
+      "anchorQuoteIds": ["q-hadley-bull-goose-loony", "q-red-fresh-fish", "q-red-first-night-toughest"],
+      "linkSentenceTemplate": "The induction sequence in The Shawshank Redemption establishes institutional violence as a matter of routine, similar in effect to [parallel scene in Text B]."
+    },
+    {
+      "id": "km-rooftop-beers",
+      "title": "Three beers a man on the rooftop",
+      "location": "Tar on the rooftop, 1949",
+      "whatHappens": "While tarring the licence-plate-factory roof, Andy hears Hadley grumbling about losing most of an inheritance to tax. He walks across the roof, almost gets thrown off, and offers to shelter the money legally. He asks only that his crew be given a few cold beers in the sun. Hadley agrees. The men sit drinking on the roof while Andy looks on.",
+      "whyItMatters": "The film's first piece of qualified hope, set just three years into Andy's time. Red's voiceover frames the scene as Andy buying his friends a brief taste of being ordinary working men again. It is the first proof that Andy intends to remain himself inside Shawshank, and the first hint of the financial knowledge that will eventually undo Norton.",
+      "modeDeployment": {
+        "CC": "Postwar masculinity is restored briefly through beer in the sun and a normal day's labour. The cultural script the men have lost outside is rehearsed for one morning.",
+        "GVV": "Hope enters the film as a practical achievement, not as a sentiment. The vision lifts visibly for a single sequence.",
+        "LG": "Roger Deakins's camera frames the men in wide, sunlit shots, the only such shots in the first hour. The visual language carries the meaning before Red's voiceover names it.",
+        "TI": "Dignity, friendship and the small economies of survival inside an institution that denies all three."
+      },
+      "anchorQuoteIds": ["q-andy-tax-free-gift", "q-red-lords-of-all-creation", "q-red-feel-like-free-men"],
+      "linkSentenceTemplate": "The rooftop scene in The Shawshank Redemption shows hope being engineered out of a mundane transaction, an effect comparable to [moment in Text B]."
+    },
+    {
+      "id": "km-mozart-broadcast",
+      "title": "Mozart on the public-address system",
+      "location": "Library / Mozart, 1955",
+      "whatHappens": "Sorting through donated books, Andy finds a recording of The Marriage of Figaro. He locks the warden's assistant in the toilet, puts the record on the turntable, and pipes it through the prison loudspeakers. The yard, the workshops and the laundry all stop. Hadley breaks down the door. Andy is sent to the hole for two weeks. He returns calm, telling the men at the lunch table that he had Mozart in his head.",
+      "whyItMatters": "The film's central scene on transcendence and the disagreement at the heart of Andy and Red's friendship. Andy insists hope is something the institution cannot reach. Red insists hope is dangerous inside walls. The exchange that follows the broadcast becomes the line the rest of the film either confirms or refutes.",
+      "modeDeployment": {
+        "CC": "Music as transcendence. The film argues that the cultural artefacts the institution permits inside (donated books, donated records) can briefly inflict meaning on it.",
+        "GVV": "The vision opens up at its widest point. Red's voiceover, on the briefly motionless yard, is the film's clearest statement that hope is real even when it is unreachable.",
+        "LG": "Long lens on still men, classical aria over institutional speakers, slow tilt up the cellblock. The film's most carefully choreographed sequence in image and sound.",
+        "TI": "Hope, freedom and the inner life. The theme is staged, not stated."
+      },
+      "anchorQuoteIds": ["q-red-every-last-man-free", "q-andy-mozart-here", "q-andy-need-it-not-forget", "q-red-hope-dangerous-thing"],
+      "linkSentenceTemplate": "The Mozart broadcast in The Shawshank Redemption stages a single act of cultural defiance against an institution, comparable to [equivalent moment in Text B]."
+    },
+    {
+      "id": "km-brooks-suicide",
+      "title": "Brooks Hatlen on the outside",
+      "location": "Brooks's parole",
+      "whatHappens": "After fifty years in Shawshank, Brooks is paroled. Outside he sleeps in a halfway-house room, bags groceries with arthritic hands, feeds pigeons in a park, watches the cars move too fast and writes a letter to the boys describing how the world has gone and got itself in a big damn hurry. He climbs onto a chair, carves 'Brooks was here' into the beam, and hangs himself.",
+      "whyItMatters": "Institutionalisation, named explicitly by Red elsewhere in the film, is dramatised here without speeches. Brooks is not destroyed by violence; he is destroyed by release. His sequence is the film's strongest argument that the prison's deepest harm is to the part of a man that learns to need it.",
+      "modeDeployment": {
+        "CC": "Postwar America is presented as alien to the man it has held for half a century. The film stages the cultural distance between 1905, when Brooks went in, and 1955, when he came out.",
+        "GVV": "The bleakest sustained passage of the film. A man's release reads as a death sentence. The vision insists that institutions can damage in ways the law does not name.",
+        "LG": "Voiceover letter, quiet handheld camera, almost no dialogue. The slow-cinema quality of institutional time bleeds out into the world. Darabont chooses the most domestic possible images for despair.",
+        "TI": "Institutionalisation as a theme is anchored here. Every later choice in the film is read against Brooks's room."
+      },
+      "anchorQuoteIds": ["q-red-walls-funny-institutionalised", "q-brooks-big-damn-hurry", "q-brooks-was-here", "q-red-tired-of-being-afraid"],
+      "linkSentenceTemplate": "Brooks Hatlen's release in The Shawshank Redemption presents institutional damage at its most quiet and most fatal, an effect comparable to [equivalent fate in Text B]."
+    },
+    {
+      "id": "km-norton-salvation-within",
+      "title": "Norton's Bible and the laundering scheme",
+      "location": "Norton's office / Inside Out programme",
+      "whatHappens": "Norton inspects Andy's cell, finds a Bible, and tells Andy that salvation lies within. Behind the Bible's hollowed pages, Andy is hiding the rock hammer he has been using to dig. Norton sets up the Inside Out work programme, which generates kickbacks from local contractors that Andy launders through a fictional banker called Randall Stephens.",
+      "whyItMatters": "The film's sharpest piece of irony. The warden quotes scripture and runs a corruption scheme; the prisoner he calls a sinner is the only honest accountant in the room. The Bible becomes the literal hiding place of the means of escape. Catholic guilt collides with Protestant work ethic and both lose to greed.",
+      "modeDeployment": {
+        "CC": "Money and corruption are central to the cultural context. Norton runs a public morality and a private kickback in the same office, in the same hour.",
+        "GVV": "The vision is bleakly comic here. Hypocrisy at this scale is presented as ordinary administration.",
+        "LG": "The Bible-as-hiding-place is the film's most concentrated visual irony. Darabont sets up the punchline two hours before he pays it off when Norton discovers the cut-out compartment.",
+        "TI": "Faith, justice and corruption. Religion is shown as an institutional language rather than a moral one."
+      },
+      "anchorQuoteIds": ["q-norton-salvation-within", "q-norton-rule-one-blasphemy", "q-andy-prison-be-crook"],
+      "linkSentenceTemplate": "Norton's pious facade in The Shawshank Redemption uses religious authority to dignify corruption, an institutional move comparable to [equivalent figure in Text B]."
+    },
+    {
+      "id": "km-tommy-revelation",
+      "title": "Tommy's testimony and the murder in the yard",
+      "location": "Tommy's revelation / Tommy's murder",
+      "whatHappens": "Tommy tells Andy and Red about a cellmate from another prison who boasted of a Maine country-club murder matching Andy's case in every detail. Andy brings the testimony to Norton in his office. Norton sends Andy to solitary for a month and arranges with Hadley to have Tommy shot in the yard, called as an attempted escape.",
+      "whyItMatters": "The pivot of the film. Andy's last belief in due process dies in this sequence. Norton's willingness to murder a prisoner to protect his accountant is the moral floor of Shawshank. Andy emerges from the hole no longer waiting for the courts. The escape we did not know was being planned now becomes inevitable.",
+      "modeDeployment": {
+        "CC": "Carceral power expressed through extrajudicial killing. The cultural context contains a closed system where a warden can order a death and call it policy.",
+        "GVV": "The bleakest plot beat in the film. Hope is killed in the literal sense. Tommy, the film's clearest figure of redemptive education, is shot for telling the truth.",
+        "LG": "The slow shoot in the yard, fluorescent lights flicking on at night, no music until the body falls. Darabont stages it as administrative murder, not action.",
+        "TI": "Justice and law part company permanently. Friendship is shown as the only remaining moral economy inside Shawshank."
+      },
+      "anchorQuoteIds": ["q-tommy-not-the-rock-it-was", "q-andy-norton-obtuse", "q-norton-discuss-immortal-soul", "q-red-thing-of-stone"],
+      "linkSentenceTemplate": "Tommy's murder in The Shawshank Redemption demonstrates an institution defending itself by killing a witness, a use of power that compares directly with [equivalent act in Text B]."
+    },
+    {
+      "id": "km-andy-escape-poster",
+      "title": "Andy is gone behind the poster",
+      "location": "Andy's escape",
+      "whatHappens": "Andy fails to appear for morning roll call. Norton enters the cell, finds it empty, and throws a stone at the Raquel Welch poster on the wall. The stone passes straight through. Behind the poster is the tunnel Andy has dug for nineteen years with the rock hammer he bought from Red, hidden behind a succession of pin-ups. Red's voiceover walks the audience through the night before: the storm, the sewer pipe, the rain in the river.",
+      "whyItMatters": "The film's most famous sequence and its most complete pay-off of planted detail. Every earlier object (the hammer, the posters, the rocks Andy carried out of the yard, his refusal to stop polishing his shoes) reveals itself as part of one operation. Hope, in this film, is what a patient man does for nineteen years when no one is watching.",
+      "modeDeployment": {
+        "CC": "The institution's blind spot is the inner life of the man it thinks it owns. Norton has been looking at Andy for a decade and seeing only a clerk.",
+        "GVV": "The vision turns decisively. The grey of Shawshank breaks open into rain, river and sky in the same sequence.",
+        "LG": "The poster as visual misdirection is the most elegant single device in the film. Darabont withholds the reveal until Norton's stone goes through the wall, then rewinds Red's narration to walk the audience back over what was always there.",
+        "TI": "Freedom, hope and patience. The theme is delivered through structure, not speech."
+      },
+      "anchorQuoteIds": ["q-red-geology-pressure-time", "q-red-crawled-five-hundred-yards", "q-red-some-birds-not-caged", "q-andy-rita-hayworth"],
+      "linkSentenceTemplate": "Andy's escape in The Shawshank Redemption uses planted detail across two hours of screen time to deliver a single visual reveal, a structural move comparable to [equivalent late twist in Text B]."
+    },
+    {
+      "id": "km-norton-suicide",
+      "title": "His judgement cometh",
+      "location": "Norton's suicide",
+      "whatHappens": "Andy walks into a dozen Portland banks under the alias Randall Stephens, withdraws every dollar Norton laundered through him, and sends the warden's account ledgers and a corruption diary to a Portland newspaper. State troopers arrive at Shawshank to arrest Hadley, who weeps at the gate. Norton, in his office, sees the troopers crossing the yard, opens his desk drawer, takes out his revolver, looks at the embroidered sampler reading His judgement cometh and that right soon, and shoots himself.",
+      "whyItMatters": "The film's most precise piece of justice. Andy does not return to Shawshank to expose Norton; he ruins him with paperwork. The sampler line, which has hung over Norton's office for the entire film, is suddenly readable as a prophecy he embroidered against himself. The institution destroys itself with the documents Andy was forced to write.",
+      "modeDeployment": {
+        "CC": "Money and corruption come full circle. The cultural context's faith in respectability is shown as the warden's last available costume, and the costume falls off.",
+        "GVV": "The vision recovers its sense of order. Justice is possible, the film argues, but it usually arrives sideways, through ledgers rather than courts.",
+        "LG": "The sampler is Darabont's most patient piece of visual irony. The shot of Norton looking at it as the troopers cross the yard is a single image doing the work of an entire moral.",
+        "TI": "Justice, corruption and time. The theme of slow patience as the only practicable form of resistance reaches its punchline."
+      },
+      "anchorQuoteIds": ["q-norton-judgement-cometh", "q-red-investors-richer", "q-andy-prison-be-crook"],
+      "linkSentenceTemplate": "Norton's downfall in The Shawshank Redemption arrives through documents rather than confrontation, a quiet form of justice comparable to [equivalent reckoning in Text B]."
+    },
+    {
+      "id": "km-red-parole-rehabilitated",
+      "title": "Red's fortieth-year parole",
+      "location": "Red's parole / Buxton field",
+      "whatHappens": "Red sits before the parole board for the third time. Asked whether he feels rehabilitated, he gives up the script he gave at his earlier hearings and tells the board the word is a politician's invention, that he wishes he could talk to the young fool who committed the crime forty years ago, and that he doesn't give a damn whether they stamp the form. They stamp it.",
+      "whyItMatters": "Red's most complete piece of self-knowledge in the film. The parole-board scene also sets up the film's quiet thesis on language: the only honest answer Red has ever given is the one that finally lets him out. He leaves Shawshank into the same halfway-house room and grocery job that destroyed Brooks, and now has to choose differently.",
+      "modeDeployment": {
+        "CC": "American carceral culture's vocabulary of rehabilitation is exposed as a procedural fiction. Red, who has been inside since the late 1920s, has finally learned to say so.",
+        "GVV": "Hope arrives in disguise. The bleak setup is bent into possibility by an old man telling the truth.",
+        "LG": "The scene is shot almost entirely in close-up on Freeman's face, a single sustained take that puts the dramatic weight on the actor and out of the dialogue.",
+        "TI": "Identity, time and self-knowledge. The film's argument that the long sentence is a moral education arrives here, late and earned."
+      },
+      "anchorQuoteIds": ["q-red-rehabilitated-bullshit", "q-red-stupid-young-kid", "q-red-aged-old-man"],
+      "linkSentenceTemplate": "Red's final parole hearing in The Shawshank Redemption shows a man speaking honestly to authority for the first time, an act of integrity comparable to [equivalent moment in Text B]."
+    },
+    {
+      "id": "km-buxton-letter",
+      "title": "Get busy living, or get busy dying",
+      "location": "Red's parole / Buxton field",
+      "whatHappens": "Red, now an old man, walks into a hayfield in Buxton with a long stone wall and an oak tree. At the base of the tree he digs out a tin. Inside is cash and a letter from Andy. Andy tells Red that hope is a good thing, maybe the best of things, that no good thing ever dies, and asks his old friend to come find him in Zihuatanejo.",
+      "whyItMatters": "The line Andy first gave Red in Shawshank, the line Brooks could not act on, comes back as instruction. Red chooses to break parole and go to Mexico. The film's redemptive register, qualified throughout, is allowed its full release. Hope is now an action.",
+      "modeDeployment": {
+        "CC": "The American postwar landscape is, briefly, shown as something a man can move through again. The road and the bus replace the cellblock.",
+        "GVV": "The film's qualified hope reaches its statement. The bleakness has not been denied; it has been outwalked.",
+        "LG": "Voiceover letter delivered over images of Red on the road. The long letter pay-off is the film's signature device, planted at the Mozart scene and detonated here.",
+        "TI": "Hope, friendship and choice. The theme of getting busy living is staged as a single decision under an oak tree."
+      },
+      "anchorQuoteIds": ["q-andy-hope-good-thing", "q-andy-get-busy-living", "q-red-hope-can-make-man-mad", "q-red-i-hope-pacific-blue"],
+      "linkSentenceTemplate": "The Buxton letter in The Shawshank Redemption converts hope from feeling into action, a turn that compares directly with [equivalent decision in Text B]."
+    },
+    {
+      "id": "km-zihuatanejo-reunion",
+      "title": "Reunion on the Pacific",
+      "location": "Zihuatanejo reunion",
+      "whatHappens": "Red crosses into Mexico on a bus. Voiceover: he hopes to make it across the border, hopes to see his friend, hopes the Pacific is as blue as it has been in his dreams. The closing shot is a wide pull-back over a cream beach, two old men greeting each other beside a small wooden boat under sanding tools.",
+      "whyItMatters": "The film closes on its most exposed image of friendship. Two men who met inside an institution that was designed to deny them anything other than survival end the film in the most ordinary scene the camera could find. The redemption of the title is not metaphysical; it is two friends on a beach.",
+      "modeDeployment": {
+        "CC": "The cultural context is left behind in the literal sense. The film argues that some redemption requires geography.",
+        "GVV": "The vision arrives at qualified light. Nothing the prison did has been undone. It has only been outlived.",
+        "LG": "Cream sand, blue ocean, blue sky. The colour grade reverses every grey shot in the previous two hours. The film's last image is its first warm one.",
+        "TI": "Friendship, hope and freedom. Each of the film's themes is permitted its closing chord."
+      },
+      "anchorQuoteIds": ["q-red-i-hope-pacific-blue", "q-red-i-hope-i-hope", "q-andy-zihuatanejo-pacific"],
+      "linkSentenceTemplate": "The closing reunion in The Shawshank Redemption gives the film its qualified redemptive image, a release of tension comparable to [equivalent close in Text B]."
+    }
+  ],
+
+  "characters": [
+    {
+      "id": "char-andy-dufresne",
+      "name": "Andy Dufresne",
+      "role": "Protagonist. A Portland banker, convicted of his wife's murder in 1947 and sentenced to two consecutive life terms at Shawshank. Innocent, patient, financially gifted, and quietly determined.",
+      "socialPosition": "Middle-class professional on entry. Vice-president of a Portland bank in his early thirties. Inside Shawshank he is reduced to inmate then quietly reasserted as the prison's de facto accountant.",
+      "mindset": "Composed to the point of opacity. Refuses to break in public. Holds an inner life the institution cannot read and uses that gap as his working space. Believes that hope is a discipline rather than a feeling.",
+      "contradictions": "Is convicted of a crime he did not commit and ends the film by committing several he did. Speaks softly and almost never raises his voice, yet engineers the most precise revenge in the film. Insists hope is harmless and spends nineteen years digging a tunnel in the dark.",
+      "arc": "Naive professional in the courtroom (1947) to silent newcomer (first night) to accountant for the guards (rooftop, 1949) to quiet librarian and educator (1950s) to broken faith in the legal system (Tommy's murder) to escapee, exile, and free man on a Mexican beach. The arc is a slow recovery of agency through patience.",
+      "keyRelationshipIds": ["rel-andy-red", "rel-andy-norton", "rel-andy-tommy"],
+      "keyQuoteIds": [
+        "q-andy-i-loved-her-very-much",
+        "q-andy-tax-free-gift",
+        "q-andy-mozart-here",
+        "q-andy-need-it-not-forget",
+        "q-andy-rita-hayworth",
+        "q-andy-hope-good-thing",
+        "q-andy-get-busy-living",
+        "q-andy-zihuatanejo-pacific",
+        "q-andy-prison-be-crook",
+        "q-andy-norton-obtuse",
+        "q-andy-excited-free-man"
+      ]
+    },
+    {
+      "id": "char-red",
+      "name": "Ellis Boyd 'Red' Redding",
+      "role": "Co-protagonist and narrator. Lifer at Shawshank, the man inside who can get things, the audience's voice and moral barometer for the whole film.",
+      "socialPosition": "Long-term inmate. Granted unofficial trader status inside the prison economy. Outside, after parole, a halfway-house resident bagging groceries.",
+      "mindset": "Wry, cautious, persuaded by experience that hope is dangerous inside walls. Slowly converted by Andy's patience into someone who can risk hope at the end of his life.",
+      "contradictions": "The man who knows everyone inside the prison knows almost no one outside it. The voice of seasoned realism becomes the film's voice of qualified hope. He pleads his rehabilitation for forty years and is finally paroled the moment he stops bothering.",
+      "arc": "Cautious lifer (1947) to friend and quiet ally (1949 onward) to grieving witness of Tommy's murder (Tommy's revelation) to honest old man at the parole board (Red's parole) to free man on a bus and a beach (Zihuatanejo). The arc is the slow conversion of a realist into a believer, on his own terms.",
+      "keyRelationshipIds": ["rel-andy-red", "rel-red-brooks"],
+      "keyQuoteIds": [
+        "q-red-rookie-i-ever-saw",
+        "q-red-fresh-fish",
+        "q-red-first-night-toughest",
+        "q-red-lords-of-all-creation",
+        "q-red-feel-like-free-men",
+        "q-red-every-last-man-free",
+        "q-red-hope-dangerous-thing",
+        "q-red-walls-funny-institutionalised",
+        "q-red-tired-of-being-afraid",
+        "q-red-thing-of-stone",
+        "q-red-geology-pressure-time",
+        "q-red-crawled-five-hundred-yards",
+        "q-red-some-birds-not-caged",
+        "q-red-rehabilitated-bullshit",
+        "q-red-stupid-young-kid",
+        "q-red-aged-old-man",
+        "q-red-investors-richer",
+        "q-red-hope-can-make-man-mad",
+        "q-red-i-hope-pacific-blue",
+        "q-red-i-hope-i-hope"
+      ]
+    },
+    {
+      "id": "char-norton",
+      "name": "Warden Samuel Norton",
+      "role": "Antagonist. The warden of Shawshank from the early 1950s onward. A self-styled Christian disciplinarian who runs a private kickback scheme through Andy.",
+      "socialPosition": "Highest authority inside the prison. Public face of the institution to the outside world. Speaks for the state, the law and, in his own mind, the church.",
+      "mindset": "Self-righteous, transactional, capable of extraordinary moral compartmentalisation. Quotes scripture and orders murder in the same hour. Cannot conceive that the system that authorises him might be turned against him.",
+      "contradictions": "Embroiders biblical judgement onto a sampler over the safe that holds his laundered money. Insists on rehabilitation and runs a forced-labour racket. Calls Andy his accountant and authorises the killing of the witness who could free him.",
+      "arc": "Effectively static in moral outline, but his arc by event runs from public sermon (induction) to private corruption (Inside Out programme) to the murder of Tommy (Tommy's revelation) to his own bullet at the desk (Norton's suicide). Like Danforth in The Crucible, Norton's point is that he does not change.",
+      "keyRelationshipIds": ["rel-andy-norton"],
+      "keyQuoteIds": [
+        "q-norton-rule-one-blasphemy",
+        "q-norton-salvation-within",
+        "q-norton-discuss-immortal-soul",
+        "q-norton-judgement-cometh"
+      ]
+    },
+    {
+      "id": "char-hadley",
+      "name": "Captain Byron Hadley",
+      "role": "Norton's chief of guards. The institution's everyday violence given a uniform.",
+      "socialPosition": "Senior corrections officer. Operational power over every inmate at Shawshank.",
+      "mindset": "Impulsive, profane, casually lethal. Treats the prisoners as livestock and his colleagues as a captive audience for his complaints.",
+      "contradictions": "The man who beats a sobbing newcomer to death in the first night also accepts financial advice from one of his prisoners and lets a work crew drink beer in the sun. His brutality and his gratitude for tax help are not opposites in him; they are the same lack of imagination.",
+      "arc": "From rooftop tirade about taxes (Tar on the rooftop) to executioner of Tommy (Tommy's murder) to weeping arrest at the gate (Norton's suicide). The arc is the institutional brute discovering that there are limits, the hard way.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": [
+        "q-hadley-bull-goose-loony",
+        "q-hadley-tax-stinking-government",
+        "q-hadley-eat-or-not-eat"
+      ]
+    },
+    {
+      "id": "char-brooks",
+      "name": "Brooks Hatlen",
+      "role": "Long-term inmate and Shawshank's elderly librarian. The film's clearest case study in institutionalisation.",
+      "socialPosition": "Lifer with a level of trust inside the prison. Outside, on parole, a halfway-house resident and grocery bagger.",
+      "mindset": "Gentle, courteous, bookish. Has built a fragile second life inside Shawshank and cannot transplant it to the outside.",
+      "contradictions": "A man who keeps a pet crow named Jake is more capable of love and gentleness inside a prison than he is of survival outside it. Fifty years of institution have made him so domestic to it that release becomes the worst thing that has ever happened to him.",
+      "arc": "Trusted librarian (1940s, 1950s) to terrified parolee threatening Heywood with a knife (parole eve) to lonely halfway-house resident writing his last letter (Brooks's parole) to suicide. Tragic and quiet from start to finish.",
+      "keyRelationshipIds": ["rel-red-brooks"],
+      "keyQuoteIds": [
+        "q-brooks-big-damn-hurry",
+        "q-brooks-dont-belong-here",
+        "q-brooks-was-here"
+      ]
+    },
+    {
+      "id": "char-tommy",
+      "name": "Tommy Williams",
+      "role": "Young inmate, late arrival at Shawshank. The witness whose testimony could free Andy and whose death traps him.",
+      "socialPosition": "Petty thief, multiple convictions. Illiterate on entry; passes his GED under Andy's tutelage.",
+      "mindset": "Cocky, eager, surprisingly tender once Andy starts teaching him to read. Loves his young wife and son and wants to do better by them.",
+      "contradictions": "The youngest character in the prison's main cast is the one whose testimony reveals the oldest injustice. His murder is delivered by the institution that was supposed to be rehabilitating him.",
+      "arc": "Hot-headed newcomer (arrival) to literate student (Library / Mozart, 1955 era) to crucial witness (Tommy's revelation) to body in the yard (Tommy's murder). The arc is education arriving just in time to be killed for.",
+      "keyRelationshipIds": ["rel-andy-tommy"],
+      "keyQuoteIds": [
+        "q-tommy-not-the-rock-it-was",
+        "q-tommy-elmo-blatch"
+      ]
+    },
+    {
+      "id": "char-bogs",
+      "name": "Bogs Diamond",
+      "role": "Leader of the Sisters, a gang of inmates who repeatedly attack Andy in his early years at Shawshank.",
+      "socialPosition": "Long-term inmate with informal power inside the cellblock economy of violence.",
+      "mindset": "Predatory and territorial. Treats new inmates as prey.",
+      "contradictions": "The man who runs the cellblock at one end of his arc spends the other end bedridden after a beating ordered by Hadley off the rooftop. Power inside the institution is shown to be entirely contingent on which guard you have crossed.",
+      "arc": "Predator in the laundry and projection booth (early years) to a beaten figure in the infirmary, fed through a straw, after Hadley breaks him in retaliation for tax-helping Andy. Reported off-screen rather than enacted in detail.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-bogs-eat-it"]
+    },
+    {
+      "id": "char-heywood",
+      "name": "Heywood",
+      "role": "One of the long-time inmates and a member of Andy and Red's group. Comic relief and chorus.",
+      "socialPosition": "Lifer. Mid-rank inside the prison's social order, friend to Red and Andy and witness to most of the major events.",
+      "mindset": "Talkative, easily impressed, capable of grief. The voice of the group's ordinary feeling.",
+      "contradictions": "The character who spends most of the film cracking jokes is the one Brooks holds at knifepoint, and the one whose voice cracks reading Brooks's last letter aloud. Comic relief is the film's vehicle for some of its quietest pain.",
+      "arc": "Comic chorus throughout, with the Brooks parole sequence and the closing letters as his moments of full emotional weight.",
+      "keyRelationshipIds": [],
+      "keyQuoteIds": ["q-heywood-fresh-fish-fresh-fish"]
+    }
+  ],
+
+  "relationships": [
+    {
+      "id": "rel-andy-red",
+      "characterAId": "char-andy-dufresne",
+      "characterBId": "char-red",
+      "type": "friendship",
+      "startStatus": "Transactional. Andy approaches Red in the yard for a rock hammer and pays in cash. Red treats him like any other new customer of his small inside-the-walls trade.",
+      "endStatus": "Two old men on a Mexican beach beside a small wooden boat. Red has accepted hope on Andy's terms; Andy has come back to nothing else.",
+      "trajectory": "The other arc of the film. Their friendship deepens in increments: a chess set carved from yard stones, the rooftop beers, the Mozart broadcast, the slow argument over whether hope helps or hurts. Each step costs them something. By Tommy's death the friendship is the only legitimate moral economy left at Shawshank. Andy's letter under the oak tree is the last gift. Red's bus ride south is the answer.",
+      "keyMomentIds": ["km-rooftop-beers", "km-mozart-broadcast", "km-tommy-revelation", "km-andy-escape-poster", "km-buxton-letter", "km-zihuatanejo-reunion"],
+      "modeRelevance": ["GVV", "LG", "TI"]
+    },
+    {
+      "id": "rel-andy-norton",
+      "characterAId": "char-andy-dufresne",
+      "characterBId": "char-norton",
+      "type": "antagonistic",
+      "startStatus": "Warden inspecting a new arrival. Norton recognises Andy's banking background as useful and begins building him into the prison's accounting system.",
+      "endStatus": "Norton dead at his desk under his own embroidered scripture, ruined by ledgers Andy was forced to keep. Andy on a beach in Mexico. They never meet again.",
+      "trajectory": "The relationship is the institution's quietest power struggle. Norton thinks he owns Andy. Andy uses every interaction (the Bible, the Inside Out programme, the laundering ledgers) to build the means of his own escape and Norton's destruction. The torn poster and the sampler are mirror images: both pieces of homely decoration that are quietly weaponised against the men they were supposed to comfort.",
+      "keyMomentIds": ["km-norton-salvation-within", "km-tommy-revelation", "km-andy-escape-poster", "km-norton-suicide"],
+      "modeRelevance": ["CC", "GVV", "LG", "TI"]
+    },
+    {
+      "id": "rel-andy-tommy",
+      "characterAId": "char-andy-dufresne",
+      "characterBId": "char-tommy",
+      "type": "mentor",
+      "startStatus": "Older inmate teaching a younger one to read. Tommy is restless, Andy is patient. The lessons are slow.",
+      "endStatus": "Andy in the hole; Tommy dead in the yard. The mentorship has become a death sentence for Tommy and a moral threshold for Andy.",
+      "trajectory": "What begins as literacy lessons widens into Tommy's GED and then into the testimony that could free Andy. The film shows education and friendship as the same act in this relationship. Norton ends both with one rifle shot. Andy's response is the long, silent escape we have already been watching him build.",
+      "keyMomentIds": ["km-tommy-revelation"],
+      "modeRelevance": ["GVV", "TI", "CC"]
+    },
+    {
+      "id": "rel-red-brooks",
+      "characterAId": "char-red",
+      "characterBId": "char-brooks",
+      "type": "friendship",
+      "startStatus": "Long-time fellow inmates. Brooks runs the library; Red has known him for decades.",
+      "endStatus": "Brooks dead in a halfway-house room. Red, paroled into the same room, reads Brooks's situation as a warning rather than a fate.",
+      "trajectory": "Brooks does not change. Red does. The relationship's meaning is delivered after Brooks's death, when Red lives in his room, eats with his cutlery, and decides not to repeat his ending. Brooks is the negative space against which Red's final choice is measured.",
+      "keyMomentIds": ["km-brooks-suicide", "km-red-parole-rehabilitated", "km-buxton-letter"],
+      "modeRelevance": ["GVV", "TI", "CC"]
+    },
+    {
+      "id": "rel-norton-hadley",
+      "characterAId": "char-norton",
+      "characterBId": "char-hadley",
+      "type": "alliance",
+      "startStatus": "Warden and chief of guards. Hadley supplies the violence; Norton supplies the language that dignifies it.",
+      "endStatus": "Hadley weeping at the gate as the troopers cuff him. Norton bleeding at his desk. The alliance ends in two ruined men in two adjoining rooms.",
+      "trajectory": "The institution's two faces. Norton in his suit and Hadley in his uniform run the same operation. The relationship dramatises how a quiet warden and a brutal captain together produce a place like Shawshank. Their mutual collapse is the film's argument that institutional corruption tends to take its hands with it when it falls.",
+      "keyMomentIds": ["km-first-night-fish", "km-tommy-revelation", "km-norton-suicide"],
+      "modeRelevance": ["CC", "GVV", "TI"]
+    }
+  ],
+
+  "culturalContext": {
+    "socialClass": {
+      "applies": "yes",
+      "summary": "Shawshank operates as a cross-section of postwar American class anxieties. Andy enters the prison as a middle-class professional, the only banker on the cellblock, and his expertise becomes the currency that buys him relative protection and Norton his private fortune. The other inmates are predominantly working-class men whose financial knowledge ends at their pay packet; the rooftop scene is structured around the social novelty of a bank vice-president sharing a tax tip with a guard. Outside, Brooks and Red discover that being an ex-convict in 1950s and 1960s America places them at the bottom of the class order regardless of what they once knew or did.",
+      "anchorMomentIds": ["km-rooftop-beers", "km-norton-salvation-within", "km-brooks-suicide"],
+      "anchorQuoteIds": ["q-andy-tax-free-gift", "q-andy-prison-be-crook", "q-red-walls-funny-institutionalised"],
+      "argumentHook": "The Shawshank Redemption shows class operating both inside and outside the prison: Andy's professional knowledge is what makes him useful, and what eventually makes him free."
+    },
+    "gender": {
+      "applies": "yes",
+      "summary": "Shawshank is an almost wholly male cultural context. Women appear as photographs (Rita Hayworth, Marilyn Monroe, Raquel Welch), as Andy's murdered wife, and as the voices on a record. The institution's masculinity is rigid: tears get a man killed on his first night, friendship has to be hidden inside trade, and the most violent figures (Hadley, Bogs) hold authority precisely because they enforce that code. Andy's quiet refusal to perform the expected version of male toughness is repeatedly read by other men as weakness and by the audience as the quality that survives the prison.",
+      "anchorMomentIds": ["km-first-night-fish", "km-rooftop-beers", "km-andy-escape-poster"],
+      "anchorQuoteIds": ["q-hadley-bull-goose-loony", "q-red-feel-like-free-men", "q-andy-rita-hayworth"],
+      "argumentHook": "Postwar masculinity in The Shawshank Redemption is a code that Andy mostly refuses, and the film argues that his refusal is what protects him."
+    },
+    "religion": {
+      "applies": "yes",
+      "summary": "The film stages Catholic guilt and Protestant work ethic against each other and lets greed defeat them both. Norton presents Shawshank as a place of redemption, hands new arrivals Bibles, embroiders a sampler about divine judgement, and uses every sermon to shore up his authority. He also runs an industrial kickback. Andy's hidden rock hammer in the hollowed Bible is the film's central piece of religious irony. By the closing reel, the only person who has acted on the moral content of the scripture Norton quoted is the prisoner who left it on the desk.",
+      "anchorMomentIds": ["km-norton-salvation-within", "km-norton-suicide"],
+      "anchorQuoteIds": ["q-norton-rule-one-blasphemy", "q-norton-salvation-within", "q-norton-judgement-cometh", "q-andy-prison-be-crook"],
+      "argumentHook": "Religion in Shawshank is the language the institution uses to dignify its corruption, and the film argues that scripture is only as honest as the person quoting it."
+    },
+    "familyAndMarriage": {
+      "applies": "yes",
+      "summary": "Family appears in The Shawshank Redemption mostly through absence. Andy's marriage is presented in the opening minutes as already broken; his wife is dead before the film begins. Tommy speaks of his wife and son with the tenderness of a man who has not been allowed to be a father; his death deletes that family. Brooks, with no family at all, treats his crow Jake as the only living thing he can love. Red admits at his parole hearing that there is no family waiting for him. The prison disrupts and replaces the family in every case the film stages, and the closing image of Andy and Red on the beach is offered as the substitute the institution could not finally suppress.",
+      "anchorMomentIds": ["km-opening-trial", "km-tommy-revelation", "km-brooks-suicide", "km-zihuatanejo-reunion"],
+      "anchorQuoteIds": ["q-andy-i-loved-her-very-much", "q-tommy-elmo-blatch", "q-red-aged-old-man"],
+      "argumentHook": "Family in The Shawshank Redemption is something the prison takes; friendship is what the film offers in its place."
+    },
+    "authorityAndPower": {
+      "applies": "yes",
+      "summary": "Authority at Shawshank is absolute, layered, and self-justifying. The courts deliver Andy on circumstantial evidence. Norton runs the prison as a private fiefdom, scripture in one hand and a kickback ledger in the other. Hadley dispenses violence on Norton's instruction. The parole board recites rehabilitation while acting as the gatekeeper of release. Andy's escape is not a refusal of authority in general but a precise, document-based refusal of this authority's claim to own him. The film's argument is that authority that admits no qualification eventually destroys itself with its own paperwork.",
+      "anchorMomentIds": ["km-opening-trial", "km-first-night-fish", "km-tommy-revelation", "km-norton-suicide", "km-red-parole-rehabilitated"],
+      "anchorQuoteIds": ["q-norton-rule-one-blasphemy", "q-norton-discuss-immortal-soul", "q-red-rehabilitated-bullshit", "q-norton-judgement-cometh"],
+      "argumentHook": "The Shawshank Redemption argues that institutional authority sustained by ritual rather than truth eventually devours itself."
+    }
+  },
+
+  "generalVisionAndViewpoint": {
+    "oneLineVision": "The Shawshank Redemption presents a qualified, ultimately redemptive vision: institutions can grind a man down for decades, but patience, friendship and hope can outlast them.",
+    "openingShapesVision": "The vision is set deliberately bleak. A young banker is convicted in his first scene on circumstantial evidence; his first night ends with another newcomer beaten to death for crying. The film insists from its opening half-hour that this world is genuinely hostile, and that any hope it later offers will have to be earned in full view of how heavy the setup was. The bleakness is not denied later; it is outlasted.",
+    "climaxShapesVision": "The vision turns at Tommy's murder. The audience and Andy lose, in the same scene, the last belief that the legal system might intervene from outside. From that point forward, the film's argument becomes that hope inside an institution like Shawshank is not a feeling but a discipline, and that justice will arrive, if at all, sideways and quietly. The Mozart broadcast is the vision's most generous moment; Tommy's death is its hardest.",
+    "closingShapesVision": "The closing recovers a register of qualified hope. Andy is on a beach, Red is on a bus, and the institution that defined them is in disgrace. The film does not pretend that the prison did not happen; it argues that two friends and a small boat can end a story that began in a courtroom forty years earlier. Hope, in Andy's letter, is reframed as an instruction rather than an emotion. Get busy living, or get busy dying.",
+    "ambiguity": "The vision is bleak about institutions, processes, and the legal system. It is hopeful about patience, friendship and the inner life of the individual. Like The Crucible, the film's most quoted lines hold both registers in tension at once. Brooks is destroyed by release; Red is saved by it. Andy is broken by Tommy's murder and freed by what he does next. The film refuses simple optimism and refuses despair in equal measure.",
+    "anchorMomentIds": ["km-first-night-fish", "km-mozart-broadcast", "km-brooks-suicide", "km-tommy-revelation", "km-andy-escape-poster", "km-zihuatanejo-reunion"]
+  },
+
+  "literaryGenre": {
+    "toolkit": "film",
+    "elements": [
+      {
+        "name": "Voiceover narration",
+        "description": "Red is the film's narrator from the second scene to the last. His voiceover frames every major event, lets the audience inside an institution that otherwise denies inner life, and quietly turns the film into a memoir Red is telling years after the fact. Darabont uses voiceover not as a crutch but as a structural device, letting Red's reading of events, especially the Mozart broadcast and the morning Andy is found gone, do work the camera cannot.",
+        "anchorMomentIds": ["km-first-night-fish", "km-mozart-broadcast", "km-andy-escape-poster", "km-buxton-letter"],
+        "keyExample": "Red's narration over the still yard during the Mozart broadcast lets the film argue, in calm voiceover, that something briefly free has happened inside Shawshank without ever interrupting the visual stillness."
+      },
+      {
+        "name": "The poster as visual misdirection",
+        "description": "Across two hours of screen time the audience sees three pin-ups (Rita Hayworth, then Marilyn Monroe, then Raquel Welch) on the wall of Andy's cell and reads them as a piece of conventional male prison decoration. The film withholds, deliberately, that the posters are concealing a tunnel. The reveal, when Norton's stone passes through the wall, retroactively reframes every shot of those posters in the previous nineteen years of story time. It is one of the most disciplined uses of planted visual detail in mainstream cinema.",
+        "anchorMomentIds": ["km-andy-escape-poster"],
+        "keyExample": "The slow tilt up the third poster as Norton walks into the cell is the same shot the audience has seen three times before. This time the camera does not stop where it has stopped before, and the trick reveals itself."
+      },
+      {
+        "name": "Pacing and the slow cinema of institutional time",
+        "description": "Darabont stretches sequences (the rooftop, the Mozart broadcast, Brooks on the outside, the long montage of Andy writing his weekly library letters) far beyond what a conventional Hollywood film of the period would allow. The slowness is the point. Institutional time is what Shawshank does to people; the film's pacing makes the audience live inside it. The contrast between the slow Shawshank stretches and the brisk Portland-bank sequence at the climax delivers most of its meaning through tempo alone.",
+        "anchorMomentIds": ["km-rooftop-beers", "km-mozart-broadcast", "km-brooks-suicide"],
+        "keyExample": "Brooks's release sequence runs almost without dialogue for several minutes. The audience is asked to sit inside his loneliness for as long as the film can hold it, which is the only way to make the suicide land."
+      },
+      {
+        "name": "Music as transcendence",
+        "description": "Mozart's The Marriage of Figaro on the prison loudspeakers is the film's central scene on art and freedom. The aria is allowed to play across the entire prison without interruption while Red's voiceover holds a single thought. Darabont stages the music as a piece of contraband transcendence: it is something the institution cannot finally censor because it has already entered the prisoners' heads. Earlier and later cues (Inkspots, Hank Williams) are quieter, but the Mozart sequence is the film's clearest statement about the inner life.",
+        "anchorMomentIds": ["km-mozart-broadcast"],
+        "keyExample": "The sustained crane shot rising up the cellblock during the duet is the highest single image in the film. The camera goes up because the prisoners cannot."
+      },
+      {
+        "name": "The long letter pay-off",
+        "description": "Andy's letter to Red, hidden under the oak tree in Buxton, is set up as early as the Mozart scene and not detonated until the final reel. The letter pulls together the rock hammer, the posters, the rooftop, the library, the Mozart broadcast and the escape into a single document Red reads aloud in voiceover under a tree. Darabont uses the letter as the structural seam between Andy's plot and Red's plot, and as the device that turns hope from theme into instruction.",
+        "anchorMomentIds": ["km-buxton-letter"],
+        "keyExample": "Andy's line on hope being a good thing is held back from his earlier scenes precisely so that it can land here, in his absent voice, over Red's bowed head."
+      },
+      {
+        "name": "Cross-cutting and editing as argument",
+        "description": "Darabont uses cross-cutting most decisively in the opening (Andy's car outside the cottage versus the prosecutor's narration in court) and in the climax (Andy emerging from the sewer in the rain versus Norton finding the empty cell). In both cases the cuts are doing argumentative work, not just narrative work. The opening cuts make the prosecutor's story seem true; the climax cuts make the warden's discovery the punchline of an operation the audience now realises it has been watching for two hours.",
+        "anchorMomentIds": ["km-opening-trial", "km-andy-escape-poster"],
+        "keyExample": "The intercut between Andy washing in the rain and Norton's stone passing through the poster is the film's moral fulcrum, edited so that the reveal arrives in image, not dialogue."
+      },
+      {
+        "name": "Confined space giving way to wide landscape",
+        "description": "For most of the film the camera lives inside cells, corridors, the warden's office, the laundry, the library. The frames are tight, grey, and crowded. The film withholds wide landscape almost entirely until the rain in the river outside the sewer pipe and the final pull-back over the Pacific. The visual contraction and release is the film's structural metaphor for hope. Confined staging makes the cream-and-blue of Zihuatanejo legible as freedom.",
+        "anchorMomentIds": ["km-andy-escape-poster", "km-zihuatanejo-reunion"],
+        "keyExample": "The crane shot pulling up and out over Andy and Red on the beach is the only sustained wide shot of open space in the film. It is held as long as it is precisely because the audience has been given so few of them."
+      }
+    ]
+  },
+
+  "themeOrIssue": {
+    "primaryThemes": [
+      {
+        "name": "Hope as a discipline",
+        "summary": "The film's central theme. Andy insists hope is a good thing, perhaps the best of things, and proves it across nineteen years of patient digging in the dark. Red insists hope is a dangerous thing inside walls, and is converted only by Andy's letter under the Buxton oak. The film's argument is that hope is not a mood but a practice, and that the institutions that try to extinguish it are trying to remove the very thing that makes survival worth survival.",
+        "pivotalMomentIds": ["km-mozart-broadcast", "km-andy-escape-poster", "km-buxton-letter", "km-zihuatanejo-reunion"],
+        "contradictoryAspect": "Hope is what saves Andy and what kills Tommy. The film holds both in the same frame and refuses to soften either. The audience is asked to accept that the same disposition that gets Andy through the sewer is the one that gets Tommy shot in the yard."
+      },
+      {
+        "name": "Institutionalisation",
+        "summary": "Brooks Hatlen is the film's hardest case. Fifty years in Shawshank have made the outside lethal to him. Red names the theme directly: the walls are funny, you hate them, then you get used to them, then you depend on them. The film argues that the deepest harm a long-running institution does is to the part of a man that learns to need it. Red survives because Brooks did not, and because he chooses, at the very end, to refuse the script the institution has written into him.",
+        "pivotalMomentIds": ["km-brooks-suicide", "km-red-parole-rehabilitated", "km-buxton-letter"],
+        "contradictoryAspect": "The institution that destroys Brooks is the one that gives Red his closest friendships, his role inside the inmate economy, and the moral education that finally lets him speak honestly to the parole board. The film refuses to let Shawshank be only a place of damage; it concedes, painfully, that it is also where Red became the man who could one day take a bus to Mexico."
+      },
+      {
+        "name": "Friendship",
+        "summary": "Andy and Red's friendship is the film's other arc, and the one most students underwrite in essays. It begins as a transaction (rock hammer for cash) and ends as the meaning of the title. The film argues that friendship is the only legitimate moral economy inside an institution that denies all the others, and that it can survive separations long enough to bring two old men to the same beach. Brooks and Jake the crow rehearse a smaller version of the same theme; Tommy and Andy rehearse a third.",
+        "pivotalMomentIds": ["km-rooftop-beers", "km-mozart-broadcast", "km-buxton-letter", "km-zihuatanejo-reunion"],
+        "contradictoryAspect": "Friendship, in this film, is also a vector of grief. The same closeness that lets Andy teach Tommy to read is what makes Tommy's death unbearable. Red's friendship with Brooks is not what saves Brooks. The film's argument is that friendship is necessary, not that it is sufficient."
+      },
+      {
+        "name": "Justice and the gap between law and right",
+        "summary": "The film opens with a court convicting an innocent man and ends with an innocent man pulling down a corrupt warden by his own paperwork. The legal system in The Shawshank Redemption is shown as procedural, slow, and very easily co-opted. Justice, when it comes, comes through Andy's ledgers, through Red's parole, through a Portland newspaper. The film argues that law and justice are not the same thing, and that an institution can be the obstacle to one while pretending to be the other.",
+        "pivotalMomentIds": ["km-opening-trial", "km-tommy-revelation", "km-norton-suicide"],
+        "contradictoryAspect": "Andy's revenge on Norton is precise and devastating, but it is not delivered through the courts. The film celebrates a justice the audience can recognise as moral while refusing to pretend it is legal. Andy ends as a fugitive on a Mexican beach. The film knows this and refuses to apologise for it."
+      },
+      {
+        "name": "Time, patience and the inner life",
+        "summary": "Geology, as Red says, is the study of pressure and time, and so is Andy's escape. Nineteen years of digging happen at the rate of a few inches a week. The film's slow pacing is the formal expression of this theme. Patience is not a passive state in The Shawshank Redemption; it is what Andy does with the years the institution thought it had taken from him.",
+        "pivotalMomentIds": ["km-mozart-broadcast", "km-andy-escape-poster", "km-buxton-letter"],
+        "contradictoryAspect": "Time is also what damages Brooks past repair, what gives Norton the freedom to murder Tommy, and what Red is given too much of at his parole. The film holds patience and time as the same medium with two opposite effects, depending on what a man does inside them."
+      }
+    ]
+  },
+
+  "examinerPitfalls": [
+    "Treating The Shawshank Redemption as a feel-good film and writing about it in the language of fairy tale. The setup is bleak, the central murder of Tommy is brutal, and the redemption is qualified rather than triumphant. Strong answers register both registers.",
+    "Reducing Andy to a saint and Red to a sidekick. Both characters change. Red's arc is the one most students miss, and the parole-board scenes are examiner gold for character development under Literary Genre.",
+    "Forgetting that the film is in copyright and that quotation in essays should be brief and used analytically. Overlong quoted passages waste marks. Short, exact lines used as evidence land harder.",
+    "Ignoring the Brooks sequence. Institutionalisation is named directly only in Brooks's release and in Red's voiceover that follows it, and ignoring those scenes is the most common way to underwrite a Cultural Context answer.",
+    "Treating the film as American history rather than as a cultural context the film constructs. The cultural context to argue is postwar carceral America as Darabont stages it, not the United States in general.",
+    "Naming themes without anchoring them in moments. The film's themes are well-known, so a strong answer must reach for specific scenes (the rooftop beers, the Mozart broadcast, the torn poster, the sampler) rather than restating the abstractions.",
+    "Underwriting Norton. Norton is the film's most efficient piece of villain construction and is examiner-rich for both Cultural Context (institution as private kingdom) and Literary Genre (irony, scripture, the sampler payoff). Treating him as background is a missed mark.",
+    "Misreading the closing. Zihuatanejo is not a guarantee that everything was worth it; it is two old men on a beach. Strong answers treat it as qualified hope, not as resolution."
+  ],
+
+  "status": "draft",
+  "schemaVersion": 1,
+  "lastReviewedAt": null
+}

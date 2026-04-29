@@ -1,0 +1,756 @@
+{
+  "textId": "the-shawshank-redemption",
+  "schemaVersion": 1,
+  "quotes": [
+    {
+      "id": "q-prosecutor-cold-blooded",
+      "text": "It is in fact the cold-blooded nature of his crime that I find most chilling.",
+      "speaker": "Prosecutor",
+      "location": "Opening trial / Maine, 1947",
+      "context": "The prosecutor closing his case against Andy in front of the Maine jury, framing the circumstantial evidence as proof of premeditation.",
+      "themeTags": ["justice", "law", "judgement"],
+      "modeTags": ["CC", "GVV", "LG"],
+      "characterTags": ["Prosecutor", "Andy Dufresne"]
+    },
+    {
+      "id": "q-andy-i-loved-her-very-much",
+      "text": "I loved her very much. I just wasn't a good husband to her.",
+      "speaker": "Andy Dufresne",
+      "location": "Opening trial / Maine, 1947",
+      "context": "Andy on the stand at his murder trial, attempting to explain the marriage the prosecutor is using against him.",
+      "themeTags": ["marriage", "guilt", "regret", "identity"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Andy Dufresne"]
+    },
+    {
+      "id": "q-red-rookie-i-ever-saw",
+      "text": "I must admit I didn't think much of Andy first time I laid eyes on him. Looked like a stiff breeze would blow him over.",
+      "speaker": "Red",
+      "location": "Andy's first night",
+      "context": "Red's voiceover as the bus of new arrivals enters Shawshank, introducing Andy as he sees him for the first time.",
+      "themeTags": ["identity", "perception", "narration"],
+      "modeTags": ["LG", "GVV"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-fresh-fish",
+      "text": "Fresh fish today! We're reeling them in!",
+      "speaker": "Heywood",
+      "location": "Andy's first night",
+      "context": "Heywood and other long-term inmates jeering at the new arrivals as they are walked into the cellblock for the first time.",
+      "themeTags": ["dehumanisation", "institutionalisation", "ritual"],
+      "modeTags": ["CC", "LG", "TI"],
+      "characterTags": ["Heywood"]
+    },
+    {
+      "id": "q-heywood-fresh-fish-fresh-fish",
+      "text": "Fresh fish! Fresh fish!",
+      "speaker": "Heywood",
+      "location": "Andy's first night",
+      "context": "Heywood leading the chant as the new prisoners are processed by the guards.",
+      "themeTags": ["dehumanisation", "ritual"],
+      "modeTags": ["CC", "LG"],
+      "characterTags": ["Heywood"]
+    },
+    {
+      "id": "q-hadley-bull-goose-loony",
+      "text": "When I say you eat, you eat! When I say you shit, you shit! You got that, you maggot-dick motherfucker?",
+      "speaker": "Captain Hadley",
+      "location": "Andy's first night",
+      "context": "Hadley laying down the rules to the new prisoners on their first night, before he beats one of them to death for crying.",
+      "themeTags": ["dehumanisation", "authority", "violence"],
+      "modeTags": ["CC", "GVV", "TI"],
+      "characterTags": ["Captain Hadley"]
+    },
+    {
+      "id": "q-hadley-eat-or-not-eat",
+      "text": "You eat when we say you eat, you sleep when we say you sleep.",
+      "speaker": "Captain Hadley",
+      "location": "Andy's first night",
+      "context": "Hadley asserting total control over the new prisoners' bodies as part of the induction routine.",
+      "themeTags": ["dehumanisation", "authority", "institutionalisation"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Captain Hadley"]
+    },
+    {
+      "id": "q-norton-rule-one-blasphemy",
+      "text": "Rule number one: no blasphemy. I'll not have the Lord's name taken in vain in my prison.",
+      "speaker": "Warden Norton",
+      "location": "Andy's first night",
+      "context": "Norton addressing the new prisoners on their first day, opening with a religious rule rather than a legal one.",
+      "themeTags": ["religion", "authority", "hypocrisy"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Warden Norton"]
+    },
+    {
+      "id": "q-red-first-night-toughest",
+      "text": "The first night's the toughest. No doubt about it.",
+      "speaker": "Red",
+      "location": "Andy's first night",
+      "context": "Red's voiceover during the new prisoners' first night, as one of them cries himself into a fatal beating from Hadley.",
+      "themeTags": ["dehumanisation", "fear", "institutionalisation"],
+      "modeTags": ["LG", "GVV", "CC"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-everyone-innocent-here",
+      "text": "Everybody's innocent in here. Don't you know that?",
+      "speaker": "Red",
+      "location": "Yard / Red's introduction",
+      "context": "Red, sceptical, when Andy maintains his innocence in their first proper conversation in the yard.",
+      "themeTags": ["justice", "innocence", "scepticism"],
+      "modeTags": ["GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-can-get-things",
+      "text": "I'm a man who knows how to get things.",
+      "speaker": "Red",
+      "location": "Yard / Red's introduction",
+      "context": "Red explaining his role inside the prison economy when Andy asks how he might obtain a rock hammer.",
+      "themeTags": ["resilience", "identity", "narration"],
+      "modeTags": ["LG", "CC"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-bogs-eat-it",
+      "text": "Why don't you swallow what's in your mouth, then you can talk.",
+      "speaker": "Bogs Diamond",
+      "location": "Yard / Sisters subplot",
+      "context": "Bogs, leader of the Sisters, threatening Andy in the yard early in his sentence.",
+      "themeTags": ["violence", "power", "dehumanisation"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Bogs Diamond", "Andy Dufresne"]
+    },
+    {
+      "id": "q-andy-tax-free-gift",
+      "text": "Mr. Hadley, do you trust your wife?",
+      "speaker": "Andy Dufresne",
+      "location": "Tar on the rooftop, 1949",
+      "context": "Andy's opening line to Hadley on the licence-plate-factory roof, leading into the tax-free gift advice that earns the work crew their three beers each.",
+      "themeTags": ["dignity", "intelligence", "resilience"],
+      "modeTags": ["GVV", "LG", "TI"],
+      "characterTags": ["Andy Dufresne", "Captain Hadley"]
+    },
+    {
+      "id": "q-hadley-tax-stinking-government",
+      "text": "Stinking government, they will fish in your pocket for spare change.",
+      "speaker": "Captain Hadley",
+      "location": "Tar on the rooftop, 1949",
+      "context": "Hadley complaining on the prison roof about the tax he is about to pay on his inheritance, the complaint Andy uses to buy his crew their beers.",
+      "themeTags": ["money", "authority", "corruption"],
+      "modeTags": ["CC"],
+      "characterTags": ["Captain Hadley"]
+    },
+    {
+      "id": "q-red-lords-of-all-creation",
+      "text": "We sat and drank with the sun on our shoulders and felt like free men.",
+      "speaker": "Red",
+      "location": "Tar on the rooftop, 1949",
+      "context": "Red's voiceover on the rooftop sequence, summing up what Andy's tax advice bought his crew that morning.",
+      "themeTags": ["dignity", "freedom", "hope", "friendship"],
+      "modeTags": ["GVV", "LG", "TI"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-feel-like-free-men",
+      "text": "We could have been tarring the roof of one of our own houses.",
+      "speaker": "Red",
+      "location": "Tar on the rooftop, 1949",
+      "context": "Red's voiceover continuing the rooftop sequence, framing the men's morning of beer and labour as briefly indistinguishable from ordinary working life.",
+      "themeTags": ["dignity", "freedom", "identity"],
+      "modeTags": ["GVV", "LG"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-every-last-man-free",
+      "text": "For the briefest of moments every last man at Shawshank felt free.",
+      "speaker": "Red",
+      "location": "Library / Mozart, 1955",
+      "context": "Red's voiceover during the Mozart broadcast, as the entire prison stops and listens.",
+      "themeTags": ["freedom", "hope", "transcendence"],
+      "modeTags": ["GVV", "LG", "TI"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-andy-mozart-here",
+      "text": "That's the beauty of music. They can't get that from you.",
+      "speaker": "Andy Dufresne",
+      "location": "Library / Mozart, 1955",
+      "context": "Andy at the lunch table, after his two-week stretch in solitary for playing Mozart over the loudspeakers, defending the broadcast to Red and the others.",
+      "themeTags": ["hope", "freedom", "resilience", "identity"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-andy-need-it-not-forget",
+      "text": "There are places in this world that aren't made out of stone. There's something inside that they can't get to, that they can't touch. That's yours.",
+      "speaker": "Andy Dufresne",
+      "location": "Library / Mozart, 1955",
+      "context": "Andy explaining hope to Red at the lunch table after the Mozart broadcast.",
+      "themeTags": ["hope", "resilience", "freedom", "identity"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-red-hope-dangerous-thing",
+      "text": "Hope is a dangerous thing. Hope can drive a man insane.",
+      "speaker": "Red",
+      "location": "Library / Mozart, 1955",
+      "context": "Red's reply to Andy in the lunch room after the Mozart scene, warning his friend against the very thing the film will spend the next hour vindicating.",
+      "themeTags": ["hope", "despair", "institutionalisation"],
+      "modeTags": ["GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-hope-can-make-man-mad",
+      "text": "Let me tell you something, my friend. Hope is a dangerous thing.",
+      "speaker": "Red",
+      "location": "Library / Mozart, 1955",
+      "context": "Red preparing his warning to Andy in the same lunch-room exchange, immediately after the Mozart broadcast.",
+      "themeTags": ["hope", "despair", "friendship"],
+      "modeTags": ["GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-andy-rita-hayworth",
+      "text": "Could you get me Rita Hayworth?",
+      "speaker": "Andy Dufresne",
+      "location": "Yard / Red's introduction",
+      "context": "Andy asking Red, a few years into his sentence, to obtain a poster of Rita Hayworth, the first of the three pin-ups that will conceal the tunnel.",
+      "themeTags": ["hope", "patience", "identity"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-red-walls-funny-institutionalised",
+      "text": "These walls are funny. First you hate em, then you get used to em. Enough time passes, gets so you depend on them. That's institutionalised.",
+      "speaker": "Red",
+      "location": "Brooks's parole",
+      "context": "Red explaining institutionalisation to the younger inmates over a meal in the canteen, after Heywood mocks Brooks for threatening Heywood with a knife rather than leave the prison.",
+      "themeTags": ["institutionalisation", "time", "identity", "dehumanisation"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-tired-of-being-afraid",
+      "text": "They send you here for life and that's exactly what they take. The part that counts, anyway.",
+      "speaker": "Red",
+      "location": "Brooks's parole",
+      "context": "Red, in the same canteen exchange about Brooks, framing the long sentence as the slow theft of an inner life.",
+      "themeTags": ["institutionalisation", "identity", "time", "despair"],
+      "modeTags": ["GVV", "TI", "CC"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-brooks-big-damn-hurry",
+      "text": "The world went and got itself in a big damn hurry.",
+      "speaker": "Brooks Hatlen",
+      "location": "Brooks's parole",
+      "context": "Brooks in voiceover, writing his last letter back to the boys at Shawshank from his halfway-house room.",
+      "themeTags": ["institutionalisation", "time", "despair", "loneliness"],
+      "modeTags": ["CC", "GVV", "TI"],
+      "characterTags": ["Brooks Hatlen"]
+    },
+    {
+      "id": "q-brooks-dont-belong-here",
+      "text": "I don't like it here. I'm tired of being afraid all the time. I've decided not to stay.",
+      "speaker": "Brooks Hatlen",
+      "location": "Brooks's parole",
+      "context": "Brooks's last letter, in voiceover, explaining his decision to take his own life in the halfway-house room.",
+      "themeTags": ["despair", "fear", "institutionalisation", "loneliness"],
+      "modeTags": ["GVV", "TI"],
+      "characterTags": ["Brooks Hatlen"]
+    },
+    {
+      "id": "q-brooks-was-here",
+      "text": "Brooks was here.",
+      "speaker": "Brooks Hatlen",
+      "location": "Brooks's parole",
+      "context": "Brooks's last act before he hangs himself in the halfway-house room is to carve these three words into the rafter above the chair.",
+      "themeTags": ["identity", "institutionalisation", "despair", "loneliness"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Brooks Hatlen"]
+    },
+    {
+      "id": "q-norton-salvation-within",
+      "text": "Salvation lies within.",
+      "speaker": "Warden Norton",
+      "location": "Norton's office / Inside Out programme",
+      "context": "Norton handing Andy a Bible during a cell inspection, preaching while he stands beside the very book that hides the rock hammer Andy is using to dig.",
+      "themeTags": ["religion", "hypocrisy", "irony", "authority"],
+      "modeTags": ["CC", "TI", "LG"],
+      "characterTags": ["Warden Norton", "Andy Dufresne"]
+    },
+    {
+      "id": "q-norton-discuss-immortal-soul",
+      "text": "I believe in two things. Discipline and the Bible. Here you'll receive both.",
+      "speaker": "Warden Norton",
+      "location": "Andy's first night",
+      "context": "Norton's induction speech to the new prisoners, pairing the lash and the scripture as the prison's two operating instruments.",
+      "themeTags": ["religion", "authority", "hypocrisy"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Warden Norton"]
+    },
+    {
+      "id": "q-andy-prison-be-crook",
+      "text": "I had to come to prison to be a crook.",
+      "speaker": "Andy Dufresne",
+      "location": "Norton's office / Inside Out programme",
+      "context": "Andy to Red in the yard, after years of laundering Norton's kickbacks under the alias Randall Stephens.",
+      "themeTags": ["corruption", "irony", "money", "justice"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-tommy-not-the-rock-it-was",
+      "text": "He said he did it, said this hotshot banker took the rap for it.",
+      "speaker": "Tommy Williams",
+      "location": "Tommy's revelation",
+      "context": "Tommy telling Red and Andy in the yard about the cellmate at another prison who confessed to the country-club murder Andy was convicted of.",
+      "themeTags": ["justice", "innocence", "law", "truth"],
+      "modeTags": ["TI", "GVV", "CC"],
+      "characterTags": ["Tommy Williams", "Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-tommy-elmo-blatch",
+      "text": "Elmo Blatch. Big, twitchy bastard.",
+      "speaker": "Tommy Williams",
+      "location": "Tommy's revelation",
+      "context": "Tommy naming the man who confessed to the murder Andy was convicted of, the testimony that triggers Norton's response.",
+      "themeTags": ["justice", "truth", "innocence"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Tommy Williams"]
+    },
+    {
+      "id": "q-andy-norton-obtuse",
+      "text": "How can you be so obtuse?",
+      "speaker": "Andy Dufresne",
+      "location": "Tommy's revelation",
+      "context": "Andy losing his composure with Norton in the warden's office, when Norton refuses to act on Tommy's testimony.",
+      "themeTags": ["justice", "anger", "law"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Andy Dufresne", "Warden Norton"]
+    },
+    {
+      "id": "q-red-thing-of-stone",
+      "text": "Andy went into the hole, and Tommy went into the ground.",
+      "speaker": "Red",
+      "location": "Tommy's murder",
+      "context": "Red's voiceover summing up the aftermath of Tommy's testimony, pairing Andy's solitary confinement with Tommy's murder in the yard.",
+      "themeTags": ["justice", "corruption", "death", "despair"],
+      "modeTags": ["GVV", "LG", "TI"],
+      "characterTags": ["Red", "Andy Dufresne", "Tommy Williams"]
+    },
+    {
+      "id": "q-red-geology-pressure-time",
+      "text": "Geology is the study of pressure and time. That's all it takes really, pressure, and time.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover, after the escape is revealed, paraphrasing what Andy had told him long before about the slow erosion of stone.",
+      "themeTags": ["time", "patience", "hope", "resilience"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-crawled-five-hundred-yards",
+      "text": "Andy Dufresne, who crawled through a river of shit and came out clean on the other side.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover during the escape sequence, as Andy emerges from the sewer pipe into the storm.",
+      "themeTags": ["freedom", "hope", "resilience", "redemption"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-some-birds-not-caged",
+      "text": "Some birds aren't meant to be caged. Their feathers are just too bright.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover, in the days after Andy's escape, reflecting on his friend's absence from Shawshank.",
+      "themeTags": ["freedom", "friendship", "hope", "identity"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-investors-richer",
+      "text": "Mr. Stevens enjoys a rather lofty existence. As far as the state police are concerned, he's a ghost.",
+      "speaker": "Red",
+      "location": "Norton's suicide",
+      "context": "Red's voiceover during the bank-withdrawal montage, framing Andy's alias as the device that empties Norton's accounts.",
+      "themeTags": ["justice", "money", "identity", "irony"],
+      "modeTags": ["LG", "CC", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-norton-judgement-cometh",
+      "text": "His judgement cometh and that right soon.",
+      "speaker": "Warden Norton",
+      "location": "Norton's suicide",
+      "context": "The embroidered sampler hanging behind Norton's desk for the entire film, last seen as Norton sees the troopers crossing the yard and reaches for his revolver.",
+      "themeTags": ["religion", "irony", "justice", "corruption"],
+      "modeTags": ["CC", "TI", "LG"],
+      "characterTags": ["Warden Norton"]
+    },
+    {
+      "id": "q-red-rehabilitated-bullshit",
+      "text": "Rehabilitated? It's just a bullshit word.",
+      "speaker": "Red",
+      "location": "Red's parole / Buxton field",
+      "context": "Red at his fortieth-year parole hearing, abandoning the rehearsed answer he had used at every previous hearing.",
+      "themeTags": ["institutionalisation", "honesty", "identity"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-stupid-young-kid",
+      "text": "I want to talk to him. I want to try and talk some sense to him, tell him the way things are. But I can't. That kid's long gone.",
+      "speaker": "Red",
+      "location": "Red's parole / Buxton field",
+      "context": "Red at his final parole hearing, speaking honestly for the first time about the young man he was when he committed his crime.",
+      "themeTags": ["regret", "time", "identity", "self-knowledge"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-aged-old-man",
+      "text": "This old man is all that's left.",
+      "speaker": "Red",
+      "location": "Red's parole / Buxton field",
+      "context": "Red closing his statement at the final parole hearing, conceding the gulf between the man who entered Shawshank and the man asking to leave it.",
+      "themeTags": ["time", "identity", "regret"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-andy-hope-good-thing",
+      "text": "Remember, Red, hope is a good thing, maybe the best of things, and no good thing ever dies.",
+      "speaker": "Andy Dufresne",
+      "location": "Red's parole / Buxton field",
+      "context": "Andy's letter to Red, hidden under the oak tree in the Buxton hayfield, read in voiceover by Red after he digs up the tin.",
+      "themeTags": ["hope", "friendship", "redemption", "resilience"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-andy-get-busy-living",
+      "text": "Get busy living, or get busy dying.",
+      "speaker": "Andy Dufresne",
+      "location": "Library / Mozart, 1955",
+      "context": "Andy to Red on the yard bench near the prison wall, the line that returns at the climax in the Buxton letter.",
+      "themeTags": ["hope", "choice", "freedom", "redemption"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-andy-zihuatanejo-pacific",
+      "text": "The Pacific Ocean. You know what the Mexicans say about the Pacific? They say it has no memory.",
+      "speaker": "Andy Dufresne",
+      "location": "Library / Mozart, 1955",
+      "context": "Andy on the yard bench, telling Red about the Mexican town he plans to live in, the phrase that becomes the closing image of the film.",
+      "themeTags": ["hope", "freedom", "redemption"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-andy-excited-free-man",
+      "text": "I find I'm so excited I can barely sit still or hold a thought in my head. I think it's the excitement only a free man can feel.",
+      "speaker": "Andy Dufresne",
+      "location": "Red's parole / Buxton field",
+      "context": "The closing lines of Andy's letter to Red, voiced over Red's bus ride south to the border.",
+      "themeTags": ["freedom", "hope", "friendship", "redemption"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-red-i-hope-pacific-blue",
+      "text": "I hope I can make it across the border. I hope to see my friend and shake his hand. I hope the Pacific is as blue as it has been in my dreams.",
+      "speaker": "Red",
+      "location": "Zihuatanejo reunion",
+      "context": "Red's closing voiceover on the bus south, the film's final lines before the reunion shot on the beach.",
+      "themeTags": ["hope", "friendship", "freedom", "redemption"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-i-hope-i-hope",
+      "text": "I hope.",
+      "speaker": "Red",
+      "location": "Zihuatanejo reunion",
+      "context": "The last words of Red's voiceover, and the last spoken words of the film.",
+      "themeTags": ["hope", "redemption"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-andy-only-i-was-ever-in-love",
+      "text": "My wife used to say I'm a hard man to know. Like a closed book.",
+      "speaker": "Andy Dufresne",
+      "location": "Library / Mozart, 1955",
+      "context": "Andy on the yard bench, opening his quietest conversation with Red about the marriage that ended in his conviction.",
+      "themeTags": ["identity", "marriage", "regret"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Andy Dufresne"]
+    },
+    {
+      "id": "q-andy-killed-her",
+      "text": "I didn't pull the trigger, but I drove her away. That's why she died, because of me.",
+      "speaker": "Andy Dufresne",
+      "location": "Library / Mozart, 1955",
+      "context": "Andy on the yard bench, telling Red the only honest version of what happened with his wife.",
+      "themeTags": ["guilt", "marriage", "regret", "self-knowledge"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-red-conscience",
+      "text": "Bad luck, I guess. It floats around. It's gotta land on somebody.",
+      "speaker": "Andy Dufresne",
+      "location": "Library / Mozart, 1955",
+      "context": "Andy to Red on the yard bench, accepting the share of responsibility for his wife's death without surrendering his innocence of the murder.",
+      "themeTags": ["fate", "regret", "self-knowledge"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Andy Dufresne"]
+    },
+    {
+      "id": "q-red-not-an-easy-man-to-know",
+      "text": "Andy was a quiet kind of guy. There's something inside that they couldn't get to.",
+      "speaker": "Red",
+      "location": "Library / Mozart, 1955",
+      "context": "Red's voiceover summing up his early years of friendship with Andy, in the lead-up to the Mozart broadcast.",
+      "themeTags": ["identity", "resilience", "friendship", "hope"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-time-draws-out-like-a-blade",
+      "text": "Time draws out like a blade.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover during Andy's month in solitary after Tommy's murder.",
+      "themeTags": ["time", "despair", "institutionalisation"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-andy-pressure-time",
+      "text": "Pressure and time. That, and a big goddamn poster.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover after the escape is revealed, condensing the means of Andy's freedom into a single line.",
+      "themeTags": ["time", "patience", "hope", "freedom"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-hope-i-can-make-it",
+      "text": "I find I am so excited I can barely sit still.",
+      "speaker": "Red",
+      "location": "Zihuatanejo reunion",
+      "context": "Red echoing the closing line of Andy's letter as he rides the bus toward the border, his voiceover crossing into the same words he has just read.",
+      "themeTags": ["hope", "freedom", "redemption", "friendship"],
+      "modeTags": ["GVV", "TI", "LG"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-friend",
+      "text": "I hope.",
+      "speaker": "Red",
+      "location": "Zihuatanejo reunion",
+      "context": "Red's final voiceover word held over the long pull-back over the Pacific.",
+      "themeTags": ["hope", "redemption"],
+      "modeTags": ["GVV", "TI"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-andy-six-years-letters",
+      "text": "If it takes longer, I'll write four letters a week instead of one.",
+      "speaker": "Andy Dufresne",
+      "location": "Library expansion / Tommy's GED",
+      "context": "Andy in his early library years, replying to Red's scepticism about whether the state senate will ever fund a prison library.",
+      "themeTags": ["patience", "hope", "resilience"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-red-letter-rejection",
+      "text": "All it took was pressure and time. And a few hundred letters.",
+      "speaker": "Red",
+      "location": "Library expansion / Tommy's GED",
+      "context": "Red's voiceover paraphrasing Andy's library campaign, after the state finally caves and sends the books.",
+      "themeTags": ["patience", "hope", "time"],
+      "modeTags": ["LG", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-andy-tommy-ged",
+      "text": "I'd appreciate it if you'd grade his test.",
+      "speaker": "Andy Dufresne",
+      "location": "Library expansion / Tommy's GED",
+      "context": "Andy retrieving Tommy's discarded GED paper from the rubbish bin in the library and posting it for grading without telling him.",
+      "themeTags": ["friendship", "education", "dignity"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Andy Dufresne", "Tommy Williams"]
+    },
+    {
+      "id": "q-red-tommy-pass",
+      "text": "He passed by a C-plus average. Thought you'd like to know.",
+      "speaker": "Andy Dufresne",
+      "location": "Library expansion / Tommy's GED",
+      "context": "Andy in voiceover via letter, telling Tommy he had passed his GED.",
+      "themeTags": ["education", "friendship", "dignity"],
+      "modeTags": ["TI"],
+      "characterTags": ["Andy Dufresne", "Tommy Williams"]
+    },
+    {
+      "id": "q-red-thirty-years",
+      "text": "It's a funny thing. On the outside I was an honest man. Straight as an arrow. I had to come to prison to be a crook.",
+      "speaker": "Andy Dufresne",
+      "location": "Norton's office / Inside Out programme",
+      "context": "Andy to Red in the yard, summing up his years as Norton's accountant.",
+      "themeTags": ["corruption", "irony", "identity", "money"],
+      "modeTags": ["CC", "TI", "GVV"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-red-norton-laundering",
+      "text": "Lord, the man's a tightwad.",
+      "speaker": "Red",
+      "location": "Norton's office / Inside Out programme",
+      "context": "Red's voiceover on Norton's Inside Out programme, framing the warden's public morality as a thin cover over private avarice.",
+      "themeTags": ["corruption", "money", "hypocrisy"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Red", "Warden Norton"]
+    },
+    {
+      "id": "q-red-mozart-italian",
+      "text": "I have no idea to this day what those two Italian ladies were singing about. Truth is, I don't want to know.",
+      "speaker": "Red",
+      "location": "Library / Mozart, 1955",
+      "context": "Red's voiceover during the Mozart broadcast, refusing to translate the moment.",
+      "themeTags": ["hope", "transcendence", "freedom"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-some-things-best-left-unsaid",
+      "text": "Some things are best left unsaid. I'd like to think they were singing about something so beautiful it can't be expressed in words.",
+      "speaker": "Red",
+      "location": "Library / Mozart, 1955",
+      "context": "Red's voiceover continuing his reflection on the Mozart broadcast, framing the music as transcending the institution that briefly carries it.",
+      "themeTags": ["hope", "transcendence", "freedom"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-makes-your-heart-ache",
+      "text": "And makes your heart ache because of it.",
+      "speaker": "Red",
+      "location": "Library / Mozart, 1955",
+      "context": "Red's voiceover finishing his reflection on the Mozart broadcast, the line that ends the sequence.",
+      "themeTags": ["hope", "transcendence", "despair"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-norton-piety",
+      "text": "Norton's a hypocrite. There are no two ways about it.",
+      "speaker": "Red",
+      "location": "Norton's office / Inside Out programme",
+      "context": "Red's voiceover during a montage of Norton's public sermons and private kickbacks, summing up the warden in plain terms.",
+      "themeTags": ["hypocrisy", "religion", "corruption"],
+      "modeTags": ["CC", "TI"],
+      "characterTags": ["Red", "Warden Norton"]
+    },
+    {
+      "id": "q-red-tommy-loved-his-wife",
+      "text": "Tommy was a good kid. Smart kid, when he wanted to be.",
+      "speaker": "Red",
+      "location": "Tommy's revelation",
+      "context": "Red's voiceover after Tommy passes the GED, framing the murder that follows as the loss of someone the prison had begun to redeem.",
+      "themeTags": ["friendship", "loss", "education"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Red", "Tommy Williams"]
+    },
+    {
+      "id": "q-red-hadley-cried",
+      "text": "I'd like to think the last thing that went through his head, other than that bullet, was to wonder how the hell Andy Dufresne ever got the best of him.",
+      "speaker": "Red",
+      "location": "Norton's suicide",
+      "context": "Red's voiceover over the troopers escorting Hadley out of the prison and Norton's body slumped in the office chair.",
+      "themeTags": ["justice", "irony", "corruption"],
+      "modeTags": ["LG", "TI", "GVV"],
+      "characterTags": ["Red", "Warden Norton", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-hard-time-to-be-a-man",
+      "text": "I have to remind myself that some birds aren't meant to be caged.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover at the close of the escape sequence, framing Andy's absence as a kind of release for everyone who knew him.",
+      "themeTags": ["freedom", "friendship", "hope", "loss"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-place-feels-empty",
+      "text": "And the part of you that knows it was a sin to lock them up does rejoice.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover after the escape, completing the bird metaphor as the camera pans Andy's now-empty cell.",
+      "themeTags": ["freedom", "justice", "hope"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red"]
+    },
+    {
+      "id": "q-red-still-the-place-feels-empty",
+      "text": "Still, the place you live in is that much more drab and empty that they're gone.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover finishing the bird metaphor, registering the cost to those left behind.",
+      "themeTags": ["loss", "friendship", "loneliness"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-red-miss-my-friend",
+      "text": "I guess I just miss my friend.",
+      "speaker": "Red",
+      "location": "Andy's escape",
+      "context": "Red's voiceover as the bird metaphor closes, the line that anchors the rest of the film toward the reunion in Mexico.",
+      "themeTags": ["friendship", "loss", "hope"],
+      "modeTags": ["LG", "GVV", "TI"],
+      "characterTags": ["Red", "Andy Dufresne"]
+    },
+    {
+      "id": "q-andy-letter-buxton",
+      "text": "Dear Red. If you're reading this, you've gotten out.",
+      "speaker": "Andy Dufresne",
+      "location": "Red's parole / Buxton field",
+      "context": "The opening line of Andy's letter under the oak tree in the Buxton hayfield, voiced over the moment Red unfolds the page.",
+      "themeTags": ["friendship", "hope", "freedom"],
+      "modeTags": ["TI", "GVV", "LG"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-andy-letter-come-this-far",
+      "text": "And if you've come this far, maybe you're willing to come a little further.",
+      "speaker": "Andy Dufresne",
+      "location": "Red's parole / Buxton field",
+      "context": "From Andy's letter under the oak, framing the journey south as the next step rather than the last.",
+      "themeTags": ["hope", "friendship", "choice"],
+      "modeTags": ["TI", "GVV"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    },
+    {
+      "id": "q-andy-letter-remember",
+      "text": "I will be hoping that this letter finds you, and finds you well.",
+      "speaker": "Andy Dufresne",
+      "location": "Red's parole / Buxton field",
+      "context": "From Andy's letter under the oak in Buxton, the closing courtesy before the famous lines about hope.",
+      "themeTags": ["friendship", "hope"],
+      "modeTags": ["TI"],
+      "characterTags": ["Andy Dufresne", "Red"]
+    }
+  ]
+}
