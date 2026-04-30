@@ -6,6 +6,12 @@ import { getClient } from "@/lib/claude/client";
 import {
   buildSystemPrompt,
   buildPoetryNotePrompt,
+  buildPoetryThemeStudyPrompt,
+  buildPoetryDevicesStudyPrompt,
+  buildPoetryPersonalResponsePrompt,
+  buildPoetryCrossPoemPairingPrompt,
+  buildPoetryQuoteBankThemePrompt,
+  buildPoetryExamModelAnswerPrompt,
   buildComparativePrompt,
   buildWorksheetPrompt,
   buildCriticInput,
@@ -174,13 +180,73 @@ export async function POST(request: NextRequest) {
 
     switch (contentType) {
       case "poetry": {
-        const { poet, poem, textbookAnalysis } = body;
+        const {
+          poet,
+          poem,
+          textbookAnalysis,
+          poetryNoteType,
+          poetryDepth,
+          poetrySubject,
+          poetryPastQuestionId,
+        } = body;
         if (!poet || !poem) {
           return errorResponse("Poetry notes require poet and poem");
         }
         context.poet = poet;
         context.poem = poem;
         context.examSummary = buildPoetExamSummary(poet);
+
+        // Note-type dispatch (added April 2026 expansion). Default = general_note,
+        // which preserves the legacy behaviour for any caller that has not been
+        // updated. The strict-mode prerequisites guard below MUST still fire for
+        // every note type. None of these new builders relax the anchored-quote
+        // contract.
+        const allowedPoetryNoteTypes = new Set<NonNullable<PromptContext['poetryNoteType']>>([
+          'general_note',
+          'theme_study',
+          'devices_study',
+          'personal_response',
+          'cross_poem_pairing',
+          'quote_bank_theme',
+          'exam_model_answer',
+        ]);
+        const noteType: NonNullable<PromptContext['poetryNoteType']> = (() => {
+          if (!poetryNoteType) return 'general_note';
+          if (allowedPoetryNoteTypes.has(poetryNoteType as NonNullable<PromptContext['poetryNoteType']>)) {
+            return poetryNoteType as NonNullable<PromptContext['poetryNoteType']>;
+          }
+          return 'general_note';
+        })();
+        context.poetryNoteType = noteType;
+
+        if (poetryDepth === 'quick' || poetryDepth === 'standard' || poetryDepth === 'deep') {
+          context.poetryDepth = poetryDepth;
+        }
+
+        // Subject inputs vary by note type. Theme/quote-bank-theme/cross-poem-pairing
+        // all expect a string subject; devices_study accepts an empty string
+        // (catalogue mode). exam_model_answer takes either a question id (preferred)
+        // or a free-text question via poetrySubject.
+        if (typeof poetrySubject === 'string') {
+          context.poetrySubject = poetrySubject;
+        }
+
+        // Per-note-type required-input checks. The route fails fast so the UI
+        // never sees a partially-built prompt.
+        if (noteType === 'theme_study' && !context.poetrySubject?.trim()) {
+          return errorResponse("Poetry theme_study requires a poetrySubject (theme name)");
+        }
+        if (noteType === 'cross_poem_pairing' && !context.poetrySubject?.trim()) {
+          return errorResponse("Poetry cross_poem_pairing requires a poetrySubject (sister poem sub_key)");
+        }
+        if (noteType === 'quote_bank_theme' && !context.poetrySubject?.trim()) {
+          return errorResponse("Poetry quote_bank_theme requires a poetrySubject (theme name)");
+        }
+        if (noteType === 'exam_model_answer' && !poetryPastQuestionId && !context.poetrySubject?.trim()) {
+          return errorResponse(
+            "Poetry exam_model_answer requires either poetryPastQuestionId or poetrySubject (the question text)"
+          );
+        }
 
         const prescribedPoems = level === "HL"
           ? getPoemsForPoet(year, poet)
@@ -324,9 +390,66 @@ export async function POST(request: NextRequest) {
             metadata: context.poemMetadata,
             quotes: context.structuredQuotes?.filter((q): q is PoemQuote => typeof q !== 'string'),
           };
-          const { system: pSystem, user: pUser } = buildPoetryNotePrompt(poetryPromptCtx);
-          poetrySystemOverride = pSystem;
-          userPrompt = pUser;
+
+          // exam_model_answer: hydrate the past question text from the database
+          // before building the prompt. Lookup runs after the strict-mode guard
+          // has already passed so we don't waste a query when the poem is unverified.
+          if (noteType === 'exam_model_answer' && poetryPastQuestionId) {
+            try {
+              const supabasePQ = getServerSupabase();
+              const { data: pqRow, error: pqErr } = await supabasePQ
+                .from("past_questions")
+                .select("id, exam_year, level, question_text")
+                .eq("id", poetryPastQuestionId)
+                .maybeSingle();
+              if (pqErr) {
+                console.warn("[poetry-pq-lookup] error", pqErr.message);
+              }
+              if (pqRow && pqRow.question_text) {
+                poetryPromptCtx.poetryPastQuestion = {
+                  id: String(pqRow.id),
+                  year: (pqRow.exam_year as number | null) ?? null,
+                  question_text: String(pqRow.question_text),
+                  level: (pqRow.level as 'higher' | 'ordinary') ?? 'higher',
+                };
+              } else if (!context.poetrySubject?.trim()) {
+                return errorResponse(
+                  `Past question with id "${poetryPastQuestionId}" not found, and no fallback poetrySubject was supplied.`,
+                  404
+                );
+              }
+            } catch (pqLookupErr) {
+              console.warn("[poetry-pq-lookup] failed", pqLookupErr);
+              if (!context.poetrySubject?.trim()) {
+                return errorResponse(
+                  `Could not look up past question "${poetryPastQuestionId}" and no fallback poetrySubject was supplied.`,
+                  500
+                );
+              }
+            }
+          }
+
+          const built = (() => {
+            switch (noteType) {
+              case 'theme_study':
+                return buildPoetryThemeStudyPrompt(poetryPromptCtx);
+              case 'devices_study':
+                return buildPoetryDevicesStudyPrompt(poetryPromptCtx);
+              case 'personal_response':
+                return buildPoetryPersonalResponsePrompt(poetryPromptCtx);
+              case 'cross_poem_pairing':
+                return buildPoetryCrossPoemPairingPrompt(poetryPromptCtx);
+              case 'quote_bank_theme':
+                return buildPoetryQuoteBankThemePrompt(poetryPromptCtx);
+              case 'exam_model_answer':
+                return buildPoetryExamModelAnswerPrompt(poetryPromptCtx);
+              case 'general_note':
+              default:
+                return buildPoetryNotePrompt(poetryPromptCtx);
+            }
+          })();
+          poetrySystemOverride = built.system;
+          userPrompt = built.user;
         }
         break;
       }

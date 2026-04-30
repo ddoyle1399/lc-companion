@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Nav from "@/components/nav";
 import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
@@ -17,6 +17,107 @@ import poetryOL2028 from "@/data/circulars/2028-poetry-ol.json";
 import { QuestionOutlines } from "@/components/QuestionOutlines";
 
 type Level = "HL" | "OL";
+
+type PoetryNoteType =
+  | "general_note"
+  | "theme_study"
+  | "devices_study"
+  | "personal_response"
+  | "cross_poem_pairing"
+  | "quote_bank_theme"
+  | "exam_model_answer";
+
+type Depth = "quick" | "standard" | "deep";
+
+type SubjectMode = "none" | "free_text_theme" | "device_dropdown" | "sister_poem" | "past_question";
+
+interface PoetryNoteTypeMeta {
+  key: PoetryNoteType;
+  label: string;
+  description: string;
+  subjectMode: SubjectMode;
+}
+
+const POETRY_NOTE_TYPES: PoetryNoteTypeMeta[] = [
+  {
+    key: "general_note",
+    label: "General Note",
+    description: "Overview, stanza walkthrough, themes, exam takeaways.",
+    subjectMode: "none",
+  },
+  {
+    key: "theme_study",
+    label: "Theme Study",
+    description: "One named theme traced through the poem with quote evidence.",
+    subjectMode: "free_text_theme",
+  },
+  {
+    key: "devices_study",
+    label: "Poetic Devices Study",
+    description: "Devices catalogued, or one device deep-dived.",
+    subjectMode: "device_dropdown",
+  },
+  {
+    key: "personal_response",
+    label: "Personal Response",
+    description: "First-person LC HL personal-response answer.",
+    subjectMode: "none",
+  },
+  {
+    key: "cross_poem_pairing",
+    label: "Cross-poem Pairing",
+    description: "Pair this poem with another by the same poet.",
+    subjectMode: "sister_poem",
+  },
+  {
+    key: "quote_bank_theme",
+    label: "Quote Bank by Theme",
+    description: "Curated verbatim quotes tagged by a named theme.",
+    subjectMode: "free_text_theme",
+  },
+  {
+    key: "exam_model_answer",
+    label: "Exam-Ready Model Answer",
+    description: "H1-graded model answer to a specific past question.",
+    subjectMode: "past_question",
+  },
+];
+
+const THEME_SUGGESTIONS = [
+  "memory",
+  "identity",
+  "mortality",
+  "faith and doubt",
+  "love",
+  "conflict",
+  "nature",
+  "time",
+  "exile",
+  "motherhood",
+  "ageing",
+  "loss",
+];
+
+const APPROVED_DEVICES = [
+  "alliteration",
+  "assonance",
+  "metaphor",
+  "simile",
+  "personification",
+  "enjambment",
+  "caesura",
+  "imagery",
+  "irony",
+  "symbolism",
+  "oxymoron",
+  "juxtaposition",
+  "repetition",
+  "rhyme",
+  "rhythm",
+  "sibilance",
+  "volta",
+  "tone",
+];
 
 const circularNumbers: Record<number, string> = {
   2026: "0016/2024",
@@ -48,7 +149,7 @@ function getPoets(year: number, level: Level): string[] {
 function getPoems(year: number, level: Level, poet: string): string[] {
   if (level === "HL") {
     const data = hlData[year];
-    return data ? (data.poets[poet] || []) : [];
+    return data ? data.poets[poet] || [] : [];
   }
   const data = olData[year];
   return data
@@ -56,11 +157,24 @@ function getPoems(year: number, level: Level, poet: string): string[] {
     : [];
 }
 
+interface PastQuestion {
+  id: string;
+  year: number | null;
+  question_text: string;
+  level: "higher" | "ordinary";
+}
+
 export default function PoetryPage() {
   const [year, setYear] = useState(2026);
   const [level, setLevel] = useState<Level>("HL");
   const [poet, setPoet] = useState("");
   const [poem, setPoem] = useState("");
+  const [noteType, setNoteType] = useState<PoetryNoteType>("general_note");
+  const [depth, setDepth] = useState<Depth>("standard");
+  const [subject, setSubject] = useState("");
+  const [pastQuestionId, setPastQuestionId] = useState("");
+  const [pastQuestions, setPastQuestions] = useState<PastQuestion[]>([]);
+  const [loadingPastQuestions, setLoadingPastQuestions] = useState(false);
   const [instructions, setInstructions] = useState("");
   const [copied, setCopied] = useState(false);
   const outputRef = useRef<HTMLDivElement>(null);
@@ -82,34 +196,144 @@ export default function PoetryPage() {
   const poets = getPoets(year, level);
   const poems = poet ? getPoems(year, level, poet) : [];
 
+  const noteTypeMeta = useMemo(
+    () => POETRY_NOTE_TYPES.find((t) => t.key === noteType) ?? POETRY_NOTE_TYPES[0],
+    [noteType]
+  );
+
+  // Sister poems for cross_poem_pairing: every other poem by this poet from
+  // the prescribed list. Filtering by selection year is handled server-side
+  // when AVAILABLE PAIRINGS is passed into the prompt; the dropdown shows the
+  // full prescribed list so the user can pick freely.
+  const sisterPoems = useMemo(() => {
+    if (!poet) return [] as string[];
+    return getPoems(year, level, poet).filter((p) => p !== poem);
+  }, [year, level, poet, poem]);
+
+  // Load past questions when exam_model_answer is selected and poet is set.
+  useEffect(() => {
+    if (noteType !== "exam_model_answer" || !poet) {
+      setPastQuestions([]);
+      return;
+    }
+    let cancelled = false;
+    setLoadingPastQuestions(true);
+    const lvl = level === "HL" ? "higher" : "ordinary";
+    fetch(`/api/past-questions?poet=${encodeURIComponent(poet)}&level=${lvl}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Status ${res.status}`);
+        }
+        return res.json() as Promise<{ questions: PastQuestion[] }>;
+      })
+      .then((data) => {
+        if (cancelled) return;
+        setPastQuestions(data.questions ?? []);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setPastQuestions([]);
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setLoadingPastQuestions(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [noteType, poet, level]);
+
   function handleYearChange(newYear: number) {
     setYear(newYear);
     setPoet("");
     setPoem("");
+    setSubject("");
+    setPastQuestionId("");
   }
 
   function handleLevelChange(newLevel: Level) {
     setLevel(newLevel);
     setPoet("");
     setPoem("");
+    setSubject("");
+    setPastQuestionId("");
   }
 
   function handlePoetChange(newPoet: string) {
     setPoet(newPoet);
     setPoem("");
+    setSubject("");
+    setPastQuestionId("");
+  }
+
+  function handlePoemChange(newPoem: string) {
+    setPoem(newPoem);
+    setSubject("");
+    setPastQuestionId("");
+  }
+
+  function handleNoteTypeChange(nt: PoetryNoteType) {
+    setNoteType(nt);
+    setSubject("");
+    setPastQuestionId("");
+  }
+
+  function buildSubjectForRequest(): string | undefined {
+    switch (noteTypeMeta.subjectMode) {
+      case "none":
+        return undefined;
+      case "free_text_theme":
+      case "device_dropdown":
+      case "sister_poem":
+        return subject.trim() || undefined;
+      case "past_question": {
+        // If a past_question is picked from the dropdown, the route will hydrate
+        // the question text from the DB via poetryPastQuestionId. Free-text
+        // fallback goes through poetrySubject.
+        if (pastQuestionId) return undefined;
+        return subject.trim() || undefined;
+      }
+    }
+  }
+
+  function subjectIsValid(): boolean {
+    switch (noteTypeMeta.subjectMode) {
+      case "none":
+        return true;
+      case "free_text_theme":
+        return subject.trim().length > 0;
+      case "device_dropdown":
+        // Empty subject = catalogue all major devices; that's a valid choice.
+        return true;
+      case "sister_poem":
+        return subject.trim().length > 0;
+      case "past_question":
+        return pastQuestionId.length > 0 || subject.trim().length > 0;
+    }
   }
 
   async function handleGenerate() {
     if (!poet || !poem) return;
-    await generate({
+    if (!subjectIsValid()) return;
+    const requestBody: Record<string, unknown> = {
       year,
       circular: circularNumbers[year],
       level,
       contentType: "poetry",
       poet,
       poem,
+      poetryNoteType: noteType,
+      poetryDepth: depth,
       userInstructions: instructions || undefined,
-    });
+    };
+    const subj = buildSubjectForRequest();
+    if (subj !== undefined) {
+      requestBody.poetrySubject = subj;
+    }
+    if (noteType === "exam_model_answer" && pastQuestionId) {
+      requestBody.poetryPastQuestionId = pastQuestionId;
+    }
+    await generate(requestBody);
   }
 
   async function handleCopy() {
@@ -153,6 +377,9 @@ export default function PoetryPage() {
     });
     router.push(`/video?${params.toString()}`);
   }
+
+  const canGenerate =
+    !!poet && !!poem && !generating && subjectIsValid();
 
   return (
     <div className="min-h-screen bg-cream">
@@ -230,7 +457,7 @@ export default function PoetryPage() {
               </label>
               <select
                 value={poem}
-                onChange={(e) => setPoem(e.target.value)}
+                onChange={(e) => handlePoemChange(e.target.value)}
                 disabled={!poet}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400"
               >
@@ -244,6 +471,175 @@ export default function PoetryPage() {
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* Note type */}
+          <div className="mt-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Note type
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {POETRY_NOTE_TYPES.map((t) => (
+                <button
+                  key={t.key}
+                  type="button"
+                  onClick={() => handleNoteTypeChange(t.key)}
+                  className={`text-left px-3 py-2.5 rounded border transition-colors ${
+                    noteType === t.key
+                      ? "bg-teal/10 border-teal text-navy"
+                      : "bg-white border-gray-200 hover:border-teal"
+                  }`}
+                >
+                  <div className="text-sm font-medium text-navy">{t.label}</div>
+                  <div className="text-xs text-gray-500 mt-0.5">
+                    {t.description}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Conditional subject control */}
+          {noteTypeMeta.subjectMode === "free_text_theme" && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Theme
+              </label>
+              <input
+                type="text"
+                list="poetry-theme-suggestions"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="e.g. memory, motherhood, faith and doubt"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+              />
+              <datalist id="poetry-theme-suggestions">
+                {THEME_SUGGESTIONS.map((t) => (
+                  <option key={t} value={t} />
+                ))}
+              </datalist>
+              <p className="text-xs text-gray-400 mt-1">
+                Pick from the suggestions or type your own.
+              </p>
+            </div>
+          )}
+
+          {noteTypeMeta.subjectMode === "device_dropdown" && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Device <span className="text-gray-400 font-normal">(optional)</span>
+              </label>
+              <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+              >
+                <option value="">Catalogue all major devices</option>
+                {APPROVED_DEVICES.map((d) => (
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-400 mt-1">
+                Leave blank to catalogue every major device, or pick one for a deep dive.
+              </p>
+            </div>
+          )}
+
+          {noteTypeMeta.subjectMode === "sister_poem" && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Sister poem
+              </label>
+              <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                disabled={!poet || !poem}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent disabled:bg-gray-50 disabled:text-gray-400"
+              >
+                <option value="">
+                  {poet && poem ? "Select a sister poem" : "Select a poet and poem first"}
+                </option>
+                {sisterPoems.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-400 mt-1">
+                Only poems by the same poet are eligible.
+              </p>
+            </div>
+          )}
+
+          {noteTypeMeta.subjectMode === "past_question" && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Past question
+              </label>
+              {loadingPastQuestions ? (
+                <p className="text-xs text-gray-400">Loading past questions...</p>
+              ) : pastQuestions.length > 0 ? (
+                <select
+                  value={pastQuestionId}
+                  onChange={(e) => {
+                    setPastQuestionId(e.target.value);
+                    if (e.target.value) setSubject("");
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
+                >
+                  <option value="">Select a past question</option>
+                  {pastQuestions.map((q) => (
+                    <option key={q.id} value={q.id}>
+                      {q.year ? `${q.year} ` : ""}
+                      {q.level === "higher" ? "HL" : "OL"} -{" "}
+                      {q.question_text.length > 90
+                        ? `${q.question_text.slice(0, 90)}...`
+                        : q.question_text}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <textarea
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  rows={3}
+                  placeholder='Paste the SEC question, e.g. "Discuss the poetry of Yeats with reference to..."'
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent resize-y"
+                />
+              )}
+              <p className="text-xs text-gray-400 mt-1">
+                {pastQuestions.length > 0
+                  ? "Pick a past SEC question for this poet."
+                  : "No past questions stored for this poet yet. Paste the question text instead."}
+              </p>
+            </div>
+          )}
+
+          {/* Depth */}
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Depth
+            </label>
+            <div className="flex gap-3 flex-wrap">
+              {(["quick", "standard", "deep"] as Depth[]).map((d) => (
+                <label key={d} className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="poetryDepth"
+                    value={d}
+                    checked={depth === d}
+                    onChange={() => setDepth(d)}
+                    className="accent-teal"
+                  />
+                  <span className="text-sm text-navy capitalize">{d}</span>
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-1">
+              Quick = 600-800 words, the essentials. Standard = 1300-1600 words, the working note. Deep = 2000-2500 words, with lift-ready essay language and a worked top-band paragraph.
+            </p>
           </div>
 
           {/* Additional instructions */}
@@ -262,10 +658,10 @@ export default function PoetryPage() {
           </div>
 
           {/* Generate button */}
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 flex items-center gap-3 flex-wrap">
             <button
               onClick={handleGenerate}
-              disabled={!poet || !poem || generating}
+              disabled={!canGenerate}
               className="bg-navy text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-teal transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {generating ? "Generating..." : "Generate Note"}
@@ -277,6 +673,23 @@ export default function PoetryPage() {
               >
                 Stop
               </button>
+            )}
+            {!canGenerate && !generating && (
+              <p className="text-xs text-gray-500">
+                {!poet
+                  ? "Pick a poet to continue."
+                  : !poem
+                    ? "Pick a poem to continue."
+                    : !subjectIsValid()
+                      ? noteTypeMeta.subjectMode === "free_text_theme"
+                        ? "Enter a theme above to generate."
+                        : noteTypeMeta.subjectMode === "sister_poem"
+                          ? "Pick a sister poem above to generate."
+                          : noteTypeMeta.subjectMode === "past_question"
+                            ? "Pick a past question or type one above to generate."
+                            : "Fill in the required field above to generate."
+                      : "Ready when you are."}
+              </p>
             )}
           </div>
         </div>

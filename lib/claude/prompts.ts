@@ -162,6 +162,26 @@ export interface PromptContext {
    */
   comparativeDepth?: 'quick' | 'standard' | 'deep';
 
+  // Poetry note-type system (added April 2026 expansion).
+  // Default is "general_note" (the original 7-section poetry note), so any caller
+  // that does not set the discriminator gets the legacy behaviour.
+  poetryNoteType?:
+    | 'general_note'             // overview + stanza walkthrough + themes + exam takeaways (legacy default)
+    | 'theme_study'              // one named theme deeply traced through the poem
+    | 'devices_study'            // poetic devices catalogued (or one device deep-dived)
+    | 'personal_response'        // first-person LC HL personal-response answer
+    | 'cross_poem_pairing'       // pair this poem with another by the same poet
+    | 'quote_bank_theme'         // curated verbatim quotes tagged by a named theme
+    | 'exam_model_answer';       // H1-graded model answer to a specific past question
+  poetryDepth?: 'quick' | 'standard' | 'deep';
+  poetrySubject?: string;        // theme name, device name, sister-poem sub_key, or past-question text
+  poetryPastQuestion?: {
+    id: string;
+    year: number | null;
+    question_text: string;
+    level: 'higher' | 'ordinary';
+  };
+
   userInstructions?: string;
   examSummary?: string;
   prescribedPoems?: string[];
@@ -559,12 +579,433 @@ export function buildPoetrySystemPrompt(ctx: PromptContext): string {
   ].join('\n');
 }
 
+// -----------------------------------------------------------------------------
+// Poetry depth profiles. Same shape as the comparative depth profile used by
+// buildComparativeModeProfilePrompt. Quick is a tight reference, Standard is
+// the working note, Deep is a flagship resource that adds two extra sections
+// (lift-ready essay language, worked top-band paragraph).
+// -----------------------------------------------------------------------------
+
+interface PoetryDepthProfile {
+  totalWords: string;
+  pacingNote: string;
+  extras: string; // Deep-only addendum block, appended after the main template.
+}
+
+function getPoetryDepthProfile(depth: 'quick' | 'standard' | 'deep'): PoetryDepthProfile {
+  if (depth === 'quick') {
+    return {
+      totalWords: '600-800',
+      pacingNote: 'Tight reference. One paragraph per section. Cut every word that does not earn its place.',
+      extras: '',
+    };
+  }
+  if (depth === 'deep') {
+    return {
+      totalWords: '2000-2500',
+      pacingNote: 'Flagship resource. Each section can carry two or three paragraphs where useful. Examples and worked language are welcome here, not in Quick or Standard.',
+      extras: `
+
+## Lift-ready essay language
+
+Six to ten short, ready-to-deploy sentences a student can paste into an exam answer. Each sentence must be specific to this poem (not generic) and must be defensible from the anchored quotes and historical context. Mix opening sentences, transition sentences, and closing flourishes. Format as a simple bulleted list, one sentence per line. Each sentence stands alone and is examiner-friendly.
+
+## Worked top-band paragraph
+
+One model paragraph (around 180-220 words) that a student could sit beside their answer as a template. It must demonstrate the moves an examiner rewards: a clear thesis sentence, two or three specific moments from the poem, one embedded short quote drawn verbatim from the anchored bank, one named technique connected to meaning, and a closing sentence that lifts to a wider thematic argument. Do not annotate the paragraph; just write it cleanly.`,
+    };
+  }
+  return {
+    totalWords: '1300-1600',
+    pacingNote: 'Working substantive note. Each section gets one full paragraph (sometimes two for the central one).',
+    extras: '',
+  };
+}
+
+function getPoetryDepth(ctx: PromptContext): 'quick' | 'standard' | 'deep' {
+  return ctx.poetryDepth ?? 'standard';
+}
+
+function getPoetryUserInstructions(ctx: PromptContext): string {
+  return ctx.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${ctx.userInstructions}`
+    : '';
+}
+
+// -----------------------------------------------------------------------------
+// 1. general_note (default, the seven-section poetry note)
+// -----------------------------------------------------------------------------
+
 export function buildPoetryNotePrompt(ctx: PromptContext): {
   system: string;
   user: string;
 } {
   const system = buildPoetrySystemPrompt(ctx);
-  const user = `Write the full study note for "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''} per the contract above.`;
+  const depth = getPoetryDepth(ctx);
+  const profile = getPoetryDepthProfile(depth);
+  const userInstr = getPoetryUserInstructions(ctx);
+  const user = [
+    `Write the full study note for "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''} per the contract above.`,
+    ``,
+    `Depth: ${depth}.`,
+    `Target word count: ${profile.totalWords} words.`,
+    `Pacing: ${profile.pacingNote}`,
+    profile.extras
+      ? `\nWhen the seven sections are complete, append the following two extra sections in this exact order, with these exact heading texts:\n${profile.extras}`
+      : '',
+    userInstr,
+  ]
+    .filter((s) => s !== '')
+    .join('\n');
+  return { system, user };
+}
+
+// -----------------------------------------------------------------------------
+// 2. theme_study (one named theme deeply traced through the poem)
+// -----------------------------------------------------------------------------
+
+export function buildPoetryThemeStudyPrompt(ctx: PromptContext): {
+  system: string;
+  user: string;
+} {
+  const system = buildPoetrySystemPrompt(ctx);
+  const depth = getPoetryDepth(ctx);
+  const profile = getPoetryDepthProfile(depth);
+  const theme = ctx.poetrySubject ?? 'the poem\'s central theme';
+  const userInstr = getPoetryUserInstructions(ctx);
+
+  const user = `Produce a Theme Study of "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''} focused on the theme of ${theme}.
+
+Depth: ${depth}. Target word count: ${profile.totalWords} words.
+Pacing: ${profile.pacingNote}
+
+This is a one-theme deep-dive, not a general overview. The student already knows the poem at surface level. They need to leave this note able to write a confident, evidence-anchored answer to a question on ${theme} in ${ctx.subject ?? 'this poet'}'s work, using this poem as their primary text.
+
+Begin the response directly with a single H1 heading. Use this exact format:
+
+# ${theme} in "${ctx.subKey ?? ''}"
+
+Then produce these sections, in this order, using these exact heading texts:
+
+## How the theme is set up
+One paragraph. What does the poem signal about ${theme} in its opening, and what does the form (or any structural feature drawn from <Form: ${ctx.metadata?.form ?? 'unspecified'}>, total lines ${ctx.metadata?.total_lines ?? 'unspecified'}) do to support it.
+
+## How the theme develops across the poem
+Trace the theme stanza by stanza or moment by moment using ONLY the quotes in ANCHORED QUOTES. Embed at least three short verbatim quotes inline with stanza references (e.g. "in stanza 3, the line 'X' marks a turn..."). Every quote must match its anchored entry character-for-character. Never invent a quote. If a stanza does not advance the theme, skip it; this is not a stanza-by-stanza walkthrough.
+
+## What the techniques are doing for the theme
+Two or three named devices from the controlled glossary, each tied to a specific anchored line and explained in terms of how the device pushes the theme forward. Do not just list devices. Explain the mechanism.
+
+## Where students lose marks on this theme
+Three or four short paragraphs. Each names a specific mistake students make when writing about ${theme} in this poem (e.g. confusing the theme with a related but distinct theme, treating the poem's ending as more decisive than it is, importing biographical detail not in historical_context). For each, give one corrective move in a teacher-to-student voice.
+
+## Exam-ready phrasing students can lift
+Three to five short sentences a student could paste into an essay paragraph on ${theme} in this poem. Each sentence must be specific to this poem and defensible from the anchored evidence. Format as a simple bulleted list, one sentence per line.${profile.extras}
+
+QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES, character-for-character. If you need a moment that is not in the bank, paraphrase the line in your own words and frame it as paraphrase ("the speaker essentially says...", "the poem turns on..."). Do not invent quotations.${userInstr}`;
+  return { system, user };
+}
+
+// -----------------------------------------------------------------------------
+// 3. devices_study (catalogue of major devices, or one device deep-dived)
+// -----------------------------------------------------------------------------
+
+export function buildPoetryDevicesStudyPrompt(ctx: PromptContext): {
+  system: string;
+  user: string;
+} {
+  const system = buildPoetrySystemPrompt(ctx);
+  const depth = getPoetryDepth(ctx);
+  const profile = getPoetryDepthProfile(depth);
+  const device = ctx.poetrySubject?.trim() ?? '';
+  const userInstr = getPoetryUserInstructions(ctx);
+  const isFocused = device.length > 0;
+
+  const focusedBody = `Produce a Poetic Devices study of "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''} focused on ${device}.
+
+Depth: ${depth}. Target word count: ${profile.totalWords} words.
+Pacing: ${profile.pacingNote}
+
+This is a single-device deep-dive. The student should leave this note able to identify ${device} in this poem with confidence, explain what it does, and quote it accurately in an exam.
+
+Begin the response directly with a single H1 heading. Use this exact format:
+
+# ${device} in "${ctx.subKey ?? ''}"
+
+Then produce these sections, in this order, using these exact heading texts:
+
+## What ${device} is doing in this poem
+One paragraph. Define ${device} in plain language (one sentence), then state in one direct sentence what it is doing across this specific poem. Use only the controlled glossary; if ${device} is not on the glossary, describe the effect in plain language without naming a banned term.
+
+## Worked examples from the poem
+At least three specific instances of ${device}, each anchored in a verbatim quote from ANCHORED QUOTES. For each instance, write one short paragraph: name the line and stanza, quote the anchored phrase, and explain in two or three sentences what the device is doing locally and how it contributes to meaning. Do not pad with adjectives.
+
+## How this device interacts with other devices in the poem
+One paragraph. Show how ${device} works with one or two other techniques in the poem (e.g. how enjambment plays against a particular metaphor, how sibilance reinforces a tonal shift). Stay anchored in specific anchored quotes.
+
+## Where students lose marks
+Three or four short paragraphs. Each names a specific mistake students make when writing about ${device} (naming it without explaining its effect, mislabelling a different device, overclaiming, missing the obvious instance). Give one corrective move per item, in a teacher-to-student voice.
+
+## Exam-ready phrasing students can lift
+Three to five short sentences a student could paste into an essay paragraph that names ${device} in this poem. Each sentence must connect device to meaning and must be defensible from the anchored evidence. Format as a simple bulleted list.${profile.extras}
+
+QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES.${userInstr}`;
+
+  const catalogueBody = `Produce a Poetic Devices catalogue of "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}.
+
+Depth: ${depth}. Target word count: ${profile.totalWords} words.
+Pacing: ${profile.pacingNote}
+
+This is a working reference. The student scans for the right device when they hit a question. Cover the major devices that are genuinely active in this poem; do not pad with devices that barely appear.
+
+Begin the response directly with a single H1 heading. Use this exact format:
+
+# Poetic devices in "${ctx.subKey ?? ''}"
+
+Then produce these sections, in this order, using these exact heading texts:
+
+## How this catalogue works
+One short paragraph. Explain that every device named below is anchored in a verbatim quote from the poem and tied to its effect on meaning. Tell the student to scan by device when they hit a question that asks about technique.
+
+## Devices in play
+For each major device active in this poem, write a sub-section using ### with the device name as the heading. Cover at least four devices and at most eight. Use ONLY device names from the controlled glossary; if a feature does not match a glossary term, describe it in plain language under a heading like "### Pacing of short lines" without inventing a device name. For each:
+
+- Name the device once in the heading and quote one or two anchored lines that show it operating
+- Explain in two or three sentences what the device is doing in this specific poem (not what it does in general)
+- End with one sentence on the exam utility (which question type this device is most useful for, e.g. tone, theme, structure)
+
+## Devices students misidentify in this poem
+Two or three short paragraphs. Each names a device students wrongly identify in this poem and explains what is actually happening on the line in question. Anchor every example in a verbatim quote.
+
+## Exam-ready phrasing students can lift
+Four to six short sentences a student could paste into an essay paragraph that names a device in this poem. Each must connect device to meaning. Format as a simple bulleted list.${profile.extras}
+
+QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES. Glossary rules in the system prompt apply: do not bold a word as a Technique unless it appears on the controlled glossary.${userInstr}`;
+
+  return { system, user: isFocused ? focusedBody : catalogueBody };
+}
+
+// -----------------------------------------------------------------------------
+// 4. personal_response (first-person LC HL personal-response answer)
+// -----------------------------------------------------------------------------
+
+export function buildPoetryPersonalResponsePrompt(ctx: PromptContext): {
+  system: string;
+  user: string;
+} {
+  const system = buildPoetrySystemPrompt(ctx);
+  const depth = getPoetryDepth(ctx);
+  const profile = getPoetryDepthProfile(depth);
+  const userInstr = getPoetryUserInstructions(ctx);
+
+  const user = `Produce a first-person Personal Response to "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}, written as the student would write it in the exam.
+
+Depth: ${depth}. Target word count: ${profile.totalWords} words.
+Pacing: ${profile.pacingNote}
+
+This is an LC Higher Level personal-response answer, not a third-person analysis. It is written in first person ("I find...", "what struck me about this poem..."), but the personal voice never replaces evidence. Every claim is anchored in a verbatim quote from ANCHORED QUOTES.
+
+The examiner is looking for: a genuine, defensible response (P), a clear shape with paragraphs that build on each other (C), precise and varied language tied to specific lines (L), and accurate quotation and mechanics (M).
+
+Begin the response directly with a single H1 heading. Use this exact format:
+
+# A personal response to "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}
+
+Then produce these sections, in this order, using these exact heading texts:
+
+## What this poem does to me on first reading
+One paragraph. Open with a direct, first-person line that names the poem's most striking move (an image, a tonal shift, a structural decision). Quote one anchored line. Avoid abstract praise like "evocative" or "beautiful".
+
+## What stays with me on a second reading
+One or two paragraphs. Move from immediate impact to more considered response. Trace one or two of the poem's most powerful moments using verbatim anchored quotes. Show the examiner you have read closely, not generally.
+
+## What I find difficult or unresolved
+One paragraph. Name a tension, an ambiguity, or a moment that resists tidy reading. Anchor in a specific line. This is where personal response wins marks; the examiner wants real engagement, not blandness.
+
+## Why this poem matters to me
+One paragraph. Connect the poem's central concern to something specific (a question the student has, a contrast with another reading they have done, a feature of the form that lands harder than expected). Avoid generic emotional language. Do not pretend a connection that the evidence cannot bear.
+
+## How I would close an exam answer on this
+One paragraph. A model closing move in first person, anchored in the strongest single anchored quote and lifting to one defensible thematic claim.${profile.extras}
+
+QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES. The first-person voice does not relax this rule. If you need a moment that is not in the bank, paraphrase the line and frame it as paraphrase.${userInstr}`;
+  return { system, user };
+}
+
+// -----------------------------------------------------------------------------
+// 5. cross_poem_pairing (pair this poem with another by the same poet)
+// -----------------------------------------------------------------------------
+
+export function buildPoetryCrossPoemPairingPrompt(ctx: PromptContext): {
+  system: string;
+  user: string;
+} {
+  const system = buildPoetrySystemPrompt(ctx);
+  const depth = getPoetryDepth(ctx);
+  const profile = getPoetryDepthProfile(depth);
+  const sister = ctx.poetrySubject ?? '';
+  const userInstr = getPoetryUserInstructions(ctx);
+
+  const sisterClause = sister
+    ? `paired with "${sister}" by the same poet.`
+    : `paired with one other poem by the same poet from AVAILABLE PAIRINGS. Pick the strongest pairing on the list and state your choice in the H1.`;
+
+  const user = `Produce a Cross-Poem Pairing study of "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}, ${sisterClause}
+
+Depth: ${depth}. Target word count: ${profile.totalWords} words.
+Pacing: ${profile.pacingNote}
+
+This note prepares a student for the "Discuss the poetry of ${ctx.subject ?? '[poet]'}" essay style, where two poems must be set against each other in a single argument. The pairing must be productive, not just adjacent.
+
+Begin the response directly with a single H1 heading naming both poems, e.g.:
+
+# "${ctx.subKey ?? ''}" and "${sister || '[chosen sister poem]'}", a pairing
+
+Then produce these sections, in this order, using these exact heading texts:
+
+## Why these two poems sit together
+One paragraph. Name the shared concern in plain language, and state in one direct sentence the productive tension between the two poems on that concern.
+
+## What "${ctx.subKey ?? ''}" brings to the pairing
+One or two paragraphs. The angle this poem owns. Embed at least two short verbatim quotes from ANCHORED QUOTES.
+
+## What the sister poem brings
+One or two paragraphs. The angle the sister poem owns. Where you quote the sister poem, do so only if you can verify the wording from your knowledge of ${ctx.subject ?? 'the poet'}'s work; otherwise paraphrase and frame as paraphrase. Do not fabricate quotes for the sister poem.
+
+## A worked comparison move
+One paragraph. Show the student exactly how to pivot from one poem to the other in a single essay paragraph. Provide the link sentence in full, ready to lift.
+
+## Exam-ready phrasing students can lift
+Three to five short sentences a student could paste into an essay paragraph that handles both poems together. Format as a simple bulleted list.${profile.extras}
+
+QUOTE RULE (zero tolerance) for "${ctx.subKey ?? ''}": every double-quoted phrase from this poem must appear verbatim in ANCHORED QUOTES. For the sister poem, quote only what you can verify; otherwise paraphrase.
+
+PAIRINGS RULE: only refer to poems by ${ctx.subject ?? 'this poet'}. Never recommend or compare poems by other poets. Use only sister poems that appear in AVAILABLE PAIRINGS for this student's selection year.${userInstr}`;
+  return { system, user };
+}
+
+// -----------------------------------------------------------------------------
+// 6. quote_bank_theme (curated verbatim quotes tagged by a named theme)
+// -----------------------------------------------------------------------------
+
+export function buildPoetryQuoteBankThemePrompt(ctx: PromptContext): {
+  system: string;
+  user: string;
+} {
+  const system = buildPoetrySystemPrompt(ctx);
+  const depth = getPoetryDepth(ctx);
+  const profile = getPoetryDepthProfile(depth);
+  const theme = ctx.poetrySubject ?? 'the poem\'s central theme';
+  const userInstr = getPoetryUserInstructions(ctx);
+
+  const user = `Produce a Quote Bank for "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}, organised around the theme of ${theme}.
+
+Depth: ${depth}. Target word count: ${profile.totalWords} words.
+Pacing: ${profile.pacingNote}
+
+This is a working reference. The student scans this bank when they sit down to write an essay on ${theme} in ${ctx.subject ?? 'this poet'}'s work. Every quote must be verbatim from ANCHORED QUOTES. Do not invent quotes; do not paraphrase quotes inside double quotes.
+
+Begin the response directly with a single H1 heading. Use this exact format:
+
+# Quote bank: ${theme} in "${ctx.subKey ?? ''}"
+
+Then produce these sections, in this order, using these exact heading texts:
+
+## How to read this bank
+One short paragraph. Explain that every quote is verbatim, that each one is tagged by stanza and by sub-angle on ${theme}, and that the student should pick two or three to memorise rather than all of them.
+
+## Quotes that establish ${theme}
+For each relevant anchored quote that opens or sets up the theme, write a short block:
+
+### "[anchored quote]"
+**Stanza**: [stanza number from anchored quote]
+**Sub-angle**: one short phrase naming the specific angle on ${theme} this quote serves
+**How to use it**: one or two sentences on the question type or paragraph position this quote suits
+
+## Quotes that develop ${theme}
+Same block format. Cover the quotes that complicate, deepen, or extend the theme.
+
+## Quotes that close or unsettle ${theme}
+Same block format. Cover the quotes that mark the poem's final move on the theme, including any moment of ambiguity.
+
+## The two or three quotes worth memorising
+A short bulleted list. For each, the verbatim quote and one sentence on why this is the load-bearing quote for ${theme} in this poem.
+
+## Where students lose marks with these quotes
+Three short paragraphs. Each names a specific misuse of one of these quotes (importing it into a paragraph where it does not fit, misattributing speaker, mis-spelling). Give the corrective move.${profile.extras}
+
+QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES, including capitalisation and punctuation. If you cannot find a quote in the bank that serves a sub-angle, omit that sub-angle. Do not invent.${userInstr}`;
+  return { system, user };
+}
+
+// -----------------------------------------------------------------------------
+// 7. exam_model_answer (H1-graded model answer to a specific past question)
+// -----------------------------------------------------------------------------
+
+export function buildPoetryExamModelAnswerPrompt(ctx: PromptContext): {
+  system: string;
+  user: string;
+} {
+  const system = buildPoetrySystemPrompt(ctx);
+  const depth = getPoetryDepth(ctx);
+  const profile = getPoetryDepthProfile(depth);
+  const userInstr = getPoetryUserInstructions(ctx);
+
+  const pq = ctx.poetryPastQuestion;
+  const fallbackQuestionText = ctx.poetrySubject?.trim() ?? '';
+  const questionText = pq?.question_text ?? fallbackQuestionText;
+  const questionYear = pq?.year ?? null;
+  const questionLevel = pq?.level ?? (ctx.level === 'OL' ? 'ordinary' : 'higher');
+  const yearTag = questionYear ? `${questionYear} ` : '';
+
+  if (!questionText) {
+    // Should be caught by the route, but defend in depth.
+    throw new Error(
+      `buildPoetryExamModelAnswerPrompt requires either ctx.poetryPastQuestion or ctx.poetrySubject (the question text).`
+    );
+  }
+
+  const user = `Produce an H1-graded Exam Model Answer to a past SEC question on ${ctx.subject ?? 'this poet'}, anchored in "${ctx.subKey ?? ''}".
+
+Depth: ${depth}. Target word count: ${profile.totalWords} words.
+Pacing: ${profile.pacingNote}
+
+PAST QUESTION (${yearTag}${questionLevel === 'higher' ? 'Higher' : 'Ordinary'} Level):
+"${questionText}"
+
+The model answer must engage with this exact question, not a related one. The poem named in the H1 is the primary text; you may glance at AVAILABLE PAIRINGS for one supporting reference if the question type rewards it (e.g. "Discuss the poetry of ${ctx.subject ?? '[poet]'} with reference to..."). Do not invent pairings; use only poems in AVAILABLE PAIRINGS.
+
+Begin the response directly with a single H1 heading. Use this exact format:
+
+# Model answer: ${ctx.subject ?? ''} ${yearTag}${questionLevel === 'higher' ? 'HL' : 'OL'}
+
+Then produce these sections, in this order, using these exact heading texts:
+
+## The question
+Quote the question verbatim in italics on a single line. Underneath, write one short paragraph identifying what the question is actually testing (the angle, the verbs the student must serve, the trap the question sets).
+
+## The model answer
+Write the answer itself in flowing essay prose with no internal sub-headings. Paragraphs should follow exam structure: a thesis paragraph that states a defendable position on the question, three or four body paragraphs each anchored in a verbatim anchored quote, and a closing paragraph that lifts back to the question. Do not narrate that you are doing this; just write the essay. Embed quotes inline with attribution to "${ctx.subKey ?? ''}".
+
+## PCLM self-assessment
+A short structured assessment of the model answer the student has just read, in four blocks:
+
+### Purpose (P)
+One short paragraph. What position the model answer takes on the question, and why an examiner would mark this as a clear purpose.
+
+### Coherence (C)
+One short paragraph. How the paragraphs build on each other, where the pivots are, and how the conclusion links back to the thesis.
+
+### Language (L)
+One short paragraph. Two or three specific phrases from the model answer that demonstrate precise, examiner-friendly language. Quote them.
+
+### Mechanics (M)
+One short paragraph. Quote handling (verbatim, attributed, embedded), spelling, punctuation. Note any places the model answer deliberately keeps it simple to avoid losing marks.
+
+## Where students lose marks on this question
+Three or four short paragraphs. Each names a specific mistake students make when answering this exact question (drifting into a different angle, padding with biographical context, treating personal response as decoration rather than evidence). Give one corrective move per item.${profile.extras}
+
+QUOTE RULE (zero tolerance): every double-quoted phrase from "${ctx.subKey ?? ''}" must appear verbatim in ANCHORED QUOTES, including capitalisation and punctuation. The question itself is quoted verbatim from above. If the question rewards a brief sister-poem reference, only refer to poems in AVAILABLE PAIRINGS, and quote the sister poem only if you are confident of the wording (otherwise paraphrase and frame as paraphrase).${userInstr}`;
   return { system, user };
 }
 
