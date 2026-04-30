@@ -1,4 +1,5 @@
 import type { OutlineBodyMove } from "./generateOutline";
+import { ABSOLUTE_OUTPUT_RULES } from "@/lib/claude/outputRules";
 
 export type GradeTier = "H1" | "H2" | "H3" | "H4";
 
@@ -23,12 +24,12 @@ export type SampleAnswerPromptInput = {
 
 const SHARED_RULES = `You are writing a Leaving Certificate English Higher Level essay in response to a Paper 2 Poetry question.
 
-ABSOLUTE RULES:
-- Every quote you use must be copied verbatim from the QUOTE BANK provided. Do not invent quotes. Do not paraphrase and present as a quote. If you need a quote to support a point and the bank does not have one, adjust the point — do not invent a quote.
+${ABSOLUTE_OUTPUT_RULES}
+
+CONTENT RULES:
+- Every quote you use must be copied verbatim from the QUOTE BANK provided. Do not invent quotes. Do not paraphrase and present as a quote. If you need a quote to support a point and the bank does not have one, adjust the point, do not invent a quote.
 - You must discuss the poems listed under SELECTED POEMS. Do not mention any other poem by this poet by name, even if you know it. The QUOTE BANK only contains quotes from the selected poems — this is by design.
 - Output the essay text only. No preamble, no heading, no markdown code fences, no meta-commentary.
-- Use UK English spelling (colour, organised, analyse, centre).
-- Never use em dashes. Use commas, full stops, colons, semicolons.
 - Write in the first person where natural. Do not default to "the reader".
 - Target the word count given. Plus or minus 10 percent is acceptable.
 

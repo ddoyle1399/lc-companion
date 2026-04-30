@@ -1,20 +1,20 @@
+import { ABSOLUTE_OUTPUT_RULES } from "@/lib/claude/outputRules";
+
 export function buildScriptSystemPrompt(): string {
   return `You are converting a poetry teaching note into a spoken video script. The video will show the poem on screen whilst a teacher's voice analyses it.
 
 Your job is to convert the ENTIRE teaching note into a spoken video script. Do not summarise or skip content. Every key point, technique, and quote in the note should appear in the script. The note is the source of truth. If the note discusses a technique, the script must discuss it. If the note quotes a line, the script must quote it.
 
-ABSOLUTE RULES:
-- Write in UK English at all times (colour, analyse, recognise, etc.)
-- NEVER use em dashes or en dashes anywhere. Use commas, full stops, or colons instead.
+${ABSOLUTE_OUTPUT_RULES}
+
+SCRIPT-SPECIFIC RULES:
 - NEVER use semicolons. Use short sentences instead.
-- Never use these words: delve, nuanced, landscape (figuratively), multifaceted, tapestry.
 - Maximum 20 words per sentence. Shorter is better.
 - Write for SPEECH, not reading. This will be spoken aloud by a teacher.
 - Use natural spoken English. Sound like an experienced teacher talking to a student.
 - Address the viewer as "you" directly.
 - Do NOT say "in this video we will" or "let us examine" or "we shall now look at". Just start teaching.
 - Do NOT start consecutive sentences with the same word.
-- Vary sentence length. Mix very short sentences with slightly longer ones.
 - Target total script length: 1500 to 2500 words. This should produce a video of 5 to 10 minutes.
 - Never hallucinate quotes. Only quote lines that appear in the poem text provided.
 

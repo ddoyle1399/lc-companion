@@ -19,6 +19,8 @@
  * prompt. buildPoetrySystemPrompt throws if called without strict metadata.
  */
 
+import { ABSOLUTE_OUTPUT_RULES } from "@/lib/claude/outputRules";
+
 // -----------------------------------------------------------------------------
 // Types
 // -----------------------------------------------------------------------------
@@ -1608,16 +1610,9 @@ function getQuestionFormatBlock(format: string | undefined): string {
   return '';
 }
 
-// Hard style rules injected into every comparative user prompt.
-// The system prompt also carries these but the model can drift on long outputs.
-// Repeating them in the user turn keeps them salient throughout generation.
-const COMPARATIVE_HARD_RULES = `
-OUTPUT RULES (non-negotiable, checked automatically after generation):
-- NEVER use em dashes (—) or en dashes (–). Not once. Use commas, semicolons, colons, or full stops instead.
-- NEVER use spaced hyphens as an em-dash substitute ( - between phrases).
-- UK English spelling throughout (colour, analyse, recognise, etc.).
-- No banned words: delve, multifaceted, tapestry, furthermore, moreover, additionally (in sequence).
-`.trim();
+// ABSOLUTE_OUTPUT_RULES is imported from lib/claude/outputRules.ts and injected
+// into every comparative user prompt. It covers em dashes, UK English, banned words,
+// anti-AI tells, and humanising rules. Change rules in outputRules.ts, not here.
 
 // -----------------------------------------------------------------------------
 // 1. mode_grid (default, 5-section comparative note across 3 texts)
@@ -1635,7 +1630,7 @@ function buildComparativeModeGridPrompt(context: PromptContext): string {
 
   const modeFocus = getModeFocusBlock(context.comparativeMode || '');
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a comparative study note for the following three texts studied through the lens of ${context.comparativeMode}.
 
@@ -1700,7 +1695,7 @@ function buildComparativeTextFullPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a full comparative-study breakdown of ${textRef}. This is the canonical reference note for one of the three texts a student studies for the Comparative Study (Paper 2, Section II). It must be deep enough that a student can deploy this single text in any mode question.
 
@@ -1767,7 +1762,7 @@ function buildComparativeCharacterPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a deep character study of ${character} from ${textRef}, framed for use in the Leaving Certificate Comparative Study.
 
@@ -1824,7 +1819,7 @@ function buildComparativeKeyMomentsPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a Key Moments analysis for ${textRef}.
 
@@ -1930,7 +1925,7 @@ One model paragraph (around 180-220 words) that a student could sit beside their
             extras: '',
           };
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a single-text profile of ${textRef} through the lens of ${mode}, written for an Irish Leaving Certificate Higher Level student.
 
@@ -1992,7 +1987,7 @@ function buildComparativeRelationshipsPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a Relationships map for ${textRef}.
 
@@ -2038,7 +2033,7 @@ function buildComparativeQuoteBankPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a comprehensive Quote Bank for ${textRef}, organised for use in the Leaving Certificate Comparative Study.
 
@@ -2088,7 +2083,7 @@ function buildComparativeGridTablePrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a Comparison Grid for the following three texts through the lens of ${mode}.
 
@@ -2150,7 +2145,7 @@ function buildComparativeArgumentPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate one detailed Comparative Argument across the following three texts on ${mode}, with the specific argument focus: ${focus}.
 
@@ -2212,7 +2207,7 @@ function buildComparativeSampleParagraphPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate one model Comparative Paragraph in the ${mode} mode, on the angle: ${focus}.
 
@@ -2266,7 +2261,7 @@ function buildComparativeQuestionPlanPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a structured Answer Plan for the following SEC Comparative Study question.
 
@@ -2339,7 +2334,7 @@ function buildComparativeSampleAnswerPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `${COMPARATIVE_HARD_RULES}
+  return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a full Sample Answer at H1 tier (90+ marks band) for the following SEC Comparative Study question.
 

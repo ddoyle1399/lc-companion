@@ -1,4 +1,5 @@
 import type { OutlineInput } from "./generateOutline";
+import { EM_DASH_RULE, UK_ENGLISH_RULE, BANNED_WORDS_RULE } from "@/lib/claude/outputRules";
 
 export function buildOutlineUserMessage(input: OutlineInput): string {
   const headerParts: string[] = [];
@@ -17,6 +18,11 @@ export function buildOutlineUserMessage(input: OutlineInput): string {
     : "(No themes extracted from note)";
 
   return `You are writing a structured essay outline for this SEC exam question on ${input.poet}${input.poem ? ` (focus poem: ${input.poem})` : ""}.
+
+OUTPUT RULES (apply to all string values in the JSON you produce):
+- ${EM_DASH_RULE}
+- ${UK_ENGLISH_RULE}
+- ${BANNED_WORDS_RULE}
 
 EXAM QUESTION (${questionHeader}):
 "${input.questionText}"
