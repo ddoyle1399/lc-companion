@@ -4,6 +4,8 @@
 // Output is structured Markdown that students/teachers can lift content from.
 // Each note embeds 8-12 verbatim quotes from the verified bank.
 
+import { ABSOLUTE_OUTPUT_RULES } from "@/lib/claude/outputRules";
+
 export type Level = "higher" | "ordinary";
 export type Depth = "quick" | "standard" | "deep";
 export type NoteType =
@@ -43,10 +45,10 @@ export function targetWordCount(level: Level, depth: Depth): number {
 
 const SHARED_RULES = `You are producing study notes for an Irish Leaving Certificate English student. The notes will be lifted as raw material into exam essays, so they must be substantive, accurate, and exam-aware.
 
-ABSOLUTE RULES:
+${ABSOLUTE_OUTPUT_RULES}
+
+CONTENT RULES:
 - Every quote you embed must be copied verbatim from the QUOTE BANK provided. Do not invent quotes. If a point needs a quote you do not have, adjust the point.
-- Use UK English spelling. Never em dashes (—), en dashes (–), or double hyphens used as a substitute (--). Use a comma, colon, semicolon, or full stop instead. This is a hard rule because students paste output into Word, which autocorrects -- into — and exposes the AI tell.
-- Banned words: "delve", "nuanced" (unless genuinely necessary), "tapestry", "multifaceted", "landscape" (figurative), "furthermore" / "moreover" / "additionally" used in sequence.
 - Output Markdown only. Do not include code fences.
 - Heading hierarchy is strict and must always be:
     # for the single note title at the very top (one only)
