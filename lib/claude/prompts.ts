@@ -671,38 +671,87 @@ export function buildPoetryThemeStudyPrompt(ctx: PromptContext): {
   const system = buildPoetrySystemPrompt(ctx);
   const depth = getPoetryDepth(ctx);
   const profile = getPoetryDepthProfile(depth);
-  const theme = ctx.poetrySubject ?? 'the poem\'s central theme';
   const userInstr = getPoetryUserInstructions(ctx);
+  const namedTheme = ctx.poetrySubject?.trim();
 
-  const user = `Produce a Theme Study of "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''} focused on the theme of ${theme}.
+  // Two modes:
+  //   1. NAMED-THEME DEEP DIVE (poetrySubject provided) — cover one named theme
+  //      in depth, exam-essay style.
+  //   2. THREE-THEMES SURVEY (no poetrySubject) — identify and cover the three
+  //      themes a student would actually write about in an exam answer on this
+  //      poem. This is the default and the path most users will use.
+  if (namedTheme) {
+    const user = `Produce a Theme Study of "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''} focused on the theme of ${namedTheme}.
 
 Depth: ${depth}. Target word count: ${profile.totalWords} words.
 Pacing: ${profile.pacingNote}
 
-This is a one-theme deep-dive, not a general overview. The student already knows the poem at surface level. They need to leave this note able to write a confident, evidence-anchored answer to a question on ${theme} in ${ctx.subject ?? 'this poet'}'s work, using this poem as their primary text.
+This is a one-theme deep-dive. The student already knows the poem at surface level. They need to leave this note able to write a confident, evidence-anchored answer to a question on ${namedTheme} in ${ctx.subject ?? 'this poet'}'s work, using this poem as their primary text.
 
-Begin the response directly with a single H1 heading. Use this exact format:
+Begin the response directly with a single H1 heading:
 
-# ${theme} in "${ctx.subKey ?? ''}"
+# ${namedTheme} in "${ctx.subKey ?? ''}"
 
 Then produce these sections, in this order, using these exact heading texts:
 
 ## How the theme is set up
-One paragraph. What does the poem signal about ${theme} in its opening, and what does the form (or any structural feature drawn from <Form: ${ctx.metadata?.form ?? 'unspecified'}>, total lines ${ctx.metadata?.total_lines ?? 'unspecified'}) do to support it.
+One paragraph. What does the poem signal about ${namedTheme} in its opening, and what does the form (drawn from <Form: ${ctx.metadata?.form ?? 'unspecified'}>, total lines ${ctx.metadata?.total_lines ?? 'unspecified'}) do to support it.
 
 ## How the theme develops across the poem
-Trace the theme stanza by stanza or moment by moment using ONLY the quotes in ANCHORED QUOTES. Embed at least three short verbatim quotes inline with stanza references (e.g. "in stanza 3, the line 'X' marks a turn..."). Every quote must match its anchored entry character-for-character. Never invent a quote. If a stanza does not advance the theme, skip it; this is not a stanza-by-stanza walkthrough.
+Trace the theme stanza by stanza or moment by moment using ONLY the quotes in ANCHORED QUOTES. Embed at least three short verbatim quotes inline with stanza references. Every quote must match its anchored entry character-for-character. Never invent a quote.
 
 ## What the techniques are doing for the theme
-Two or three named devices from the controlled glossary, each tied to a specific anchored line and explained in terms of how the device pushes the theme forward. Do not just list devices. Explain the mechanism.
+Two or three named devices from the controlled glossary, each tied to a specific anchored line and explained in terms of how the device pushes the theme forward.
 
 ## Where students lose marks on this theme
-Three or four short paragraphs. Each names a specific mistake students make when writing about ${theme} in this poem (e.g. confusing the theme with a related but distinct theme, treating the poem's ending as more decisive than it is, importing biographical detail not in historical_context). For each, give one corrective move in a teacher-to-student voice.
+Three or four short paragraphs. Each names a specific mistake students make when writing about ${namedTheme} in this poem and gives one corrective move in a teacher-to-student voice.
 
 ## Exam-ready phrasing students can lift
-Three to five short sentences a student could paste into an essay paragraph on ${theme} in this poem. Each sentence must be specific to this poem and defensible from the anchored evidence. Format as a simple bulleted list, one sentence per line.${profile.extras}
+Three to five short sentences a student could paste into an essay paragraph on ${namedTheme} in this poem. Each sentence must be specific to this poem and defensible from the anchored evidence. Format as a simple bulleted list, one sentence per line.${profile.extras}
 
-QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES, character-for-character. If you need a moment that is not in the bank, paraphrase the line in your own words and frame it as paraphrase ("the speaker essentially says...", "the poem turns on..."). Do not invent quotations.${userInstr}`;
+QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES, character-for-character. Do not invent quotations.${userInstr}`;
+    return { system, user };
+  }
+
+  const user = `Produce a Three-Themes Study of "${ctx.subKey ?? ''}" by ${ctx.subject ?? ''}.
+
+Depth: ${depth}. Target word count: ${profile.totalWords} words.
+Pacing: ${profile.pacingNote}
+
+Identify the three themes a Higher Level student would actually write about in an exam answer on this poem. Pick themes that (a) are genuinely central to this poem, not generic to the poet's body of work; (b) are defensible from the anchored evidence in ANCHORED QUOTES; (c) are distinct from each other. Avoid umbrella themes that overlap (e.g. don't pair "loss" and "grief" as separate themes).
+
+Begin the response directly with a single H1 heading:
+
+# Three central themes in "${ctx.subKey ?? ''}"
+
+Then a short orientation paragraph (3-4 sentences) naming the three themes you have selected and explaining briefly why these three over other possible candidates. This is the only place you justify the selection; do not return to it.
+
+Then produce ONE section per theme, in this order, using exactly this heading pattern:
+
+## Theme 1: [Name of Theme]
+## Theme 2: [Name of Theme]
+## Theme 3: [Name of Theme]
+
+Inside each theme section, produce these subsections (use ### sub-headings):
+
+### How the theme is set up
+One paragraph. What does the poem signal about this theme in its opening, and how does the form (<Form: ${ctx.metadata?.form ?? 'unspecified'}>, ${ctx.metadata?.total_lines ?? 'unspecified'} lines) support it.
+
+### How it develops
+Trace the theme through the poem using AT LEAST TWO short verbatim quotes from ANCHORED QUOTES with stanza references. Show how the theme moves, deepens, or turns. Every quote must match its anchored entry character-for-character.
+
+### Technique that carries the theme
+One named device from the controlled glossary, tied to a specific anchored line, explained in terms of how the device pushes this particular theme forward.
+
+### Exam-ready phrase you can lift
+ONE sentence a student could paste into an essay paragraph on this theme in this poem. Specific to this poem, defensible from the anchored evidence. Italicise it.
+
+After the three theme sections, produce one final section:
+
+## Where students lose marks on this poem's themes
+Three or four short paragraphs. Each names a specific mistake students make when writing about this poem's themes (e.g. confusing two of the themes, treating the poem's ending as more decisive than it is, importing biographical detail not in historical_context). For each, give one corrective move in a teacher-to-student voice.${profile.extras}
+
+QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES, character-for-character. If you need a moment that is not in the bank, paraphrase the line in your own words and frame it as paraphrase. Do not invent quotations.${userInstr}`;
   return { system, user };
 }
 

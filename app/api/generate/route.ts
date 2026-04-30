@@ -233,9 +233,8 @@ export async function POST(request: NextRequest) {
 
         // Per-note-type required-input checks. The route fails fast so the UI
         // never sees a partially-built prompt.
-        if (noteType === 'theme_study' && !context.poetrySubject?.trim()) {
-          return errorResponse("Poetry theme_study requires a poetrySubject (theme name)");
-        }
+        // theme_study has two modes: with a poetrySubject it's a one-theme deep
+        // dive; without one it auto-selects three themes. Both are valid.
         if (noteType === 'cross_poem_pairing' && !context.poetrySubject?.trim()) {
           return errorResponse("Poetry cross_poem_pairing requires a poetrySubject (sister poem sub_key)");
         }

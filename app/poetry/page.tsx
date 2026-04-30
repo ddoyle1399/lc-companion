@@ -48,7 +48,7 @@ const POETRY_NOTE_TYPES: PoetryNoteTypeMeta[] = [
   {
     key: "theme_study",
     label: "Theme Study",
-    description: "One named theme traced through the poem with quote evidence.",
+    description: "Three central themes covered, or name one for a deeper dive.",
     subjectMode: "free_text_theme",
   },
   {
@@ -301,6 +301,10 @@ export default function PoetryPage() {
       case "none":
         return true;
       case "free_text_theme":
+        // theme_study has both modes: empty = three themes auto-selected,
+        // filled = single-theme deep dive. quote_bank_theme still requires
+        // a theme name (the bank is curated by theme).
+        if (noteType === "theme_study") return true;
         return subject.trim().length > 0;
       case "device_dropdown":
         // Empty subject = catalogue all major devices; that's a valid choice.
@@ -503,14 +507,21 @@ export default function PoetryPage() {
           {noteTypeMeta.subjectMode === "free_text_theme" && (
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Theme
+                Theme{" "}
+                {noteType === "theme_study" && (
+                  <span className="text-gray-400 font-normal">(optional)</span>
+                )}
               </label>
               <input
                 type="text"
                 list="poetry-theme-suggestions"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                placeholder="e.g. memory, motherhood, faith and doubt"
+                placeholder={
+                  noteType === "theme_study"
+                    ? "Leave blank for the poem's three central themes"
+                    : "e.g. memory, motherhood, faith and doubt"
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent"
               />
               <datalist id="poetry-theme-suggestions">
@@ -519,7 +530,9 @@ export default function PoetryPage() {
                 ))}
               </datalist>
               <p className="text-xs text-gray-400 mt-1">
-                Pick from the suggestions or type your own.
+                {noteType === "theme_study"
+                  ? "Leave blank to cover the poem's three central themes. Or name one for a single-theme deep dive."
+                  : "Pick from the suggestions or type your own."}
               </p>
             </div>
           )}
