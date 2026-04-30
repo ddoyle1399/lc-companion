@@ -1608,6 +1608,17 @@ function getQuestionFormatBlock(format: string | undefined): string {
   return '';
 }
 
+// Hard style rules injected into every comparative user prompt.
+// The system prompt also carries these but the model can drift on long outputs.
+// Repeating them in the user turn keeps them salient throughout generation.
+const COMPARATIVE_HARD_RULES = `
+OUTPUT RULES (non-negotiable, checked automatically after generation):
+- NEVER use em dashes (—) or en dashes (–). Not once. Use commas, semicolons, colons, or full stops instead.
+- NEVER use spaced hyphens as an em-dash substitute ( - between phrases).
+- UK English spelling throughout (colour, analyse, recognise, etc.).
+- No banned words: delve, multifaceted, tapestry, furthermore, moreover, additionally (in sequence).
+`.trim();
+
 // -----------------------------------------------------------------------------
 // 1. mode_grid (default, 5-section comparative note across 3 texts)
 // -----------------------------------------------------------------------------
@@ -1624,7 +1635,9 @@ function buildComparativeModeGridPrompt(context: PromptContext): string {
 
   const modeFocus = getModeFocusBlock(context.comparativeMode || '');
 
-  return `Generate a comparative study note for the following three texts studied through the lens of ${context.comparativeMode}.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a comparative study note for the following three texts studied through the lens of ${context.comparativeMode}.
 
 ${textList}
 
@@ -1687,7 +1700,9 @@ function buildComparativeTextFullPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `Generate a full comparative-study breakdown of ${textRef}. This is the canonical reference note for one of the three texts a student studies for the Comparative Study (Paper 2, Section II). It must be deep enough that a student can deploy this single text in any mode question.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a full comparative-study breakdown of ${textRef}. This is the canonical reference note for one of the three texts a student studies for the Comparative Study (Paper 2, Section II). It must be deep enough that a student can deploy this single text in any mode question.
 
 Year: ${context.year} | Level: ${context.level}
 
@@ -1752,7 +1767,9 @@ function buildComparativeCharacterPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `Generate a deep character study of ${character} from ${textRef}, framed for use in the Leaving Certificate Comparative Study.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a deep character study of ${character} from ${textRef}, framed for use in the Leaving Certificate Comparative Study.
 
 Year: ${context.year} | Level: ${context.level}
 
@@ -1807,7 +1824,9 @@ function buildComparativeKeyMomentsPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `Generate a Key Moments analysis for ${textRef}.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a Key Moments analysis for ${textRef}.
 
 Year: ${context.year} | Level: ${context.level}
 
@@ -1911,7 +1930,9 @@ One model paragraph (around 180-220 words) that a student could sit beside their
             extras: '',
           };
 
-  return `Generate a single-text profile of ${textRef} through the lens of ${mode}, written for an Irish Leaving Certificate Higher Level student.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a single-text profile of ${textRef} through the lens of ${mode}, written for an Irish Leaving Certificate Higher Level student.
 
 Year: ${context.year} | Level: ${context.level} | Mode: ${mode} | Depth: ${depth}
 Target word count: ${depthBlock.totalWords} words.
@@ -1971,7 +1992,9 @@ function buildComparativeRelationshipsPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `Generate a Relationships map for ${textRef}.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a Relationships map for ${textRef}.
 
 Year: ${context.year} | Level: ${context.level}
 
@@ -2015,7 +2038,9 @@ function buildComparativeQuoteBankPrompt(context: PromptContext): string {
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  return `Generate a comprehensive Quote Bank for ${textRef}, organised for use in the Leaving Certificate Comparative Study.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a comprehensive Quote Bank for ${textRef}, organised for use in the Leaving Certificate Comparative Study.
 
 Year: ${context.year} | Level: ${context.level}
 
@@ -2063,7 +2088,9 @@ function buildComparativeGridTablePrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `Generate a Comparison Grid for the following three texts through the lens of ${mode}.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a Comparison Grid for the following three texts through the lens of ${mode}.
 
 ${textList}
 
@@ -2123,7 +2150,9 @@ function buildComparativeArgumentPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `Generate one detailed Comparative Argument across the following three texts on ${mode}, with the specific argument focus: ${focus}.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate one detailed Comparative Argument across the following three texts on ${mode}, with the specific argument focus: ${focus}.
 
 ${textList}
 
@@ -2183,7 +2212,9 @@ function buildComparativeSampleParagraphPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `Generate one model Comparative Paragraph in the ${mode} mode, on the angle: ${focus}.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate one model Comparative Paragraph in the ${mode} mode, on the angle: ${focus}.
 
 ${textList}
 
@@ -2235,7 +2266,9 @@ function buildComparativeQuestionPlanPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `Generate a structured Answer Plan for the following SEC Comparative Study question.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a structured Answer Plan for the following SEC Comparative Study question.
 
 QUESTION:
 ${question}
@@ -2306,7 +2339,9 @@ function buildComparativeSampleAnswerPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
-  return `Generate a full Sample Answer at H1 tier (90+ marks band) for the following SEC Comparative Study question.
+  return `${COMPARATIVE_HARD_RULES}
+
+Generate a full Sample Answer at H1 tier (90+ marks band) for the following SEC Comparative Study question.
 
 QUESTION:
 ${question}

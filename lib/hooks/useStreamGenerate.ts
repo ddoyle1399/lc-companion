@@ -199,11 +199,18 @@ export function useStreamGenerate(
                   setOutlinesSaveStatus(parsed.outlinesSave);
                 } else if (parsed.text) {
                   setSearchStatus("");
-                  rawOutputRef.current += parsed.text;
+                  // Strip em dashes and en dashes from generated text at the
+                  // display layer. This is belt-and-suspenders: the prompt
+                  // forbids them but the model occasionally produces them in
+                  // long comparative outputs where the system-prompt rule fades.
+                  const cleanText = (parsed.text as string)
+                    .replace(/\s*—\s*/g, ", ")
+                    .replace(/\s*–\s*/g, ", ");
+                  rawOutputRef.current += cleanText;
 
                   if (stripPreamble) {
                     if (foundHeadingRef.current) {
-                      setOutput((prev) => prev + parsed.text);
+                      setOutput((prev) => prev + cleanText);
                     } else {
                       const headingMatch =
                         rawOutputRef.current.match(/^([\s\S]*?)(#{1,2}\s)/);
@@ -216,7 +223,7 @@ export function useStreamGenerate(
                       }
                     }
                   } else {
-                    setOutput((prev) => prev + parsed.text);
+                    setOutput((prev) => prev + cleanText);
                   }
                 }
               } catch {
