@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 type GradeTier = "H1" | "H2" | "H3";
 
@@ -97,7 +98,17 @@ export default function GenerateForm({
       ? "single_text"
       : "comparative";
 
+  const router = useRouter();
   const [section, setSection] = useState<Section>(defaultSection);
+
+  // Comparative lives on /comparative (file-based profile substrate). If the
+  // default section resolved to comparative because no other banks were
+  // available, bounce immediately so the user lands on the working tool.
+  useEffect(() => {
+    if (section === "comparative") {
+      router.push("/comparative");
+    }
+  }, [section, router]);
   const [examCycleYear, setExamCycleYear] = useState<number>(defaultYear);
   const [poet, setPoet] = useState("");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -373,21 +384,30 @@ export default function GenerateForm({
               {(Object.keys(SECTION_LABELS) as Section[]).map((s) => {
                 const available = sectionAvailability[s];
                 const isSelected = section === s;
+                // Comparative lives on the dedicated /comparative page (uses
+                // file-based profiles, not the notes table). Picking it here
+                // redirects so users always land on the working tool.
+                const isComparative = s === "comparative";
+                const isClickable = isComparative || available;
                 return (
                   <label
                     key={s}
                     className={`flex items-center gap-1.5 ${
-                      available ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+                      isClickable ? "cursor-pointer" : "cursor-not-allowed opacity-50"
                     }`}
-                    title={available ? "" : unavailableMessage(s)}
+                    title={isClickable ? (isComparative ? "Opens the comparative essay generator" : "") : unavailableMessage(s)}
                   >
                     <input
                       type="radio"
                       name="section"
                       value={s}
                       checked={isSelected}
-                      disabled={!available}
+                      disabled={!isClickable}
                       onChange={() => {
+                        if (isComparative) {
+                          router.push("/comparative");
+                          return;
+                        }
                         setSection(s);
                         setPoet("");
                         setQuestionId("");
@@ -405,20 +425,21 @@ export default function GenerateForm({
             </div>
           </div>
 
-          {/* Section gate: if the selected section isn't available, show why. */}
-          {!sectionAvailability[section] && (
+          {/* Section gate: if the selected section isn't available, show why.
+              Comparative is exempted because clicking it redirects to /comparative. */}
+          {section !== "comparative" && !sectionAvailability[section] && (
             <div className="bg-amber-50 border border-amber-200 rounded p-3">
               <p className="text-sm text-amber-900">{unavailableMessage(section)}</p>
             </div>
           )}
 
-          {/* Comparative section remains a stub. */}
-          {section === "comparative" && sectionAvailability.comparative && (
-            <div className="bg-amber-50 border border-amber-200 rounded p-3">
-              <p className="text-sm text-amber-900">
-                Comparative generator is coming. The section has verified banks but
-                the generator pipeline has not yet been wired. Available subjects:{" "}
-                {comparativeSubjects.join(", ") || "none"}
+          {/* Comparative redirects to /comparative (file-based profile substrate).
+              The radio onChange and mount-time effect both bounce, so this branch
+              is only reached as a brief flash during navigation. */}
+          {section === "comparative" && (
+            <div className="bg-teal-50 border border-teal-200 rounded p-3">
+              <p className="text-sm text-teal-900">
+                Opening the comparative essay generator...
               </p>
             </div>
           )}
