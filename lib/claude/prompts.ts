@@ -970,14 +970,14 @@ Within each sub-theme, every quote follows this EXACT four-line pattern:
 
 > "Quote text here, verbatim from ANCHORED QUOTES."
 Stanza X.
-Tags: tag1 · tag2 · tag3
+Themes: theme1 · theme2 · theme3
 
 Plain-English meaning sentence. Exam-use sentence.
 
 Notes on the pattern:
 - Line 1 (the quote): > followed by the verbatim text in straight double quotes. Verbatim. Do not paraphrase.
 - Line 2 (location): plain prose, no bold. Just "Stanza 3." or "Lines 7-9." with a full stop. No "Stanza:" label.
-- Line 3 (tags): the literal word "Tags:" (plain text, not bolded) followed by 2-4 short topic tags separated by " · " (space middle-dot space). Tags should be the themes, sub-angles, or exam-question topics this quote fits under (e.g. "memory · loss · childhood", "nature · spiritual · transcendence"). Lets a student scan a long bank and find the quote that fits a specific question.
+- Line 3 (themes): the literal word "Themes:" (plain text, not bolded) followed by 2-4 short theme labels separated by " · " (space middle-dot space). Themes should be the topics, sub-angles, or exam-question angles this quote fits under (e.g. "memory · loss · childhood", "nature · spiritual · transcendence"). Lets a student scan a long bank and find the quote that fits a specific question.
 - Line 4 (commentary): EXACTLY two sentences, no more. Sentence 1 = what the quote MEANS in plain teacher-to-student English (the kind a teacher would say to a 15-year-old, NOT what a literary critic writes). Sentence 2 = the exam question type or paragraph position this quote suits. Use everyday verbs: shows, means, tells us, signals, marks, reveals.
 
 Plain-English commentary rules:
@@ -993,7 +993,7 @@ Worked example of one quote, exactly to spec:
 
 > "the frail, illegal fire balloons appear"
 Stanza 1.
-Tags: ritual · fragility · opening image
+Themes: ritual · fragility · opening image
 
 The poem opens by showing something pretty and traditional that is also against the rules and easy to break. Use this for any question on how the poem sets up its central tension between beauty and danger.
 

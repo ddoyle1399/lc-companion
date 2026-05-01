@@ -134,11 +134,11 @@ For each quote, use this layout (a quote block followed by a tags line followed 
 
 > "Quote text, verbatim."
 Speaker, Act X Scene Y.
-Tags: tag1 · tag2 · tag3
+Themes: theme1 · theme2 · theme3
 
 Plain-English meaning sentence. Exam-use sentence.
 
-The Tags line is plain text (not bolded), starting with the literal word "Tags:" and listing 2-4 short topic tags separated by " · " (space middle-dot space). Tags should be the themes or exam-question topics this quote fits under (e.g. "jealousy · race · self-doubt").
+The Themes line is plain text (not bolded), starting with the literal word "Themes:" and listing 2-4 short theme labels separated by " · " (space middle-dot space). Themes should be the topics or exam-question angles this quote fits under (e.g. "jealousy · race · self-doubt").
 
 The commentary is exactly two sentences. Sentence 1 explains what the quote MEANS in plain teacher-to-student English (the kind of sentence an experienced LC teacher would say to a 15-year-old, not the kind a literary critic writes). Sentence 2 names the exam question type or argument the quote answers. BANNED jargon: anaphora, parallelism, syntax, narrative, rhetorician, weaponise, principled, self-dismantling, valorise, register, modality. Use everyday verbs: shows, means, tells us, signals, marks, reveals, proves.
 
@@ -318,14 +318,14 @@ Within each sub-theme, quotes follow this EXACT four-line pattern (with a blank 
 
 > "Quote text here, verbatim from the bank."
 Speaker, Act X Scene Y.
-Tags: theme1 · theme2 · theme3
+Themes: theme1 · theme2 · theme3
 
 Plain-English meaning sentence. Exam-use sentence.
 
 Notes on the pattern:
 - Line 1 (the quote): > followed by the verbatim text in straight double quotes. Nothing else on that line. Verbatim from the QUOTE BANK.
 - Line 2 (attribution): plain prose, no bold, no labels, no italics. Just "Iago, Act 3 Scene 3." with a full stop. For framing quotes spoken ABOUT the subject by another character: "Iago describing Othello, Act 1 Scene 3." or "Lodovico on Othello, Act 4 Scene 1."
-- Line 3 (tags): the literal word "Tags:" followed by 2-4 short topic tags separated by " · " (space middle-dot space). Use lowercase, single words or short phrases. Tags are the themes, exam-question topics, or character motifs this quote fits under. Examples: "jealousy · self-deception · race", "identity · public reputation · downfall", "manipulation · trust · appearance vs reality". Tags let a student scan a long bank and find the quote that fits a specific question. The "Tags:" word is plain text, not bolded.
+- Line 3 (themes): the literal word "Themes:" followed by 2-4 short theme labels separated by " · " (space middle-dot space). Use lowercase, single words or short phrases. Themes are the topics, exam-question angles, or character motifs this quote fits under. Examples: "jealousy · self-deception · race", "identity · public reputation · downfall", "manipulation · trust · appearance vs reality". Themes let a student scan a long bank and find the quote that fits a specific question. The "Themes:" word is plain text, not bolded.
 - Line 4 (commentary): EXACTLY two sentences, no more. Sentence 1 = what the quote MEANS in plain teacher-to-student English. Sentence 2 = the exam question type or argument it slots into. Both sentences read as if an experienced LC teacher is sitting across from a 15-year-old explaining it. No analytical jargon, no academic register, no showing off.
 
 Plain-English commentary rules:
@@ -344,7 +344,7 @@ Worked example of one quote, exactly to spec:
 
 > "I think my wife be honest, and think she is not."
 Othello, Act 3 Scene 3.
-Tags: jealousy · self-doubt · turning point
+Themes: jealousy · self-doubt · turning point
 
 Othello is stuck between two opposite ideas at the same time, and you can hear his mind starting to crack. Use this for any question on the exact moment Othello's doubt becomes something more dangerous.
 
