@@ -149,6 +149,23 @@ UI: Theme input is now optional for theme_study with placeholder "Leave blank fo
 
 Added a hint text under the Generate Note button on `/poetry` explaining why it's disabled (e.g. "Pick a poet to continue", "Enter a theme above to generate"). Resolves the silent-greyed-button UX problem.
 
+### G. Single-text download + combine-all (commit `5bc196f`)
+
+Per-note: added `.md` and `.docx` download buttons next to the existing copy buttons in `app/single-text/SingleTextNotesForm.tsx`.
+
+Batch: when 2+ notes are done in a batch run, a teal "Combine all N notes into one document" panel appears with Copy/Download as Markdown/HTML/.docx, all stitched into one document with a generation header (date, level, depth, list of skipped/failed). Failed notes are excluded but counted.
+
+The combined-export panel shows under the summary bar above the per-job cards. Uses `wrapForH1Club` for the HTML variant so the combined doc is paste-ready for the H1 Club CMS.
+
+### H. Single-text retry on failed cards (commit `664c7b7`)
+
+Network errors used to be a dead end - failed cards just showed "Network error." with no recovery. Now:
+- Each failed card has a Retry button that re-runs that single job in place.
+- Summary bar grows a "Retry N failed" button when any job is in error state, runs all failed jobs through the same PARALLELISM=3 worker pool.
+- Error message now includes `err.message` from the catch (e.g. "fetch failed", "Load failed") so the next session can diagnose actual causes.
+
+**Confirmed cause of the Othello batch failures:** "Network error" not quote thinness. The Next.js dev server is choking under 3 concurrent Claude API calls (long-running). My earlier guess about minor-character quote-bank thinness was wrong - speakers are pooled across the whole play in the route, the threshold is `< 10` total. The right fix path is: (a) lower PARALLELISM to 2 in dev, OR (b) move generation to a background worker, OR (c) deploy to Vercel where serverless handles concurrency better.
+
 ---
 
 ## 6. Commits in flight at hand-off
@@ -182,6 +199,13 @@ The Cowork sandbox cannot push (no credentials). All push must come from his ter
 None. Bishop's "The Armadillo" generates. The strict gate works. PCLM rolling is grade-locked.
 
 ### Should-do soon
+0. **Single-text batch generation is unreliable in dev** because the Next.js dev server times out under 3 parallel Claude calls (the long-running poetry/single-text generations). 4/7 character notes failed with "Network error" on a recent Othello batch. Three real fix paths:
+   (a) Lower `PARALLELISM` from 3 to 2 in `app/single-text/SingleTextNotesForm.tsx` line ~43. Sequential-ish, slower but more reliable.
+   (b) Move generation to a background queue (e.g. Inngest, Trigger.dev). Right architecture but a real build.
+   (c) Deploy to Vercel where serverless handlers don't have the dev-server connection-pool problem. Already on hobby tier, just needs the deploy. **Likely the quickest real fix.**
+
+   ~~Earlier hypothesis (incorrect): the Othello quote bank was thin for minor characters. The route pools all 97 quotes across the play, so threshold passes for everyone.~~ Network error is the actual cause.
+
 1. **6 partial-anchored substrate rows** with genuine quote-vs-canonical mismatches:
    - Smith "Letter to a Photojournalist Going In" (2 fabrications: stored quotes drop em-dashed parentheticals)
    - Smith "The Museum of Obsolescence" (1 em-dash variant)

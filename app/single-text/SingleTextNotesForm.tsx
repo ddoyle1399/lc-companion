@@ -265,8 +265,58 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
         return { state: "error", message: msg };
       }
       return { state: "done", note: json.note };
-    } catch {
-      return { state: "error", message: "Network error." };
+    } catch (err) {
+      const detail =
+        err instanceof Error
+          ? err.message
+          : typeof err === "string"
+            ? err
+            : "unknown";
+      return {
+        state: "error",
+        message: `Network error (${detail}). Often a dev-server timeout under parallel load. Hit Retry on this card.`,
+      };
+    }
+  }
+
+  // Retry a single failed (or any) job in place. The summary counts and
+  // per-card status update as it runs.
+  async function retryOne(job: Job) {
+    setResults((prev) => ({ ...prev, [job.displayKey]: { state: "generating" } }));
+    const status = await generateOne(job);
+    setResults((prev) => ({ ...prev, [job.displayKey]: status }));
+  }
+
+  // Retry every job whose current status is "error". Runs through the same
+  // PARALLELISM worker pool as the original batch.
+  async function retryAllFailed() {
+    const failedJobs = jobs.filter((j) => results[j.displayKey]?.state === "error");
+    if (failedJobs.length === 0) return;
+    setGenerating(true);
+    try {
+      // Mark each failed job as queued so the spinner is consistent.
+      setResults((prev) => {
+        const next = { ...prev };
+        for (const j of failedJobs) next[j.displayKey] = { state: "queued" };
+        return next;
+      });
+      let cursor = 0;
+      async function worker() {
+        while (cursor < failedJobs.length) {
+          const idx = cursor++;
+          const job = failedJobs[idx];
+          setResults((prev) => ({ ...prev, [job.displayKey]: { state: "generating" } }));
+          const status = await generateOne(job);
+          setResults((prev) => ({ ...prev, [job.displayKey]: status }));
+        }
+      }
+      const workers = Array.from(
+        { length: Math.min(PARALLELISM, failedJobs.length) },
+        () => worker(),
+      );
+      await Promise.all(workers);
+    } finally {
+      setGenerating(false);
     }
   }
 
@@ -514,19 +564,30 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
       {total > 0 && (
         <div className="space-y-3">
           {/* Summary bar */}
-          <div className="flex items-center justify-between bg-white border border-gray-200 rounded-lg px-5 py-3">
+          <div className="flex items-center justify-between bg-white border border-gray-200 rounded-lg px-5 py-3 flex-wrap gap-3">
             <div className="text-sm text-navy">
               <span className="font-medium">{done}</span> done
               {failed > 0 && <span className="text-red-600 ml-3"><span className="font-medium">{failed}</span> failed</span>}
               {inFlight > 0 && <span className="text-gray-500 ml-3"><span className="font-medium">{inFlight}</span> in flight</span>}
               <span className="text-gray-400 ml-3">of {total}</span>
             </div>
-            <a
-              href="/single-text/library"
-              className="text-sm text-teal-700 hover:underline whitespace-nowrap"
-            >
-              View library →
-            </a>
+            <div className="flex items-center gap-3">
+              {failed > 0 && (
+                <button
+                  onClick={retryAllFailed}
+                  disabled={generating}
+                  className="text-sm px-3 py-1.5 border border-red-300 text-red-700 rounded hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Retry {failed} failed
+                </button>
+              )}
+              <a
+                href="/single-text/library"
+                className="text-sm text-teal-700 hover:underline whitespace-nowrap"
+              >
+                View library →
+              </a>
+            </div>
           </div>
 
           {/* Combine-all panel: appears once at least 2 notes are done.
@@ -592,7 +653,16 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
                 </div>
 
                 {status.state === "error" && (
-                  <p className="text-sm text-red-600">{status.message}</p>
+                  <div>
+                    <p className="text-sm text-red-600 mb-2">{status.message}</p>
+                    <button
+                      onClick={() => retryOne(job)}
+                      disabled={generating}
+                      className="px-3 py-1.5 text-sm border border-red-300 text-red-700 rounded hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Retry
+                    </button>
+                  </div>
                 )}
 
                 {status.state === "generating" && (
