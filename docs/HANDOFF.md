@@ -157,6 +157,27 @@ Batch: when 2+ notes are done in a batch run, a teal "Combine all N notes into o
 
 The combined-export panel shows under the summary bar above the per-job cards. Uses `wrapForH1Club` for the HTML variant so the combined doc is paste-ready for the H1 Club CMS.
 
+### K. Per-quote tags + plain-English commentary (commit `2c8f807`)
+
+Quote bank V2 audit found two remaining gaps after the bold-as-heading repair: (a) no theme tags per quote so a student scanning a long bank cannot visually find the quotes that fit a specific question topic; (b) commentary still in writer-voice not teacher-voice (anaphora, weaponise, principled, narrative, self-dismantling — words a 17-year-old has to look up).
+
+Fix at the prompt layer. Applies to single-text quote_bank_*, character_profile Defining Quotes, and poetry quote_bank_theme.
+
+New 4-line per-quote pattern:
+```
+> "Quote text, verbatim."
+Speaker, Act X Scene Y.
+Tags: jealousy · self-doubt · turning point
+
+Plain-English meaning sentence. Exam-use sentence.
+```
+
+Tags are plain text (not bolded), 2-4 short topic words separated by " · " (space middle-dot space). Lets a student scan visually for "race" or "self-knowledge" without reading every commentary.
+
+Sentence 1 is what the line MEANS in plain teacher-to-student English. Sentence 2 names the exam question type, opening with a directive verb ("Use this for...", "Best for...", "Lift this into..."). Banned jargon list explicit in the prompt: anaphora, parallelism, syntax, narrative, rhetorician, weaponise, principled, self-dismantling, paratactic, hypotactic, valorise, register, modality.
+
+Also tightened the poetry quote_bank_theme prompt which previously used `**Stanza:** **Sub-angle:** **How to use it:**` field-label format. Now uses the same 4-line pattern as the single-text bank.
+
 ### J. Bold-as-heading repair + selection discipline (commit `8d21430`)
 
 Audit of an Othello character quote bank exposed two residual problems after the design overhaul:
