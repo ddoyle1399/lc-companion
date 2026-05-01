@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import type { Asset, AssetsByText } from "./page";
 import { wrapForH1Club } from "@/lib/export/h1ClubHtml";
+import { exportToWord } from "@/lib/export/word";
 
 type Level = "higher" | "ordinary";
 type Depth = "quick" | "standard" | "deep";
@@ -93,6 +94,85 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
     const html = wrapForH1Club({ markdown: body, title, level });
     await navigator.clipboard.writeText(html);
     flashCopied(jobKey, "html");
+  }
+
+  function safeFilename(s: string): string {
+    return s.replace(/[/\\?%*:|"<>]/g, "-").trim();
+  }
+
+  function downloadMarkdownFile(filename: string, body: string) {
+    const blob = new Blob([body], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${safeFilename(filename)}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function downloadDocxFile(filename: string, body: string) {
+    await exportToWord(body, safeFilename(filename));
+  }
+
+  /**
+   * Build one combined markdown document from all done notes, separated by
+   * the conventional "---" hr and an H1 per-section. Failed and in-flight
+   * jobs are skipped (with a small note at the top counting them).
+   */
+  function buildCombinedMarkdown(): string {
+    const doneNotes: { name: string; body: string }[] = [];
+    const skipped: string[] = [];
+    for (const job of jobs) {
+      const status = results[job.displayKey];
+      if (status?.state === "done") {
+        doneNotes.push({
+          name: status.note.display_subject,
+          body: status.note.body_markdown,
+        });
+      } else if (status?.state === "error") {
+        skipped.push(`${job.displayName} (failed)`);
+      } else if (status) {
+        skipped.push(`${job.displayName} (${status.state})`);
+      }
+    }
+    const header = [
+      `# ${text} — ${noteTypeMeta.label} (${doneNotes.length} notes)`,
+      "",
+      `Generated ${new Date().toLocaleString("en-IE")}.  Level: ${level === "higher" ? "Higher" : "Ordinary"}.  Depth: ${depth}.`,
+    ];
+    if (skipped.length > 0) {
+      header.push("", `Skipped: ${skipped.join(", ")}.`);
+    }
+    header.push("", "---", "");
+    const sections = doneNotes.map((n) => n.body.trim()).join("\n\n---\n\n");
+    return `${header.join("\n")}\n${sections}\n`;
+  }
+
+  function combinedFilename(): string {
+    return `${text} - ${noteTypeMeta.label} - ${new Date().toISOString().slice(0, 10)}`;
+  }
+
+  async function copyCombinedMarkdown() {
+    await navigator.clipboard.writeText(buildCombinedMarkdown());
+    flashCopied("__combined__", "md");
+  }
+
+  async function copyCombinedAsH1ClubHtml() {
+    const html = wrapForH1Club({
+      markdown: buildCombinedMarkdown(),
+      title: combinedFilename(),
+      level,
+    });
+    await navigator.clipboard.writeText(html);
+    flashCopied("__combined__", "html");
+  }
+
+  function downloadCombinedMarkdown() {
+    downloadMarkdownFile(combinedFilename(), buildCombinedMarkdown());
+  }
+
+  async function downloadCombinedDocx() {
+    await downloadDocxFile(combinedFilename(), buildCombinedMarkdown());
   }
 
   const noteTypeMeta = NOTE_TYPES.find((t) => t.key === noteType)!;
@@ -449,6 +529,50 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
             </a>
           </div>
 
+          {/* Combine-all panel: appears once at least 2 notes are done.
+              Lets the operator export every successful note as one document. */}
+          {done >= 2 && (
+            <div className="bg-teal-50 border border-teal-200 rounded-lg px-5 py-4">
+              <div className="flex items-baseline justify-between mb-2 flex-wrap gap-2">
+                <h3 className="text-sm font-semibold text-navy">
+                  Combine all {done} notes into one document
+                </h3>
+                {failed > 0 && (
+                  <span className="text-xs text-red-600">
+                    {failed} failed note{failed === 1 ? "" : "s"} excluded
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={copyCombinedMarkdown}
+                  className="px-3 py-1.5 text-sm border border-gray-300 bg-white rounded hover:bg-gray-50"
+                >
+                  {copiedKey === "__combined__::md" ? "Copied!" : "Copy combined Markdown"}
+                </button>
+                <button
+                  onClick={copyCombinedAsH1ClubHtml}
+                  className="px-3 py-1.5 text-sm bg-teal text-white rounded hover:bg-teal/90"
+                  title="Copy combined as H1 Club HTML, ready to paste into the H1 Club CMS"
+                >
+                  {copiedKey === "__combined__::html" ? "Copied!" : "Copy combined for H1 Club"}
+                </button>
+                <button
+                  onClick={downloadCombinedMarkdown}
+                  className="px-3 py-1.5 text-sm border border-gray-300 bg-white rounded hover:bg-gray-50"
+                >
+                  Download combined .md
+                </button>
+                <button
+                  onClick={downloadCombinedDocx}
+                  className="px-3 py-1.5 text-sm border border-gray-300 bg-white rounded hover:bg-gray-50"
+                >
+                  Download combined .docx
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Per-job cards */}
           {jobs.map((job) => {
             const status = results[job.displayKey];
@@ -501,6 +625,30 @@ export default function SingleTextNotesForm({ availableTexts, assetsByText }: Pr
                         title="Copy as H1 Club HTML, ready to paste into the H1 Club CMS"
                       >
                         {copiedKey === `${job.displayKey}::html` ? "Copied!" : "Copy for H1 Club"}
+                      </button>
+                      <button
+                        onClick={() =>
+                          downloadMarkdownFile(
+                            `${text} - ${status.note.display_subject}`,
+                            status.note.body_markdown,
+                          )
+                        }
+                        className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                        title="Download as a Markdown file"
+                      >
+                        .md
+                      </button>
+                      <button
+                        onClick={() =>
+                          downloadDocxFile(
+                            `${text} - ${status.note.display_subject}`,
+                            status.note.body_markdown,
+                          )
+                        }
+                        className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                        title="Download as a Word document"
+                      >
+                        .docx
                       </button>
                       <a
                         href={`/single-text/library/${status.note.id}`}
