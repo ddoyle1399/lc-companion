@@ -157,6 +157,17 @@ Batch: when 2+ notes are done in a batch run, a teal "Combine all N notes into o
 
 The combined-export panel shows under the summary bar above the per-job cards. Uses `wrapForH1Club` for the HTML variant so the combined doc is paste-ready for the H1 Club CMS.
 
+### I. Note design overhaul, no AI dividers (commit `4463107`)
+
+The Othello Jealousy quote bank exposed three failure modes across all note prompts: horizontal rules between every section, bold paragraphs masquerading as headings (so the docx had no real outline), and 4-5 sentence wordy commentary with cross-quote chatter ("Pair this with...", "Use alongside...").
+
+Fix at three layers:
+- **`lib/claude/outputRules.ts`**: new `DOCUMENT_DESIGN_RULE` constant added to `ABSOLUTE_OUTPUT_RULES`. Bans `---`/`***`/`___` horizontal rules, bold-as-heading, field-label format (`**Speaker:** X`), cross-quote chatter. Caps quote-bank commentary at 2 sentences. Applies to every prompt that imports the shared rules block — every poetry and single-text builder.
+- **`lib/claude/textNotePrompts.ts`**: rewrite of the `quote_bank_theme/_character/_act` prompt with a worked example showing the exact output shape (H2 sub-themes, blockquote, plain-prose attribution line, exactly 2 sentences). Explicit bans restated locally.
+- **`lib/export/word.ts` and `lib/export/h1ClubHtml.ts`**: safety net at the export boundary. Strips horizontal-rule lines from markdown source AND any `<hr>` tags from rendered HTML. So even if the model regresses, the .docx and H1 Club paste don't carry them.
+
+**To test the fix:** regenerate the Othello Jealousy quote bank. Compare to the old version in `/sessions/affectionate-sleepy-gates/mnt/uploads/Othello - Jealousy.docx`. Should now have proper H1/H2 outline, no `---` between quotes, exactly 2 sentences per quote, plain "Iago, Act 3 Scene 3." attribution lines, no cross-quote chatter.
+
 ### H. Single-text retry on failed cards (commit `664c7b7`)
 
 Network errors used to be a dead end - failed cards just showed "Network error." with no recovery. Now:
