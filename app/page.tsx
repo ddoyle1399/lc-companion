@@ -3,12 +3,12 @@ import Nav from "@/components/nav";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 /**
- * Dashboard.
+ * Dashboard. Six-tile grid, SaaS-clean.
  *
- * Six-tile grid. Each tile is one function with one primary number.
- * Coverage table moved to /coverage. Recent activity moved to /library.
- * The dashboard is an entry point, not a data view. If the operator wants
- * detail, they click in.
+ * Visual direction: Stripe / Resend / Linear. Pure white, fine borders,
+ * generous whitespace, hover via shadow not colour. The cream/navy/teal
+ * brand is kept but the background loses the cream tint here so the
+ * dashboard reads as a polished tool rather than a poster.
  */
 
 interface Counts {
@@ -58,7 +58,7 @@ async function loadCounts(): Promise<Counts> {
     poetryRows: poetryAll.count ?? 0,
     poetryVerified: poetryVerified.count ?? 0,
     textNotes: textNotesTotal.count ?? 0,
-    comparativeProfiles: 7, // file-based, see data/profiles/comparative/2026
+    comparativeProfiles: 7,
     lastActivityIso: candidates[0] ?? null,
   };
 }
@@ -84,113 +84,85 @@ export default async function DashboardPage() {
   const counts = await loadCounts();
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-white">
       <Nav />
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
 
-        {/* Header — minimal. Title + last activity timestamp. */}
-        <header className="mb-12 sm:mb-16">
-          <h1 className="text-4xl sm:text-5xl font-semibold text-navy tracking-tight">
+      <main className="max-w-6xl mx-auto px-6 sm:px-8 py-14 sm:py-20">
+
+        {/* Header */}
+        <header className="mb-14 sm:mb-16">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-1.5 h-1.5 rounded-full bg-teal" aria-hidden />
+            <p className="text-xs uppercase tracking-[0.14em] text-gray-500 font-medium">
+              Last generation {relativeTime(counts.lastActivityIso)}
+            </p>
+          </div>
+          <h1 className="text-[2.75rem] sm:text-5xl font-semibold text-gray-900 tracking-tight leading-[1.05]">
             LC Companion
           </h1>
-          <p className="text-sm text-gray-500 mt-3">
-            Last generation {relativeTime(counts.lastActivityIso)}
+          <p className="text-base text-gray-500 mt-3 max-w-xl">
+            Generate, review, and manage Leaving Certificate English content.
           </p>
         </header>
 
-        {/* Primary tiles: 3 across on desktop. The three things created daily. */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
-          <Tile
+        {/* Primary tiles */}
+        <SectionLabel>Generate</SectionLabel>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gray-100 rounded-2xl overflow-hidden mb-10 ring-1 ring-gray-100">
+          <PrimaryTile
             href="/poetry"
             title="Poetry"
             subtitle="Notes for prescribed poems"
-            metric={`${counts.poetryRows}`}
+            metric={counts.poetryRows}
             metricLabel={`${counts.poetryVerified} verified`}
           />
-          <Tile
+          <PrimaryTile
             href="/single-text"
             title="Single Text"
             subtitle="Notes for novels, plays, Shakespeare"
-            metric={`${counts.textNotes}`}
+            metric={counts.textNotes}
             metricLabel="notes generated"
           />
-          <Tile
+          <PrimaryTile
             href="/comparative"
             title="Comparative"
             subtitle="Cross-text essays and mode notes"
-            metric={`${counts.comparativeProfiles}`}
+            metric={counts.comparativeProfiles}
             metricLabel="text profiles"
           />
-        </section>
+        </div>
 
-        {/* Secondary tiles: same shape, lighter accent. Admin functions. */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
-          <Tile
+        {/* Admin tiles */}
+        <SectionLabel>Manage</SectionLabel>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gray-100 rounded-2xl overflow-hidden mb-14 ring-1 ring-gray-100">
+          <AdminTile
             href="/generate"
-            title="Sample Answer"
+            title="Sample answer"
             subtitle="H1, H2, H3 graded model answers"
-            tone="subtle"
           />
-          <Tile
+          <AdminTile
             href="/coverage"
             title="Coverage"
             subtitle="Catalogue gaps by poet and text"
-            tone="subtle"
           />
-          <Tile
+          <AdminTile
             href="/single-text/library"
             title="Library"
             subtitle="Browse and edit generated notes"
-            tone="subtle"
           />
-        </section>
+        </div>
 
-        {/* Tools: a single quiet row of plain links, no chrome. */}
-        <section className="border-t border-gray-200 pt-8">
-          <p className="text-xs uppercase tracking-wider text-gray-400 font-medium mb-4">
-            More
-          </p>
-          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-3 text-sm">
-            <li>
-              <Link href="/worksheet" className="text-navy hover:text-teal transition-colors">
-                Worksheet
-              </Link>
-            </li>
-            <li>
-              <Link href="/slides" className="text-navy hover:text-teal transition-colors">
-                Slides
-              </Link>
-            </li>
-            <li>
-              <Link href="/video" className="text-navy hover:text-teal transition-colors">
-                Video
-              </Link>
-            </li>
-            <li>
-              <Link href="/unseen-poetry" className="text-navy hover:text-teal transition-colors">
-                Unseen poetry
-              </Link>
-            </li>
-            <li>
-              <Link href="/comprehension" className="text-navy hover:text-teal transition-colors">
-                Comprehension
-              </Link>
-            </li>
-            <li>
-              <Link href="/composition" className="text-navy hover:text-teal transition-colors">
-                Composition
-              </Link>
-            </li>
-            <li>
-              <Link href="/poem-texts" className="text-navy hover:text-teal transition-colors">
-                Poem texts
-              </Link>
-            </li>
-            <li>
-              <Link href="/generate/history" className="text-gray-500 hover:text-teal transition-colors">
-                History
-              </Link>
-            </li>
+        {/* Tools — tertiary, plain link list */}
+        <section>
+          <SectionLabel>More</SectionLabel>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-3 text-sm">
+            <ToolLink href="/worksheet">Worksheet</ToolLink>
+            <ToolLink href="/slides">Slides</ToolLink>
+            <ToolLink href="/video">Video</ToolLink>
+            <ToolLink href="/unseen-poetry">Unseen poetry</ToolLink>
+            <ToolLink href="/comprehension">Comprehension</ToolLink>
+            <ToolLink href="/composition">Composition</ToolLink>
+            <ToolLink href="/poem-texts">Poem texts</ToolLink>
+            <ToolLink href="/generate/history" muted>Generation history</ToolLink>
           </ul>
         </section>
       </main>
@@ -198,54 +170,118 @@ export default async function DashboardPage() {
   );
 }
 
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-xs uppercase tracking-[0.14em] text-gray-500 font-medium mb-3">
+      {children}
+    </p>
+  );
+}
+
 /**
- * Tile.
+ * PrimaryTile.
  *
- * Two tones:
- *   - default (primary actions): white card, larger, primary metric on the
- *     bottom-right, hover lifts the border to teal.
- *   - subtle (admin/secondary): same dimensions, no metric, slightly muted.
+ * White card, subtle hover. Layout: title at top, metric large at bottom.
+ * No icons. The metric IS the visual focal point.
  *
- * No icons. No coloured tags. The label IS the icon.
+ * The grid uses gap-px on a gray-100 background so adjacent tiles share a
+ * 1px hairline divider — Stripe-style, no double borders, no boxy frames.
  */
-function Tile({
+function PrimaryTile({
   href,
   title,
   subtitle,
   metric,
   metricLabel,
-  tone = "default",
 }: {
   href: string;
   title: string;
   subtitle: string;
-  metric?: string;
-  metricLabel?: string;
-  tone?: "default" | "subtle";
+  metric: number;
+  metricLabel: string;
 }) {
-  const base =
-    "group block bg-white border rounded-xl p-7 sm:p-8 transition-all hover:border-teal hover:shadow-[0_2px_12px_rgba(27,42,74,0.05)]";
-  const border = tone === "subtle" ? "border-gray-100" : "border-gray-200";
   return (
-    <Link href={href} className={`${base} ${border} min-h-[160px] flex flex-col`}>
+    <Link
+      href={href}
+      className="group bg-white p-7 sm:p-8 flex flex-col min-h-[180px] transition-colors hover:bg-gray-50"
+    >
       <div className="flex-1">
-        <h2 className="text-xl font-semibold text-navy group-hover:text-teal transition-colors tracking-tight">
+        <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
           {title}
         </h2>
         <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">
           {subtitle}
         </p>
       </div>
-      {metric !== undefined && (
-        <div className="mt-6 flex items-baseline gap-2 tabular-nums">
-          <span className="text-2xl font-semibold text-navy">{metric}</span>
-          {metricLabel && (
-            <span className="text-xs text-gray-400 uppercase tracking-wider">
-              {metricLabel}
-            </span>
-          )}
-        </div>
-      )}
+      <div className="mt-8 flex items-baseline gap-2 tabular-nums">
+        <span className="text-[2rem] font-semibold text-gray-900 leading-none tracking-tight">
+          {metric}
+        </span>
+        <span className="text-xs text-gray-400">{metricLabel}</span>
+      </div>
+      <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-teal opacity-0 group-hover:opacity-100 transition-opacity">
+        Open
+        <span aria-hidden>&rarr;</span>
+      </span>
     </Link>
+  );
+}
+
+/**
+ * AdminTile. Compact version of PrimaryTile, no metric, lighter weight.
+ */
+function AdminTile({
+  href,
+  title,
+  subtitle,
+}: {
+  href: string;
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group bg-white p-7 sm:p-8 flex flex-col min-h-[120px] transition-colors hover:bg-gray-50"
+    >
+      <h2 className="text-base font-semibold text-gray-900 tracking-tight">
+        {title}
+      </h2>
+      <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">{subtitle}</p>
+      <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-teal opacity-0 group-hover:opacity-100 transition-opacity">
+        Open
+        <span aria-hidden>&rarr;</span>
+      </span>
+    </Link>
+  );
+}
+
+function ToolLink({
+  href,
+  children,
+  muted = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  muted?: boolean;
+}) {
+  const colour = muted
+    ? "text-gray-400 hover:text-gray-700"
+    : "text-gray-700 hover:text-gray-900";
+  return (
+    <li>
+      <Link
+        href={href}
+        className={`${colour} transition-colors inline-flex items-center gap-1 group`}
+      >
+        <span>{children}</span>
+        <span
+          aria-hidden
+          className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          &rarr;
+        </span>
+      </Link>
+    </li>
   );
 }
