@@ -157,6 +157,22 @@ Batch: when 2+ notes are done in a batch run, a teal "Combine all N notes into o
 
 The combined-export panel shows under the summary bar above the per-job cards. Uses `wrapForH1Club` for the HTML variant so the combined doc is paste-ready for the H1 Club CMS.
 
+### J. Bold-as-heading repair + selection discipline (commit `8d21430`)
+
+Audit of an Othello character quote bank exposed two residual problems after the design overhaul:
+
+1. **Bold-paragraph-as-heading regression.** The model still emits `**Heading**` instead of `## Heading` on some runs even with `DOCUMENT_DESIGN_RULE` in place. Result: docx has no real outline pane, H1 Club HTML renders headings as plain bold text.
+
+2. **Selection bar too low.** Quotes were workmanlike not elite. Famous lines included on recognition value rather than analytical utility (e.g. an Othello character bank that pulled "Keep up your bright swords" but missed the Pontic Sea simile and "It is the cause"). Commentary often paraphrased the surface meaning instead of saying something the student would not see for themselves.
+
+Fix at two layers:
+
+- **`lib/export/word.ts` and `lib/export/h1ClubHtml.ts`**: new `promoteBoldLinesToHeadings` pre-processor. A line whose entire content is `**...**` (or `__..__`) and is at most 120 chars gets promoted before paragraph conversion / marked.parse. First qualifying line in a doc with no prior heading becomes `# H1`, all subsequent become `## H2`. Belt-and-braces against future model regressions.
+
+- **`lib/claude/textNotePrompts.ts`**: quote_bank prompt gains a SELECTION DISCIPLINE block — model must ask "would a top-band H1 essay actually quote this" for every candidate and drop fame-but-no-utility lines. Character/theme variants flagged separately. character_profile prompt gets a parallel sentence in its "Defining quotes" section. Cover-letter framing ("This bank gathers...", "Any question asking...") explicitly banned.
+
+**To test:** regenerate Othello character quote bank (subject = Othello). Expect: real H1/H2 in docx outline pane, no surface-paraphrase commentary, includes Pontic Sea simile and "It is the cause" if they're in the source bank.
+
 ### I. Note design overhaul, no AI dividers (commit `4463107`)
 
 The Othello Jealousy quote bank exposed three failure modes across all note prompts: horizontal rules between every section, bold paragraphs masquerading as headings (so the docx had no real outline), and 4-5 sentence wordy commentary with cross-quote chatter ("Pair this with...", "Use alongside...").
