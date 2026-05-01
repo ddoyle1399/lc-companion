@@ -94,6 +94,14 @@ function markdownToParagraphs(markdown: string): Paragraph[] {
       continue;
     }
 
+    // Suppress horizontal rule lines (---, ***, ___). The shared output
+    // rules ban these but the model occasionally still emits them. Dropping
+    // them here keeps the exported document professional regardless.
+    if (/^\s*([-*_])\1{2,}\s*$/.test(line)) {
+      i++;
+      continue;
+    }
+
     // H2 heading
     if (line.startsWith("## ")) {
       paragraphs.push(

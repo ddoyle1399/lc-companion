@@ -72,6 +72,22 @@ export const HUMANIZING_RULE =
   `State interpretations confidently where they are defensible. Do not over-hedge. ` +
   `Sound like an experienced teacher talking to a student one-to-one, not a textbook entry.`;
 
+export const DOCUMENT_DESIGN_RULE =
+  `DOCUMENT DESIGN (this is what makes the difference between a teacher resource and AI sludge): ` +
+  `(a) NEVER emit a horizontal rule line. No "---", no "***", no "___", no Unicode box-drawing. ` +
+  `If you feel the urge to insert a divider between sections, use a heading instead. ` +
+  `(b) NEVER use bold paragraphs as headings. The title is "# Title". A section is "## Section". A sub-section is "### Sub-section". ` +
+  `Bold (**word**) is only for inline emphasis on key terms. ` +
+  `(c) NEVER use field-label format like "**Speaker:** Iago **Act/Scene:** 3.3" or "**Theme:** Jealousy". ` +
+  `Attribution belongs in a single short prose line beneath the quote, e.g. "Iago, Act 3 Scene 3." Nothing bolded. No labels. ` +
+  `(d) NEVER add cross-quote chatter. Lines like "Pair this with the quote below", "Use alongside Section 2", ` +
+  `"This complements the previous quote", "Bring this in when discussing X" are banned. The student decides what to pair. ` +
+  `Each quote stands on its own and earns its place by what IT does. ` +
+  `(e) Commentary per quote in a quote bank: 2 sentences MAXIMUM. One sentence on what the quote shows. ` +
+  `One sentence on the question type or argument it slots into. No more. If you cannot make the case in 2 sentences, the quote is not strong enough. ` +
+  `(f) Sub-themes in a quote bank get an "## H2 heading" with a clear name. Do not number them ("1. The Nature of...") ` +
+  `unless numbering is itself meaningful. The H2 heading is the structure; numbering on top of it is noise.`;
+
 // ---------------------------------------------------------------------------
 // Combined block — inject this into every prompt that generates prose output
 // ---------------------------------------------------------------------------
@@ -86,4 +102,6 @@ export const ABSOLUTE_OUTPUT_RULES = `OUTPUT RULES — enforced by automated pos
 
 4. ${ANTI_AI_TELLS_RULE}
 
-5. ${HUMANIZING_RULE}`;
+5. ${HUMANIZING_RULE}
+
+6. ${DOCUMENT_DESIGN_RULE}`;

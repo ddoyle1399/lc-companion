@@ -271,19 +271,47 @@ Write the note now.`;
 NOTE TYPE: Curated Quote Bank
 SUBJECT: ${subjectDisplay}
 
-Produce a curated quote bank focused on "${subjectDisplay}". Structure:
+Produce a curated quote bank focused on "${subjectDisplay}".
 
-# Quote Bank: ${subjectDisplay} (${textKey})
+OUTPUT SHAPE (follow exactly):
 
-Group the most relevant 12-20 quotes from the bank into 3-5 sub-themes or sub-categories. Each sub-grouping is a ## section. Within each, quotes appear with a ### heading naming the moment or character (e.g. "### Lady Macbeth, Act 1 Scene 5") followed by:
-- The quote itself in a > blockquote
-- Attribution line: speaker (if drama) and act/scene/line if available
-- 2-3 sentences explaining what the quote shows and how a student could deploy it in an exam answer
+Open with the title as a real H1: "# Quote Bank: ${subjectDisplay} in ${textKey}".
 
-## Quick reference for past questions
-List 3-5 past question patterns these quotes serve.
+Follow with a 2-3 sentence orientation paragraph. Plain prose. What this bank is, what it gives the student, what kind of exam question it serves. No bold field labels.
 
-Write the bank now.`;
+Then group 12-18 of the strongest quotes from the bank into 3-5 sub-themes. Each sub-theme is an "## H2 section" with a SHORT, CLEAR name (3-6 words). Do not number the sub-themes. Do not invent decorative titles. Examples of good sub-theme names: "How jealousy takes root", "Iago's own jealousy", "The cost in the final act". Bad: "1. The Nature and Anatomy of Jealousy" (numbering + over-long).
+
+Within each sub-theme, quotes follow this EXACT pattern:
+
+> "Quote text here, verbatim from the bank."
+Speaker, Act X Scene Y.
+
+What the quote shows. One sentence. One sentence on the exam-question type or argument it lifts into.
+
+Notes on the pattern:
+- The quote line: > followed by the verbatim text in straight double quotes. Nothing else on that line.
+- The attribution line is plain prose, no bold, no labels, no italics. Just "Iago, Act 3 Scene 3." with a full stop.
+- The commentary is exactly TWO sentences. Sentence 1 is what the quote shows about the subject. Sentence 2 is the question pattern or argument it answers. No more.
+- BANNED in the commentary: "Pair this with...", "Use alongside...", "This complements the X above", "Bring this in when discussing Y", "Bring it together with...", any cross-quote linking. The student decides which to bundle.
+- BANNED: bold paragraphs as fake headings. The H2 is the only thing structuring this section.
+- BANNED: horizontal rules ("---") between quotes. Whitespace and the next quote's > is the only separator needed.
+
+Worked example of one quote, exactly to spec:
+
+## How jealousy takes root in Othello
+
+> "I think my wife be honest, and think she is not."
+Othello, Act 3 Scene 3.
+
+Othello is suspended between trust and suspicion, and the parallel syntax enacts his mind splitting in real time. Use this for any question on the moment jealousy converts from doubt into psychological collapse.
+
+End the bank with one final section:
+
+## Past questions this bank answers
+
+A bullet list of 3-5 past-question patterns. Each bullet: the question phrasing in quotes, then ONE sentence on which sub-themes above to lift from. No long explanations.
+
+Write the bank now. Hold yourself to the 2-sentence commentary cap; if a quote needs more, it does not belong in the bank.`;
 
     case "dramatic_technique":
       return `${HEADER}

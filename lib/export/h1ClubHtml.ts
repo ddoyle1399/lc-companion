@@ -95,6 +95,16 @@ function stripLeadingH1(markdown: string): string {
 }
 
 /**
+ * Strip markdown horizontal-rule lines ("---", "***", "___") from the source
+ * so they don't render as <hr> tags in the H1 Club CMS. The shared output
+ * rules ban these, but the model still emits them occasionally — this is
+ * the safety net at the export boundary.
+ */
+function stripHorizontalRules(markdown: string): string {
+  return markdown.replace(/^\s*([-*_])\1{2,}\s*$/gm, "");
+}
+
+/**
  * Replace em dashes, en dashes, and double hyphens with ", " so the output
  * never carries the dash tells. Single hyphens (compound words) are kept.
  */
@@ -146,9 +156,10 @@ export function wrapForH1Club(input: WrapInput): string {
       ? "Ordinary Level English Resource"
       : "Higher Level English Resource";
 
-  const cleanedMd = scrubDashes(stripLeadingH1(input.markdown));
+  const cleanedMd = scrubDashes(stripHorizontalRules(stripLeadingH1(input.markdown)));
   let bodyHtml = marked.parse(cleanedMd, { async: false }) as string;
   bodyHtml = scrubDashes(bodyHtml); // belt-and-braces: catch any reintroduced
+  bodyHtml = bodyHtml.replace(/<hr\s*\/?>/gi, ""); // strip any <hr> that slipped through
   bodyHtml = applyBrandStyles(bodyHtml);
   bodyHtml = wrapAnalysisLabels(bodyHtml);
 
