@@ -3,50 +3,62 @@ import Nav from "@/components/nav";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 /**
- * Dashboard. Six-tile grid, SaaS-clean.
+ * Dashboard. Customer-facing SaaS quality.
  *
- * Visual direction: Stripe / Resend / Linear. Pure white, fine borders,
- * generous whitespace, hover via shadow not colour. The cream/navy/teal
- * brand is kept but the background loses the cream tint here so the
- * dashboard reads as a polished tool rather than a poster.
+ * Reference bar: Linear, Resend, Vercel, Cal.com. Light neutral background,
+ * white cards with proper rounded corners, generous whitespace, restrained
+ * accent. KPI strip at the top, two action sections below, a quiet tools
+ * row at the bottom.
  */
 
 interface Counts {
   poetryRows: number;
   poetryVerified: number;
   textNotes: number;
+  textTexts: number; // distinct text_keys touched
   comparativeProfiles: number;
   lastActivityIso: string | null;
 }
 
 async function loadCounts(): Promise<Counts> {
   const supabase = getServerSupabase();
-  const [poetryAll, poetryVerified, textNotesTotal, latestText, latestPoem] =
-    await Promise.all([
-      supabase
-        .from("notes")
-        .select("id", { count: "exact", head: true })
-        .eq("content_type", "poem_notes"),
-      supabase
-        .from("notes")
-        .select("id", { count: "exact", head: true })
-        .eq("content_type", "poem_notes")
-        .eq("status", "verified"),
-      supabase.from("text_notes").select("id", { count: "exact", head: true }),
-      supabase
-        .from("text_notes")
-        .select("generated_at")
-        .order("generated_at", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from("notes")
-        .select("generated_at")
-        .eq("content_type", "poem_notes")
-        .order("generated_at", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-    ]);
+  const [
+    poetryAll,
+    poetryVerified,
+    textNotesTotal,
+    textKeys,
+    latestText,
+    latestPoem,
+  ] = await Promise.all([
+    supabase
+      .from("notes")
+      .select("id", { count: "exact", head: true })
+      .eq("content_type", "poem_notes"),
+    supabase
+      .from("notes")
+      .select("id", { count: "exact", head: true })
+      .eq("content_type", "poem_notes")
+      .eq("status", "verified"),
+    supabase.from("text_notes").select("id", { count: "exact", head: true }),
+    supabase.from("text_notes").select("text_key"),
+    supabase
+      .from("text_notes")
+      .select("generated_at")
+      .order("generated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("notes")
+      .select("generated_at")
+      .eq("content_type", "poem_notes")
+      .order("generated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+
+  const distinctTexts = new Set(
+    ((textKeys.data ?? []) as Array<{ text_key: string }>).map((r) => r.text_key),
+  ).size;
 
   const candidates = [
     (latestText.data as { generated_at?: string } | null)?.generated_at ?? null,
@@ -58,6 +70,7 @@ async function loadCounts(): Promise<Counts> {
     poetryRows: poetryAll.count ?? 0,
     poetryVerified: poetryVerified.count ?? 0,
     textNotes: textNotesTotal.count ?? 0,
+    textTexts: distinctTexts,
     comparativeProfiles: 7,
     lastActivityIso: candidates[0] ?? null,
   };
@@ -70,10 +83,10 @@ function relativeTime(iso: string | null): string {
   if (diffMin < 1) return "just now";
   if (diffMin < 60) return `${diffMin} min ago`;
   const hours = Math.round(diffMin / 60);
-  if (hours < 24) return `${hours} hr ago`;
+  if (hours < 24) return `${hours}h ago`;
   const days = Math.round(hours / 24);
   if (days === 1) return "yesterday";
-  if (days < 7) return `${days} days ago`;
+  if (days < 7) return `${days}d ago`;
   return new Date(iso).toLocaleDateString("en-IE", {
     day: "numeric",
     month: "short",
@@ -82,176 +95,208 @@ function relativeTime(iso: string | null): string {
 
 export default async function DashboardPage() {
   const counts = await loadCounts();
+  const last = relativeTime(counts.lastActivityIso);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       <Nav />
 
-      <main className="max-w-6xl mx-auto px-6 sm:px-8 py-14 sm:py-20">
+      <main className="max-w-7xl mx-auto px-6 lg:px-10 py-10 sm:py-12">
 
         {/* Header */}
-        <header className="mb-14 sm:mb-16">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-teal" aria-hidden />
-            <p className="text-xs uppercase tracking-[0.14em] text-gray-500 font-medium">
-              Last generation {relativeTime(counts.lastActivityIso)}
+        <header className="flex items-end justify-between flex-wrap gap-4 mb-10 pb-8 border-b border-gray-200">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-gray-900">
+              Dashboard
+            </h1>
+            <p className="text-sm text-gray-500 mt-1.5">
+              Generate, review and manage Leaving Certificate English content.
             </p>
           </div>
-          <h1 className="text-[2.75rem] sm:text-5xl font-semibold text-gray-900 tracking-tight leading-[1.05]">
-            LC Companion
-          </h1>
-          <p className="text-base text-gray-500 mt-3 max-w-xl">
-            Generate, review, and manage Leaving Certificate English content.
-          </p>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden />
+            <span className="text-xs font-medium text-gray-700 tabular-nums">
+              Last activity {last}
+            </span>
+          </div>
         </header>
 
-        {/* Primary tiles */}
-        <SectionLabel>Generate</SectionLabel>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gray-100 rounded-2xl overflow-hidden mb-10 ring-1 ring-gray-100">
-          <PrimaryTile
-            href="/poetry"
-            title="Poetry"
-            subtitle="Notes for prescribed poems"
-            metric={counts.poetryRows}
-            metricLabel={`${counts.poetryVerified} verified`}
+        {/* KPI strip */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+          <Stat
+            label="Poetry notes"
+            value={counts.poetryRows}
+            sub={`${counts.poetryVerified} verified`}
           />
-          <PrimaryTile
-            href="/single-text"
-            title="Single Text"
-            subtitle="Notes for novels, plays, Shakespeare"
-            metric={counts.textNotes}
-            metricLabel="notes generated"
+          <Stat
+            label="Single text notes"
+            value={counts.textNotes}
+            sub={`across ${counts.textTexts} text${counts.textTexts === 1 ? "" : "s"}`}
           />
-          <PrimaryTile
-            href="/comparative"
-            title="Comparative"
-            subtitle="Cross-text essays and mode notes"
-            metric={counts.comparativeProfiles}
-            metricLabel="text profiles"
+          <Stat
+            label="Comparative profiles"
+            value={counts.comparativeProfiles}
+            sub="2026 cycle"
           />
         </div>
 
-        {/* Admin tiles */}
-        <SectionLabel>Manage</SectionLabel>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gray-100 rounded-2xl overflow-hidden mb-14 ring-1 ring-gray-100">
-          <AdminTile
-            href="/generate"
-            title="Sample answer"
-            subtitle="H1, H2, H3 graded model answers"
-          />
-          <AdminTile
-            href="/coverage"
-            title="Coverage"
-            subtitle="Catalogue gaps by poet and text"
-          />
-          <AdminTile
-            href="/single-text/library"
-            title="Library"
-            subtitle="Browse and edit generated notes"
-          />
-        </div>
+        {/* Generate */}
+        <section className="mb-10">
+          <SectionHeading>Generate</SectionHeading>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <ActionCard
+              href="/poetry"
+              title="Poetry"
+              description="Notes for prescribed poems"
+            />
+            <ActionCard
+              href="/single-text"
+              title="Single Text"
+              description="Notes for novels, plays, Shakespeare"
+            />
+            <ActionCard
+              href="/comparative"
+              title="Comparative"
+              description="Cross-text essays and mode notes"
+            />
+          </div>
+        </section>
 
-        {/* Tools — tertiary, plain link list */}
+        {/* Manage */}
+        <section className="mb-10">
+          <SectionHeading>Manage</SectionHeading>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <ActionCard
+              href="/generate"
+              title="Sample answer"
+              description="H1, H2, H3 graded model answers"
+              tone="muted"
+            />
+            <ActionCard
+              href="/coverage"
+              title="Coverage"
+              description="Catalogue gaps by poet and text"
+              tone="muted"
+            />
+            <ActionCard
+              href="/single-text/library"
+              title="Library"
+              description="Browse and edit generated notes"
+              tone="muted"
+            />
+          </div>
+        </section>
+
+        {/* Tools */}
         <section>
-          <SectionLabel>More</SectionLabel>
-          <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-3 text-sm">
-            <ToolLink href="/worksheet">Worksheet</ToolLink>
-            <ToolLink href="/slides">Slides</ToolLink>
-            <ToolLink href="/video">Video</ToolLink>
-            <ToolLink href="/unseen-poetry">Unseen poetry</ToolLink>
-            <ToolLink href="/comprehension">Comprehension</ToolLink>
-            <ToolLink href="/composition">Composition</ToolLink>
-            <ToolLink href="/poem-texts">Poem texts</ToolLink>
-            <ToolLink href="/generate/history" muted>Generation history</ToolLink>
-          </ul>
+          <SectionHeading>Tools</SectionHeading>
+          <div className="bg-white border border-gray-200 rounded-xl p-2">
+            <ul className="grid grid-cols-2 sm:grid-cols-4 gap-1">
+              <ToolLink href="/worksheet">Worksheet</ToolLink>
+              <ToolLink href="/slides">Slides</ToolLink>
+              <ToolLink href="/video">Video</ToolLink>
+              <ToolLink href="/unseen-poetry">Unseen poetry</ToolLink>
+              <ToolLink href="/comprehension">Comprehension</ToolLink>
+              <ToolLink href="/composition">Composition</ToolLink>
+              <ToolLink href="/poem-texts">Poem texts</ToolLink>
+              <ToolLink href="/generate/history">Generation history</ToolLink>
+            </ul>
+          </div>
         </section>
       </main>
     </div>
   );
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-xs uppercase tracking-[0.14em] text-gray-500 font-medium mb-3">
+    <h2 className="text-sm font-semibold text-gray-900 mb-4">
       {children}
-    </p>
+    </h2>
   );
 }
 
 /**
- * PrimaryTile.
- *
- * White card, subtle hover. Layout: title at top, metric large at bottom.
- * No icons. The metric IS the visual focal point.
- *
- * The grid uses gap-px on a gray-100 background so adjacent tiles share a
- * 1px hairline divider — Stripe-style, no double borders, no boxy frames.
+ * KPI card. Big tabular number, small label, sub-text.
+ * White card on gray-50 page, rounded-xl, fine border, very subtle shadow.
  */
-function PrimaryTile({
+function Stat({
+  label,
+  value,
+  sub,
+}: {
+  label: string;
+  value: number;
+  sub?: string;
+}) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl px-6 py-5">
+      <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        {label}
+      </p>
+      <p className="text-3xl font-semibold text-gray-900 tabular-nums mt-2 leading-none">
+        {value}
+      </p>
+      {sub && (
+        <p className="text-xs text-gray-500 mt-2 tabular-nums">{sub}</p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * ActionCard. Primary clickable tile.
+ *
+ * Default tone: navy-friendly heading, hover border lifts to teal with a
+ * subtle teal-tinted shadow and an arrow that nudges right.
+ * Muted tone: lighter type weight, otherwise identical interaction.
+ */
+function ActionCard({
   href,
   title,
-  subtitle,
-  metric,
-  metricLabel,
+  description,
+  tone = "default",
 }: {
   href: string;
   title: string;
-  subtitle: string;
-  metric: number;
-  metricLabel: string;
+  description: string;
+  tone?: "default" | "muted";
 }) {
+  const titleClass =
+    tone === "muted"
+      ? "text-base font-semibold text-gray-800"
+      : "text-base font-semibold text-gray-900";
   return (
     <Link
       href={href}
-      className="group bg-white p-7 sm:p-8 flex flex-col min-h-[180px] transition-colors hover:bg-gray-50"
+      className="group block bg-white border border-gray-200 rounded-xl p-6 transition-all hover:border-teal hover:shadow-[0_4px_20px_-4px_rgba(42,157,143,0.12)] hover:-translate-y-px"
     >
-      <div className="flex-1">
-        <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
-          {title}
-        </h2>
-        <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">
-          {subtitle}
-        </p>
-      </div>
-      <div className="mt-8 flex items-baseline gap-2 tabular-nums">
-        <span className="text-[2rem] font-semibold text-gray-900 leading-none tracking-tight">
-          {metric}
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h3 className={`${titleClass} tracking-tight`}>{title}</h3>
+          <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">
+            {description}
+          </p>
+        </div>
+        <span
+          aria-hidden
+          className="text-gray-300 group-hover:text-teal group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-0.5"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+            />
+          </svg>
         </span>
-        <span className="text-xs text-gray-400">{metricLabel}</span>
       </div>
-      <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-teal opacity-0 group-hover:opacity-100 transition-opacity">
-        Open
-        <span aria-hidden>&rarr;</span>
-      </span>
-    </Link>
-  );
-}
-
-/**
- * AdminTile. Compact version of PrimaryTile, no metric, lighter weight.
- */
-function AdminTile({
-  href,
-  title,
-  subtitle,
-}: {
-  href: string;
-  title: string;
-  subtitle: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group bg-white p-7 sm:p-8 flex flex-col min-h-[120px] transition-colors hover:bg-gray-50"
-    >
-      <h2 className="text-base font-semibold text-gray-900 tracking-tight">
-        {title}
-      </h2>
-      <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">{subtitle}</p>
-      <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-teal opacity-0 group-hover:opacity-100 transition-opacity">
-        Open
-        <span aria-hidden>&rarr;</span>
-      </span>
     </Link>
   );
 }
@@ -259,28 +304,17 @@ function AdminTile({
 function ToolLink({
   href,
   children,
-  muted = false,
 }: {
   href: string;
   children: React.ReactNode;
-  muted?: boolean;
 }) {
-  const colour = muted
-    ? "text-gray-400 hover:text-gray-700"
-    : "text-gray-700 hover:text-gray-900";
   return (
     <li>
       <Link
         href={href}
-        className={`${colour} transition-colors inline-flex items-center gap-1 group`}
+        className="block px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors"
       >
-        <span>{children}</span>
-        <span
-          aria-hidden
-          className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          &rarr;
-        </span>
+        {children}
       </Link>
     </li>
   );
