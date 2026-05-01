@@ -95,6 +95,48 @@ function stripLeadingH1(markdown: string): string {
 }
 
 /**
+ * Promote bold-only lines to real markdown headings before marked.parse
+ * runs. The model occasionally emits `**Heading**` instead of `## Heading`
+ * which renders as a bold paragraph rather than a real <h2>. This catches
+ * the regression at the export boundary.
+ *
+ * A line is promoted when:
+ *   - Its entire content is `**...**` or `__...__`
+ *   - Inner text is at most 120 chars (longer = legitimate emphatic prose)
+ * The first qualifying line in a doc with no prior heading becomes H1;
+ * subsequent qualifying lines become H2.
+ */
+function promoteBoldLinesToHeadings(markdown: string): string {
+  const lines = markdown.split("\n");
+  const out: string[] = [];
+  let seenHeading = false;
+  let seenContent = false;
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const boldMatch = trimmed.match(/^(\*\*|__)(.+?)\1$/);
+    if (boldMatch && boldMatch[2].length <= 120) {
+      const headingText = boldMatch[2].trim();
+      if (!seenHeading && !seenContent) {
+        out.push(`# ${headingText}`);
+      } else {
+        out.push(`## ${headingText}`);
+      }
+      seenHeading = true;
+      seenContent = true;
+      continue;
+    }
+    if (trimmed.startsWith("# ") || trimmed.startsWith("## ") || trimmed.startsWith("### ")) {
+      seenHeading = true;
+      seenContent = true;
+    } else if (trimmed.length > 0) {
+      seenContent = true;
+    }
+    out.push(line);
+  }
+  return out.join("\n");
+}
+
+/**
  * Strip markdown horizontal-rule lines ("---", "***", "___") from the source
  * so they don't render as <hr> tags in the H1 Club CMS. The shared output
  * rules ban these, but the model still emits them occasionally — this is
@@ -156,7 +198,9 @@ export function wrapForH1Club(input: WrapInput): string {
       ? "Ordinary Level English Resource"
       : "Higher Level English Resource";
 
-  const cleanedMd = scrubDashes(stripHorizontalRules(stripLeadingH1(input.markdown)));
+  const cleanedMd = scrubDashes(
+    stripHorizontalRules(promoteBoldLinesToHeadings(stripLeadingH1(input.markdown))),
+  );
   let bodyHtml = marked.parse(cleanedMd, { async: false }) as string;
   bodyHtml = scrubDashes(bodyHtml); // belt-and-braces: catch any reintroduced
   bodyHtml = bodyHtml.replace(/<hr\s*\/?>/gi, ""); // strip any <hr> that slipped through

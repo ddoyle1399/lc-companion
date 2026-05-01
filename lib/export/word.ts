@@ -78,9 +78,60 @@ function parseInline(text: string): TextRun[] {
 }
 
 /**
+ * Promote bold-only lines to real markdown headings.
+ *
+ * The generation models occasionally regress and emit a heading as a fully
+ * bolded paragraph (e.g. `**Othello's nobility and public self**`) instead
+ * of the requested `## Heading` syntax. Result: the .docx has no real
+ * outline pane in Word. This pre-processor catches that pattern and
+ * promotes the line to a heading before paragraph conversion.
+ *
+ * Rules:
+ *  - A line whose entire content is `**...**` (or `__..__`) is a candidate.
+ *  - If no `#` heading has appeared yet AND the line is the document's
+ *    first non-empty line, promote to H1 (it's the title).
+ *  - Otherwise promote to H2 (the model's intended hierarchy).
+ *  - Bold lines longer than 120 chars are NOT promoted — those are
+ *    legitimate emphatic prose paragraphs, not headings.
+ */
+function promoteBoldLinesToHeadings(markdown: string): string {
+  const lines = markdown.split("\n");
+  const out: string[] = [];
+  let seenHeading = false;
+  let seenContent = false;
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const boldMatch = trimmed.match(/^(\*\*|__)(.+?)\1$/);
+    if (boldMatch && boldMatch[2].length <= 120) {
+      const headingText = boldMatch[2].trim();
+      if (!seenHeading && !seenContent) {
+        out.push(`# ${headingText}`);
+        seenHeading = true;
+      } else {
+        out.push(`## ${headingText}`);
+        seenHeading = true;
+      }
+      seenContent = true;
+      continue;
+    }
+    if (trimmed.startsWith("# ") || trimmed.startsWith("## ") || trimmed.startsWith("### ")) {
+      seenHeading = true;
+      seenContent = true;
+    } else if (trimmed.length > 0) {
+      seenContent = true;
+    }
+    out.push(line);
+  }
+  return out.join("\n");
+}
+
+/**
  * Convert a markdown string to an array of docx Paragraphs.
  */
 function markdownToParagraphs(markdown: string): Paragraph[] {
+  // Run the bold-as-heading repair before any other parsing so subsequent
+  // logic sees real `##` markers instead of bold lines.
+  markdown = promoteBoldLinesToHeadings(markdown);
   const paragraphs: Paragraph[] = [];
   const lines = markdown.split("\n");
   let i = 0;

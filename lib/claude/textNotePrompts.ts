@@ -126,7 +126,7 @@ How does ${subjectDisplay} change from first appearance to final appearance? Use
 The 2-3 most important relationships this character has, and what each reveals.
 
 ## Defining quotes
-6-10 quotes drawn from the bank that capture this character's voice, role, and arc. Each quote should be embedded in 2-3 sentences of analysis that explains what the quote shows AND how it could be used in an exam answer. Do not list quotes; weave them into argument.
+6-10 quotes drawn from the bank that capture this character's voice, role, and arc. SELECTION DISCIPLINE: for each candidate, ask "would a top-band H1 essay actually quote this when answering a standard question on this character?" If the honest answer is "probably not, but it's recognisable", drop it. Fame is not utility. Each quote should be embedded in 2-3 sentences of analysis that explains what the quote shows AND how it could be used in an exam answer. Do not just paraphrase the quote — say something the student would not see for themselves on a first read. Do not list quotes; weave them into argument.
 
 ## Themes this character carries
 Which 2-4 of the play's central themes does this character embody, complicate, or oppose? One paragraph each.
@@ -273,11 +273,28 @@ SUBJECT: ${subjectDisplay}
 
 Produce a curated quote bank focused on "${subjectDisplay}".
 
+SELECTION DISCIPLINE (do this in your head before you write the bank):
+
+For every quote you are tempted to include, ask yourself: "Would a top-band H1 essay actually quote this when answering one of the standard exam questions on ${subjectDisplay}?" If the honest answer is "probably not, but it's a famous line", DROP IT. Fame is not utility. Iconic but rarely-deployed quotes are filler.
+
+The cut-list test:
+  1. Does this quote support a specific argumentative move a strong student would make?
+  2. Is the inclusion driven by what it DOES analytically, not by recognition value?
+  3. Could you write a sharper essay paragraph WITH this quote than without it?
+
+Only quotes that pass all three belong in the bank. Aim for 12-18 strong quotes; if you only have 10 that pass, ship 10. A tight bank of 10 elite quotes is worth more than 18 with filler.
+
+For a CHARACTER quote bank, prioritise: (a) the character's most-quoted self-defining lines; (b) quotes that mark the turning points in their arc; (c) quotes that capture how they speak about their core conflict; (d) quotes from OTHER characters that frame how this character is perceived (Iago on Othello, Lady Macbeth on Macbeth, etc.) — these are legitimate IF they reveal something about the subject. Tag those clearly in the attribution line ("Iago describing Othello, Act 1 Scene 1.").
+
+For a THEME quote bank, prioritise quotes where the theme is named, enacted, or imagistically embodied — not quotes where the theme is merely present in the background.
+
+If the quote selection includes a famous line that fails the cut-list test (e.g. for a Macbeth Lady-Macbeth bank you might be tempted to include "Tomorrow and tomorrow and tomorrow" — but that's Macbeth, not Lady Macbeth), DROP IT and use the slot for something that earns its place.
+
 OUTPUT SHAPE (follow exactly):
 
 Open with the title as a real H1: "# Quote Bank: ${subjectDisplay} in ${textKey}".
 
-Follow with a 2-3 sentence orientation paragraph. Plain prose. What this bank is, what it gives the student, what kind of exam question it serves. No bold field labels.
+Follow with a SHORT orientation: 2-3 sentences MAXIMUM, plain prose. State what the bank covers in one sentence; state what kind of exam question it serves in another. Do not write a "cover letter" describing the document ("This bank gathers...", "Any question asking..."). Just state the working position.
 
 Then group 12-18 of the strongest quotes from the bank into 3-5 sub-themes. Each sub-theme is an "## H2 section" with a SHORT, CLEAR name (3-6 words). Do not number the sub-themes. Do not invent decorative titles. Examples of good sub-theme names: "How jealousy takes root", "Iago's own jealousy", "The cost in the final act". Bad: "1. The Nature and Anatomy of Jealousy" (numbering + over-long).
 
