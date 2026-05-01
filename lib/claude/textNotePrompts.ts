@@ -30,6 +30,13 @@ export type TextNotePromptInput = {
   level: Level;
   depth: Depth;
   quoteBank: string[]; // verbatim string[] from the verified bank
+  // Canonical theme display names for this text, drawn from the
+  // single_text_assets table (asset_type='theme'). The per-quote "Themes:"
+  // line in quote banks and character profiles must draw from this list
+  // ONLY — no model-invented buzzwords like "naivety" or "fatal flaw".
+  // Empty array = no theme catalogue seeded; the prompt falls back to
+  // letting the model pick reasonable themes (legacy behaviour).
+  canonicalThemes?: string[];
   userInstructions?: string;
 };
 
@@ -91,16 +98,25 @@ function userInstructionsBlock(instr?: string): string {
 }
 
 export function buildUserMessage(input: TextNotePromptInput): string {
-  const { noteType, textKey, author, subjectDisplay, level, depth, quoteBank, userInstructions } = input;
+  const { noteType, textKey, author, subjectDisplay, level, depth, quoteBank, canonicalThemes, userInstructions } = input;
   const wordTarget = targetWordCount(level, depth);
   const levelLabel = level === "higher" ? "Higher Level" : "Ordinary Level";
   const userInstr = userInstructionsBlock(userInstructions);
+
+  // The model has been observed inventing themes ("naivety", "fatal flaw",
+  // "self-assurance") that do not match the themes the operator actually
+  // teaches. Inject the canonical list so the per-quote "Themes:" line is
+  // constrained to themes a student will recognise from class.
+  const themesBlock =
+    canonicalThemes && canonicalThemes.length > 0
+      ? `\nCANONICAL THEMES for ${textKey} (use ONLY these themes on the per-quote "Themes:" line, lowercased; do not invent new themes; pick 2-4 per quote):\n${canonicalThemes.map((t) => `- ${t}`).join("\n")}\n`
+      : "";
 
   const HEADER = `TEXT: ${textKey}
 AUTHOR: ${author}
 LEVEL: Leaving Certificate ${levelLabel}
 DEPTH: ${depth}
-TARGET WORD COUNT: ${wordTarget} words (plus or minus 10%).
+TARGET WORD COUNT: ${wordTarget} words (plus or minus 10%).${themesBlock}
 
 QUOTE BANK (the ONLY permitted source of quotations, verbatim from the text):
 ${quotesBlock(quoteBank)}${userInstr}`;
@@ -138,7 +154,7 @@ Themes: theme1 · theme2 · theme3
 
 Plain-English meaning sentence. Exam-use sentence.
 
-The Themes line is plain text (not bolded), starting with the literal word "Themes:" and listing 2-4 short theme labels separated by " · " (space middle-dot space). Themes should be the topics or exam-question angles this quote fits under (e.g. "jealousy · race · self-doubt").
+The Themes line is plain text (not bolded), starting with the literal word "Themes:" and listing 2-4 short theme labels separated by " · " (space middle-dot space). CANONICAL THEMES ONLY: if the header lists CANONICAL THEMES for this text, every label on this line must come from that canon (lowercased; you may shorten "Manipulation & Deceit" to "manipulation"). Do NOT invent themes outside the canon. Students study a fixed set of themes per text; consistent tagging is what makes the bank scannable.
 
 The commentary is exactly two sentences. Sentence 1 explains what the quote MEANS in plain teacher-to-student English (the kind of sentence an experienced LC teacher would say to a 15-year-old, not the kind a literary critic writes). Sentence 2 names the exam question type or argument the quote answers. BANNED jargon: anaphora, parallelism, syntax, narrative, rhetorician, weaponise, principled, self-dismantling, valorise, register, modality. Use everyday verbs: shows, means, tells us, signals, marks, reveals, proves.
 
@@ -325,7 +341,7 @@ Plain-English meaning sentence. Exam-use sentence.
 Notes on the pattern:
 - Line 1 (the quote): > followed by the verbatim text in straight double quotes. Nothing else on that line. Verbatim from the QUOTE BANK.
 - Line 2 (attribution): plain prose, no bold, no labels, no italics. Just "Iago, Act 3 Scene 3." with a full stop. For framing quotes spoken ABOUT the subject by another character: "Iago describing Othello, Act 1 Scene 3." or "Lodovico on Othello, Act 4 Scene 1."
-- Line 3 (themes): the literal word "Themes:" followed by 2-4 short theme labels separated by " · " (space middle-dot space). Use lowercase, single words or short phrases. Themes are the topics, exam-question angles, or character motifs this quote fits under. Examples: "jealousy · self-deception · race", "identity · public reputation · downfall", "manipulation · trust · appearance vs reality". Themes let a student scan a long bank and find the quote that fits a specific question. The "Themes:" word is plain text, not bolded.
+- Line 3 (themes): the literal word "Themes:" followed by 2-4 short theme labels separated by " · " (space middle-dot space). Use lowercase. The "Themes:" word is plain text, not bolded. CANONICAL THEMES ONLY: if the header above lists CANONICAL THEMES for this text, every label on this line MUST come from that list. You may shorten "Manipulation & Deceit" to "manipulation", or "Race & Otherness" to "race", but the underlying theme must come from the canon. Do NOT invent themes like "naivety", "fatal flaw", "self-assurance", "narrative", "metaphor", "irrationality", "self-deception" (use "appearance vs reality" or "manipulation" instead). Students study a fixed set of themes for each text; this line is what makes the bank consistent across the whole resource. If no CANONICAL THEMES list is provided in the header (legacy case), pick sensible themes a student would recognise from class.
 - Line 4 (commentary): EXACTLY two sentences, no more. Sentence 1 = what the quote MEANS in plain teacher-to-student English. Sentence 2 = the exam question type or argument it slots into. Both sentences read as if an experienced LC teacher is sitting across from a 15-year-old explaining it. No analytical jargon, no academic register, no showing off.
 
 Plain-English commentary rules:

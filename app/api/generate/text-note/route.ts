@@ -163,6 +163,20 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Load the canonical theme list for this text. Used to constrain the
+  // per-quote "Themes:" line so the model can't invent random buzzwords
+  // like "naivety" or "fatal flaw" — students need themes that match the
+  // ones they actually study and write essays on.
+  const { data: themeAssets } = await supabase
+    .from("single_text_assets")
+    .select("display_name")
+    .eq("text_key", textKey)
+    .eq("asset_type", "theme")
+    .order("display_name");
+  const canonicalThemes: string[] = (themeAssets ?? [])
+    .map((r) => r.display_name as string)
+    .filter((s) => s && s.length > 0);
+
   const result = await generateTextNote({
     noteType,
     textKey,
@@ -172,6 +186,7 @@ export async function POST(request: NextRequest) {
     level,
     depth,
     quoteBank,
+    canonicalThemes,
     userInstructions,
   });
 
