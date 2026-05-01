@@ -126,7 +126,23 @@ How does ${subjectDisplay} change from first appearance to final appearance? Use
 The 2-3 most important relationships this character has, and what each reveals.
 
 ## Defining quotes
-6-10 quotes drawn from the bank that capture this character's voice, role, and arc. SELECTION DISCIPLINE: for each candidate, ask "would a top-band H1 essay actually quote this when answering a standard question on this character?" If the honest answer is "probably not, but it's recognisable", drop it. Fame is not utility. Each quote should be embedded in 2-3 sentences of analysis that explains what the quote shows AND how it could be used in an exam answer. Do not just paraphrase the quote — say something the student would not see for themselves on a first read. Do not list quotes; weave them into argument.
+6-10 quotes drawn from the bank that capture this character's voice, role, and arc.
+
+SELECTION DISCIPLINE: for each candidate, ask "would a top-band H1 essay actually quote this when answering a standard question on this character?" If the honest answer is "probably not, but it's recognisable", drop it. Fame is not utility.
+
+For each quote, use this layout (a quote block followed by a tags line followed by a plain-English commentary):
+
+> "Quote text, verbatim."
+Speaker, Act X Scene Y.
+Tags: tag1 · tag2 · tag3
+
+Plain-English meaning sentence. Exam-use sentence.
+
+The Tags line is plain text (not bolded), starting with the literal word "Tags:" and listing 2-4 short topic tags separated by " · " (space middle-dot space). Tags should be the themes or exam-question topics this quote fits under (e.g. "jealousy · race · self-doubt").
+
+The commentary is exactly two sentences. Sentence 1 explains what the quote MEANS in plain teacher-to-student English (the kind of sentence an experienced LC teacher would say to a 15-year-old, not the kind a literary critic writes). Sentence 2 names the exam question type or argument the quote answers. BANNED jargon: anaphora, parallelism, syntax, narrative, rhetorician, weaponise, principled, self-dismantling, valorise, register, modality. Use everyday verbs: shows, means, tells us, signals, marks, reveals, proves.
+
+Do NOT just paraphrase the quote. Say something the student would not see for themselves on a first read.
 
 ## Themes this character carries
 Which 2-4 of the play's central themes does this character embody, complicate, or oppose? One paragraph each.
@@ -298,20 +314,29 @@ Follow with a SHORT orientation: 2-3 sentences MAXIMUM, plain prose. State what 
 
 Then group 12-18 of the strongest quotes from the bank into 3-5 sub-themes. Each sub-theme is an "## H2 section" with a SHORT, CLEAR name (3-6 words). Do not number the sub-themes. Do not invent decorative titles. Examples of good sub-theme names: "How jealousy takes root", "Iago's own jealousy", "The cost in the final act". Bad: "1. The Nature and Anatomy of Jealousy" (numbering + over-long).
 
-Within each sub-theme, quotes follow this EXACT pattern:
+Within each sub-theme, quotes follow this EXACT four-line pattern (with a blank line between each quote block):
 
 > "Quote text here, verbatim from the bank."
 Speaker, Act X Scene Y.
+Tags: theme1 · theme2 · theme3
 
-What the quote shows. One sentence. One sentence on the exam-question type or argument it lifts into.
+Plain-English meaning sentence. Exam-use sentence.
 
 Notes on the pattern:
-- The quote line: > followed by the verbatim text in straight double quotes. Nothing else on that line.
-- The attribution line is plain prose, no bold, no labels, no italics. Just "Iago, Act 3 Scene 3." with a full stop.
-- The commentary is exactly TWO sentences. Sentence 1 is what the quote shows about the subject. Sentence 2 is the question pattern or argument it answers. No more.
-- BANNED in the commentary: "Pair this with...", "Use alongside...", "This complements the X above", "Bring this in when discussing Y", "Bring it together with...", any cross-quote linking. The student decides which to bundle.
-- BANNED: bold paragraphs as fake headings. The H2 is the only thing structuring this section.
-- BANNED: horizontal rules ("---") between quotes. Whitespace and the next quote's > is the only separator needed.
+- Line 1 (the quote): > followed by the verbatim text in straight double quotes. Nothing else on that line. Verbatim from the QUOTE BANK.
+- Line 2 (attribution): plain prose, no bold, no labels, no italics. Just "Iago, Act 3 Scene 3." with a full stop. For framing quotes spoken ABOUT the subject by another character: "Iago describing Othello, Act 1 Scene 3." or "Lodovico on Othello, Act 4 Scene 1."
+- Line 3 (tags): the literal word "Tags:" followed by 2-4 short topic tags separated by " · " (space middle-dot space). Use lowercase, single words or short phrases. Tags are the themes, exam-question topics, or character motifs this quote fits under. Examples: "jealousy · self-deception · race", "identity · public reputation · downfall", "manipulation · trust · appearance vs reality". Tags let a student scan a long bank and find the quote that fits a specific question. The "Tags:" word is plain text, not bolded.
+- Line 4 (commentary): EXACTLY two sentences, no more. Sentence 1 = what the quote MEANS in plain teacher-to-student English. Sentence 2 = the exam question type or argument it slots into. Both sentences read as if an experienced LC teacher is sitting across from a 15-year-old explaining it. No analytical jargon, no academic register, no showing off.
+
+Plain-English commentary rules:
+  - BANNED words (these are writer-voice not teacher-voice): anaphora, parallelism, syntax (use "the way the words mirror each other" instead), narrative (use "the stories he tells"), rhetorician (use "smooth talker"), weaponise (use "use it against him"), principled (use "based on values"), self-dismantling, distillation, anaphora, paratactic, hypotactic, valorise, register, modality.
+  - Use everyday verbs: shows, means, tells us, signals, marks, reveals, proves.
+  - If a sentence makes you sound like a literary critic, rewrite it as if you were explaining to a friend who hasn't read the play.
+  - Sentence 2 should start with the question type, e.g. "Use this for any question on...", "Best for questions about...", "Strong for...", "Lift this into any answer that asks...".
+
+BANNED in commentary: "Pair this with...", "Use alongside...", "This complements the X above", "Bring this in when discussing Y", "Bring it together with...", any cross-quote linking. The student decides which to bundle.
+BANNED: bold paragraphs as fake headings. The H2 is the only thing structuring this section. Use the literal characters ## at the start of the line, not bold around the words.
+BANNED: horizontal rules ("---") between quotes. Blank line is the separator.
 
 Worked example of one quote, exactly to spec:
 
@@ -319,8 +344,9 @@ Worked example of one quote, exactly to spec:
 
 > "I think my wife be honest, and think she is not."
 Othello, Act 3 Scene 3.
+Tags: jealousy · self-doubt · turning point
 
-Othello is suspended between trust and suspicion, and the parallel syntax enacts his mind splitting in real time. Use this for any question on the moment jealousy converts from doubt into psychological collapse.
+Othello is stuck between two opposite ideas at the same time, and you can hear his mind starting to crack. Use this for any question on the exact moment Othello's doubt becomes something more dangerous.
 
 End the bank with one final section:
 

@@ -956,34 +956,54 @@ Pacing: ${profile.pacingNote}
 
 This is a working reference. The student scans this bank when they sit down to write an essay on ${theme} in ${ctx.subject ?? 'this poet'}'s work. Every quote must be verbatim from ANCHORED QUOTES. Do not invent quotes; do not paraphrase quotes inside double quotes.
 
-Begin the response directly with a single H1 heading. Use this exact format:
+SELECTION DISCIPLINE: for each candidate quote, ask "would a top-band H1 essay actually quote this when answering a question on ${theme} in this poem?" If the honest answer is "probably not, but it's recognisable", drop it. Fame is not utility.
+
+Begin the response directly with a single H1 heading:
 
 # Quote bank: ${theme} in "${ctx.subKey ?? ''}"
 
-Then produce these sections, in this order, using these exact heading texts:
+Then a SHORT orientation paragraph: 2-3 sentences MAXIMUM in plain prose. State what the bank covers and what kind of question it serves. No cover-letter framing ("This bank gathers...", "Any question asking..."). Just state the working position.
 
-## How to read this bank
-One short paragraph. Explain that every quote is verbatim, that each one is tagged by stanza and by sub-angle on ${theme}, and that the student should pick two or three to memorise rather than all of them.
+Then group quotes into 2-3 sub-themes, each as an "## H2 section" with a short clear name (3-6 words). Suggested sub-themes: "Where ${theme} is set up", "How ${theme} develops", "Where ${theme} closes or unsettles". Use real names not numbered titles.
 
-## Quotes that establish ${theme}
-For each relevant anchored quote that opens or sets up the theme, write a short block:
+Within each sub-theme, every quote follows this EXACT four-line pattern:
 
-### "[anchored quote]"
-**Stanza**: [stanza number from anchored quote]
-**Sub-angle**: one short phrase naming the specific angle on ${theme} this quote serves
-**How to use it**: one or two sentences on the question type or paragraph position this quote suits
+> "Quote text here, verbatim from ANCHORED QUOTES."
+Stanza X.
+Tags: tag1 · tag2 · tag3
 
-## Quotes that develop ${theme}
-Same block format. Cover the quotes that complicate, deepen, or extend the theme.
+Plain-English meaning sentence. Exam-use sentence.
 
-## Quotes that close or unsettle ${theme}
-Same block format. Cover the quotes that mark the poem's final move on the theme, including any moment of ambiguity.
+Notes on the pattern:
+- Line 1 (the quote): > followed by the verbatim text in straight double quotes. Verbatim. Do not paraphrase.
+- Line 2 (location): plain prose, no bold. Just "Stanza 3." or "Lines 7-9." with a full stop. No "Stanza:" label.
+- Line 3 (tags): the literal word "Tags:" (plain text, not bolded) followed by 2-4 short topic tags separated by " · " (space middle-dot space). Tags should be the themes, sub-angles, or exam-question topics this quote fits under (e.g. "memory · loss · childhood", "nature · spiritual · transcendence"). Lets a student scan a long bank and find the quote that fits a specific question.
+- Line 4 (commentary): EXACTLY two sentences, no more. Sentence 1 = what the quote MEANS in plain teacher-to-student English (the kind a teacher would say to a 15-year-old, NOT what a literary critic writes). Sentence 2 = the exam question type or paragraph position this quote suits. Use everyday verbs: shows, means, tells us, signals, marks, reveals.
+
+Plain-English commentary rules:
+  - BANNED jargon (writer-voice not teacher-voice): anaphora, parallelism, syntax (use "the way the words mirror each other"), narrative (use "the stories"), rhetorician, weaponise, principled, self-dismantling, paratactic, hypotactic, valorise, register, modality.
+  - If a sentence makes you sound like a literary critic, rewrite it as if you were explaining to a friend who hasn't read the poem.
+  - Sentence 2 should start with a clear use directive: "Use this for any question on...", "Best for questions about...", "Strong for...", "Lift this into any answer that asks...".
+
+BANNED everywhere: bold paragraphs as fake headings (## is the only structuring move). Horizontal rules ("---") between quotes. Cross-quote chatter ("Pair this with...", "Use alongside the next quote", "Bring this in when..."). The student decides which to bundle.
+
+Worked example of one quote, exactly to spec:
+
+## Where ${theme} is set up
+
+> "the frail, illegal fire balloons appear"
+Stanza 1.
+Tags: ritual · fragility · opening image
+
+The poem opens by showing something pretty and traditional that is also against the rules and easy to break. Use this for any question on how the poem sets up its central tension between beauty and danger.
 
 ## The two or three quotes worth memorising
-A short bulleted list. For each, the verbatim quote and one sentence on why this is the load-bearing quote for ${theme} in this poem.
+
+A short bulleted list. For each, the verbatim quote followed by one sentence on why it is the load-bearing quote for ${theme} in this poem.
 
 ## Where students lose marks with these quotes
-Three short paragraphs. Each names a specific misuse of one of these quotes (importing it into a paragraph where it does not fit, misattributing speaker, mis-spelling). Give the corrective move.${profile.extras}
+
+Three short paragraphs. Each names a specific misuse of one of these quotes (importing it into a paragraph where it does not fit, misattributing speaker, misspelling). Give the corrective move.${profile.extras}
 
 QUOTE RULE (zero tolerance): every double-quoted phrase must appear verbatim in ANCHORED QUOTES, including capitalisation and punctuation. If you cannot find a quote in the bank that serves a sub-angle, omit that sub-angle. Do not invent.${userInstr}`;
   return { system, user };
