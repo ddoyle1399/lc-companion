@@ -4,13 +4,13 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 /**
- * Sidebar navigation. Fixed left, full height, white card on gray-50 page.
+ * Sidebar navigation. Generation-first.
  *
- * Visual reference: Linear / Resend / Cal.com sidebars. Logo at top, grouped
- * nav with subtle section labels, selected-state has a light grey background
- * and a 2px teal accent strip on the left.
- *
- * Active route: matches exact path (for /) or prefix (for nested routes).
+ * The app exists to generate content. The nav is structured so the
+ * generation routes are the most prominent thing in view: a primary
+ * "+ New note" CTA right under the logo, then a GENERATE section as
+ * the first nav group with larger items than the admin/production
+ * groups below.
  */
 
 interface Item {
@@ -22,31 +22,31 @@ interface Item {
 interface Group {
   label?: string;
   items: Item[];
+  // primary group items are slightly larger/bolder. Used for the
+  // generation routes.
+  primary?: boolean;
 }
 
 const NAV: Group[] = [
   {
-    items: [
-      { href: "/", label: "Dashboard", icon: <IconHome /> },
-      { href: "/coverage", label: "Coverage", icon: <IconChart /> },
-      { href: "/single-text/library", label: "Library", icon: <IconFolder /> },
-    ],
-  },
-  {
     label: "Generate",
+    primary: true,
     items: [
       { href: "/poetry", label: "Poetry", icon: <IconBook /> },
       { href: "/single-text", label: "Single Text", icon: <IconBookOpen /> },
       { href: "/comparative", label: "Comparative", icon: <IconCompare /> },
+      { href: "/comprehension", label: "Comprehension", icon: <IconSearch /> },
+      { href: "/composition", label: "Composition", icon: <IconPen /> },
+      { href: "/unseen-poetry", label: "Unseen poetry", icon: <IconEye /> },
       { href: "/generate", label: "Sample answer", icon: <IconStar /> },
     ],
   },
   {
-    label: "Paper 1",
+    label: "Manage",
     items: [
-      { href: "/comprehension", label: "Comprehension", icon: <IconSearch /> },
-      { href: "/composition", label: "Composition", icon: <IconPen /> },
-      { href: "/unseen-poetry", label: "Unseen poetry", icon: <IconEye /> },
+      { href: "/", label: "Dashboard", icon: <IconHome /> },
+      { href: "/coverage", label: "Coverage", icon: <IconChart /> },
+      { href: "/single-text/library", label: "Library", icon: <IconFolder /> },
     ],
   },
   {
@@ -76,50 +76,95 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="flex fixed inset-y-0 left-0 w-60 flex-col bg-white border-r border-gray-200 z-40">
+    <aside
+      className="w-64 shrink-0 sticky top-0 h-screen flex flex-col text-slate-300"
+      style={{
+        background: "linear-gradient(180deg, #0F172A 0%, #0B1220 100%)",
+      }}
+    >
       {/* Logo */}
-      <div className="px-6 py-6 border-b border-gray-100">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md bg-navy flex items-center justify-center text-white text-xs font-bold tracking-tight">
+      <div className="px-5 pt-6 pb-4">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-bold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+            style={{
+              background: "linear-gradient(135deg, #2A9D8F 0%, #1F7A6F 100%)",
+            }}
+          >
             LC
           </div>
-          <span className="text-sm font-semibold text-gray-900 tracking-tight">
-            Companion
+          <div className="flex flex-col leading-tight">
+            <span className="text-[13px] font-semibold text-white tracking-tight">
+              Companion
+            </span>
+            <span className="text-[10px] text-slate-500 tracking-wider uppercase">
+              LC English
+            </span>
+          </div>
+        </Link>
+      </div>
+
+      {/* Primary CTA: New note. Defaults to the poetry generator (the most
+          frequent starting point). The big visual weight here is intentional;
+          this is the action that fires every day. */}
+      <div className="px-3 pb-3">
+        <Link
+          href="/poetry"
+          className="group flex items-center justify-between w-full px-3.5 py-2.5 rounded-lg text-[13px] font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_1px_2px_rgba(0,0,0,0.2)] hover:brightness-110 transition-all"
+          style={{
+            background: "linear-gradient(135deg, #34D1BF 0%, #2A9D8F 100%)",
+          }}
+        >
+          <span className="flex items-center gap-2">
+            <IconPlus />
+            New note
           </span>
+          <kbd className="text-[10px] text-white/70 font-mono bg-white/10 px-1.5 py-0.5 rounded">
+            P
+          </kbd>
         </Link>
       </div>
 
       {/* Nav groups */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+      <nav className="flex-1 overflow-y-auto px-3 pt-2 pb-4 space-y-5">
         {NAV.map((group, gi) => (
           <div key={gi}>
             {group.label && (
-              <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+              <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
                 {group.label}
               </p>
             )}
             <ul className="space-y-0.5">
               {group.items.map((item) => {
                 const active = isActive(pathname, item.href);
+                const sizeClasses = group.primary
+                  ? "py-2 text-[13.5px]"
+                  : "py-2 text-[13px]";
                 return (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className={`relative flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                      className={`relative flex items-center gap-3 px-3 rounded-lg transition-all duration-150 ${sizeClasses} ${
                         active
-                          ? "bg-gray-100 text-gray-900 font-medium"
-                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                          ? "bg-white/[0.07] text-white font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+                          : group.primary
+                            ? "text-slate-300 hover:text-white hover:bg-white/[0.04]"
+                            : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
                       }`}
                     >
                       {active && (
                         <span
                           aria-hidden
-                          className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-teal rounded-r"
+                          className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-sm"
+                          style={{
+                            background:
+                              "linear-gradient(180deg, #34D1BF 0%, #2A9D8F 100%)",
+                          }}
                         />
                       )}
                       <span
-                        className={`flex-shrink-0 ${
-                          active ? "text-gray-900" : "text-gray-400"
+                        className={`flex-shrink-0 transition-colors ${
+                          active ? "text-teal" : group.primary ? "text-slate-400" : "text-slate-500"
                         }`}
                       >
                         {item.icon}
@@ -135,12 +180,12 @@ export default function Sidebar() {
       </nav>
 
       {/* Bottom: sign out */}
-      <div className="border-t border-gray-100 px-3 py-3">
+      <div className="border-t border-white/[0.06] px-3 py-3">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] text-slate-500 hover:text-white hover:bg-white/[0.04] transition-all duration-150"
         >
-          <span className="text-gray-400 flex-shrink-0">
+          <span className="text-slate-500 flex-shrink-0">
             <IconLogout />
           </span>
           <span>Sign out</span>
@@ -150,7 +195,15 @@ export default function Sidebar() {
   );
 }
 
-// Simple line icons. 16x16, stroke 1.5. Match Lucide / Tabler conventions.
+/* ───── icons ───── */
+
+function IconPlus() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  );
+}
 function IconHome() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
