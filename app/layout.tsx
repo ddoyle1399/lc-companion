@@ -28,9 +28,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
       >
-        <Sidebar />
-        {/* Main content sits to the right of the fixed 240px sidebar. */}
-        <div className="pl-60 min-h-screen">{children}</div>
+        {/* Flex shell. Sidebar is a flex item with fixed width; main grows to
+            fill the rest. min-w-0 on main prevents long content from blowing
+            out the layout. */}
+        <div className="flex min-h-screen">
+          <Sidebar />
+          <main className="flex-1 min-w-0">{children}</main>
+        </div>
       </body>
     </html>
   );
