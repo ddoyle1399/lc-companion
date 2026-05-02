@@ -34,6 +34,7 @@ import { saveNote } from "@/lib/supabase/saveNote";
 import { mapPromptContextToNoteInput } from "@/lib/supabase/mapPromptContextToNoteInput";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { extractQuotesAndThemes } from "@/lib/claude/extractQuotesAndThemes";
+import { scrubDashes, containsForbiddenDashes } from "@/lib/sanitize/scrubDashes";
 import { generateOutline, type OutlineSuccess } from "@/lib/claude/generateOutline";
 import { findMatchingQuestions } from "@/lib/supabase/findMatchingQuestions";
 import { saveOutlines } from "@/lib/supabase/saveOutlines";
@@ -488,7 +489,14 @@ export async function POST(request: NextRequest) {
           "sample_answer",
         ]);
 
-        if (singleTextNoteTypes.has(noteType)) {
+        // mode_guide is text-agnostic — only requires a mode. Validate up
+        // front so it bypasses the single-text / cross-text / question-driven
+        // gates below.
+        if (noteType === "mode_guide") {
+          if (!comparativeMode) {
+            return errorResponse("mode_guide requires a comparativeMode (Cultural Context, General Vision and Viewpoint, Literary Genre, or Theme or Issue)");
+          }
+        } else if (singleTextNoteTypes.has(noteType)) {
           if (!comparativeTexts || comparativeTexts.length !== 1) {
             return errorResponse(
               `Comparative ${noteType} requires exactly 1 text (got ${comparativeTexts?.length ?? 0})`
@@ -687,8 +695,14 @@ export async function POST(request: NextRequest) {
             ) {
               const cleaned = stripper.process(event.delta.text);
               if (cleaned) {
-                accumulatedText += cleaned;
-                const chunk = `data: ${JSON.stringify({ text: cleaned })}\n\n`;
+                // Strip em/en dashes and double-hyphens at the chunk
+                // boundary so the user never sees one mid-stream. Em
+                // dashes are a single Unicode codepoint so they cannot
+                // span chunks; double-hyphens technically can but are
+                // re-scrubbed at save time.
+                const scrubbed = scrubDashes(cleaned);
+                accumulatedText += scrubbed;
+                const chunk = `data: ${JSON.stringify({ text: scrubbed })}\n\n`;
                 controller.enqueue(encoder.encode(chunk));
               }
             }
@@ -977,7 +991,14 @@ export async function POST(request: NextRequest) {
           // Stream completed cleanly. Extract quotes/themes, generate outlines, then persist.
           if (accumulatedText) {
             try {
-              const bodyText = accumulatedText;
+              // Sanitize before save AND before extraction. Em/en dashes and
+              // double-hyphens are banned in output but the model occasionally
+              // regresses; this is the boundary safety net so saved content
+              // never carries them.
+              const bodyText = scrubDashes(accumulatedText);
+              if (containsForbiddenDashes(bodyText)) {
+                console.warn("[generate] forbidden dashes survived scrubDashes");
+              }
 
               // Run extraction before save. Never blocks the user's note display.
               const extractionResult = await extractQuotesAndThemes(bodyText);

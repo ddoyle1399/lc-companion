@@ -139,6 +139,7 @@ export interface PromptContext {
   // Comparative note-type system (added April 2026 revamp).
   // Default is "mode_grid" (the original 5-section note) so existing callers keep working.
   comparativeNoteType?:
+    | 'mode_guide'               // 1 mode (CC, GVV, LG, TI), text-agnostic plain-English explainer
     | 'mode_grid'                // 3 texts + 1 mode, the original 5-section comparative note
     | 'text_full_breakdown'      // 1 text, full plot+character+theme+moments breakdown for comparative use
     | 'text_character'           // 1 text + character name, deep character study with mode-relevance tags
@@ -1405,6 +1406,8 @@ export function buildComparativePrompt(context: PromptContext): string {
   const noteType = context.comparativeNoteType || 'mode_grid';
   const core = (() => {
     switch (noteType) {
+      case 'mode_guide':
+        return buildComparativeModeGuidePrompt(context);
       case 'mode_grid':
         return buildComparativeModeGridPrompt(context);
       case 'text_full_breakdown':
@@ -1633,6 +1636,120 @@ function getQuestionFormatBlock(format: string | undefined): string {
 // ABSOLUTE_OUTPUT_RULES is imported from lib/claude/outputRules.ts and injected
 // into every comparative user prompt. It covers em dashes, UK English, banned words,
 // anti-AI tells, and humanising rules. Change rules in outputRules.ts, not here.
+
+// -----------------------------------------------------------------------------
+// 0. mode_guide (text-agnostic plain-English explainer for one comparative mode)
+//
+// Cultural Context, General Vision and Viewpoint, Literary Genre, and Theme or
+// Issue are the four comparative modes. Students routinely confuse them — they
+// answer a CC question in GVV terms, or vice versa. This prompt produces a
+// stand-alone explainer that defines the mode, names what an examiner is
+// looking for, and shows how to write about it. No specific texts are needed.
+// -----------------------------------------------------------------------------
+
+function buildComparativeModeGuidePrompt(context: PromptContext): string {
+  const mode = context.comparativeMode || "Cultural Context";
+
+  // Tight, mode-specific framing. Each entry tells the model what the mode
+  // means in plain language, what makes it distinct from the others, and the
+  // most common student mistake. The model uses these as starting material;
+  // it should NOT just regurgitate them.
+  const FRAME: Record<string, { definition: string; distinct: string; trap: string }> = {
+    "Cultural Context": {
+      definition:
+        "the world the text is set in: who has power, what is normal, what the rules of the society are. Class, family, religion, money, work, gender roles, where people live and how they speak.",
+      distinct:
+        "this is about the WORLD, not the characters' inner lives. A character feeling lonely is NOT cultural context. A character being lonely BECAUSE the rural community has emptied out IS cultural context.",
+      trap:
+        "students drift into character study and forget to anchor every point to a feature of the society. Every CC paragraph must say 'in this world, X is true' before moving to character.",
+    },
+    "General Vision and Viewpoint": {
+      definition:
+        "the overall outlook the text leaves you with: is the world it shows essentially hopeful or essentially bleak, and what does the text seem to believe about people and their chances?",
+      distinct:
+        "this is the AUTHOR'S WORLDVIEW, not the events of the plot. A play with a happy ending can still have a bleak GVV if the happiness depends on luck or self-deception. A tragedy can carry a hopeful GVV if the protagonist achieves dignity in their fall.",
+      trap:
+        "students retell the plot and call it GVV. The question is never 'what happens?' but 'what does the author want us to believe?'",
+    },
+    "Literary Genre": {
+      definition:
+        "the toolkit the writer uses to tell the story: narrative voice, structure, language, imagery, tone, the way characters are introduced and developed, the way the ending lands.",
+      distinct:
+        "this is about HOW the story is told, not WHAT happens. A scene of grief is not LG; the writer's choice to render that grief in present tense, fragmented sentences, and silence is LG.",
+      trap:
+        "students write a theme essay and tag a few techniques on. Every LG paragraph must lead with a craft choice and then show what it does, not the other way round.",
+    },
+    "Theme or Issue": {
+      definition:
+        "a single human concern the text takes a position on: justice, family, identity, freedom, ambition, fear. The text's argument about that concern.",
+      distinct:
+        "this is a SINGLE FOCUSED CONCERN, not a list of themes the text 'explores'. Pick the one the question names and stay there. The text is treated as a position-taker, not a discussion document.",
+      trap:
+        "students cover three themes in one essay because they are afraid of running out. Better to go deep on the named theme than skate across all the themes the text touches.",
+    },
+  };
+
+  const frame = FRAME[mode] ?? FRAME["Cultural Context"];
+
+  const userInstr = context.userInstructions
+    ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
+    : "";
+
+  return `Produce a Mode Guide for the comparative mode "${mode}". This is a TEXT-AGNOSTIC explainer. Do NOT reference specific prescribed texts. The student should be able to read this once and understand what ${mode} is, how it differs from the other three modes, and how to write about it in any answer.
+
+WHAT THIS MODE IS, in plain teacher-to-student English:
+${frame.definition}
+
+WHAT MAKES IT DIFFERENT FROM THE OTHER MODES:
+${frame.distinct}
+
+THE COMMON STUDENT TRAP:
+${frame.trap}
+
+Use the above as your starting material but DO NOT just paste it back. Expand it, sharpen it, give the student useful structure.
+
+Produce the guide in this exact shape, using these exact heading texts:
+
+# ${mode}: a guide
+
+A short orientation paragraph (3-4 sentences). Plain prose. State what the mode is, why students struggle with it, and what this guide will give them. No cover-letter framing.
+
+## What the examiner is actually asking
+
+3-4 sentences. The mode in your own words. Lean on the definition above but expand. Use the second person ("you", "your") and address the student directly.
+
+## How to recognise a ${mode} question
+
+A short list (3-5 bulleted items). Phrasing patterns the examiner uses for this mode. Concrete keyword cues. The kind of opening line that signals the question is about this mode rather than another one.
+
+## What separates this mode from the other three
+
+Three short paragraphs. One per other mode. Each names the other mode and gives a one-sentence rule for telling them apart. This is the most useful part of the guide — students lose marks because they answer the wrong mode.
+
+## How to structure a ${mode} answer
+
+A practical structure: opening move, body paragraph shape, comparative weave between texts, closing move. Plain English, not abstract advice. Tell the student what to do.
+
+## Phrases you can lift
+
+5-8 short sentences a student could drop into an essay paragraph for this mode. Not generic essay phrases; phrases that prove the student knows what ${mode} is. Format as a bulleted list.
+
+## Where students lose marks
+
+3-4 short paragraphs. Each names a specific failure mode (drifting into theme when the question is GVV, listing techniques without analysis in LG, forgetting to compare across texts, padding with plot summary). For each, give the corrective move in a teacher-to-student voice.
+
+## A quick checklist before you submit
+
+A short bulleted list (5-7 items). Yes/no questions the student should ask themselves about their finished answer.${userInstr}
+
+Plain-English rules:
+- Sound like an experienced teacher talking to a 17-year-old, not an academic.
+- Use everyday verbs (shows, means, tells us, signals, marks).
+- Banned jargon: anaphora, paratactic, hypotactic, valorise, register, modality, narrative (use "the story"), rhetorician.
+- Vary sentence length. Short punchy sentences mixed with longer explanatory ones.
+
+Write the guide now.`;
+}
 
 // -----------------------------------------------------------------------------
 // 1. mode_grid (default, 5-section comparative note across 3 texts)

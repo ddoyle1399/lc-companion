@@ -14,6 +14,7 @@ type Level = "HL" | "OL";
 type Depth = "quick" | "standard" | "deep";
 
 type NoteType =
+  | "mode_guide"
   | "mode_grid"
   | "text_full_breakdown"
   | "text_character"
@@ -31,10 +32,10 @@ type QuestionFormat = "Q1a_30" | "Q1b_40" | "Q2_70";
 
 interface NoteTypeMeta {
   id: NoteType;
-  family: "single" | "cross" | "question";
+  family: "guide" | "single" | "cross" | "question";
   label: string;
   blurb: string;
-  needsTexts: 1 | 3;
+  needsTexts: 0 | 1 | 3;
   needsMode: boolean;
   needsCharacterName: boolean;
   needsArgumentFocus: boolean;
@@ -42,6 +43,21 @@ interface NoteTypeMeta {
 }
 
 const NOTE_TYPES: NoteTypeMeta[] = [
+  // Guide family — text-agnostic explainers for the comparative modes.
+  // These exist because Cultural Context, GVV, Literary Genre, and Theme or
+  // Issue are nuanced concepts students routinely confuse.
+  {
+    id: "mode_guide",
+    family: "guide",
+    label: "Mode guide",
+    blurb:
+      "Plain-English explainer for one comparative mode (CC, GVV, LG, or TI). What the mode is, how to recognise it, how to write about it. No specific texts needed.",
+    needsTexts: 0,
+    needsMode: true,
+    needsCharacterName: false,
+    needsArgumentFocus: false,
+    needsQuestion: false,
+  },
   // Single-text family
   {
     id: "text_full_breakdown",
@@ -192,6 +208,7 @@ const NOTE_TYPES: NoteTypeMeta[] = [
 ];
 
 const FAMILY_LABELS: Record<NoteTypeMeta["family"], string> = {
+  guide: "Mode guides — what each comparative mode means",
   single: "Per single text",
   cross: "Across three texts",
   question: "Driven by an exam question",
@@ -319,7 +336,11 @@ export default function ComparativePage() {
   const filmWarning = meta.needsTexts === 3 && filmCount > 1;
 
   const allTextsPicked =
-    meta.needsTexts === 1 ? !!text1 : !!text1 && !!text2 && !!text3;
+    meta.needsTexts === 0
+      ? true
+      : meta.needsTexts === 1
+        ? !!text1
+        : !!text1 && !!text2 && !!text3;
   const modeOk = !meta.needsMode || !!mode;
   const characterOk = !meta.needsCharacterName || !!characterName.trim();
   const argumentOk = !meta.needsArgumentFocus || !!argumentFocus.trim();
@@ -367,6 +388,9 @@ export default function ComparativePage() {
   }
 
   function fileLabel(): string {
+    if (meta.needsTexts === 0 && meta.needsMode) {
+      return `${mode} - ${meta.label}`;
+    }
     if (meta.needsTexts === 1 && text1) {
       return `${text1.title} - ${meta.label}`;
     }
@@ -541,6 +565,7 @@ export default function ComparativePage() {
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Note Type
           </label>
+          {renderNoteTypeFamily("guide")}
           {renderNoteTypeFamily("single")}
           {renderNoteTypeFamily("cross")}
           {renderNoteTypeFamily("question")}

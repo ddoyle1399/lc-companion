@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { generateTextNote } from "@/lib/claude/generateTextNote";
 import { findSingleTextAuthor } from "@/data/circulars";
+import { scrubDashes, containsForbiddenDashes } from "@/lib/sanitize/scrubDashes";
 import type {
   Depth,
   Level,
@@ -197,6 +198,18 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Sanitize: strip em/en dashes and double-hyphens before persisting OR
+  // returning to the client. The shared system prompt bans these but the
+  // model occasionally regresses; this is the boundary safety net.
+  const cleanBody = scrubDashes(result.body_markdown);
+  if (containsForbiddenDashes(cleanBody)) {
+    // Should be impossible after scrubDashes but log if it ever happens.
+    console.warn(
+      "[text-note] forbidden dashes survived scrubDashes",
+      { textKey, noteType, subjectKey },
+    );
+  }
+
   // Persist
   const { data: saved, error: saveErr } = await supabase
     .from("text_notes")
@@ -207,7 +220,7 @@ export async function POST(request: NextRequest) {
       subject_key: subjectKey,
       display_subject: displaySubject,
       depth,
-      body_markdown: result.body_markdown,
+      body_markdown: cleanBody,
       word_count: result.word_count,
       generation_model: result.model,
       user_instructions: userInstructions || null,
@@ -232,7 +245,7 @@ export async function POST(request: NextRequest) {
       subject_key: subjectKey,
       display_subject: displaySubject,
       depth,
-      body_markdown: result.body_markdown,
+      body_markdown: cleanBody,
       word_count: result.word_count,
       generation_model: result.model,
     },

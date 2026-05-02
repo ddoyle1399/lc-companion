@@ -23,6 +23,10 @@
  */
 
 import { marked } from "marked";
+// Em/en/double-hyphen scrubber. Shared with API routes and Word exporter so
+// the no-dash rule is enforced identically everywhere generated content is
+// saved or rendered.
+import { scrubDashes } from "@/lib/sanitize/scrubDashes";
 
 export interface WrapInput {
   markdown: string;
@@ -146,13 +150,7 @@ function stripHorizontalRules(markdown: string): string {
   return markdown.replace(/^\s*([-*_])\1{2,}\s*$/gm, "");
 }
 
-/**
- * Replace em dashes, en dashes, and double hyphens with ", " so the output
- * never carries the dash tells. Single hyphens (compound words) are kept.
- */
-function scrubDashes(s: string): string {
-  return s.replace(/—|–/g, ", ").replace(/--/g, ", ");
-}
+// scrubDashes imported at top of file.
 
 /**
  * Apply inline brand styles to the marked output. Operates on the rendered
