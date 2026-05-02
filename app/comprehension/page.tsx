@@ -5,6 +5,7 @@ import Nav from "@/components/nav";
 import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
 import { exportToWord } from "@/lib/export/word";
 import { exportToPDF } from "@/lib/export/pdf";
+import H1ClubCopyButton from "@/components/h1ClubCopyButton";
 
 type Level = "HL" | "OL";
 type FocusArea = "question_a" | "question_b" | "both";
@@ -220,6 +221,12 @@ export default function ComprehensionPage() {
                   >
                     PDF
                   </button>
+                  <H1ClubCopyButton
+                    markdown={output}
+                    title={`Comprehension Guide - ${focusLabels[focusArea]} - ${level} ${year}`}
+                    level={level === "HL" ? "higher" : "ordinary"}
+                    size="sm"
+                  />
                 </div>
               )}
             </div>

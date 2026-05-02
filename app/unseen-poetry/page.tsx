@@ -5,6 +5,7 @@ import Nav from "@/components/nav";
 import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
 import { exportToWord } from "@/lib/export/word";
 import { exportToPDF } from "@/lib/export/pdf";
+import H1ClubCopyButton from "@/components/h1ClubCopyButton";
 
 type Level = "HL" | "OL";
 
@@ -195,6 +196,12 @@ export default function UnseenPoetryPage() {
                   >
                     PDF
                   </button>
+                  <H1ClubCopyButton
+                    markdown={output}
+                    title={`Unseen Poetry Guide - ${level} ${year}`}
+                    level={level === "HL" ? "higher" : "ordinary"}
+                    size="sm"
+                  />
                 </div>
               )}
             </div>

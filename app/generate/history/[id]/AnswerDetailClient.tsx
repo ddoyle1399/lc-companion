@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { SampleAnswerFull } from "@/lib/export/sampleAnswer";
 import { toPlainText, toHtml } from "@/lib/export/sampleAnswer";
+import H1ClubCopyButton from "@/components/h1ClubCopyButton";
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-GB", {
@@ -142,6 +143,11 @@ export default function AnswerDetailClient({ answer }: { answer: SampleAnswerFul
           >
             {copyHtmlLabel}
           </button>
+          <H1ClubCopyButton
+            markdown={answer.answer_text}
+            title={`Sample answer ${answer.grade_tier} - ${answer.question.subject_key}`}
+            level="higher"
+          />
           {!approved && (
             <button
               onClick={handleApprove}

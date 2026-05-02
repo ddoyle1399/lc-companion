@@ -6,6 +6,7 @@ import Nav from "@/components/nav";
 import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
 import { exportToWord } from "@/lib/export/word";
 import { exportToPDF } from "@/lib/export/pdf";
+import H1ClubCopyButton from "@/components/h1ClubCopyButton";
 
 // Import circular data statically for client-side use
 import poetryHL2026 from "@/data/circulars/2026-poetry-hl.json";
@@ -753,6 +754,12 @@ export default function PoetryPage() {
                   >
                     PDF
                   </button>
+                  <H1ClubCopyButton
+                    markdown={output}
+                    title={`${poet} - ${poem}`}
+                    level={level === "HL" ? "higher" : "ordinary"}
+                    size="sm"
+                  />
                   <button
                     onClick={handleGenerateVideo}
                     disabled={generating}

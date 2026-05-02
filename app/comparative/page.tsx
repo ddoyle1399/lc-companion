@@ -5,6 +5,7 @@ import Nav from "@/components/nav";
 import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
 import { exportToWord } from "@/lib/export/word";
 import { exportToPDF } from "@/lib/export/pdf";
+import H1ClubCopyButton from "@/components/h1ClubCopyButton";
 
 import comp2026 from "@/data/circulars/2026-comparative.json";
 import comp2027 from "@/data/circulars/2027-comparative.json";
@@ -790,6 +791,12 @@ export default function ComparativePage() {
                   >
                     PDF
                   </button>
+                  <H1ClubCopyButton
+                    markdown={output}
+                    title={fileLabel()}
+                    level={level === "HL" ? "higher" : "ordinary"}
+                    size="sm"
+                  />
                 </div>
               )}
             </div>

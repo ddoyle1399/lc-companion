@@ -5,6 +5,7 @@ import Nav from "@/components/nav";
 import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
 import { exportToWord } from "@/lib/export/word";
 import { exportToPDF } from "@/lib/export/pdf";
+import H1ClubCopyButton from "@/components/h1ClubCopyButton";
 
 import poetryHL2026 from "@/data/circulars/2026-poetry-hl.json";
 import poetryOL2026 from "@/data/circulars/2026-poetry-ol.json";
@@ -695,6 +696,12 @@ export default function WorksheetPage() {
                   >
                     PDF
                   </button>
+                  <H1ClubCopyButton
+                    markdown={output}
+                    title={getFilenameBase()}
+                    level={level === "HL" ? "higher" : "ordinary"}
+                    size="sm"
+                  />
                 </div>
               )}
             </div>

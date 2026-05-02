@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { useStreamGenerate } from "@/lib/hooks/useStreamGenerate";
 import { exportToWord } from "@/lib/export/word";
 import { exportToPDF } from "@/lib/export/pdf";
+import H1ClubCopyButton from "@/components/h1ClubCopyButton";
 import {
   GENRES,
   GUIDE_TYPES,
@@ -270,6 +271,12 @@ export default function CompositionPage() {
                 <button onClick={handleDownloadMarkdown} className="text-[12px] px-3 py-1.5 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">.md</button>
                 <button onClick={handleDownloadWord} className="text-[12px] px-3 py-1.5 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">.docx</button>
                 <button onClick={handleDownloadPDF} className="text-[12px] px-3 py-1.5 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">PDF</button>
+                <H1ClubCopyButton
+                  markdown={output}
+                  title={fileName()}
+                  level={level === "HL" ? "higher" : "ordinary"}
+                  size="sm"
+                />
               </div>
             )}
           </div>
