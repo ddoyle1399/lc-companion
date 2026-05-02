@@ -645,11 +645,30 @@ export async function POST(request: NextRequest) {
       }
 
       case "composition": {
-        const { compositionType } = body;
-        if (!compositionType) {
-          return errorResponse("Composition notes require a compositionType");
+        // Composition is a genre × guide-type matrix. Either the legacy
+        // single field (compositionType) or the new pair
+        // (compositionGenre + compositionGuideType) can be supplied; the
+        // new pair takes precedence.
+        const {
+          compositionType,
+          compositionGenre,
+          compositionGuideType,
+          compositionTitle,
+        } = body;
+        if (!compositionGenre && !compositionType) {
+          return errorResponse(
+            "Composition notes require a compositionGenre (and a compositionGuideType)",
+          );
+        }
+        if (compositionGenre && !compositionGuideType) {
+          return errorResponse(
+            "Composition notes with compositionGenre require a compositionGuideType (overview, features, worked_example, lift_phrases, common_mistakes, plan_a_title)",
+          );
         }
         context.compositionType = compositionType;
+        context.compositionGenre = compositionGenre;
+        context.compositionGuideType = compositionGuideType;
+        context.compositionTitle = compositionTitle;
 
         useWebSearch = false;
         userPrompt = buildCompositionPrompt(context);

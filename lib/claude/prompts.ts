@@ -20,6 +20,7 @@
  */
 
 import { ABSOLUTE_OUTPUT_RULES } from "@/lib/claude/outputRules";
+import { findGenre, findGuideType, type CompositionGenre, type CompositionGuideType } from "@/lib/composition/genres";
 
 // -----------------------------------------------------------------------------
 // Types
@@ -208,6 +209,11 @@ export interface PromptContext {
   textType?: 'shakespeare' | 'novel' | 'play';
   focusArea?: 'question_a' | 'question_b' | 'both';
   compositionType?: 'personal_essay' | 'short_story' | 'speech' | 'discursive' | 'feature_article' | 'descriptive';
+  // Composition guide system (added later). Genre × guide-type matrix
+  // backed by lib/composition/genres.ts.
+  compositionGenre?: CompositionGenre;
+  compositionGuideType?: CompositionGuideType;
+  compositionTitle?: string; // optional, used by 'plan_a_title' guide type
   poemMetadata?: PoemMetadata;
   structuredQuotes?: Array<string | PoemQuote>;
 }
@@ -3067,98 +3073,231 @@ ${sections}${userInstr}`;
 }
 
 export function buildCompositionPrompt(context: PromptContext): string {
+  // Composition is a genre × guide-type matrix. Genre data lives in
+  // lib/composition/genres.ts (single source of truth). The prompt is
+  // shaped by the chosen guide type.
+  const genreKey = context.compositionGenre || "personal_essay";
+  const guideTypeKey = context.compositionGuideType || "overview";
+  const genre = findGenre(genreKey);
+  const guide = findGuideType(guideTypeKey);
+
+  if (!genre) {
+    return `Error: Unknown composition genre '${genreKey}'.`;
+  }
+  if (!guide) {
+    return `Error: Unknown composition guide type '${guideTypeKey}'.`;
+  }
+
   const userInstr = context.userInstructions
     ? `\n\nADDITIONAL INSTRUCTIONS FROM THE TEACHER:\n${context.userInstructions}`
     : "";
 
-  const typeLabels: Record<string, string> = {
-    personal_essay: "Personal Essay",
-    short_story: "Short Story",
-    speech: "Speech",
-    discursive: "Discursive Essay",
-    feature_article: "Feature Article",
-    descriptive: "Descriptive Essay",
-  };
+  const HEADER = `LC English Paper 1 Section II Composition. The student will write a ${genre.label} in the exam (${genre.targetLength}, worth 100 marks, assessed on PCLM: Purpose, Coherence, Language, Mechanics).
 
-  const compType = typeLabels[context.compositionType || "personal_essay"] || "Personal Essay";
+GENRE FRAMING (use as your foundation; do not just paste it back):
+${genre.framing}
 
-  const typeSpecificGuidance: Record<string, string> = {
-    personal_essay: `A personal essay is reflective, drawing on the student's own experiences, observations, and feelings. The examiner expects a genuine voice, not a formal academic essay. The best personal essays move between the specific (a moment, a memory, a detail) and the general (a broader insight about life, people, or the world). The tone should feel honest and thoughtful. Humour is welcome if natural. The essay should feel like it was written by a real person with something to say.`,
-    short_story: `A short story must have a clear narrative arc: a beginning that hooks, a middle that develops tension or conflict, and an ending that resolves or resonates. Characters should feel real, not cardboard. Dialogue should sound natural. The setting should be established quickly through specific sensory detail, not lengthy description. The examiner rewards controlled pacing, a clear climax, and an ending that leaves an impression. Avoid cliches: "it was all a dream", "and then I woke up", "the end".`,
-    speech: `A speech must be written for a specific audience and occasion. It should open with direct address and an attention-grabbing statement. The tone should be persuasive and engaging, mixing personal anecdote with broader argument. Use rhetorical techniques naturally: repetition, rhetorical questions, lists of three, direct address. The speech should build to a strong conclusion with a call to action or memorable final statement. It must sound like something that would be spoken aloud, not read silently.`,
-    discursive: `A discursive essay presents a balanced exploration of an issue, considering multiple perspectives before reaching a reasoned conclusion. The structure is critical: introduce the topic, present arguments for and against (or multiple viewpoints), and conclude with a considered personal position. Each paragraph should have a clear topic sentence and supporting evidence. The tone should be thoughtful and measured, not aggressive or one-sided. The examiner rewards nuance and the ability to engage with opposing viewpoints fairly.`,
-    feature_article: `A feature article is written for publication in a newspaper or magazine. It needs a catchy headline and an engaging opening that hooks the reader. The tone is more personal and engaging than a news report but more structured than a personal essay. It can include anecdote, interview-style quotes (invented is fine), statistics, and expert opinion. Subheadings can be used to break up the text. The closing should circle back to the opening or leave the reader with something to think about.`,
-    descriptive: `A descriptive essay creates a vivid picture of a place, person, event, or experience through detailed sensory writing. The examiner rewards specific, concrete detail over vague generalities. Use all five senses where appropriate. The description should have a controlling mood or atmosphere. Structure through spatial organisation (moving through a place), chronological organisation (moving through time), or emotional organisation (moving through feelings). Avoid listing adjectives. Instead, use precise nouns and strong verbs to carry the description.`,
-  };
+The most common student trap with this genre: ${genre.primaryTrap}`;
 
-  const guidance = typeSpecificGuidance[context.compositionType || "personal_essay"] || typeSpecificGuidance.personal_essay;
+  // Each guide type produces a different structure. All inherit the genre
+  // framing above so the output is genre-aware regardless of which guide
+  // the operator picked.
+  let body = "";
 
-  return `Generate a comprehensive composition writing guide for the ${compType} for ${context.level} level students preparing for the ${context.year} Leaving Certificate English examination.
+  switch (guide.key) {
+    case "overview":
+      body = `Produce a comprehensive Overview guide for ${genre.label}.
 
-This covers Paper 1, Section II. The composition is worth 100 marks, the single highest-value question on either paper. It is assessed on PCLM: Purpose, Coherence, Language, Mechanics.
+Begin with a single H1: "# ${genre.label}: Overview"
 
-COMPOSITION TYPE: ${compType}
+Then a SHORT 2-3 sentence orientation paragraph in plain prose. Plain teacher voice. State what the student will learn from this guide and what kind of exam title triggers this genre.
 
-TYPE-SPECIFIC CONTEXT:
-${guidance}
+Then produce these sections, in this exact order:
 
-STRUCTURE (follow this exactly):
+## What this genre is
 
-## 1. Format and Expectations
-150-200 words. What the examiner expects from a ${compType}:
-- Typical length for a strong answer
-- Structural conventions specific to this type
-- Tone and voice expectations
-- What "Purpose" means specifically for a ${compType}
-- What "Coherence" means specifically for a ${compType}
+3-4 sentences in your own words. Define the genre, name its purpose, and identify what makes it distinct from neighbouring genres (e.g. for Diary Entry, distinguish from Personal Essay; for Speech, distinguish from Talk/Podcast).
 
-## 2. Structure Template
-200-250 words. A detailed structural framework:
-- How to open: provide 2-3 specific opening strategies with brief examples
-- How to develop the middle: paragraph structure, transitions, pacing
-- How to close: circular structure, resonant ending, or call to action
-- Approximate number of paragraphs and rough length for each
-- How to plan the composition in 5 minutes before writing
+## When it appears in the exam
 
-## 3. Language Marks Guide
-150-200 words. How to maximise the Language mark in a ${compType}:
-- 5-10 strong words or phrases to aim for (not pretentious, but precise and effective)
-- Sentence variety techniques: how to mix short and long, simple and complex
-- What "sophisticated language" actually looks like at this level, with 2-3 examples
-- Common language errors that cost marks (repetitive vocabulary, vague adjectives, cliched phrases)
+A short paragraph plus a bulleted list. The kinds of question prompts that trigger this genre. Sample title phrasings the SEC has used (invent realistic ones if you don't recall specific examples).
 
-## 4. PCLM Breakdown
-200-250 words. How each PCLM criterion applies to the ${compType} specifically:
+## Conventions and structure
 
-### Purpose
-What does a clear sense of purpose look like in a ${compType}? How does the student demonstrate they know what they are doing and why?
+A practical paragraph followed by a structure outline. Opening shape, body shape, closing shape. Approximate paragraph count and word distribution. The length target is ${genre.targetLength}.
 
-### Coherence
-What makes a ${compType} flow? How do paragraphs connect? What structural devices create unity?
+## Tone and register
 
-### Language
-What register and vocabulary is expected? What distinguishes a B-grade ${compType} from an A-grade one in terms of language?
+What voice the examiner expects. Specific markers (formal vs informal, first vs third person, contractions vs no contractions, register notes).
 
-### Mechanics
-Spelling, grammar, punctuation focus areas for this type. Common mechanical errors students make in ${compType} writing.
+## How it differs from neighbouring genres
 
-## 5. Strong Opening Examples
-Provide 3 different ways to open a ${compType}. For each opening:
-- The opening itself (50-80 words)
-- A brief explanation (1-2 sentences) of why this opening works
+3-4 short paragraphs. Distinguish this genre from the 2-3 other genres students confuse it with. Concrete one-line rules where possible.
 
-## 6. Sample ${compType}
-400-500 words. A complete model ${compType} demonstrating all the principles above.
-- This should be the kind of composition that would score 85-90 out of 100
-- It should demonstrate varied sentence structure, strong vocabulary, clear purpose, and effective structure
-- It should read as if written by a talented student, not by a teacher or AI
-- Choose a topic that is accessible and relatable for a 17-18 year old
+## What the examiner is looking for
 
-## 7. Common Mistakes
-100-150 words. The 4-5 most common errors students make when writing a ${compType}:
-- What the mistake is
-- Why it costs marks
-- How to avoid it${userInstr}`;
+A bulleted list, 4-6 items. The specific moves a strong answer in this genre makes that a weak answer doesn't. Phrased as observable behaviours, not abstract advice.${userInstr}`;
+      break;
+
+    case "features":
+      body = `Produce a Features and Devices guide for ${genre.label}.
+
+Begin with a single H1: "# ${genre.label}: Features and Devices"
+
+Then a 2-3 sentence orientation. State why these specific features matter for this genre (different genres reward different toolkits).
+
+For each of the following ${genre.features.length} features, produce a "## H2 section" with:
+  - The feature name as the H2 heading
+  - A 1-2 sentence definition in plain English
+  - A worked example (1-3 sentences) showing the feature used WELL in this genre
+  - A common misuse and the correction
+
+The features to cover, in this order:
+
+${genre.features.map((f, i) => `${i + 1}. ${f}`).join("\n")}
+
+End with a final section:
+
+## How to use these together
+
+3-4 sentences. How a strong student combines several of these features in a single paragraph rather than using one in isolation.${userInstr}`;
+      break;
+
+    case "worked_example":
+      body = `Produce a Worked Example for ${genre.label}.
+
+Begin with a single H1: "# ${genre.label}: Worked Example"
+
+Then a 2-3 sentence orientation. State what title or prompt this worked example is responding to (invent a realistic LC-style title for this genre).
+
+Then produce these sections:
+
+## The title we are working with
+
+State the title in italics. One-line gloss of what the title is asking for.
+
+## Opening paragraph (with annotation)
+
+Write a strong opening paragraph (80-150 words) for this title in this genre. Then a 2-3 sentence annotation in plain prose explaining what each move in the opening does (what it sets up, why it works, how it serves the genre).
+
+## First middle paragraph (with annotation)
+
+Write a body paragraph (120-180 words). Then a 2-3 sentence annotation.
+
+## Second middle paragraph (with annotation)
+
+Write a contrasting or developing body paragraph (120-180 words). Then a 2-3 sentence annotation.
+
+## Closing paragraph (with annotation)
+
+Write a closing paragraph (80-150 words). Then a 2-3 sentence annotation showing how the closing lands.
+
+## What this would score and why
+
+A short paragraph (3-5 sentences) estimating an H1/H2/H3 grade and naming the specific moves that earn the marks.${userInstr}`;
+      break;
+
+    case "lift_phrases":
+      body = `Produce a Lift-ready Phrases guide for ${genre.label}.
+
+Begin with a single H1: "# ${genre.label}: Lift-ready Phrases"
+
+Then a 2-3 sentence orientation. State that these are sentences and transitions a student can adapt directly into their answer, that the phrases are genre-specific (not generic essay phrases), and that the student should change names/details to match their own composition.
+
+Produce these sections:
+
+## Opening lines
+
+5-7 strong opening lines specific to ${genre.label}. Each should be a real sentence or sentence-starter, not abstract advice. Format as a bulleted list.
+
+## Transition phrases
+
+5-7 ways to move between paragraphs or shift gear within ${genre.label}. Format as a bulleted list.
+
+## Mid-paragraph phrases
+
+5-7 mid-paragraph moves a student can lift — a way to introduce evidence, pivot to reflection, or sharpen a claim. Format as a bulleted list.
+
+## Closing lines
+
+4-6 strong closing lines specific to ${genre.label}. Format as a bulleted list.
+
+End with one short paragraph: a warning about over-using lifted phrases. The student should treat these as scaffolding, not script.${userInstr}`;
+      break;
+
+    case "common_mistakes":
+      body = `Produce a Common Mistakes guide for ${genre.label}.
+
+Begin with a single H1: "# ${genre.label}: Common Mistakes"
+
+Then a 2-3 sentence orientation. State that these are the failure modes specific to this genre, that each one has a corrective move, and that fixing the top two or three of these can move a script up a grade band.
+
+Produce these sections.
+
+## The biggest single mistake
+
+Two short paragraphs. Name the primary trap for this genre (which is: ${genre.primaryTrap}). Show what it looks like with a brief example. Then give the corrective move.
+
+## Other mistakes that cost marks
+
+5-6 short numbered subsections. Each with:
+  - Name of the mistake (as ### H3)
+  - One-sentence description of what it looks like
+  - One-sentence corrective move
+
+## How an examiner thinks
+
+A short paragraph. What the examiner is reading for in ${genre.label} that students often forget — and the question they implicitly ask of every paragraph.${userInstr}`;
+      break;
+
+    case "plan_a_title":
+      // Optional title input. If absent, invent a realistic one.
+      const title = (context.compositionTitle || "").trim();
+      const titleBlock = title
+        ? `THE TITLE: "${title}"`
+        : `No specific title supplied. Invent a realistic LC-style title appropriate to ${genre.label} and use it throughout.`;
+      body = `Produce a Plan-a-Title walk-through for ${genre.label}.
+
+${titleBlock}
+
+Begin with a single H1: "# Planning your ${genre.label}"
+
+Then a 2-3 sentence orientation. State the title you are working with (in italics), name what the title is asking for, and tell the student that this guide will walk them through the 5-minute plan and the paragraph-by-paragraph structure.
+
+Produce these sections, in order:
+
+## Reading the title
+
+3-4 sentences. Unpack what the title is actually asking. Identify the angle, the implied audience, the implied tone, and any words in the title that should shape every paragraph.
+
+## The 5-minute plan
+
+Walk through what the student should jot down before writing. A bulleted list (5-7 items) of the things they should decide in the first five minutes: angle, central image or anecdote, structural shape, opening hook, closing landing, two or three middle moves.
+
+## Paragraph-by-paragraph structure
+
+A numbered list, 6-8 paragraphs (or whatever fits the typical length: ${genre.targetLength}). For each paragraph, state in one short prose sentence what the paragraph does (e.g. "Paragraph 3: bring in the second voice — your father — to broaden the personal moment").
+
+## Where you might go wrong
+
+3-4 short paragraphs naming the failure modes specific to THIS title (not generic genre traps). Each with the corrective move.
+
+## What a top-band answer to this title looks like
+
+A short paragraph (3-5 sentences) describing the texture and moves a strong answer would have. No worked example — just the shape.${userInstr}`;
+      break;
+  }
+
+  return `${HEADER}
+
+${body}
+
+OUTPUT VOICE:
+- Write like an experienced LC English teacher talking to a 17-year-old, not like an academic.
+- Use everyday verbs (shows, means, signals, lands, earns, works, fails).
+- Banned jargon: anaphora, paratactic, hypotactic, valorise, register (use "the right voice"), modality, narrative voice (use "the storyteller's voice"), rhetorician.
+- Vary sentence length. Mix short punchy sentences with longer explanatory ones.
+- Address the student directly using "you" and "your".`;
 }
 
 export function buildOutlineSystemPrompt(): string {

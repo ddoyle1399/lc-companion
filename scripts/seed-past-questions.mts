@@ -198,21 +198,98 @@ async function fetchDataJson(): Promise<DataJson> {
 // ---------------------------------------------------------------------------
 
 async function getSessionCookies(): Promise<Cookie[]> {
-  console.log("\nLaunching Puppeteer to acquire examinations.ie session...");
+  console.log("\nLaunching Puppeteer (visible window - needed to pass Cloudflare)...");
+  console.log("A Chrome window will open briefly. Do not close it.\n");
+
   const systemChrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
   const executablePath = fs.existsSync(systemChrome) ? systemChrome : undefined;
   if (executablePath) console.log("Using system Chrome");
 
   const browser = await puppeteer.launch({
-    headless: true,
-    ...(executablePath ? { executablePath } : {}),
+    headless: false,
+    executablePath,
+    args: [
+      "--window-size=1280,800",
+      "--disable-blink-features=AutomationControlled", // hide automation flag
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+    ],
+    defaultViewport: { width: 1280, height: 800 },
+    ignoreDefaultArgs: ["--enable-automation"], // remove --enable-automation flag
   });
   try {
     const page = await browser.newPage();
-    await page.goto(ARCHIVE_PAGE, { waitUntil: "networkidle2", timeout: 30000 });
-    await page.waitForSelector("#MaterialArchive__noTable__cbv__AgreeCheck", { timeout: 10000 });
-    await page.click("#MaterialArchive__noTable__cbv__AgreeCheck");
-    await page.waitForSelector("#MaterialArchive__noTable__sbv__YearSelect", { timeout: 10000 });
+
+    // Override navigator.webdriver so Cloudflare doesn't detect Puppeteer
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+    });
+
+    await page.setUserAgent(
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    );
+
+    console.log("Navigating to examinations.ie archive...");
+    await page.goto(ARCHIVE_PAGE, { waitUntil: "networkidle2", timeout: 40000 });
+
+    // Cloudflare may show a "Just a moment..." challenge page first.
+    // Wait up to 20 seconds for it to resolve automatically.
+    let attempts = 0;
+    while (attempts < 30) {
+      const title = await page.title();
+      if (!title.includes("Just a moment")) break;
+      if (attempts === 0) console.log("  Waiting for Cloudflare challenge to resolve...");
+      await new Promise((r) => setTimeout(r, 1000));
+      attempts++;
+    }
+
+    const title = await page.title();
+    console.log(`  Page title: "${title}"`);
+    if (title.includes("Just a moment")) {
+      const screenshotPath = path.join(process.cwd(), "data", "examinations-debug.png");
+      fs.mkdirSync(path.dirname(screenshotPath), { recursive: true });
+      await page.screenshot({ path: screenshotPath, fullPage: true });
+      throw new Error(
+        "Cloudflare challenge did not resolve after 20 seconds.\n" +
+        "Screenshot saved to data/examinations-debug.png\n" +
+        "Try running the script again, or see README for manual download option."
+      );
+    }
+
+    // Find and click the agree checkbox
+    const agreeSelectors = [
+      "#MaterialArchive__noTable__cbv__AgreeCheck",
+      "input[id*='AgreeCheck']",
+      "input[type='checkbox']",
+    ];
+
+    let clicked = false;
+    for (const sel of agreeSelectors) {
+      const el = await page.$(sel);
+      if (el) {
+        console.log(`  Clicking agree checkbox (${sel})`);
+        await el.click();
+        clicked = true;
+        break;
+      }
+    }
+
+    if (!clicked) {
+      const screenshotPath = path.join(process.cwd(), "data", "examinations-debug.png");
+      await page.screenshot({ path: screenshotPath, fullPage: true });
+      throw new Error(
+        "Page loaded but agree checkbox not found.\n" +
+        "Screenshot saved to data/examinations-debug.png"
+      );
+    }
+
+    // Wait for page to settle after checkbox click, then confirm the form loaded
+    await page.waitForNetworkIdle({ idleTime: 500, timeout: 20000 });
+    await page.waitForSelector(
+      "#MaterialArchive__noTable__sbv__YearSelect",
+      { timeout: 20000 }
+    );
+
     const cookies = await page.cookies();
     console.log(`Session acquired (${cookies.length} cookies)\n`);
     return cookies as Cookie[];
