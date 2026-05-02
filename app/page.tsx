@@ -2,182 +2,49 @@ import Link from "next/link";
 import { getServerSupabase } from "@/lib/supabase/server";
 
 /**
- * Dashboard. Reference: clean SaaS admin (Linear / Resend / Cal.com).
+ * Dashboard. Just clickable tiles. No tables, no lists, no progress bars.
  *
- * Layout, top to bottom:
- *   - Header: greeting + last activity pill on right
- *   - KPI strip: 4 stat cards, big tabular numbers
- *   - Two-column row: Recent generations (left, wider) + Coverage by poet (right)
- *   - Two-column row: Recent text notes table + Recent poetry notes table
- *
- * No fake charts or invented metrics. Every number traces back to Supabase.
+ * Each tile is a single clear function with a single clear destination.
+ * The 'Last generation' tile deep-links straight to the most recent note
+ * in the library so the operator can resume work in one click.
  */
 
-interface RecentItem {
-  id: string;
+interface LastGen {
+  href: string;
   title: string;
   subtitle: string;
-  href: string;
   whenIso: string;
-  badge: string;
 }
 
-interface PoetCoverage {
-  poet: string;
-  generated: number;
-  total: number;
-  percent: number;
-}
-
-interface DashboardData {
-  poetryRows: number;
-  poetryVerified: number;
-  textNotes: number;
-  textTexts: number;
-  comparativeProfiles: number;
-  recentText: RecentItem[];
-  recentPoetry: RecentItem[];
-  recentMixed: RecentItem[];
-  poetCoverage: PoetCoverage[];
-  lastActivityIso: string | null;
-}
-
-async function loadDashboard(): Promise<DashboardData> {
+async function loadLastGen(): Promise<LastGen | null> {
   const supabase = getServerSupabase();
-  const [
-    poetryAll,
-    poetryVerified,
-    textNotesTotal,
-    textKeys,
-    textRecent,
-    poetryRecent,
-    poetryRowsByPoet,
-  ] = await Promise.all([
-    supabase
-      .from("notes")
-      .select("id", { count: "exact", head: true })
-      .eq("content_type", "poem_notes"),
-    supabase
-      .from("notes")
-      .select("id", { count: "exact", head: true })
-      .eq("content_type", "poem_notes")
-      .eq("status", "verified"),
-    supabase.from("text_notes").select("id", { count: "exact", head: true }),
-    supabase.from("text_notes").select("text_key"),
-    supabase
-      .from("text_notes")
-      .select("id, text_key, note_type, display_subject, generated_at")
-      .order("generated_at", { ascending: false })
-      .limit(5),
-    supabase
-      .from("notes")
-      .select("id, subject_key, sub_key, generated_at, status")
-      .eq("content_type", "poem_notes")
-      .order("generated_at", { ascending: false })
-      .limit(5),
-    supabase
-      .from("notes")
-      .select("subject_key, sub_key")
-      .eq("content_type", "poem_notes")
-      .eq("status", "verified"),
-  ]);
-
-  const distinctTexts = new Set(
-    ((textKeys.data ?? []) as Array<{ text_key: string }>).map((r) => r.text_key),
-  ).size;
-
-  const recentText: RecentItem[] = ((textRecent.data ?? []) as Array<{
+  const { data } = await supabase
+    .from("text_notes")
+    .select("id, text_key, display_subject, note_type, generated_at")
+    .order("generated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (!data) return null;
+  const r = data as {
     id: string;
     text_key: string;
-    note_type: string;
     display_subject: string;
+    note_type: string;
     generated_at: string;
-  }>).map((r) => ({
-    id: r.id,
-    title: r.display_subject,
-    subtitle: `${r.text_key} · ${prettyType(r.note_type)}`,
-    href: `/single-text/library/${r.id}`,
-    whenIso: r.generated_at,
-    badge: "Text",
-  }));
-
-  const recentPoetry: RecentItem[] = ((poetryRecent.data ?? []) as Array<{
-    id: string;
-    subject_key: string;
-    sub_key: string;
-    generated_at: string | null;
-    status: string;
-  }>)
-    .filter((r) => r.generated_at)
-    .map((r) => ({
-      id: r.id,
-      title: r.sub_key,
-      subtitle: `${r.subject_key} · poetry`,
-      href: `/poetry`,
-      whenIso: r.generated_at!,
-      badge: r.status === "verified" ? "Poetry" : "Draft",
-    }));
-
-  const recentMixed = [...recentText, ...recentPoetry]
-    .sort((a, b) => (a.whenIso < b.whenIso ? 1 : -1))
-    .slice(0, 6);
-
-  // Per-poet coverage (verified poems / prescribed poems for HL 2026).
-  // Hardcode prescribed counts; we already render the Coverage page from
-  // the prescribed JSON elsewhere, this is a snapshot for visual signal.
-  const PRESCRIBED_HL_2026: Record<string, number> = {
-    "Elizabeth Bishop": 10,
-    "Seamus Heaney": 13,
-    "Tracy K. Smith": 12,
-    "Adrienne Rich": 7,
-    "Patrick Kavanagh": 13,
-    "W.B. Yeats": 13,
-    "John Donne": 10,
-    "Eiléan Ní Chuilleanáin": 12,
-    "Paula Meehan": 10,
-    "T.S. Eliot": 8,
   };
-  const poetSubKeys = new Map<string, Set<string>>();
-  for (const r of (poetryRowsByPoet.data ?? []) as Array<{
-    subject_key: string;
-    sub_key: string;
-  }>) {
-    if (!poetSubKeys.has(r.subject_key)) poetSubKeys.set(r.subject_key, new Set());
-    poetSubKeys.get(r.subject_key)!.add(r.sub_key);
-  }
-  const poetCoverage: PoetCoverage[] = Object.entries(PRESCRIBED_HL_2026)
-    .map(([poet, total]) => {
-      const generated = poetSubKeys.get(poet)?.size ?? 0;
-      return {
-        poet,
-        generated,
-        total,
-        percent: total > 0 ? Math.round((generated / total) * 100) : 0,
-      };
-    })
-    .sort((a, b) => b.percent - a.percent)
-    .slice(0, 6);
-
+  const niceType = r.note_type
+    .split("_")
+    .map((w) => w[0].toUpperCase() + w.slice(1))
+    .join(" ");
   return {
-    poetryRows: poetryAll.count ?? 0,
-    poetryVerified: poetryVerified.count ?? 0,
-    textNotes: textNotesTotal.count ?? 0,
-    textTexts: distinctTexts,
-    comparativeProfiles: 7,
-    recentText: recentText.slice(0, 5),
-    recentPoetry: recentPoetry.slice(0, 5),
-    recentMixed,
-    poetCoverage,
-    lastActivityIso: recentMixed[0]?.whenIso ?? null,
+    href: `/single-text/library/${r.id}`,
+    title: r.display_subject,
+    subtitle: `${r.text_key} · ${niceType}`,
+    whenIso: r.generated_at,
   };
 }
 
-function prettyType(s: string): string {
-  return s.split("_").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
-}
-
-function relativeTime(iso: string | null): string {
-  if (!iso) return "never";
+function relativeTime(iso: string): string {
   const t = new Date(iso).getTime();
   const diffMin = Math.round((Date.now() - t) / 60000);
   if (diffMin < 1) return "just now";
@@ -187,224 +54,125 @@ function relativeTime(iso: string | null): string {
   const days = Math.round(hours / 24);
   if (days === 1) return "yesterday";
   if (days < 7) return `${days}d ago`;
-  return new Date(iso).toLocaleDateString("en-IE", {
-    day: "numeric",
-    month: "short",
-  });
+  return new Date(iso).toLocaleDateString("en-IE", { day: "numeric", month: "short" });
 }
 
 export default async function DashboardPage() {
-  const data = await loadDashboard();
+  const lastGen = await loadLastGen();
 
   return (
-    <main className="px-6 lg:px-10 py-8 lg:py-10 max-w-[1400px]">
+    <main className="px-8 lg:px-12 py-10 lg:py-12 max-w-[1400px]">
 
       {/* Header */}
-      <header className="flex items-end justify-between flex-wrap gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
-            Hello, Diarmuid
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Here&apos;s where your catalogue stands today.
-          </p>
-        </div>
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden />
-          <span className="text-xs font-medium text-gray-700 tabular-nums">
-            Last activity {relativeTime(data.lastActivityIso)}
-          </span>
-        </div>
+      <header className="mb-10">
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900">
+          Hello, Diarmuid
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Pick something to work on.
+        </p>
       </header>
 
-      {/* KPI strip */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <Stat
-          label="Poetry notes"
-          value={data.poetryRows}
-          sub={`${data.poetryVerified} verified`}
-        />
-        <Stat
-          label="Text notes"
-          value={data.textNotes}
-          sub={`across ${data.textTexts} text${data.textTexts === 1 ? "" : "s"}`}
-        />
-        <Stat
-          label="Comparative"
-          value={data.comparativeProfiles}
-          sub="text profiles"
-        />
-        <Stat
-          label="Total"
-          value={data.poetryRows + data.textNotes + data.comparativeProfiles}
-          sub="catalogue items"
-        />
-      </section>
+      {/* Resume row: 1 wide tile linking to the last generation */}
+      {lastGen && (
+        <div className="mb-10">
+          <Link
+            href={lastGen.href}
+            className="group block bg-white border border-gray-200 rounded-xl p-6 hover:border-teal hover:shadow-[0_4px_20px_-4px_rgba(42,157,143,0.12)] transition-all"
+          >
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">
+                  Last generation · {relativeTime(lastGen.whenIso)}
+                </p>
+                <h2 className="text-lg font-semibold text-gray-900 mt-1 truncate">
+                  {lastGen.title}
+                </h2>
+                <p className="text-sm text-gray-500 mt-0.5 truncate">
+                  {lastGen.subtitle}
+                </p>
+              </div>
+              <Arrow />
+            </div>
+          </Link>
+        </div>
+      )}
 
-      {/* Middle row: recent (2/3) + coverage (1/3) */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
-        {/* Recent (mixed) */}
-        <Card className="lg:col-span-2">
-          <CardHeader title="Recent generations" right={<Link href="/single-text/library" className="text-xs font-medium text-teal hover:text-navy">View library &rarr;</Link>} />
-          {data.recentMixed.length === 0 ? (
-            <EmptyRow>No generations yet.</EmptyRow>
-          ) : (
-            <ul className="divide-y divide-gray-100">
-              {data.recentMixed.map((r) => (
-                <li key={r.id}>
-                  <Link
-                    href={r.href}
-                    className="flex items-center gap-4 px-5 py-3 hover:bg-gray-50 transition-colors"
-                  >
-                    <Badge tone={r.badge === "Text" ? "blue" : r.badge === "Draft" ? "amber" : "teal"}>
-                      {r.badge}
-                    </Badge>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900 truncate">
-                        {r.title}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-0.5 truncate">
-                        {r.subtitle}
-                      </p>
-                    </div>
-                    <span className="text-xs text-gray-400 tabular-nums whitespace-nowrap">
-                      {relativeTime(r.whenIso)}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Card>
+      {/* Create */}
+      <SectionLabel>Create</SectionLabel>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+        <Tile href="/poetry" title="Poetry note" subtitle="Notes for prescribed poems" />
+        <Tile href="/single-text" title="Single text note" subtitle="Notes for novels, plays, Shakespeare" />
+        <Tile href="/comparative" title="Comparative note" subtitle="Cross-text essays and mode notes" />
+      </div>
 
-        {/* Coverage */}
-        <Card>
-          <CardHeader title="Poetry coverage" right={<Link href="/coverage" className="text-xs font-medium text-teal hover:text-navy">All &rarr;</Link>} />
-          <ul className="px-5 py-4 space-y-4">
-            {data.poetCoverage.map((p) => (
-              <li key={p.poet}>
-                <div className="flex items-baseline justify-between mb-1.5">
-                  <span className="text-sm font-medium text-gray-900 truncate">
-                    {p.poet}
-                  </span>
-                  <span className="text-xs text-gray-500 tabular-nums">
-                    {p.generated}/{p.total}
-                  </span>
-                </div>
-                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full ${
-                      p.percent === 100
-                        ? "bg-emerald-500"
-                        : p.percent >= 50
-                          ? "bg-teal"
-                          : p.percent > 0
-                            ? "bg-amber-400"
-                            : "bg-gray-300"
-                    }`}
-                    style={{ width: `${p.percent}%` }}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </section>
+      {/* Manage */}
+      <SectionLabel>Manage</SectionLabel>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+        <Tile href="/single-text/library" title="Library" subtitle="Browse and edit generated notes" />
+        <Tile href="/coverage" title="Coverage" subtitle="Catalogue gaps by poet and text" />
+        <Tile href="/generate" title="Sample answer" subtitle="H1, H2, H3 graded model answers" />
+      </div>
 
-      {/* Bottom row: 2 split tables — recent text notes + recent poetry */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader title="Recent text notes" right={<Link href="/single-text" className="text-xs font-medium text-teal hover:text-navy">Generate &rarr;</Link>} />
-          <RowList items={data.recentText} emptyMessage="No text notes yet." />
-        </Card>
-        <Card>
-          <CardHeader title="Recent poetry notes" right={<Link href="/poetry" className="text-xs font-medium text-teal hover:text-navy">Generate &rarr;</Link>} />
-          <RowList items={data.recentPoetry} emptyMessage="No poetry notes yet." />
-        </Card>
-      </section>
+      {/* Production */}
+      <SectionLabel>Production</SectionLabel>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Tile href="/worksheet" title="Worksheet" subtitle="Class activities and exercises" />
+        <Tile href="/slides" title="Slides" subtitle="PowerPoint decks for class" />
+        <Tile href="/video" title="Video" subtitle="Narrated analysis from a poetry note" />
+        <Tile href="/comprehension" title="Comprehension" subtitle="Paper 1 strategy" />
+        <Tile href="/composition" title="Composition" subtitle="Paper 1 essay guides" />
+        <Tile href="/unseen-poetry" title="Unseen poetry" subtitle="Skills guides for unseen analysis" />
+      </div>
     </main>
   );
 }
 
-/* ───── components ───── */
-
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`bg-white border border-gray-200 rounded-xl ${className}`}>
+    <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 mb-3">
       {children}
-    </div>
+    </h2>
   );
 }
 
-function CardHeader({ title, right }: { title: string; right?: React.ReactNode }) {
-  return (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-      <h2 className="text-sm font-semibold text-gray-900">{title}</h2>
-      {right}
-    </div>
-  );
-}
-
-function Stat({ label, value, sub }: { label: string; value: number; sub: string }) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-xl px-5 py-4">
-      <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-        {label}
-      </p>
-      <p className="text-3xl font-semibold text-gray-900 tabular-nums mt-2 leading-none">
-        {value}
-      </p>
-      <p className="text-xs text-gray-500 mt-2 tabular-nums">{sub}</p>
-    </div>
-  );
-}
-
-function Badge({
-  children,
-  tone,
+function Tile({
+  href,
+  title,
+  subtitle,
 }: {
-  children: React.ReactNode;
-  tone: "blue" | "teal" | "amber";
+  href: string;
+  title: string;
+  subtitle: string;
 }) {
-  const cls =
-    tone === "blue"
-      ? "bg-blue-50 text-blue-700 ring-blue-200"
-      : tone === "teal"
-        ? "bg-teal/10 text-teal ring-teal/30"
-        : "bg-amber-50 text-amber-700 ring-amber-200";
+  return (
+    <Link
+      href={href}
+      className="group block bg-white border border-gray-200 rounded-xl p-5 hover:border-teal hover:shadow-[0_4px_20px_-4px_rgba(42,157,143,0.12)] transition-all"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base font-semibold text-gray-900 tracking-tight">
+            {title}
+          </h3>
+          <p className="text-sm text-gray-500 mt-1 leading-relaxed">{subtitle}</p>
+        </div>
+        <Arrow />
+      </div>
+    </Link>
+  );
+}
+
+function Arrow() {
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium uppercase tracking-wider ring-1 ring-inset ${cls}`}
+      aria-hidden
+      className="text-gray-300 group-hover:text-teal group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-0.5"
     >
-      {children}
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
     </span>
-  );
-}
-
-function EmptyRow({ children }: { children: React.ReactNode }) {
-  return <div className="px-5 py-6 text-sm text-gray-500">{children}</div>;
-}
-
-function RowList({ items, emptyMessage }: { items: RecentItem[]; emptyMessage: string }) {
-  if (items.length === 0) return <EmptyRow>{emptyMessage}</EmptyRow>;
-  return (
-    <ul className="divide-y divide-gray-100">
-      {items.map((r) => (
-        <li key={r.id}>
-          <Link
-            href={r.href}
-            className="flex items-baseline justify-between px-5 py-3 hover:bg-gray-50 transition-colors"
-          >
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-gray-900 truncate">{r.title}</p>
-              <p className="text-xs text-gray-500 mt-0.5 truncate">{r.subtitle}</p>
-            </div>
-            <span className="text-xs text-gray-400 tabular-nums ml-4 whitespace-nowrap">
-              {relativeTime(r.whenIso)}
-            </span>
-          </Link>
-        </li>
-      ))}
-    </ul>
   );
 }

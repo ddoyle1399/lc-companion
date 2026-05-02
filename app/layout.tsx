@@ -29,10 +29,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
       >
         <Sidebar />
-        {/* Main content area sits to the right of the fixed 240px sidebar.
-            On screens narrower than `lg` the sidebar is hidden, so no
-            padding-left there. */}
-        <div className="lg:pl-60 min-h-screen">{children}</div>
+        {/* Main content sits to the right of the fixed 240px sidebar. */}
+        <div className="pl-60 min-h-screen">{children}</div>
       </body>
     </html>
   );

@@ -76,7 +76,7 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="hidden lg:flex fixed inset-y-0 left-0 w-60 flex-col bg-white border-r border-gray-200">
+    <aside className="flex fixed inset-y-0 left-0 w-60 flex-col bg-white border-r border-gray-200 z-40">
       {/* Logo */}
       <div className="px-6 py-6 border-b border-gray-100">
         <Link href="/" className="flex items-center gap-2">

@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FAF8F5;
-  --foreground: #1B2A4A;
+  /* Background is now neutral grey, not cream. The cream was reading as
+     institutional poster, and white cards on cream gave too little contrast.
+     The --cream token is preserved for any legacy consumer that still
+     references it. */
+  --background: #F9FAFB;
+  --foreground: #111827;
   --teal: #2A9D8F;
   --navy: #1B2A4A;
   --cream: #FAF8F5;
