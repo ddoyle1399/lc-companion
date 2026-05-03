@@ -36,7 +36,12 @@ interface NoteTypeMeta {
   family: "guide" | "single" | "cross" | "question";
   label: string;
   blurb: string;
-  needsTexts: 0 | 1 | 3;
+  /**
+   * Minimum number of texts the user must pick. For multi-text families this
+   * is 2: the third input is shown but optional, so the teacher can compare
+   * exactly two texts when that is what the question (or the lesson) calls for.
+   */
+  needsTexts: 0 | 1 | 2;
   needsMode: boolean;
   needsCharacterName: boolean;
   needsArgumentFocus: boolean;
@@ -136,10 +141,10 @@ const NOTE_TYPES: NoteTypeMeta[] = [
   {
     id: "mode_grid",
     family: "cross",
-    label: "5-section comparative note",
+    label: "Multi-section comparative note",
     blurb:
-      "3 texts + mode. Mode overview, 4-5 comparative arguments, comparison anchors, key quotes, sample paragraph.",
-    needsTexts: 3,
+      "2 or 3 texts + mode. Mode overview, comparative arguments, comparison anchors, key quotes, sample paragraph. Text 3 is optional for direct two-text comparisons.",
+    needsTexts: 2,
     needsMode: true,
     needsCharacterName: false,
     needsArgumentFocus: false,
@@ -150,8 +155,8 @@ const NOTE_TYPES: NoteTypeMeta[] = [
     family: "cross",
     label: "Comparison grid (table)",
     blurb:
-      "3 texts + mode. Visual grid of texts vs mode axes. The working document teachers actually use.",
-    needsTexts: 3,
+      "2 or 3 texts + mode. Visual grid of texts vs mode axes. The working document teachers actually use.",
+    needsTexts: 2,
     needsMode: true,
     needsCharacterName: false,
     needsArgumentFocus: false,
@@ -162,8 +167,8 @@ const NOTE_TYPES: NoteTypeMeta[] = [
     family: "cross",
     label: "Single comparative argument",
     blurb:
-      "3 texts + mode + your angle. One argument developed in depth across all three texts.",
-    needsTexts: 3,
+      "2 or 3 texts + mode + your angle. One argument developed in depth across the chosen texts.",
+    needsTexts: 2,
     needsMode: true,
     needsCharacterName: false,
     needsArgumentFocus: true,
@@ -174,8 +179,8 @@ const NOTE_TYPES: NoteTypeMeta[] = [
     family: "cross",
     label: "Sample paragraph",
     blurb:
-      "3 texts + mode + your angle. One model paragraph with sustained comparative weave, plus annotation.",
-    needsTexts: 3,
+      "2 or 3 texts + mode + your angle. One model paragraph with sustained comparative weave, plus annotation.",
+    needsTexts: 2,
     needsMode: true,
     needsCharacterName: false,
     needsArgumentFocus: true,
@@ -187,8 +192,8 @@ const NOTE_TYPES: NoteTypeMeta[] = [
     family: "question",
     label: "Exam answer plan",
     blurb:
-      "Paste an SEC question + 3 texts + format (30/40/70). Get a structured plan: thesis, body paragraphs, link sentences, conclusion, word target.",
-    needsTexts: 3,
+      "Paste an SEC question + 2 or 3 texts + format (30/40/70). Get a structured plan: thesis, body paragraphs, link sentences, conclusion, word target.",
+    needsTexts: 2,
     needsMode: false,
     needsCharacterName: false,
     needsArgumentFocus: false,
@@ -199,8 +204,8 @@ const NOTE_TYPES: NoteTypeMeta[] = [
     family: "question",
     label: "H1 sample answer",
     blurb:
-      "Paste an SEC question + 3 texts + format. Full sample answer at H1 tier (90+ band) with annotation and PCLM self-assessment.",
-    needsTexts: 3,
+      "Paste an SEC question + 2 or 3 texts + format. Full sample answer at H1 tier (90+ band) with annotation and PCLM self-assessment.",
+    needsTexts: 2,
     needsMode: false,
     needsCharacterName: false,
     needsArgumentFocus: false,
@@ -211,7 +216,7 @@ const NOTE_TYPES: NoteTypeMeta[] = [
 const FAMILY_LABELS: Record<NoteTypeMeta["family"], string> = {
   guide: "Mode guides — what each comparative mode means",
   single: "Per single text",
-  cross: "Across three texts",
+  cross: "Across two or three texts",
   question: "Driven by an exam question",
 };
 
@@ -334,14 +339,17 @@ export default function ComparativePage() {
   const filmCount = (selectedTexts as TextOption[]).filter(
     (t) => t.category === "Film"
   ).length;
-  const filmWarning = meta.needsTexts === 3 && filmCount > 1;
+  // The SEC rule allows at most one film in the chosen 3-text set; the cap
+  // applies whether the teacher picks 2 or 3 texts.
+  const filmWarning = meta.needsTexts === 2 && filmCount > 1;
 
   const allTextsPicked =
     meta.needsTexts === 0
       ? true
       : meta.needsTexts === 1
         ? !!text1
-        : !!text1 && !!text2 && !!text3;
+        : // 2-or-3 mode: minimum 2 picked, third optional
+          !!text1 && !!text2;
   const modeOk = !meta.needsMode || !!mode;
   const characterOk = !meta.needsCharacterName || !!characterName.trim();
   const argumentOk = !meta.needsArgumentFocus || !!argumentFocus.trim();
@@ -395,8 +403,11 @@ export default function ComparativePage() {
     if (meta.needsTexts === 1 && text1) {
       return `${text1.title} - ${meta.label}`;
     }
-    if (meta.needsTexts === 3 && text1 && text2 && text3) {
-      return `${meta.label} - ${text1.title}, ${text2.title}, ${text3.title}`;
+    if (meta.needsTexts === 2) {
+      const titles = (selectedTexts as TextOption[]).map((t) => t.title);
+      if (titles.length >= 2) {
+        return `${meta.label} - ${titles.join(", ")}`;
+      }
     }
     return `Comparative - ${meta.label}`;
   }
@@ -601,13 +612,16 @@ export default function ComparativePage() {
               {renderTextSelect(text1Key, setText1Key, "Text")}
             </div>
           )}
-          {meta.needsTexts === 3 && (
+          {meta.needsTexts === 2 && (
             <>
               <div className="mb-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {renderTextSelect(text1Key, setText1Key, "Text 1")}
                 {renderTextSelect(text2Key, setText2Key, "Text 2")}
-                {renderTextSelect(text3Key, setText3Key, "Text 3")}
+                {renderTextSelect(text3Key, setText3Key, "Text 3 (optional)")}
               </div>
+              <p className="text-xs text-gray-500 mt-1 mb-3">
+                Pick two texts for a direct A vs B comparison, or add a third for the full three-text comparative.
+              </p>
               {filmWarning && (
                 <p className="text-sm text-red-600 mt-1 mb-3">
                   Maximum of 1 film allowed in the comparative study.

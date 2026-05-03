@@ -469,7 +469,7 @@ export async function POST(request: NextRequest) {
         const noteType = comparativeNoteType || "mode_grid";
 
         // Note types are organised in three families with different input requirements.
-        // Single-text family: 1 text. Cross-text family: 3 texts. Question family: 3 texts + question.
+        // Single-text family: 1 text. Cross-text family: 2 or 3 texts. Question family: 2 or 3 texts + question.
         const singleTextNoteTypes = new Set([
           "text_full_breakdown",
           "text_character",
@@ -509,9 +509,13 @@ export async function POST(request: NextRequest) {
             return errorResponse("text_mode_profile requires a comparativeMode");
           }
         } else if (crossTextNoteTypes.has(noteType)) {
-          if (!comparativeMode || !comparativeTexts || comparativeTexts.length !== 3) {
+          // 2-text comparisons are valid (direct A vs B), 3-text is the
+          // canonical SEC comparative shape. Anything outside that range is
+          // a UI bug or a malformed API call.
+          const n = comparativeTexts?.length ?? 0;
+          if (!comparativeMode || n < 2 || n > 3) {
             return errorResponse(
-              `Comparative ${noteType} requires a mode and exactly 3 texts`
+              `Comparative ${noteType} requires a mode and 2 or 3 texts (got ${n})`
             );
           }
           if (
@@ -523,9 +527,10 @@ export async function POST(request: NextRequest) {
             );
           }
         } else if (questionNoteTypes.has(noteType)) {
-          if (!comparativeTexts || comparativeTexts.length !== 3) {
+          const n = comparativeTexts?.length ?? 0;
+          if (n < 2 || n > 3) {
             return errorResponse(
-              `Comparative ${noteType} requires exactly 3 texts`
+              `Comparative ${noteType} requires 2 or 3 texts (got ${n})`
             );
           }
           if (!comparativeQuestionText) {

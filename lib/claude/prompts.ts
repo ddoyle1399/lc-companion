@@ -1758,7 +1758,31 @@ Write the guide now.`;
 }
 
 // -----------------------------------------------------------------------------
-// 1. mode_grid (default, 5-section comparative note across 3 texts)
+// Cross-text helpers — every cross-text builder must work for 2 OR 3 texts.
+// Direct A vs B comparisons are a legitimate teaching format and a legitimate
+// SEC question shape (Q1b, 40 marks). The helpers below produce dynamic,
+// numerically honest copy so the model never says "three texts" when only
+// two are in play.
+// -----------------------------------------------------------------------------
+
+function describeTextCount(n: number): string {
+  if (n === 2) return "two texts";
+  if (n === 3) return "three texts";
+  return `${n} texts`;
+}
+
+/**
+ * "all three" / "both" / "all N" — for use inside running prose where the
+ * model is asked to weave the texts together.
+ */
+function describeAcross(n: number): string {
+  if (n === 2) return "both";
+  if (n === 3) return "all three";
+  return `all ${n}`;
+}
+
+// -----------------------------------------------------------------------------
+// 1. mode_grid (multi-section comparative note across 2 or 3 texts)
 // -----------------------------------------------------------------------------
 
 function buildComparativeModeGridPrompt(context: PromptContext): string {
@@ -1772,14 +1796,22 @@ function buildComparativeModeGridPrompt(context: PromptContext): string {
     .join("\n");
 
   const modeFocus = getModeFocusBlock(context.comparativeMode || '');
+  const n = texts.length;
+  const countWord = describeTextCount(n);
+  const acrossWord = describeAcross(n);
+
+  // Per-text quote sub-sections, only render the ones actually picked.
+  const quoteSections = texts
+    .map((t, i) => `### ${t?.title || `Text ${i + 1}`}\n3-4 quotes here`)
+    .join("\n\n");
 
   return `${ABSOLUTE_OUTPUT_RULES}
 
-Generate a comparative study note for the following three texts studied through the lens of ${context.comparativeMode}.
+Generate a comparative study note for the following ${countWord} studied through the lens of ${context.comparativeMode}.
 
 ${textList}
 
-Year: ${context.year} | Level: ${context.level} | Mode: ${context.comparativeMode}
+Year: ${context.year} | Level: ${context.level} | Mode: ${context.comparativeMode} | Texts in this comparison: ${n}
 
 ${modeFocus}
 
@@ -1794,8 +1826,8 @@ STRUCTURE (follow this exactly):
 ## 2. Key Comparative Arguments
 Provide 4-5 arguments. For EACH argument:
 - A clear heading stating the comparative point
-- 3-5 sentences developing the argument with supporting evidence from ALL THREE texts
-- This must be a genuine comparison, not three separate summaries
+- 3-5 sentences developing the argument with supporting evidence from ${acrossWord.toUpperCase()} ${countWord.toUpperCase()}
+- This must be a genuine comparison, not separate summaries
 - One clear similarity across the texts
 - One clear qualification or contrast across the texts
 
@@ -1806,25 +1838,19 @@ For each argument from Section 2, provide:
 - Include phrases for both similarities and contrasts
 
 ## 4. Key Quotes per Mode
-For each of the three texts, provide 3-4 key quotes that are relevant to this mode.
+For each of the ${countWord}, provide 3-4 key quotes that are relevant to this mode.
 - Tag each quote to which argument from Section 2 it supports
 - Use web search to verify quotes. If you cannot verify, paraphrase and label as a paraphrase
 
-### ${texts[0]?.title || "Text 1"}
-3-4 quotes here
-
-### ${texts[1]?.title || "Text 2"}
-3-4 quotes here
-
-### ${texts[2]?.title || "Text 3"}
-3-4 quotes here
+${quoteSections}
 
 ## 5. Sample Comparative Paragraph
-Write one full paragraph (180-220 words) demonstrating how to weave all three texts together in response to a typical question in this mode.
+Write one full paragraph (180-220 words) demonstrating how to weave ${acrossWord} texts together in response to a typical question in this mode.
 - Use sustained comparative writing within the paragraph, not just at junctions
 - Include short quotes from Section 4
 - Show how to transition between texts using the link sentences from Section 3
-- Address the specific mode, not general themes${userInstr}`;
+- Address the specific mode, not general themes
+- Discuss only the ${countWord} listed above. Do not invent or import a third text if only two are provided.${userInstr}`;
 }
 
 // -----------------------------------------------------------------------------
@@ -2226,13 +2252,19 @@ function buildComparativeGridTablePrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
+  const n = texts.length;
+  const countWord = describeTextCount(n);
+  // Build dynamic table header so it has 2 or 3 text columns to match input.
+  const headerCols = texts.map((t, i) => t?.title || `Text ${i + 1}`).join(' | ');
+  const sampleRow = texts.map(() => '...').join(' | ');
+
   return `${ABSOLUTE_OUTPUT_RULES}
 
-Generate a Comparison Grid for the following three texts through the lens of ${mode}.
+Generate a Comparison Grid for the following ${countWord} through the lens of ${mode}.
 
 ${textList}
 
-Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
+Year: ${context.year} | Level: ${context.level} | Mode: ${mode} | Texts in this comparison: ${n}
 
 This is the working document teachers and elite students actually use to prepare for the comparative. A grid: rows are mode axes, columns are texts, cells contain the evidence and interpretation. PDST workshop materials and Aoife O'Driscoll teaching guides both confirm this is the dominant pedagogical format.
 
@@ -2244,12 +2276,12 @@ STRUCTURE (follow this exactly):
 
 ## 1. The Grid
 
-Render as a markdown table with one column per text and one row per axis. Cells must be tight: one short interpretive sentence plus one anchor moment or quote, no more.
+Render as a markdown table with one column per text and one row per axis. Cells must be tight: one short interpretive sentence plus one anchor moment or quote, no more. Use exactly the ${n} text columns shown in the header below, no more, no fewer.
 
-| Axis | ${texts[0]?.title || 'Text 1'} | ${texts[1]?.title || 'Text 2'} | ${texts[2]?.title || 'Text 3'} |
-|------|---|---|---|
-| [Axis 1] | ... | ... | ... |
-| [Axis 2] | ... | ... | ... |
+| Axis | ${headerCols} |
+|------|${texts.map(() => '---').join('|')}|
+| [Axis 1] | ${sampleRow} |
+| [Axis 2] | ${sampleRow} |
 | ... |
 
 If a cell does not apply to a particular text, write "Not applicable: [one-line reason]" rather than padding. Do not force every axis onto every text.
@@ -2288,44 +2320,64 @@ function buildComparativeArgumentPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
+  const n = texts.length;
+  const countWord = describeTextCount(n);
+  const acrossWord = describeAcross(n);
+
+  // Per-text body sub-sections, dynamic to actual count.
+  const perTextBlocks = texts
+    .map((t, i) => {
+      const title = t?.title || `Text ${i + 1}`;
+      if (i === 0) {
+        return `### ${title}\n80-120 words. State this text's position on the argument. Anchor in 1-2 specific moments. Include 1-2 short verified quotes. End with a one-sentence summary of what this text contributes to the argument.`;
+      }
+      return `### ${title}\nSame shape as above.`;
+    })
+    .join("\n\n");
+
+  // Synthesis prose differs slightly for 2-vs-3 text comparisons. With two
+  // texts the SEC marker still rewards qualified comparison, just without the
+  // third triangulating move.
+  const synthesisGuidance =
+    n === 2
+      ? `Use sustained comparative language ("X demonstrates A, while Y qualifies that position by..."). With two texts the danger is binary opposition: state where the texts genuinely diverge AND where the contrast is more nuanced than it first appears.`
+      : `Use sustained comparative language ("X demonstrates A, while Y qualifies that position by..., and Z further complicates it through..."). Avoid binary comparisons; the SEC marker rewards qualified readings.`;
+
+  // Number of link sentences scales gently with the number of texts.
+  const linkCount = n === 2 ? "Two" : "Three";
+  const linkRange = n === 2 ? "between the two texts" : "between two or three of the texts";
+
   return `${ABSOLUTE_OUTPUT_RULES}
 
-Generate one detailed Comparative Argument across the following three texts on ${mode}, with the specific argument focus: ${focus}.
+Generate one detailed Comparative Argument across the following ${countWord} on ${mode}, with the specific argument focus: ${focus}.
 
 ${textList}
 
-Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
+Year: ${context.year} | Level: ${context.level} | Mode: ${mode} | Texts in this comparison: ${n}
 Argument focus: ${focus}
 
 ${modeFocus}
 
-This note develops a single comparative argument in depth. It is what a student would build into one body paragraph (or, for a 70-mark Q2 essay, two paragraphs) of an exam answer. Total length 600-800 words.
+This note develops a single comparative argument in depth. It is what a student would build into one body paragraph (or, for a 70-mark Q2 essay, two paragraphs) of an exam answer. Total length 600-800 words. Discuss only the ${countWord} listed above; do not invent or import a third text if only two are provided.
 
 STRUCTURE (follow this exactly):
 
 ## 1. The Argument in One Sentence
-A single thesis sentence that names the argument focus and signals position across all three texts. 30 words maximum.
+A single thesis sentence that names the argument focus and signals position across ${acrossWord} texts. 30 words maximum.
 
 ## 2. Why This Argument Lands in This Mode
 60-80 words. Why this angle is genuinely a ${mode} argument and not a theme argument in disguise. Address the most common drift error.
 
-## 3. Argument Across the Three Texts
-Three sub-sections. For each text:
+## 3. Argument Across the ${countWord.charAt(0).toUpperCase()}${countWord.slice(1)}
+For each text:
 
-### ${texts[0]?.title || 'Text 1'}
-80-120 words. State this text's position on the argument. Anchor in 1-2 specific moments. Include 1-2 short verified quotes. End with a one-sentence summary of what this text contributes to the argument.
-
-### ${texts[1]?.title || 'Text 2'}
-Same shape as above.
-
-### ${texts[2]?.title || 'Text 3'}
-Same shape as above.
+${perTextBlocks}
 
 ## 4. Comparative Synthesis
-120-180 words. The synthesis is not a summary. It is the analytical move that earns H1 marks. Where do the three texts agree? Where do they qualify each other? Use sustained comparative language ("X demonstrates A, while Y qualifies that position by..., and Z further complicates it through..."). Avoid binary comparisons; the SEC marker rewards qualified readings.
+120-180 words. The synthesis is not a summary. It is the analytical move that earns H1 marks. Where do the texts agree? Where do they qualify each other? ${synthesisGuidance}
 
-## 5. Three Ready-to-Use Link Sentences
-Three sentences the student can drop directly into an essay paragraph that develops this argument. Each must move between two or three texts.
+## 5. ${linkCount} Ready-to-Use Link Sentences
+${linkCount} sentences the student can drop directly into an essay paragraph that develops this argument. Each must move ${linkRange}.
 
 ## 6. Strongest Past SEC Question for This Argument
 Identify (or generate from the SEC pattern) one verbatim or close-paraphrase exam question this argument would answer well, and a one-line note on how to position the answer.
@@ -2350,16 +2402,40 @@ function buildComparativeSampleParagraphPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
+  const n = texts.length;
+  const countWord = describeTextCount(n);
+
+  // Build the per-text "move" lines dynamically so the template never asks
+  // for a third move when only two texts are in play.
+  const moveLines = texts
+    .map((t, i) => {
+      const title = t?.title || `Text ${i + 1}`;
+      if (i === 0) {
+        return `- Move to ${title} with an anchor moment and a short verified quote`;
+      }
+      const prev = texts[i - 1]?.title || `Text ${i}`;
+      return `- Move to ${title} using a comparative link sentence ("Similarly...", "By contrast...", "Where ${prev} presents..., ${title} qualifies that...")`;
+    })
+    .join("\n");
+
+  // Annotation count of link sentences mirrors the number of moves between
+  // texts (n texts means n-1 transitions).
+  const linkSentenceCount = n - 1;
+  const linkSentencePhrase =
+    linkSentenceCount === 1
+      ? "The single comparative link sentence"
+      : `The ${linkSentenceCount === 2 ? "two" : linkSentenceCount} comparative link sentences`;
+
   return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate one model Comparative Paragraph in the ${mode} mode, on the angle: ${focus}.
 
 ${textList}
 
-Year: ${context.year} | Level: ${context.level} | Mode: ${mode}
+Year: ${context.year} | Level: ${context.level} | Mode: ${mode} | Texts in this comparison: ${n}
 Angle: ${focus}
 
-This is one paragraph as it would appear in a 70-mark Q2 essay. The student copies the structure, not the content. Total paragraph length 200-260 words.
+This is one paragraph as it would appear in a 70-mark Q2 essay. The student copies the structure, not the content. Total paragraph length 200-260 words. Use only the ${countWord} listed above.
 
 STRUCTURE:
 
@@ -2369,15 +2445,13 @@ One sentence stating the question or angle this paragraph answers.
 ## 2. The Paragraph
 A single paragraph of 200-260 words written in continuous prose. Within the paragraph:
 - Open with a topic sentence that names the comparative point and signals position
-- Move to ${texts[0]?.title || 'Text 1'} with an anchor moment and a short verified quote
-- Move to ${texts[1]?.title || 'Text 2'} using a comparative link sentence ("Similarly...", "By contrast...", "Where ${texts[0]?.title} presents..., ${texts[1]?.title} qualifies that...")
-- Move to ${texts[2]?.title || 'Text 3'} with another comparative link
+${moveLines}
 - Close with a synthesis sentence that states what the comparison reveals
 
 ## 3. Annotation
 After the paragraph, produce a 100-150 word annotation explaining:
 - The opening topic sentence and how it signals position
-- The two comparative link sentences (quote them) and what work they do
+- ${linkSentencePhrase} (quote ${linkSentenceCount === 1 ? "it" : "them"}) and what work ${linkSentenceCount === 1 ? "it does" : "they do"}
 - The synthesis sentence and why it earns marks
 
 ## 4. PCLM Notes
@@ -2404,6 +2478,17 @@ function buildComparativeQuestionPlanPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
+  const n = texts.length;
+  const countWord = describeTextCount(n);
+  const acrossWord = describeAcross(n);
+  // Per-paragraph per-text bullet lines, dynamic to the actual number of texts.
+  const perTextBullets = texts
+    .map(
+      (t, i) =>
+        `- **${t?.title || `Text ${i + 1}`}:** which key moment, which quote (verified), one-line interpretation`
+    )
+    .join("\n");
+
   return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a structured Answer Plan for the following SEC Comparative Study question.
@@ -2414,11 +2499,11 @@ ${question}
 TEXTS:
 ${textList}
 
-Year: ${context.year} | Level: ${context.level}
+Year: ${context.year} | Level: ${context.level} | Texts in this comparison: ${n}
 
 ${formatBlock}
 
-This is a plan, not a sample answer. The student uses this plan to write their own answer in the exam. The plan must be specific enough that the student can almost lift the structure directly.
+This is a plan, not a sample answer. The student uses this plan to write their own answer in the exam. The plan must be specific enough that the student can almost lift the structure directly. Discuss only the ${countWord} listed above.
 
 STRUCTURE (follow this exactly):
 
@@ -2431,19 +2516,17 @@ STRUCTURE (follow this exactly):
 - The trap: what would a weaker student misread the question as?
 
 ## 2. Thesis
-A single thesis sentence (30 words max) that addresses the specific sub-angle and signals position across all three texts. The "primacy of Purpose" rule means this thesis is the single most important sentence in the entire answer.
+A single thesis sentence (30 words max) that addresses the specific sub-angle and signals position across ${acrossWord} texts. The "primacy of Purpose" rule means this thesis is the single most important sentence in the entire answer.
 
 ## 3. Introduction
-80-120 words. The actual sentences (or close paraphrase) that should open the answer. Define the mode in the candidate's own words, signal position, and name all three texts.
+80-120 words. The actual sentences (or close paraphrase) that should open the answer. Define the mode in the candidate's own words, signal position, and name ${acrossWord} texts.
 
 ## 4. Body Paragraph Plan
 Produce 4-6 body paragraphs (4 for Q1a/Q1b, 4-6 for Q2). For each paragraph:
 
 ### Paragraph N: [Topic / Argument]
 - **Topic sentence:** the actual opening sentence
-- **${texts[0]?.title || 'Text 1'}:** which key moment, which quote (verified), one-line interpretation
-- **${texts[1]?.title || 'Text 2'}:** which key moment, which quote (verified), one-line interpretation
-- **${texts[2]?.title || 'Text 3'}:** which key moment, which quote (verified), one-line interpretation
+${perTextBullets}
 - **Comparative link sentence:** one specific link sentence to use within this paragraph
 - **Closing sentence:** how the paragraph ties back to the question
 
@@ -2477,6 +2560,9 @@ function buildComparativeSampleAnswerPrompt(context: PromptContext): string {
     .map((t, i) => `Text ${i + 1}: ${formatTextEntry(t)}`)
     .join("\n");
 
+  const n = texts.length;
+  const countWord = describeTextCount(n);
+
   return `${ABSOLUTE_OUTPUT_RULES}
 
 Generate a full Sample Answer at H1 tier (90+ marks band) for the following SEC Comparative Study question.
@@ -2487,9 +2573,11 @@ ${question}
 TEXTS:
 ${textList}
 
-Year: ${context.year} | Level: ${context.level}
+Year: ${context.year} | Level: ${context.level} | Texts in this comparison: ${n}
 
 ${formatBlock}
+
+CRITICAL: The answer must discuss only the ${countWord} listed above. Do not invent or import a third text if only two are provided. The comparative weave still applies: every paragraph should move between the texts you have.
 
 This must read as if written by a strong student under exam conditions, not by an AI or a teacher. H1 markers from the SEC marking schemes 2023-2025: critical literacy, qualified comparisons (not binary), sustained comparative weave inside paragraphs, precise vocabulary, two or three key moments per text rather than plot summary, defended structural choice. The "primacy of Purpose" cap means rhetorical beauty cannot exceed marks for clarity of argument.
 
