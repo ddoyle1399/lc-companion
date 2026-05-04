@@ -17,6 +17,7 @@ import {
   buildSystemPrompt,
   buildPoetryNotePrompt,
   buildCriticInput,
+  MetadataIncompleteError,
   type PromptContext,
   type PoemMetadata,
   type PoemQuote,
@@ -181,13 +182,35 @@ async function generatePoetryNote(
   }
 
   const useWebSearch = !context.poemText;
-  const { system: poetrySystem, user: poetryUser } = buildPoetryNotePrompt(context);
+  let poetrySystem: string;
+  let poetryUser: string;
+  try {
+    ({ system: poetrySystem, user: poetryUser } = buildPoetryNotePrompt(context));
+  } catch (err) {
+    if (err instanceof MetadataIncompleteError) {
+      try {
+        const supabaseAudit = getServerSupabase();
+        await (supabaseAudit as any).from('generation_audit').insert({
+          subject_key: context.subject,
+          sub_key: context.subKey,
+          content_type: 'poem_notes',
+          status: 'metadata_incomplete',
+          error_message: err.message,
+          missing_fields: err.missing,
+          student_year: context.studentYear,
+        });
+      } catch (auditErr) {
+        console.error('[video-render] metadata_incomplete audit insert failed:', auditErr);
+      }
+    }
+    throw err;
+  }
   const systemPrompt = poetrySystem || buildSystemPrompt(context);
   const client = getClient();
 
   const callGenerator = async (userMsg: string): Promise<string> => {
     const resp = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 16000,
       system: systemPrompt,
       messages: [{ role: "user", content: userMsg }],

@@ -6,6 +6,7 @@ import { getClient } from "@/lib/claude/client";
 import {
   buildSystemPrompt,
   buildPoetryNotePrompt,
+  MetadataIncompleteError,
   buildPoetryThemeStudyPrompt,
   buildPoetryDevicesStudyPrompt,
   buildPoetryPersonalResponsePrompt,
@@ -122,6 +123,24 @@ function errorResponse(message: string, status = 400) {
     JSON.stringify({ error: message }),
     { status, headers: { "Content-Type": "application/json" } }
   );
+}
+
+function streamFallback(message: string, meta: Record<string, unknown> = {}): Response {
+  const encoder = new TextEncoder();
+  const body = new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ fallback: message, ...meta })}\n\n`));
+      controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+      controller.close();
+    },
+  });
+  return new Response(body, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
+  });
 }
 
 const FALLBACK_MESSAGE = `This note is being reviewed for accuracy and is temporarily unavailable. Please try another poem from your selection, or check back shortly.`;
@@ -429,25 +448,54 @@ export async function POST(request: NextRequest) {
             }
           }
 
-          const built = (() => {
-            switch (noteType) {
-              case 'theme_study':
-                return buildPoetryThemeStudyPrompt(poetryPromptCtx);
-              case 'devices_study':
-                return buildPoetryDevicesStudyPrompt(poetryPromptCtx);
-              case 'personal_response':
-                return buildPoetryPersonalResponsePrompt(poetryPromptCtx);
-              case 'cross_poem_pairing':
-                return buildPoetryCrossPoemPairingPrompt(poetryPromptCtx);
-              case 'quote_bank_theme':
-                return buildPoetryQuoteBankThemePrompt(poetryPromptCtx);
-              case 'exam_model_answer':
-                return buildPoetryExamModelAnswerPrompt(poetryPromptCtx);
-              case 'general_note':
-              default:
-                return buildPoetryNotePrompt(poetryPromptCtx);
+          let built: { system: string; user: string };
+          try {
+            built = (() => {
+              switch (noteType) {
+                case 'theme_study':
+                  return buildPoetryThemeStudyPrompt(poetryPromptCtx);
+                case 'devices_study':
+                  return buildPoetryDevicesStudyPrompt(poetryPromptCtx);
+                case 'personal_response':
+                  return buildPoetryPersonalResponsePrompt(poetryPromptCtx);
+                case 'cross_poem_pairing':
+                  return buildPoetryCrossPoemPairingPrompt(poetryPromptCtx);
+                case 'quote_bank_theme':
+                  return buildPoetryQuoteBankThemePrompt(poetryPromptCtx);
+                case 'exam_model_answer':
+                  return buildPoetryExamModelAnswerPrompt(poetryPromptCtx);
+                case 'general_note':
+                default:
+                  return buildPoetryNotePrompt(poetryPromptCtx);
+              }
+            })();
+          } catch (err) {
+            if (err instanceof MetadataIncompleteError) {
+              try {
+                const supabase = getServerSupabase();
+                await supabase.from('generation_audit' as any).insert({
+                  subject_key: poetryPromptCtx.subject,
+                  sub_key: poetryPromptCtx.subKey,
+                  content_type: 'poem_notes',
+                  status: 'metadata_incomplete',
+                  error_message: err.message,
+                  missing_fields: err.missing,
+                  student_year: poetryPromptCtx.studentYear,
+                } as any);
+              } catch (auditErr) {
+                console.error('[generate] metadata_incomplete audit insert failed:', auditErr);
+              }
+              const fallbackMessage =
+                `# ${poetryPromptCtx.subject} — ${poetryPromptCtx.subKey}\n\n` +
+                `This note is not yet available. The source metadata for this poem is incomplete ` +
+                `and has been flagged for review. Missing: ${err.missing.join(', ')}.\n`;
+              return streamFallback(fallbackMessage, {
+                reason: 'metadata_incomplete',
+                missing: err.missing,
+              });
             }
-          })();
+            throw err;
+          }
           poetrySystemOverride = built.system;
           userPrompt = built.user;
         }
@@ -688,7 +736,7 @@ export async function POST(request: NextRequest) {
     const client = getClient();
 
     const stream = await client.messages.stream({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 16000,
       system: systemPrompt,
       messages: [{ role: "user", content: userPrompt }],
@@ -1115,7 +1163,7 @@ export async function POST(request: NextRequest) {
                 context,
                 bodyHtml,
                 bodyText,
-                "claude-sonnet-4-20250514",
+                "claude-sonnet-4-6",
                 quotes,
                 themes
               );
