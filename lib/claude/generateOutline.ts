@@ -71,6 +71,65 @@ function isValidShape(value: unknown): value is {
   return true;
 }
 
+/**
+ * Normalises a quote for substring comparison. Lowercases, strips surrounding
+ * straight or curly quotes, removes most punctuation, collapses whitespace.
+ * Used by the quote-source guard so that minor formatting differences between
+ * the note quote bank and the model's rendering do not cause false rejections.
+ */
+function normaliseQuote(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/^["'‘’“”]+|["'‘’“”]+$/g, "")
+    .replace(/[.,;:!?()[\]{}—–-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Quote-source guard. Every non-empty `body_moves[].quote` must appear as a
+ * substring (in either direction) of at least one entry in `noteQuotes` after
+ * normalisation. Empty strings are tolerated because they signal the model
+ * honestly declining to quote when no source is available. This guard exists
+ * because `isValidShape` only validates JSON structure; without it, the model
+ * can ship hallucinated quotes or placeholder strings such as "No quote
+ * available from provided list" past the shape check (verified 4 May 2026 via
+ * scripts/phase3-guard-test.ts).
+ */
+function validateQuoteSources(
+  bodyMoves: OutlineBodyMove[],
+  noteQuotes: string[],
+): { ok: true } | { ok: false; reason: string } {
+  const normalisedSources = noteQuotes
+    .map(normaliseQuote)
+    .filter((s) => s.length > 0);
+
+  for (let i = 0; i < bodyMoves.length; i++) {
+    const raw = bodyMoves[i].quote;
+    if (typeof raw !== "string") continue;
+    const trimmed = raw.trim();
+    if (trimmed === "") continue;
+
+    const normalised = normaliseQuote(trimmed);
+    if (normalised.length === 0) continue;
+
+    const matched = normalisedSources.some(
+      (src) => src.includes(normalised) || normalised.includes(src),
+    );
+
+    if (!matched) {
+      return {
+        ok: false,
+        reason: `body_moves[${i}].quote not present in noteQuotes: "${trimmed.slice(
+          0,
+          80,
+        )}"`,
+      };
+    }
+  }
+  return { ok: true };
+}
+
 export async function generateOutline(input: OutlineInput): Promise<OutlineResult> {
   const client = getClient();
 
@@ -116,6 +175,12 @@ export async function generateOutline(input: OutlineInput): Promise<OutlineResul
     if (!isValidShape(parsed)) {
       console.error("[generateOutline] Shape validation failed. Parsed:", JSON.stringify(parsed).slice(0, 300));
       return { ok: false, error: "outline response had wrong shape" };
+    }
+
+    const quoteCheck = validateQuoteSources(parsed.body_moves, input.noteQuotes);
+    if (!quoteCheck.ok) {
+      console.error("[generateOutline] Quote-source validation failed:", quoteCheck.reason);
+      return { ok: false, error: `quote validation failed: ${quoteCheck.reason}` };
     }
 
     return {
