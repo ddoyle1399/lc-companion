@@ -33,7 +33,7 @@ const NAV: Group[] = [
       { href: "/single-text", label: "Single Text", icon: <IconBookOpen /> },
       { href: "/comparative", label: "Comparative", icon: <IconCompare /> },
       { href: "/generate", label: "Sample Answer", icon: <IconStar /> },
-      { href: "/single-text/library", label: "Library", icon: <IconFolder /> },
+      { href: "/library", label: "Library", icon: <IconFolder /> },
       { href: "/coverage", label: "Coverage", icon: <IconChart /> },
     ],
   },
