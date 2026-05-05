@@ -1,11 +1,16 @@
 /**
  * scripts/audit-metadata-completeness.ts
  *
- * Runs the same validation the prompt builder uses, across every locked
+ * Runs the same validation the prompt builder uses, across every verified
  * poem_notes row. Prints a gap report so we know exactly which rows need
  * metadata work before they can generate.
  *
- * Usage: npx tsx scripts/audit-metadata-completeness.ts
+ * The filter is `status = 'verified'` because that is the status the
+ * streaming and sync routes actually source from (see app/api/generate/sync/
+ * route.ts). The earlier spec used 'locked' but no rows in this DB carry
+ * that status; the canonical 'production-ready' label here is 'verified'.
+ *
+ * Usage: npx tsx --env-file=.env.local scripts/audit-metadata-completeness.ts
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -24,7 +29,7 @@ async function main() {
     .from('notes')
     .select('subject_key, sub_key, metadata, quotes')
     .eq('content_type', 'poem_notes')
-    .eq('status', 'locked');
+    .eq('status', 'verified');
 
   if (error) throw error;
 
@@ -63,7 +68,7 @@ async function main() {
   const sorted = Object.entries(fieldCounts).sort((a, b) => b[1] - a[1]);
 
   console.log(`\n=== SUMMARY ===`);
-  console.log(`Total locked rows:             ${rows.length}`);
+  console.log(`Total verified rows:           ${rows.length}`);
   console.log(`Ready to generate:             ${ready.length}`);
   console.log(`Blocked by missing metadata:   ${gaps.length}`);
   if (sorted.length > 0) {
