@@ -3,6 +3,7 @@ import Link from "next/link";
 import Nav from "@/components/nav";
 import { getServerSupabase } from "@/lib/supabase/server";
 import CopyDeleteBar from "./CopyDeleteBar";
+import GenerateSlidesButton from "./GenerateSlidesButton";
 
 interface NoteDetailProps {
   id: string;
@@ -83,6 +84,7 @@ export default async function NoteDetail({ id, backHref, backLabel }: NoteDetail
           deleteHref={`/api/notes/${id}`}
           backHref={backHref}
         />
+        <GenerateSlidesButton noteId={id} />
       </main>
     </div>
   );
